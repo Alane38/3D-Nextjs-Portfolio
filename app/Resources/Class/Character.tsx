@@ -1,6 +1,6 @@
 import { createRef, useEffect } from "react";
 import { RapierContext, RigidBody, RigidBodyOptions, useRapier } from "@react-three/rapier";
-import { ModelRenderer } from "@/app/Core/ModelRenderer";
+import { ModelRenderer } from "@core/ModelRenderer";
 import { EntityProps } from "@/types/EntityProps";
 import { KeyboardControls, KeyboardControlsProps, useKeyboardControls } from "@react-three/drei";
 

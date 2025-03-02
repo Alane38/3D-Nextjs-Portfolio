@@ -23,6 +23,9 @@
       "@resources/*": [
         "./app/Resources/*"
       ],
+      "@core/*": [
+        "./app/Core/*"
+      ],
     }
   },
   "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts"],

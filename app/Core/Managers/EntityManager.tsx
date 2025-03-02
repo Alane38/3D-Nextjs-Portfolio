@@ -1,7 +1,7 @@
-import { Diamond } from "../Resources/Class/Diamond";
-import NewalText from "../Resources/Class/NewalText";
-import { FlatMap } from "../Resources/Environment/FlatMap";
-import { useMainText } from "../Resources/Settings/useMainText";
+import { Diamond } from "@resources/Class/Diamond";
+import NewalText from "@resources/Class/NewalText";
+import { FlatMap } from "@resources/Class/FlatMap";
+import { useMainText } from "@resources/Settings/useMainText";
 
 export const EntityManagaer = () => {
   const { TextSize, TextV } = useMainText();

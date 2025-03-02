@@ -4,7 +4,7 @@ import {
   RigidBody,
   RigidBodyOptions,
 } from "@react-three/rapier";
-import { ModelRenderer } from "@/app/Core/ModelRenderer";
+import { ModelRenderer } from "@core/ModelRenderer";
 import { useControls } from "leva";
 import { generateUUID } from "three/src/math/MathUtils.js";
 import { useFrame } from "@react-three/fiber";

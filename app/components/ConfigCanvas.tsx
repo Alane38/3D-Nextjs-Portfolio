@@ -4,7 +4,7 @@ import { OrbitControls, Sky } from "@react-three/drei";
 import { Canvas as ThreeCanvas } from "@react-three/fiber";
 import { Physics } from "@react-three/rapier";
 import { ReactNode, Suspense } from "react";
-import { useSunPosition } from "../Resources/Settings/useSunPosition";
+import { useSunPosition } from "@resources/Settings/useSunPosition";
 
 export function ConfigCanvas({ children }: { children: ReactNode }) {
   const sunPosition = useSunPosition();
