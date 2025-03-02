@@ -53,7 +53,13 @@ export class Diamond {
         onChange: (value) => setControlPosition(value),
         step: 0.1,
       },
-      mass: { value: this.mass, onChange: (value) => setControlMass(value), min: 0.1, max: 10, step: 0.1 },
+      mass: {
+        value: this.mass,
+        onChange: (value) => setControlMass(value),
+        min: 0.1,
+        max: 10,
+        step: 0.1,
+      },
       scale: {
         value: this.scale,
         onChange: (value) => setControlScale(value),
@@ -63,13 +69,12 @@ export class Diamond {
       },
     });
 
-    
     const hash = generateUUID();
- 
+
     useEffect(() => {
       console.log("POS", this.position);
     }, [this.position]);
-    
+
     useEffect(() => {
       this.scale = controlScale;
     }, [controlScale]);
@@ -82,8 +87,7 @@ export class Diamond {
       if (this.ref.current) {
         const newPos = this.ref.current.translation();
         this.position = [newPos.x, newPos.y, newPos.z];
-        console.log("Position en temps rÃ©el :", this.position);
-        
+        console.log("Position en temps réel :", this.position);
       }
     });
 
