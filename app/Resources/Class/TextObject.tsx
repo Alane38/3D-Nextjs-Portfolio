@@ -1,16 +1,10 @@
 import { Text3D } from "@react-three/drei";
 import { RigidBody, RigidBodyOptions } from "@react-three/rapier";
 import { Entity } from "./Entity";
-
-export interface Text3DProps {
-  text: string;
-  font: string;
-  size: number;
-}
+import { Text3DProps } from "@/types/TextProps";
 
 export class TextObject extends Entity {
   TextProps: Text3DProps;
-
   constructor(type: RigidBodyOptions["type"] = "fixed") {
     super("Main Text");
     this.type = type;
@@ -20,14 +14,14 @@ export class TextObject extends Entity {
       font: "/fonts/DefaultFont.json",
     };
   }
-
   renderComponent() {
     return <TextObjectComponent model={this} />;
   }
 }
 
-export const TextObjectComponent = ({ model }: { model: TextObject }) => {
+export const TextObjectComponent = ({ model }: { model?: TextObject }) => {
   const object = model || new TextObject();
+  
   return (
     <RigidBody
       ref={object.ref}

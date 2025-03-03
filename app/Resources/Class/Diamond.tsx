@@ -1,24 +1,19 @@
-import { classModelPath } from "@/constants/class";
-import { ModelRenderer } from "@core/ModelRenderer";
-import { RigidBody } from "@react-three/rapier";
 import { Entity } from "./Entity";
+import { RigidBody } from "@react-three/rapier";
+import { ModelRenderer } from "@core/ModelRenderer";
+import { classModelPath } from "@/constants/class";
 
 export class Diamond extends Entity {
-  path: string
-  constructor(
-    path: string = classModelPath + "/Diamond.glb",
-  ) {
+  constructor(path: string = classModelPath + "/Diamond.glb") {
     super("Diamond");
-    this.path = path
+    this.path = path;
   }
-
-  // Render method for the diamond component
   renderComponent() {
     return <DiamondComponent model={this} />;
   }
 }
 
-export const DiamondComponent = ({ model }: { model: Diamond }) => {
+export const DiamondComponent = ({ model }: { model?: Diamond }) => {
   const object = model || new Diamond();
   return (
     <RigidBody
@@ -29,9 +24,7 @@ export const DiamondComponent = ({ model }: { model: Diamond }) => {
       scale={object.scale}
       type={object.type}
     >
-      <group
-        onPointerDown={() => object.applyImpulse({ x: 0, y: 1000, z: 100 })}
-      >
+      <group onPointerDown={() => object.applyImpulse({ x: 0, y: 10, z: 0 })}>
         <ModelRenderer path={object.path} />
       </group>
     </RigidBody>

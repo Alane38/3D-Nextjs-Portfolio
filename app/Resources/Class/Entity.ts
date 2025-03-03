@@ -1,11 +1,11 @@
 import { createRef } from "react";
 import { RapierRigidBody, RigidBodyOptions } from "@react-three/rapier";
-import { Euler, Vector3 } from "three"; // Utilisation de Vector3 directement de Three.js
+import { Euler, Vector3 } from "three";
 
 export class Entity {
   ref = createRef<RapierRigidBody>();
   path: string;
-  position: Vector3; // Utilisation de Vector3 pour la position
+  position: Vector3; 
   rotation: Euler;
   mass: number;
   type: RigidBodyOptions["type"];
@@ -29,11 +29,11 @@ export class Entity {
   }
 
   setPosition(position: Vector3) {
-    this.position.copy(position); // Utilisation de la méthode copy() pour mettre à jour la position
+    this.position.copy(position);
   }
 
   setRotation(rotation: Euler) {
-    this.rotation.copy(rotation); // Utilisation de la méthode copy() pour mettre à jour la rotation
+    this.rotation.copy(rotation);
   }
 
   setMass(mass: number) {

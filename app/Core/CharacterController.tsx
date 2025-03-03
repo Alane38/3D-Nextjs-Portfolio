@@ -5,10 +5,9 @@ import { useControls } from "leva";
 import { useEffect, useRef, useState } from "react";
 import { MathUtils, Vector3 } from "three";
 import { degToRad } from "three/src/math/MathUtils.js";
-import THREE from "three";
+import * as THREE from "three";
 
 const normalizeAngle = (angle: number) => {
-  // Normalize angles to be between -PI and PI
   return ((angle + Math.PI) % (2 * Math.PI)) - Math.PI;
 };
 
@@ -24,10 +23,10 @@ export const CharacterController = () => {
   const { WALK_SPEED, RUN_SPEED, ROTATION_SPEED } = useControls(
     "Character Control",
     {
-      WALK_SPEED: { value: 5, min: 0.1, max: 4, step: 0.1 },
-      RUN_SPEED: { value: 8, min: 0.2, max: 12, step: 0.1 },
+      WALK_SPEED: { value: 4, min: 0.1, max: 4, step: 0.1 },
+      RUN_SPEED: { value: 6, min: 0.2, max: 12, step: 0.1 },
       ROTATION_SPEED: {
-        value: degToRad(0.5),
+        value: degToRad(1),
         min: degToRad(0.1),
         max: degToRad(5),
         step: degToRad(0.1),
@@ -93,17 +92,6 @@ export const CharacterController = () => {
           speed = RUN_SPEED;
         }
       }
-
-      // if (isClicking.current) {
-      //   console.log("clicking", mouse.x, mouse.y);
-      //   if (Math.abs(mouse.x) > 0.1) {
-      //     movement.x = -mouse.x;
-      //   }
-      //   movement.z = mouse.y + 0.4;
-      //   if (Math.abs(movement.x) > 0.5 || Math.abs(movement.z) > 0.5) {
-      //     speed = RUN_SPEED;
-      //   }
-      // }
 
       if (get().left) movement.x = 1;
       if (get().right) movement.x = -1;

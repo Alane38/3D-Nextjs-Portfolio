@@ -14,14 +14,16 @@ export class Ground extends Entity {
     return <GroundComponent model={this} />;
   }
 }
-
 export const GroundComponent = ({ model }: { model?: Ground }) => {
   const object = model || new Ground();
+
   return (
-    <RigidBody type="fixed" position={object.position} rotation={object.rotation}>
-      <Plane
-        scale={object.scale}
-      >
+    <RigidBody
+      type="fixed"
+      position={object.position}
+      rotation={object.rotation}
+    >
+      <Plane scale={object.scale}>
         <meshStandardMaterial attach="material" color={"black"} />
       </Plane>
     </RigidBody>
