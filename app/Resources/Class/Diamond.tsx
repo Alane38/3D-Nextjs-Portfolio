@@ -4,7 +4,7 @@ import { ModelRenderer } from "@core/ModelRenderer";
 import { classModelPath } from "@/constants/class";
 
 export class Diamond extends Entity {
-  constructor(path: string = classModelPath + "/Diamond.glb") {
+  constructor(path: string = classModelPath + "Diamond.glb") {
     super("Diamond");
     this.path = path;
   }

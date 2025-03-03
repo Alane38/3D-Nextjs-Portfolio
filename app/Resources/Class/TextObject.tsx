@@ -21,7 +21,7 @@ export class TextObject extends Entity {
 
 export const TextObjectComponent = ({ model }: { model?: TextObject }) => {
   const object = model || new TextObject();
-  
+
   return (
     <RigidBody
       ref={object.ref}

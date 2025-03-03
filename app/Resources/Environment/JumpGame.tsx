@@ -6,13 +6,13 @@ import { useRef, useState } from "react";
 import * as THREE from "three";
 
 export const Controls = {
-    forward: "forward",
-    back: "back",
-    left: "left",
-    right: "right",
-    jump: "jump",
-  };
-  
+  forward: "forward",
+  back: "back",
+  left: "left",
+  right: "right",
+  jump: "jump",
+};
+
 export const JumpGame = () => {
   const [hover, setHover] = useState(false);
   const cube = useRef<RapierRigidBody>(null);
@@ -30,7 +30,7 @@ export const JumpGame = () => {
   const rightPressed = useKeyboardControls((state) => state[Controls.right]);
   const backPressed = useKeyboardControls((state) => state[Controls.back]);
   const forwardPressed = useKeyboardControls(
-    (state) => state[Controls.forward]
+    (state) => state[Controls.forward],
   );
 
   const handleMovement = () => {
@@ -66,7 +66,7 @@ export const JumpGame = () => {
     const curRotation = quat(kicker.current?.rotation());
     const incrementRotation = new THREE.Quaternion().setFromAxisAngle(
       new THREE.Vector3(0, 1, 0),
-      delta * speed.current
+      delta * speed.current,
     );
     curRotation.multiply(incrementRotation);
     kicker.current?.setNextKinematicRotation(curRotation);

@@ -1,1 +1,1 @@
-export const classModelPath = "/assets/models/"
+export const classModelPath = "/assets/models/";

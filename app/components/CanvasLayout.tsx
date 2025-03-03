@@ -3,7 +3,7 @@ import { Canvas as ThreeCanvas } from "@react-three/fiber";
 import { Physics } from "@react-three/rapier";
 import React, { ReactNode, Suspense } from "react";
 import { useSunPosition } from "@resources/Settings/useSunPosition";
-import { useDebugState } from "../Resources/Settings/useDebugState";
+import { useDebugState } from "@resources/Settings/useDebugState";
 
 export function CanvasLayout({ children }: { children: ReactNode }) {
   const debugState = useDebugState();

@@ -8,7 +8,7 @@ export class Ground extends Entity {
     super("Ground");
     this.type = "fixed";
     this.scale = 100;
-    this.rotation = new Euler(Math.PI * 1.5, 0 , 0); // Math.PI * 1.5 = degtoRad(270)
+    this.rotation = new Euler(Math.PI * 1.5, 0, 0); // Math.PI * 1.5 = degtoRad(270)
   }
 
   renderComponent() {
@@ -24,7 +24,7 @@ export const GroundComponent = ({ model }: { model?: Ground }) => {
       position={object.position}
       rotation={object.rotation}
     >
-      <Plane scale={object.scale} >
+      <Plane scale={object.scale}>
         <meshStandardMaterial attach="material" color={"black"} />
       </Plane>
     </RigidBody>

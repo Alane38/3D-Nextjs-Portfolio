@@ -20,9 +20,8 @@ const lerpAngle = (start: number, end: number, t: number) => {
 };
 
 export const CharacterController = () => {
-  const { WALK_SPEED, RUN_SPEED, JUMP_FORCE, ROTATION_SPEED, MOUSE, } = useControls(
-    "Character Control",
-    {
+  const { WALK_SPEED, RUN_SPEED, JUMP_FORCE, ROTATION_SPEED, MOUSE } =
+    useControls("Character Control", {
       WALK_SPEED: { value: 4, min: 0.1, max: 4, step: 0.1 },
       RUN_SPEED: { value: 6, min: 0.2, max: 12, step: 0.1 },
       JUMP_FORCE: { value: 5, min: 0.1, max: 10, step: 0.1 },
@@ -32,9 +31,8 @@ export const CharacterController = () => {
         max: degToRad(5),
         step: degToRad(0.1),
       },
-      MOUSE : true
-    },
-  );
+      MOUSE: true,
+    });
 
   const rb = useRef<RapierRigidBody>(null);
   const container = useRef<THREE.Object3D>(null);

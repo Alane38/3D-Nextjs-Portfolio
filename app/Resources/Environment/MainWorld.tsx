@@ -1,10 +1,8 @@
 import { CharacterController } from "@core/CharacterController";
 import { Diamond, DiamondComponent } from "@resources/Class/Diamond";
 import { GroundComponent } from "@resources/Class/Ground";
-import {
-  TextObject,
-  TextObjectComponent,
-} from "@/app/Resources/Class/TextObject";
+import { TextObject, TextObjectComponent } from "@resources/Class/TextObject";
+import { TestComponent } from "../Class/Test";
 
 export const MainWorld = () => {
   const modelText = new TextObject();
@@ -18,7 +16,8 @@ export const MainWorld = () => {
       <GroundComponent />
       <CharacterController />
       <TextObjectComponent model={modelText} />
-      <DiamondComponent model={modelDiamond} />
+      {/* <DiamondComponent model={modelDiamond} /> */}
+      <TestComponent />
     </>
   );
 };

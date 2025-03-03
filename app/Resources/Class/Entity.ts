@@ -5,7 +5,7 @@ import { Euler, Vector3 } from "three";
 export class Entity {
   ref = createRef<RapierRigidBody>();
   path: string;
-  position: Vector3; 
+  position: Vector3;
   rotation: Euler;
   mass: number;
   type: RigidBodyOptions["type"];
@@ -25,7 +25,7 @@ export class Entity {
 
   // Add any common logic or helpers here
   applyImpulse(impulse: { x: number; y: number; z: number }) {
-      this.ref.current?.applyImpulse(impulse, true);
+    this.ref.current?.applyImpulse(impulse, true);
   }
 
   setPosition(position: Vector3) {
