@@ -6,8 +6,9 @@ import { Euler } from "three";
 export class Ground extends Entity {
   constructor() {
     super("Ground");
+    this.type = "fixed";
     this.scale = 100;
-    this.rotation = new Euler(Math.PI / 2, 0, 0);
+    this.rotation = new Euler(Math.PI * 1.5, 0 , 0); // Math.PI * 1.5 = degtoRad(270)
   }
 
   renderComponent() {
@@ -19,11 +20,11 @@ export const GroundComponent = ({ model }: { model?: Ground }) => {
 
   return (
     <RigidBody
-      type="fixed"
+      type={object.type}
       position={object.position}
       rotation={object.rotation}
     >
-      <Plane scale={object.scale}>
+      <Plane scale={object.scale} >
         <meshStandardMaterial attach="material" color={"black"} />
       </Plane>
     </RigidBody>

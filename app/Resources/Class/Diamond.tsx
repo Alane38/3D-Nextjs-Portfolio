@@ -24,7 +24,7 @@ export const DiamondComponent = ({ model }: { model?: Diamond }) => {
       scale={object.scale}
       type={object.type}
     >
-      <group onPointerDown={() => object.applyImpulse({ x: 0, y: 10, z: 0 })}>
+      <group onPointerDown={() => object.applyImpulse({ x: 0, y: 20, z: 0 })}>
         <ModelRenderer path={object.path} />
       </group>
     </RigidBody>

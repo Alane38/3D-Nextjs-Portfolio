@@ -14,18 +14,18 @@ export class Entity {
 
   constructor(name: string) {
     this.path = "";
-    this.position = new Vector3(0, 0, 0); // Initialisation avec un Vector3
+    this.position = new Vector3(0, 0, 0);
     this.rotation = new Euler(0, 0, 0);
     this.mass = 1;
-    this.type = "dynamic"; // Default to dynamic
-    this.colliders = "trimesh"; // Default to trimesh
+    this.type = "dynamic";
+    this.colliders = "trimesh";
     this.scale = 1;
     console.log(`${name} initialized`);
   }
 
   // Add any common logic or helpers here
   applyImpulse(impulse: { x: number; y: number; z: number }) {
-      this.ref.current?.applyImpulse(impulse, false);
+      this.ref.current?.applyImpulse(impulse, true);
   }
 
   setPosition(position: Vector3) {

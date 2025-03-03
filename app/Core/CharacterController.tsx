@@ -20,17 +20,19 @@ const lerpAngle = (start: number, end: number, t: number) => {
 };
 
 export const CharacterController = () => {
-  const { WALK_SPEED, RUN_SPEED, ROTATION_SPEED } = useControls(
+  const { WALK_SPEED, RUN_SPEED, JUMP_FORCE, ROTATION_SPEED, MOUSE, } = useControls(
     "Character Control",
     {
       WALK_SPEED: { value: 4, min: 0.1, max: 4, step: 0.1 },
       RUN_SPEED: { value: 6, min: 0.2, max: 12, step: 0.1 },
+      JUMP_FORCE: { value: 5, min: 0.1, max: 10, step: 0.1 },
       ROTATION_SPEED: {
-        value: degToRad(1),
+        value: degToRad(0.5),
         min: degToRad(0.1),
         max: degToRad(5),
         step: degToRad(0.1),
       },
+      MOUSE : true
     },
   );
 
@@ -74,19 +76,20 @@ export const CharacterController = () => {
   useFrame(({ camera, mouse }) => {
     if (rb.current) {
       const vel = rb.current.linvel();
-      const movement = { x: 0, z: 0 };
+      const movement = { x: 0, y: 0, z: 0 };
 
       if (get().forward) movement.z = 1;
       if (get().backward) movement.z = -1;
 
+      if (get().jump) movement.y = 1;
+
       let speed = get().run ? RUN_SPEED : WALK_SPEED;
 
-      if (isClicking.current) {
-        // Use mouse position to calculate movement direction
+      if (isClicking.current && MOUSE) {
         const cameraDirection = new Vector3();
         camera.getWorldDirection(cameraDirection);
-        movement.x = -mouse.x * 10; // Adjust scaling factor
-        movement.z = mouse.y * 10; // Adjust scaling factor
+        movement.x = -mouse.x * 10;
+        movement.z = mouse.y * 10;
 
         if (Math.abs(movement.x) > 0.5 || Math.abs(movement.z) > 0.5) {
           speed = RUN_SPEED;
@@ -112,6 +115,11 @@ export const CharacterController = () => {
         setAnimation("idle");
       }
 
+      if (movement.y !== 0) {
+        characterRotationTarget.current = Math.atan2(movement.x, movement.z);
+        vel.y = movement.y * JUMP_FORCE;
+      }
+
       if (character.current) {
         character.current.rotation.y = lerpAngle(
           character.current.rotation.y,
@@ -123,7 +131,6 @@ export const CharacterController = () => {
       rb.current.setLinvel(vel, true);
     }
 
-    // Update camera position smoothly
     if (container.current) {
       container.current.rotation.y = MathUtils.lerp(
         container.current.rotation.y,

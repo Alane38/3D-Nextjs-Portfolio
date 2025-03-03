@@ -1,31 +1,14 @@
-"use client";
-
 import { OrthographicCamera, Sky } from "@react-three/drei";
 import { Canvas as ThreeCanvas } from "@react-three/fiber";
 import { Physics } from "@react-three/rapier";
 import React, { ReactNode, Suspense } from "react";
 import { useSunPosition } from "@resources/Settings/useSunPosition";
-import { GroundComponent } from "../Resources/Class/Ground";
+import { useDebugState } from "../Resources/Settings/useDebugState";
 
-/* const maps: {
-  [key: string]: { scale: number; position: [number, number, number] };
-} = {
-  flatmap: {
-    scale: 1,
-    position: [0, 0, 0],
-  },
-};
- */
-export function ConfigCanvas({ children }: { children: ReactNode }) {
+export function CanvasLayout({ children }: { children: ReactNode }) {
+  const debugState = useDebugState();
   const sunPosition = useSunPosition();
   const shadowCameraRef = React.useRef<any>(null);
-
-  /* const { map } = useControls("Map", {
-    map: {
-      value: "flatmap",
-      options: Object.keys(maps),
-    },
-  }); */
 
   return (
     <ThreeCanvas
@@ -45,13 +28,7 @@ export function ConfigCanvas({ children }: { children: ReactNode }) {
         />
       </directionalLight>
       <Suspense fallback={null}>
-        <Physics gravity={[0, -15, 0]} debug>
-          {/* <Map
-            scale={maps[map].scale}
-            position={maps[map].position}
-            model={`${classModelPath}/${map}.glb`}
-          /> */}
-          <GroundComponent />
+        <Physics gravity={[0, -15, 0]} debug={debugState}>
           {children}
         </Physics>
       </Suspense>

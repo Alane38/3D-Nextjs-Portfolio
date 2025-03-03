@@ -13,7 +13,7 @@ export const Controls = {
     jump: "jump",
   };
   
-export const Experience = () => {
+export const JumpGame = () => {
   const [hover, setHover] = useState(false);
   const cube = useRef<RapierRigidBody>(null);
   const [start, setStart] = useState(false);

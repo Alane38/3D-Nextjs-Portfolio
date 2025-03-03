@@ -1,11 +1,14 @@
 "use client";
 
 import { KeyboardControls } from "@react-three/drei";
-import { ConfigCanvas } from "./ConfigCanvas";
-import { EntityManagaer } from "../Core/Managers/EntityManager";
+import { CanvasLayout } from "./CanvasLayout";
+import { MainWorld } from "@resources/Environment/MainWorld";
+import { Leva } from "leva";
 
 export function Canvas() {
   return (
+    <>
+    <Leva collapsed={true} />
     <KeyboardControls
       map={[
         { name: "forward", keys: ["ArrowUp", "z", "Z"] },
@@ -14,10 +17,12 @@ export function Canvas() {
         { name: "right", keys: ["ArrowRight", "d", "D"] },
         { name: "run", keys: ["ShiftLeft"] },
         { name: "jump", keys: ["Space"] },
-      ]}>
-    <ConfigCanvas>
-       <EntityManagaer /> *
-    </ConfigCanvas>
+      ]}
+    >
+      <CanvasLayout>
+        <MainWorld />
+      </CanvasLayout>
     </KeyboardControls>
+    </>
   );
 }
