@@ -21,7 +21,7 @@ export function ConfigCanvas({ children }: { children: ReactNode }) {
         intensity={Math.PI / 2}
         castShadow
       />
-      <OrbitControls />
+      {/* <OrbitControls /> */}
       <Suspense fallback={null}>
         <Physics gravity={[0, -15, 0]}>{children}</Physics>
       </Suspense>

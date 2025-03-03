@@ -2,7 +2,7 @@
 
 import { KeyboardControls } from "@react-three/drei";
 import { ConfigCanvas } from "./ConfigCanvas";
-import { EntityManagaer } from "@core/Managers/EntityManager";
+import { EntityManagaer } from "../Core/Managers/EntityManager";
 
 export function Canvas() {
   return (
