@@ -1,35 +1,26 @@
-import { Diamond } from "@resources/Class/Diamond";
-import NewalText from "@resources/Class/NewalText";
-import { FlatMap } from "@resources/Class/FlatMap";
-import { useMainText } from "@resources/Settings/useMainText";
+import { CharacterController } from "@/app/Core/CharacterController";
+import { Diamond, DiamondComponent } from "@/app/Resources/Class/Diamond";
+import {
+  TextObject,
+  TextObjectComponent,
+} from "@/app/Resources/Class/TextObject";
 
 export const EntityManagaer = () => {
-  const { TextSize, TextV } = useMainText();
-  const flatMap = new FlatMap(
-    "/flatmap2.glb",
-    [0, 0, 0],
-    0,
-    "fixed",
-    "trimesh",
-    1,
-  );
-  const diamond = new Diamond();
-  const newaltext = new NewalText(
-    TextSize,
-    TextV,
-    "fixed",
-    "trimesh",
-    1,
-    1,
-    [5, 5, 0],
-    "/fonts/FontFlemme.json",
-    1,
-  );
+  
+  const modelText = new TextObject();
+  modelText.position.set(3, 1, 0);
+
+
+  const modelDiamond = new Diamond();
+  modelDiamond.position.set(3, 2, 0);
+
   return (
     <>
-      {flatMap.getComponent()}
-      {diamond.getComponent()}
-      {newaltext.getComponent()}
+      <CharacterController />
+
+      <TextObjectComponent model={modelText} />
+      <DiamondComponent model={modelDiamond} />
+
     </>
   );
 };
