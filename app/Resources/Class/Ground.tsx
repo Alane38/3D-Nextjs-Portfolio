@@ -4,11 +4,13 @@ import { Plane } from "@react-three/drei";
 import { Euler } from "three";
 
 export class Ground extends Entity {
+  color: string;
   constructor() {
     super("Ground");
     this.type = "fixed";
     this.scale = 100;
     this.rotation = new Euler(Math.PI * 1.5, 0, 0); // Math.PI * 1.5 = degtoRad(270)
+    this.color = "black";
   }
 
   renderComponent() {
@@ -23,9 +25,10 @@ export const GroundComponent = ({ model }: { model?: Ground }) => {
       type={object.type}
       position={object.position}
       rotation={object.rotation}
+      name={object.name}
     >
       <Plane scale={object.scale}>
-        <meshStandardMaterial attach="material" color={"black"} />
+        <meshStandardMaterial attach="material" color={object.color} />
       </Plane>
     </RigidBody>
   );

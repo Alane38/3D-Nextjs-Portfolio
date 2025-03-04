@@ -1,24 +1,30 @@
 import { createRef } from "react";
-import { RapierRigidBody, RigidBodyOptions } from "@react-three/rapier";
-import { Euler, Vector3 } from "three";
+import {
+  RapierRigidBody,
+  RigidBodyOptions,
+} from "@react-three/rapier";
+import { Euler, Object3D, Vector3 } from "three";
 
 export class Entity {
   ref = createRef<RapierRigidBody>();
+  optionsRef = createRef<RigidBodyOptions>();
+  name: string;
   path: string;
   position: Vector3;
   rotation: Euler;
   mass: number;
   type: RigidBodyOptions["type"];
   colliders: RigidBodyOptions["colliders"];
-  scale: number;
+  scale: number | [number, number, number];
 
   constructor(name: string) {
+    this.name = name;
     this.path = "";
     this.position = new Vector3(0, 0, 0);
     this.rotation = new Euler(0, 0, 0);
     this.mass = 1;
     this.type = "dynamic";
-    this.colliders = "trimesh";
+    this.colliders = "hull";
     this.scale = 1;
     console.log(`${name} initialized`);
   }
@@ -47,5 +53,17 @@ export class Entity {
 
   setPath(path: string) {
     this.path = path;
+  }
+
+  getRigidBody() {
+    return this.ref.current;
+  }
+
+  getRigidBodyOptions() {
+    return this.optionsRef.current;
+  }
+
+  setRigidBodyOptions(options: RigidBodyOptions) {
+    this.optionsRef.current = options;
   }
 }
