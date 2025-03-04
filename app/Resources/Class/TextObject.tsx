@@ -30,6 +30,7 @@ export const TextObjectComponent = ({ model }: { model?: TextObject }) => {
       mass={object.mass}
       scale={object.scale}
       position={object.position}
+      rotation={object.rotation}
     >
       <Text3D
         font={object.TextProps.font}

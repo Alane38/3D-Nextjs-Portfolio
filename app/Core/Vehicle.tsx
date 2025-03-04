@@ -57,7 +57,7 @@ const _bodyEuler = new THREE.Euler();
 const _cameraPosition = new THREE.Vector3();
 const _impulse = new THREE.Vector3();
 
-export const ArcadeVehicle = (props: RigidBodyProps) => {
+export const Vehicle = (props: RigidBodyProps) => {
   const { rapier, world } = useRapier();
 
   const bodyRef = useRef<RapierRigidBody>(null!);

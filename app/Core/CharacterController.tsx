@@ -1,10 +1,15 @@
+import { characterControllerConfig } from "@/constants/character";
 import { Box, useKeyboardControls } from "@react-three/drei";
 import { useFrame } from "@react-three/fiber";
-import { RapierRigidBody, RigidBody } from "@react-three/rapier";
+import {
+  CapsuleCollider,
+  RapierRigidBody,
+  RigidBody,
+  useRapier,
+} from "@react-three/rapier";
 import { useControls } from "leva";
 import { useEffect, useRef, useState } from "react";
 import { MathUtils, Vector3 } from "three";
-import { degToRad } from "three/src/math/MathUtils.js";
 import * as THREE from "three";
 
 const normalizeAngle = (angle: number) => {
@@ -20,23 +25,17 @@ const lerpAngle = (start: number, end: number, t: number) => {
 };
 
 export const CharacterController = () => {
+  const { rapier, world } = useRapier();
+
   const { WALK_SPEED, RUN_SPEED, JUMP_FORCE, ROTATION_SPEED, MOUSE } =
-    useControls("Character Control", {
-      WALK_SPEED: { value: 4, min: 0.1, max: 4, step: 0.1 },
-      RUN_SPEED: { value: 6, min: 0.2, max: 12, step: 0.1 },
-      JUMP_FORCE: { value: 5, min: 0.1, max: 10, step: 0.1 },
-      ROTATION_SPEED: {
-        value: degToRad(0.5),
-        min: degToRad(0.1),
-        max: degToRad(5),
-        step: degToRad(0.1),
-      },
-      MOUSE: true,
-    });
+    useControls("Character Control", characterControllerConfig);
 
   const rb = useRef<RapierRigidBody>(null);
   const container = useRef<THREE.Object3D>(null);
   const character = useRef<THREE.Object3D>(null);
+
+  const grounded = useRef<boolean>(false);
+  /* const jumpTime = useRef<number>(0); */
 
   const [animation, setAnimation] = useState("idle");
 
@@ -72,6 +71,7 @@ export const CharacterController = () => {
   }, []);
 
   useFrame(({ camera, mouse }) => {
+    // Movement Forward_Backward
     if (rb.current) {
       const vel = rb.current.linvel();
       const movement = { x: 0, y: 0, z: 0 };
@@ -79,8 +79,7 @@ export const CharacterController = () => {
       if (get().forward) movement.z = 1;
       if (get().backward) movement.z = -1;
 
-      if (get().jump) movement.y = 1;
-
+      //Movement Left_Right and Run
       let speed = get().run ? RUN_SPEED : WALK_SPEED;
 
       if (isClicking.current && MOUSE) {
@@ -97,6 +96,25 @@ export const CharacterController = () => {
       if (get().left) movement.x = 1;
       if (get().right) movement.x = -1;
 
+      // Ground Check
+      const groundRayResult = world.castRay(
+        new rapier.Ray(rb.current.translation(), { x: 0, y: -1, z: 0 }),
+        1,
+        false,
+        undefined,
+        undefined,
+        undefined,
+        rb.current,
+      );
+      grounded.current = groundRayResult !== null;
+
+      // Jump
+      if (get().jump && grounded.current) {
+        movement.y = JUMP_FORCE;
+        grounded.current = false;
+      }
+
+      // Movement Rotation
       if (movement.x !== 0)
         rotationTarget.current += ROTATION_SPEED * movement.x;
 
@@ -137,6 +155,7 @@ export const CharacterController = () => {
       );
     }
 
+    //Camera
     if (cameraPosition.current) {
       cameraPosition.current.getWorldPosition(cameraWorldPosition.current);
       camera.position.lerp(cameraWorldPosition.current, 0.1);
@@ -157,7 +176,7 @@ export const CharacterController = () => {
         colliders="cuboid"
         lockRotations
         ref={rb}
-        position={[0, 1, 0]}
+        position={[0, 10, 0]}
       >
         <group ref={container}>
           <group ref={cameraTarget} position-z={1.5} />
@@ -168,6 +187,7 @@ export const CharacterController = () => {
             </Box>
           </group>
         </group>
+        <CapsuleCollider args={[0.1, 0.7]} />
       </RigidBody>
     </>
   );

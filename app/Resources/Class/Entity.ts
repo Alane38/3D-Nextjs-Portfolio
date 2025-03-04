@@ -18,9 +18,9 @@ export class Entity {
     this.name = name;
     this.path = "";
     this.position = new Vector3(0, 0, 0);
-    this.rotation = new Euler(1, 1, 1);
+    this.rotation = new Euler(0, 0, 0);
     this.mass = 1;
-    this.type = "dynamic";
+    this.type = "fixed";
     this.colliders = "hull";
     this.scale = 1;
     console.log(`${name} initialized`);

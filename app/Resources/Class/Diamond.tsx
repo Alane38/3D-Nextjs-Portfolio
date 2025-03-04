@@ -7,6 +7,7 @@ export class Diamond extends Entity {
   constructor(path: string = classModelPath + "Diamond.glb") {
     super("Diamond");
     this.path = path;
+    this.type = "dynamic";
   }
   renderComponent() {
     return <DiamondComponent model={this} />;
@@ -25,6 +26,7 @@ export const DiamondComponent = ({
       colliders={object.colliders}
       mass={object.mass}
       position={object.position}
+      rotation={object.rotation}
       scale={object.scale}
       type={object.type}
     >
