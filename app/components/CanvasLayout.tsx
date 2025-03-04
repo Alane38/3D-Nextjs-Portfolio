@@ -1,9 +1,10 @@
-import { OrthographicCamera, Sky } from "@react-three/drei";
+import { Grid, OrthographicCamera, Sky } from "@react-three/drei";
 import { Canvas as ThreeCanvas } from "@react-three/fiber";
 import { Physics } from "@react-three/rapier";
 import React, { ReactNode, Suspense } from "react";
 import { useSunPosition } from "@resources/Settings/useSunPosition";
 import { useDebugState } from "@resources/Settings/useDebugState";
+import { Perf } from "r3f-perf";
 
 export function CanvasLayout({ children }: { children: ReactNode }) {
   const debugState = useDebugState();
@@ -27,7 +28,18 @@ export function CanvasLayout({ children }: { children: ReactNode }) {
           attach={"shadow-camera"}
         />
       </directionalLight>
+
       <Suspense fallback={null}>
+        <Perf position="top-left" />
+
+        <Grid
+          infiniteGrid
+          followCamera
+          sectionColor={"lightgray"}
+          cellColor={"gray"}
+          position={[0, 0.01, 0]}
+        />
+
         <Physics gravity={[0, -15, 0]} debug={debugState}>
           {children}
         </Physics>

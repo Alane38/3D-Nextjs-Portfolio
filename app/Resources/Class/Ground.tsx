@@ -17,8 +17,12 @@ export class Ground extends Entity {
     return <GroundComponent model={this} />;
   }
 }
-export const GroundComponent = ({ model }: { model?: Ground }) => {
-  const object = model || new Ground();
+export const GroundComponent = ({
+  model,
+  ...props
+}: { model?: Ground } & Partial<Ground>) => {
+  // Fusion of props and model
+  const object = { ...new Ground(), ...model, ...props };
 
   return (
     <RigidBody

@@ -1,8 +1,5 @@
 import { createRef } from "react";
-import {
-  RapierRigidBody,
-  RigidBodyOptions,
-} from "@react-three/rapier";
+import { RapierRigidBody, RigidBodyOptions } from "@react-three/rapier";
 import { Euler, Object3D, Vector3 } from "three";
 
 export class Entity {
@@ -21,7 +18,7 @@ export class Entity {
     this.name = name;
     this.path = "";
     this.position = new Vector3(0, 0, 0);
-    this.rotation = new Euler(0, 0, 0);
+    this.rotation = new Euler(1, 1, 1);
     this.mass = 1;
     this.type = "dynamic";
     this.colliders = "hull";

@@ -4,14 +4,15 @@ import { Ground, GroundComponent } from "@resources/Class/Ground";
 import { TextObject, TextObjectComponent } from "@resources/Class/TextObject";
 import { TestComponent } from "../Class/Test";
 import { KillBrickComponent } from "../Class/KillBrick";
+import Character2 from "@/app/Core/Character2";
+import DynamicPlatforms from "@/app/Core/DynamicPlatforms";
+import { Vector3 } from "three";
+import Steps from "@/app/Core/Steps";
 
 export const MainWorld = () => {
   const modelText = new TextObject();
   modelText.position.set(3, 1, 0);
   modelText.TextProps.text = "NEWALFOX";
-
-  const modelDiamond = new Diamond();
-  modelDiamond.position.set(3, 2, 0);
 
   // Ground
   const ground = new Ground();
@@ -23,14 +24,20 @@ export const MainWorld = () => {
 
   return (
     <>
+      <CharacterController />
       <GroundComponent model={ground} />
       <GroundComponent model={pathGround} />
-      <CharacterController />
+      {/* <Character2 /> */}
       <TextObjectComponent model={modelText} />
-      {/* <DiamondComponent model={modelDiamond} /> */}
+      <DiamondComponent position={new Vector3(3, 2, 0)} />
       <TestComponent />
 
-      <KillBrickComponent />
+      <KillBrickComponent position={new Vector3(0, 2, 6)} />
+      <DynamicPlatforms />
+      <Steps />
+      {/* <KeyboardControls map={vehicleControls}>
+                        <ArcadeVehicle position={[15, 2, 0]} />
+                    </KeyboardControls> */}
     </>
   );
 };

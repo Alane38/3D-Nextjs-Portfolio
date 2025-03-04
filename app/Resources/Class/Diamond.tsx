@@ -13,8 +13,12 @@ export class Diamond extends Entity {
   }
 }
 
-export const DiamondComponent = ({ model }: { model?: Diamond }) => {
-  const object = model || new Diamond();
+export const DiamondComponent = ({
+  model,
+  ...props
+}: { model?: Diamond } & Partial<Diamond>) => {
+  const object = { ...new Diamond(), ...model, ...props };
+
   return (
     <RigidBody
       ref={object.ref}
@@ -24,7 +28,11 @@ export const DiamondComponent = ({ model }: { model?: Diamond }) => {
       scale={object.scale}
       type={object.type}
     >
-      <group onPointerDown={() => object.applyImpulse({ x: 0, y: 20, z: 0 })}>
+      <group
+        onPointerDown={() =>
+          object.ref.current?.applyImpulse({ x: 0, y: 20, z: 0 }, true)
+        }
+      >
         <ModelRenderer path={object.path} />
       </group>
     </RigidBody>
