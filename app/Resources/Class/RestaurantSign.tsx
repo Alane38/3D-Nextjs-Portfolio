@@ -6,6 +6,7 @@ import { classModelPath } from "@/constants/class";
 export class RestaurantSign extends Entity {
   constructor(path: string = classModelPath + "RestaurantSign.glb") {
     super("RestaurantSign");
+    // Modify the default settings(Entity) :
     this.path = path;
     this.scale = 0.3;
   }
@@ -18,9 +19,11 @@ export const RestaurantSignComponent = ({
   model,
   ...props
 }: { model?: RestaurantSign } & Partial<RestaurantSign>) => {
+  // Fusion of props and model
   const object = { ...new RestaurantSign(), ...model, ...props };
 
   return (
+    // Body
     <RigidBody
       ref={object.ref}
       colliders={object.colliders}
@@ -35,6 +38,7 @@ export const RestaurantSignComponent = ({
           object.ref.current?.applyImpulse({ x: 0, y: 20, z: 0 }, true)
         }
       >
+        {/* Model */}
         <ModelRenderer path={object.path} />
       </group>
     </RigidBody>

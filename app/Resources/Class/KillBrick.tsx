@@ -8,6 +8,7 @@ export class KillBrick extends Entity {
   color: string;
   constructor() {
     super("KillBrick");
+    // Modify the default settings(Entity) :
     this.type = "dynamic";
     this.scale = [1, 1, 1];
     this.rotation = new Euler(0, Math.PI, 0);
@@ -34,6 +35,7 @@ export const KillBrickComponent = ({
   };
 
   return (
+    // Body
     <RigidBody
       ref={object.ref}
       type={object.type}
@@ -59,6 +61,7 @@ export const KillBrickComponent = ({
         }
       }}
     >
+      {/* Text */}
       <Text
         scale={0.5}
         color="red"
@@ -68,7 +71,7 @@ export const KillBrickComponent = ({
       >
         Touch me to kill !
       </Text>
-
+      {/* Box */}
       <Box scale={object.scale}>
         <meshStandardMaterial attach="material" color={color} />
       </Box>

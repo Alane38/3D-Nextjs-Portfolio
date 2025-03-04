@@ -6,6 +6,7 @@ import { classModelPath } from "@/constants/class";
 export class Diamond extends Entity {
   constructor(path: string = classModelPath + "Diamond.glb") {
     super("Diamond");
+    // Modify the default settings(Entity) : 
     this.path = path;
     this.type = "dynamic";
   }
@@ -18,9 +19,11 @@ export const DiamondComponent = ({
   model,
   ...props
 }: { model?: Diamond } & Partial<Diamond>) => {
+  // Fusion of props and model
   const object = { ...new Diamond(), ...model, ...props };
 
   return (
+    // Body
     <RigidBody
       ref={object.ref}
       colliders={object.colliders}
@@ -35,6 +38,7 @@ export const DiamondComponent = ({
           object.ref.current?.applyImpulse({ x: 0, y: 20, z: 0 }, true)
         }
       >
+        {/* Model */}
         <ModelRenderer path={object.path} />
       </group>
     </RigidBody>

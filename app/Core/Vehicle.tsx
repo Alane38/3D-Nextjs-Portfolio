@@ -1,28 +1,18 @@
-import {
-  KeyboardControls,
-  MeshReflectorMaterial,
-  OrbitControls,
-  PerspectiveCamera,
-  useKeyboardControls,
-} from "@react-three/drei";
+import { MeshReflectorMaterial, useKeyboardControls } from "@react-three/drei";
 import { useFrame } from "@react-three/fiber";
 import {
   BallCollider,
   CuboidCollider,
-  CylinderCollider,
-  Physics,
   RapierRigidBody,
   RigidBody,
   RigidBodyProps,
   useBeforePhysicsStep,
   useRapier,
 } from "@react-three/rapier";
-import { useControls } from "leva";
 import { useRef } from "react";
 import * as THREE from "three";
 
-const SKETCH = "rapier/arcade-vehicle-controller";
-
+// KeyControls Type
 type KeyControls = {
   accelerate: boolean;
   decelerate: boolean;
@@ -31,6 +21,7 @@ type KeyControls = {
   hop: boolean;
 };
 
+// Vehicle Controls
 export const vehicleControls = [
   { name: "accelerate", keys: ["KeyW"] },
   { name: "decelerate", keys: ["KeyS"] },
@@ -39,24 +30,28 @@ export const vehicleControls = [
   { name: "hop", keys: ["Space"] },
 ];
 
+// Vehicle Constants
 const up = new THREE.Vector3(0, 1, 0);
 const maxForwardSpeed = 8;
 const maxReverseSpeed = -1;
 
+// Wheels
 const wheels = [
-  // front
+  // Front
   { position: new THREE.Vector3(-0.45, -0.15, -0.4) },
   { position: new THREE.Vector3(0.45, -0.15, -0.4) },
-  // rear
+  // Rear
   { position: new THREE.Vector3(-0.45, -0.15, 0.4) },
   { position: new THREE.Vector3(0.45, -0.15, 0.4) },
 ];
 
+// Helpers
 const _bodyPosition = new THREE.Vector3();
 const _bodyEuler = new THREE.Euler();
 const _cameraPosition = new THREE.Vector3();
 const _impulse = new THREE.Vector3();
 
+// VEHICLE COMPONENT
 export const Vehicle = (props: RigidBodyProps) => {
   const { rapier, world } = useRapier();
 
@@ -90,7 +85,7 @@ export const Vehicle = (props: RigidBodyProps) => {
 
     const impulse = _impulse.set(0, 0, -speed.current).multiplyScalar(5);
 
-    // check if grounded
+    // Grounded Checker
     const groundRayResult = world.castRay(
       new rapier.Ray(bodyRef.current.translation(), { x: 0, y: -1, z: 0 }),
       1,
@@ -102,13 +97,13 @@ export const Vehicle = (props: RigidBodyProps) => {
     );
     grounded.current = groundRayResult !== null;
 
-    // steering angle
+    // Steering angle
     steeringInput.current = Number(left) - Number(right);
 
-    // update vehicle angle
+    // Update vehicle angle
     steeringAngle.current += steeringInput.current * 0.01;
 
-    // drifting controls
+    // Drifting controls
     if (holdingJump.current && !hop) {
       holdingJump.current = false;
       driftingLeft.current = false;
@@ -141,7 +136,7 @@ export const Vehicle = (props: RigidBodyProps) => {
       driftingRight.current = false;
     }
 
-    // drift steering
+    // Drift steering
     let driftSteeringTarget = 0;
 
     if (driftingLeft.current) {
@@ -162,7 +157,7 @@ export const Vehicle = (props: RigidBodyProps) => {
 
     impulse.applyQuaternion(steeringAngleQuat.current);
 
-    // acceleration and deceleration
+    // Acceleration and deceleration
     let speedTarget = 0;
 
     if (accelerate) {
@@ -181,12 +176,12 @@ export const Vehicle = (props: RigidBodyProps) => {
       jumpTime.current = Date.now();
     }
 
-    // apply impulse
+    // Apply impulse
     if (impulse.length() > 0) {
       bodyRef.current.applyImpulse(impulse, true);
     }
 
-    // damping
+    // Damping
     bodyRef.current.applyImpulse(
       {
         x: -bodyRef.current.linvel().x * 1.5,
@@ -197,21 +192,22 @@ export const Vehicle = (props: RigidBodyProps) => {
     );
   });
 
+  // Update Vehicle
   useFrame((state, delta) => {
-    // body position
+    // Body position
     const bodyPosition = _bodyPosition.copy(bodyRef.current.translation());
     groupRef.current.position.copy(bodyPosition);
     groupRef.current.quaternion.copy(steeringAngleQuat.current);
     groupRef.current.updateMatrix();
 
-    // drift visual angle
+    // Drift visual angle
     driftSteeringVisualAngle.current = THREE.MathUtils.lerp(
       driftSteeringVisualAngle.current,
       driftSteeringAngle.current,
       delta * 10,
     );
 
-    // body rotation
+    // Body rotation
     const bodyEuler = _bodyEuler.setFromQuaternion(
       groupRef.current.quaternion,
       "YXZ",
@@ -219,7 +215,7 @@ export const Vehicle = (props: RigidBodyProps) => {
     bodyEuler.y = bodyEuler.y + driftSteeringVisualAngle.current * 0.4;
     groupRef.current.rotation.copy(bodyEuler);
 
-    // wheel rotation
+    // Wheel rotation
     wheelRotation.current -= (speed.current / 50) * delta * 100;
     wheelsRef.current.forEach((wheel) => {
       if (!wheel) return;
@@ -228,12 +224,12 @@ export const Vehicle = (props: RigidBodyProps) => {
       wheel.rotation.x = wheelRotation.current;
     });
 
-    // wheel steering
+    // Wheel steering
     const frontWheelsSteeringAngle = steeringInput.current * 0.5;
     wheelsRef.current[1]!.rotation.y = frontWheelsSteeringAngle;
     wheelsRef.current[0]!.rotation.y = frontWheelsSteeringAngle;
 
-    // camera
+    // Camera
     if (!state.controls) {
       const cameraPosition = _cameraPosition
         .set(0, 3, 10)
@@ -291,7 +287,9 @@ export const Vehicle = (props: RigidBodyProps) => {
   );
 };
 
-const racetrackPoints: THREE.Vector3[] = [];
+// ARCHIVES DOCUMENTATION FOR RACETRACK
+
+/* const racetrackPoints: THREE.Vector3[] = [];
 
 const boxLength = 20;
 const trackWidth = 20;
@@ -320,11 +318,11 @@ for (let i = 0; i < numConesOuter; i++) {
       Math.sin(angle) * outerTrackRadius,
     ),
   );
-}
+} */
 
-const colors = ["orange", "hotpink", "cyan"];
+/* const colors = ["orange", "hotpink", "cyan"]; */
 
-const Floor = () => (
+/* const Floor = () => (
   <>
     <RigidBody type="fixed" position={[0, -1, 0]}>
       <CuboidCollider args={[100, 1, 100]} />
@@ -347,7 +345,8 @@ const Floor = () => (
       />
     </mesh>
   </>
-);
+); */
+
 // export function Sketch() {
 //     const { orbitControls, physicsDebug } = useControls(SKETCH, {
 //         orbitControls: false,

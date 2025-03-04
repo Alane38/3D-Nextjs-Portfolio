@@ -9,11 +9,11 @@ import { characterControls } from "@/constants/character";
 export function Canvas() {
   return (
     <>
-      <Leva collapsed={true} />
+      <Leva collapsed={true} /> {/* Leva Panel Settings */}
 
-      <KeyboardControls map={characterControls}>
-        <CanvasLayout>
-          <MainWorld />
+      <KeyboardControls map={characterControls}> {/* Controls */}
+        <CanvasLayout> 
+          <MainWorld /> {/* Children */}
         </CanvasLayout>
       </KeyboardControls>
     </>

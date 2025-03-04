@@ -1,5 +1,6 @@
 import { useControls } from "leva";
 
+// Leva Settings -> SunPosition
 export const useSunPosition = () => {
   const { sunPosition } = useControls("Sun Position", {
     sunPosition: {

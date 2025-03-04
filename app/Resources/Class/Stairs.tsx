@@ -6,6 +6,7 @@ import { classModelPath } from "@/constants/class";
 export class Stairs extends Entity {
   constructor(path: string = classModelPath + "Stairs.glb") {
     super("Stairs");
+    // Modify the default settings(Entity) :
     this.path = path;
     this.type = "fixed";
   }
@@ -21,6 +22,7 @@ export const StairsComponent = ({
   const object = { ...new Stairs(), ...model, ...props };
 
   return (
+    // Body
     <RigidBody
       ref={object.ref}
       colliders={object.colliders}
@@ -35,6 +37,7 @@ export const StairsComponent = ({
           object.ref.current?.applyImpulse({ x: 0, y: 20, z: 0 }, true)
         }
       >
+        {/* Model */}
         <ModelRenderer path={object.path} />
       </group>
     </RigidBody>

@@ -12,10 +12,12 @@ import { useEffect, useRef, useState } from "react";
 import { MathUtils, Vector3 } from "three";
 import * as THREE from "three";
 
+// Initialization of normalizeAngle
 const normalizeAngle = (angle: number) => {
   return ((angle + Math.PI) % (2 * Math.PI)) - Math.PI;
 };
 
+// Initialization of lerp
 const lerpAngle = (start: number, end: number, t: number) => {
   start = normalizeAngle(start);
   end = normalizeAngle(end);
@@ -24,21 +26,24 @@ const lerpAngle = (start: number, end: number, t: number) => {
   return normalizeAngle(start + delta * t);
 };
 
+// Main Character Controller
 export const CharacterController = () => {
-  const { rapier, world } = useRapier();
+  const { rapier, world } = useRapier(); // Import Rappier for Colliders Events*
 
-  const { WALK_SPEED, RUN_SPEED, JUMP_FORCE, ROTATION_SPEED, MOUSE } =
-    useControls("Character Control", characterControllerConfig);
+  // Import Character Value
+  const { WALK_SPEED, RUN_SPEED, JUMP_FORCE, ROTATION_SPEED, MOUSE } = 
+    useControls("Character Control", characterControllerConfig); 
 
   const rb = useRef<RapierRigidBody>(null);
   const container = useRef<THREE.Object3D>(null);
   const character = useRef<THREE.Object3D>(null);
 
   const grounded = useRef<boolean>(false);
-  /* const jumpTime = useRef<number>(0); */
+  // const jumpTime = useRef<number>(0);
 
-  const [animation, setAnimation] = useState("idle");
+  const [animation, setAnimation] = useState("idle"); 
 
+  // Character Rotation & Camera Settings
   const characterRotationTarget = useRef(0);
   const rotationTarget = useRef(0);
   const cameraTarget = useRef<THREE.OrthographicCamera>(null);
@@ -47,9 +52,11 @@ export const CharacterController = () => {
   const cameraLookAtWorldPosition = useRef(new Vector3());
   const cameraLookAt = useRef(new Vector3());
 
+  // Keyboard Controls
   const [, get] = useKeyboardControls();
   const isClicking = useRef(false);
 
+  // Events listeners
   useEffect(() => {
     const onMouseDown = () => (isClicking.current = true);
     const onMouseUp = () => (isClicking.current = false);
@@ -70,6 +77,7 @@ export const CharacterController = () => {
     };
   }, []);
 
+  // MOVEMENT, CAMERA, COLLISION DETECTION
   useFrame(({ camera, mouse }) => {
     // Movement Forward_Backward
     if (rb.current) {
@@ -79,9 +87,10 @@ export const CharacterController = () => {
       if (get().forward) movement.z = 1;
       if (get().backward) movement.z = -1;
 
-      //Movement Left_Right and Run
+      // Movement Left_Right and Run
       let speed = get().run ? RUN_SPEED : WALK_SPEED;
 
+      // Movement Mouse
       if (isClicking.current && MOUSE) {
         const cameraDirection = new Vector3();
         camera.getWorldDirection(cameraDirection);
@@ -96,7 +105,7 @@ export const CharacterController = () => {
       if (get().left) movement.x = 1;
       if (get().right) movement.x = -1;
 
-      // Ground Check
+      // Ground Checker
       const groundRayResult = world.castRay(
         new rapier.Ray(rb.current.translation(), { x: 0, y: -1, z: 0 }),
         1,
@@ -136,6 +145,7 @@ export const CharacterController = () => {
         vel.y = movement.y * JUMP_FORCE;
       }
 
+      // Character Rotation
       if (character.current) {
         character.current.rotation.y = lerpAngle(
           character.current.rotation.y,
@@ -155,7 +165,7 @@ export const CharacterController = () => {
       );
     }
 
-    //Camera
+    // Camera
     if (cameraPosition.current) {
       cameraPosition.current.getWorldPosition(cameraWorldPosition.current);
       camera.position.lerp(cameraWorldPosition.current, 0.1);
@@ -181,13 +191,13 @@ export const CharacterController = () => {
         <group ref={container}>
           <group ref={cameraTarget} position-z={1.5} />
           <group ref={cameraPosition} position-y={3} position-z={-4} />
-          <group ref={character}>
+          <group ref={character}> {/* Our player, who will be replaced by a model */}
             <Box>
               <meshStandardMaterial color={"cyan"} />
             </Box>
           </group>
         </group>
-        <CapsuleCollider args={[0.1, 0.7]} />
+        <CapsuleCollider args={[0.1, 0.7]} /> {/* Enables obstacle management */}
       </RigidBody>
     </>
   );

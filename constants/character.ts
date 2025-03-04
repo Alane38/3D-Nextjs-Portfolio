@@ -1,6 +1,7 @@
 import { degToRad } from "three/src/math/MathUtils.js";
 
-export const characterControls = [
+// Controls
+export const characterControls = [ 
   { name: "forward", keys: ["ArrowUp", "z", "Z"] },
   { name: "backward", keys: ["ArrowDown", "s", "S"] },
   { name: "left", keys: ["ArrowLeft", "q", "Q"] },
@@ -9,6 +10,7 @@ export const characterControls = [
   { name: "jump", keys: ["Space"] },
 ];
 
+// Character Value Config
 export const characterControllerConfig = {
   WALK_SPEED: { value: 4, min: 0.1, max: 4, step: 0.1 },
   RUN_SPEED: { value: 6, min: 0.2, max: 12, step: 0.1 },
