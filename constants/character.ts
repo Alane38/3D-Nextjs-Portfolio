@@ -20,4 +20,5 @@ export const characterControllerConfig = {
     step: degToRad(0.1),
   },
   MOUSE: true,
+  INFINITE_JUMP: false,
 };

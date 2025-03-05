@@ -1,4 +1,9 @@
-import { Grid, OrthographicCamera, Sky } from "@react-three/drei";
+import {
+  Grid,
+  OrbitControls,
+  OrthographicCamera,
+  Sky,
+} from "@react-three/drei";
 import { Canvas as ThreeCanvas } from "@react-three/fiber";
 import { Physics } from "@react-three/rapier";
 import React, { ReactNode, Suspense } from "react";
@@ -16,6 +21,7 @@ export function CanvasLayout({ children }: { children: ReactNode }) {
       camera={{ position: [0, 16, 5], fov: 70, near: 0.1, far: 10000 }}
       shadows
     >
+      {/* <OrbitControls /> */}
       <Sky distance={10000} sunPosition={sunPosition} />
       <ambientLight intensity={Math.PI / 2} />
       <directionalLight position={[5, 5, 5]} intensity={Math.PI / 2} castShadow>

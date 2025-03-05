@@ -2,7 +2,7 @@ import { RigidBody } from "@react-three/rapier";
 import { Entity } from "./Entity";
 import { Box, Text } from "@react-three/drei";
 import { Euler, Vector3 } from "three";
-import { useState } from "react";
+import { useMemo, useState } from "react";
 
 export class KillBrick extends Entity {
   color: string;
@@ -25,33 +25,31 @@ export const KillBrickComponent = ({
   ...props
 }: { model?: KillBrick } & Partial<KillBrick>) => {
   // Fusion of props and model
-  const object = { ...new KillBrick(), ...model, ...props };
+  const object = useMemo(() => {
+    return { ...new KillBrick(), ...model, ...props };
+  }, [model, props]);
   const [color, setColor] = useState(object.color);
 
   const playerCollision = () => {
-    console.log("Collision with Player");
+    // console.log("Collision with Player");
     setColor("green");
   };
 
   return (
     <RigidBody
-      ref={object.ref}
-      type={object.type}
-      position={object.position}
-      rotation={object.rotation}
-      name={object.name}
+      {...object}
       onCollisionEnter={({ manifold, target, other }) => {
-        console.log(
-          "Collision at world position ",
-          manifold.solverContactPoint(0),
-        );
+        // console.log(
+        //   "Collision at world position ",
+        //   manifold.solverContactPoint(0),
+        // );
 
         if (other.rigidBodyObject) {
-          console.log(
-            target.rigidBodyObject?.name,
-            " collided with ",
-            other.rigidBodyObject.name,
-          );
+          // console.log(
+          //   target.rigidBodyObject?.name,
+          //   " collided with ",
+          //   other.rigidBodyObject.name,
+          // );
 
           if (other.rigidBodyObject.name === "Player") {
             playerCollision();

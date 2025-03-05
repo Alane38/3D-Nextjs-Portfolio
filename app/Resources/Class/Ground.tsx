@@ -2,6 +2,7 @@ import { RigidBody } from "@react-three/rapier";
 import { Entity } from "./Entity";
 import { Plane } from "@react-three/drei";
 import { Euler } from "three";
+import { useMemo } from "react";
 
 export class Ground extends Entity {
   color: string;
@@ -22,7 +23,9 @@ export const GroundComponent = ({
   ...props
 }: { model?: Ground } & Partial<Ground>) => {
   // Fusion of props and model
-  const object = { ...new Ground(), ...model, ...props };
+  const object = useMemo(() => {
+    return { ...new Ground(), ...model, ...props };
+  }, [model, props]);
 
   return (
     <RigidBody

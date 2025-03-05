@@ -27,8 +27,14 @@ const lerpAngle = (start: number, end: number, t: number) => {
 export const CharacterController = () => {
   const { rapier, world } = useRapier();
 
-  const { WALK_SPEED, RUN_SPEED, JUMP_FORCE, ROTATION_SPEED, MOUSE } =
-    useControls("Character Control", characterControllerConfig);
+  const {
+    WALK_SPEED,
+    RUN_SPEED,
+    JUMP_FORCE,
+    ROTATION_SPEED,
+    MOUSE,
+    INFINITE_JUMP,
+  } = useControls("Character Control", characterControllerConfig);
 
   const rb = useRef<RapierRigidBody>(null);
   const container = useRef<THREE.Object3D>(null);
@@ -109,7 +115,7 @@ export const CharacterController = () => {
       grounded.current = groundRayResult !== null;
 
       // Jump
-      if (get().jump && grounded.current) {
+      if (get().jump && (grounded.current || INFINITE_JUMP === true)) {
         movement.y = JUMP_FORCE;
         grounded.current = false;
       }
@@ -170,13 +176,28 @@ export const CharacterController = () => {
 
   return (
     <>
-      {/* <OrbitControls /> */}
       <RigidBody
         name="Player"
         colliders="cuboid"
         lockRotations
         ref={rb}
         position={[0, 10, 0]}
+        onCollisionEnter={({ other }) => {
+          if (other.rigidBodyObject?.name === "KillBrick") {
+          } else if (other.rigidBodyObject?.name === "Spinner") {
+            // console.log("collision with Spinner");
+            rb.current?.applyImpulse({ x: 5, y: 5, z: 5 }, true);
+            
+          }
+        }}
+        onCollisionExit={({ other }) => {
+          if (other.rigidBodyObject?.name === "KillBrick") {
+          } else if (other.rigidBodyObject?.name === "Spinner") {
+            // console.log("collision with Spinner");
+            rb.current?.applyImpulse({ x: 5, y: 5, z: 5 }, true);
+            
+          }
+        }}
       >
         <group ref={container}>
           <group ref={cameraTarget} position-z={1.5} />

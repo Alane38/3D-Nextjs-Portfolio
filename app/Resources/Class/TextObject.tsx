@@ -2,11 +2,12 @@ import { Text3D } from "@react-three/drei";
 import { RigidBody, RigidBodyOptions } from "@react-three/rapier";
 import { Entity } from "./Entity";
 import { Text3DProps } from "@/types/TextProps";
+import { useMemo } from "react";
 
 export class TextObject extends Entity {
   TextProps: Text3DProps;
   constructor(type: RigidBodyOptions["type"] = "fixed") {
-    super("Main Text");
+    super("Text");
     this.type = type;
     this.TextProps = {
       text: "Text",
@@ -20,18 +21,12 @@ export class TextObject extends Entity {
 }
 
 export const TextObjectComponent = ({ model }: { model?: TextObject }) => {
-  const object = model || new TextObject();
+  const object = useMemo(() => {
+    return { ...new TextObject(), ...model };
+  }, [model]);
 
   return (
-    <RigidBody
-      ref={object.ref}
-      type={object.type}
-      colliders={object.colliders}
-      mass={object.mass}
-      scale={object.scale}
-      position={object.position}
-      rotation={object.rotation}
-    >
+    <RigidBody {...object}>
       <Text3D
         font={object.TextProps.font}
         position={object.position}

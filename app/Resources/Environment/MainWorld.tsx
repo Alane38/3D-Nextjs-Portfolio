@@ -8,9 +8,10 @@ import { Euler, Vector3 } from "three";
 import Steps from "@/app/Core/Steps";
 import { RestaurantSignComponent } from "../Class/RestaurantSign";
 import FloatingPlatform from "@/app/Core/FloatingPlatform";
-import { KeyboardControls } from "@react-three/drei";
 import { Stairs, StairsComponent } from "../Class/Stairs";
 import { ObjectComponent } from "../Class/Object";
+import { SpinnerComponent } from "../Class/Spinner";
+import { GlobalUI } from "../Class/UI/GlobalUI";
 
 export const MainWorld = () => {
   const modelText = new TextObject();
@@ -46,6 +47,7 @@ export const MainWorld = () => {
       <DynamicPlatforms />
 
       <Steps />
+      <SpinnerComponent position={new Vector3(-7, 0, 0)} speed={10} />
       <KillBrickComponent position={new Vector3(0, 2, 6)} />
       <RestaurantSignComponent
         position={new Vector3(4, 0, 4)}
@@ -56,6 +58,8 @@ export const MainWorld = () => {
         position={new Vector3(-20, 0, 10)}
         rotation={new Euler(0, Math.PI / 2, 0)}
       />
+
+      <GlobalUI />
     </>
   );
 };

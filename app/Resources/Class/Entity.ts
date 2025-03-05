@@ -1,9 +1,10 @@
 import { createRef } from "react";
 import { RapierRigidBody, RigidBodyOptions } from "@react-three/rapier";
-import { Euler, Object3D, Vector3 } from "three";
+import { Euler, Group, Object3D, Vector3 } from "three";
 
 export class Entity {
   ref = createRef<RapierRigidBody>();
+  groupRef = createRef<Group>();
   optionsRef = createRef<RigidBodyOptions>();
   name: string;
   path: string;
@@ -23,7 +24,7 @@ export class Entity {
     this.type = "fixed";
     this.colliders = "hull";
     this.scale = 1;
-    console.log(`${name} initialized`);
+    // console.log(`${name} initialized`);
   }
 
   // Add any common logic or helpers here
