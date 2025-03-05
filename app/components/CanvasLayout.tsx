@@ -44,9 +44,9 @@ export function CanvasLayout({ children }: { children: ReactNode }) {
         <Grid
           infiniteGrid
           followCamera
-          sectionColor={"lightgray"}
+          sectionColor={"black"}
           cellColor={"gray"}
-          position={[0, 0.01, 0]}
+          position={[0, 0.02, 0]}
         />
         <Physics gravity={[0, -15, 0]} debug={debugState}>
           {children} {/* Put the world scene here */}

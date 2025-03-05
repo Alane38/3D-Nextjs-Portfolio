@@ -9,7 +9,7 @@ export class Object extends Entity {
     super("Object");
     // Modify the default settings(Entity) :
     this.path = path;
-    this.type = "dynamic";
+    this.type = "fixed";
   }
   renderComponent() {
     return <ObjectComponent model={this} />;

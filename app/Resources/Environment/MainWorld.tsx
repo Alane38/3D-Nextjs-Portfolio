@@ -57,7 +57,7 @@ export const MainWorld = () => {
           TextProps={{ text: "NEWALFOX" }}
         />
 
-        {/* <DiamondComponent position={new Vector3(3, 2, 0)} /> */}
+        <DiamondComponent position={new Vector3(3, 2, 0)} />
       </group>
 
       <group>
