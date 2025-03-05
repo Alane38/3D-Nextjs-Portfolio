@@ -38,8 +38,8 @@ This project showcases interactive 3D elements, physics-based interactions, and 
 
 1. Clone the repository
 ```bash
-git clone https://github.com/Alane38/tridfolio-interactive.git
-cd tridfolio-interactive
+git clone https://github.com/Alane38/3d-nextjs-portfolio.git
+cd 3d-nextjs-portfolio
 ```
 
 2. Install dependencies
@@ -65,7 +65,7 @@ bun dev
 ## 🏗️ Project Structure
 
 ```
-tridfolio-interactive/
+3d-nextjs-portfolio/
 ├── app/
 │   ├── Core/                 # Core components and controllers
 │   ├── Resources/
@@ -126,4 +126,4 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 ## 📧 Contact
 
-Project Link: [https://github.com/Alane38/tridfolio-interactive](https://github.com/Alane38/tridfolio-interactive)
+Project Link: [https://github.com/Alane38/3d-nextjs-portfolio](https://github.com/Alane38/3d-nextjs-portfolio)
