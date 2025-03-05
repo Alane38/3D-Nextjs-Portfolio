@@ -13,11 +13,11 @@ import { classModelPath } from "@/constants/class";
 import { Entity } from "./Entity";
 import { Euler, Object3D, Quaternion, Vector3 } from "three";
 import { useEffect, useMemo, useRef } from "react";
-import { vectorArrayToVector3 } from "@/packages/react-three-rapier/packages/react-three-rapier/src/utils/utils";
 import { BallSpring } from "@/app/Core/Spring";
 import { spring } from "framer-motion";
-import { Attractor } from "@/packages/react-three-rapier/packages/react-three-rapier-addons/src";
 import { Group } from "three/examples/jsm/libs/tween.module.js";
+import { vectorArrayToVector3 } from "@/packages/rapier/react-three-rapier/src/utils/utils";
+import { Attractor } from "@/packages/rapier/react-three-rapier-addons/src";
 
 export class Diamond extends Entity {
   springed?: boolean;
@@ -67,9 +67,6 @@ export const DiamondComponent = ({
         <RigidBody type="fixed" collisionGroups={interactionGroups(2)}>
           <Attractor
             strength={5}
-            rotation={new Euler(180, -90, 180)}
-            coneAngle={35}
-            direction={[0, 1, 1]}
             range={2}
             collisionGroups={interactionGroups(2, 2)}
           />
