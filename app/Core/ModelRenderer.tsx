@@ -9,5 +9,5 @@ export const ModelRenderer = ({ path }: { path: string }) => {
     loader.setDRACOLoader(dracoLoader);
   });
 
-  return <primitive object={gltf.scene.clone()} />; 
+  return <primitive object={gltf.scene.clone()} />;
 };

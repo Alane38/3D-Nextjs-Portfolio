@@ -12,6 +12,11 @@ import { Stairs, StairsComponent } from "../Class/Stairs";
 import { ObjectComponent } from "../Class/Object";
 import { SpinnerComponent } from "../Class/Spinner";
 import { GlobalUI } from "../Class/UI/GlobalUI";
+import { PresentationControls } from "@react-three/drei";
+import { useRapier } from "@react-three/rapier";
+import { useEffect, useRef } from "react";
+import { Joints } from "@/app/Core/Joint";
+import { SpringExample } from "@/app/Core/Spring";
 
 export const MainWorld = () => {
   /* INITIALIZATION */
@@ -51,9 +56,10 @@ export const MainWorld = () => {
           position={new Vector3(3, 1, 0)}
           TextProps={{ text: "NEWALFOX" }}
         />
-        <DiamondComponent position={new Vector3(3, 2, 0)} />
+
+        {/* <DiamondComponent position={new Vector3(3, 2, 0)} /> */}
       </group>
-      
+
       <group>
         {/* Entity Importations */}
         <Steps />
@@ -77,7 +83,7 @@ export const MainWorld = () => {
         rotation={new Euler(0, Math.PI / 2, 0)}
       />
 
-      <GlobalUI />
+      {/* <GlobalUI /> */}
     </>
   );
 };

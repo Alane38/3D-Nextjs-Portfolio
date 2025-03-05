@@ -25,7 +25,9 @@ export const RestaurantSignComponent = ({
   const object = useMemo(() => {
     return { ...new RestaurantSign(), ...model, ...props };
   }, [model, props]);
-  const videoTexture = useVideoTexture("/assets/videos/newalfox-compressed.webm");
+  const videoTexture = useVideoTexture(
+    "/assets/videos/newalfox-compressed.webm",
+  );
 
   return (
     <RigidBody {...object}>

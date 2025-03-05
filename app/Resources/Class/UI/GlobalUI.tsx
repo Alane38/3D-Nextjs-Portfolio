@@ -534,17 +534,17 @@ export const GlobalUI: React.FC = () => {
       {/* Ajoutez ici les autres composants en tant que groupes */}
 
       {/* Intégration de TimelineProgress */}
-      <HtmlContainer position={[-10, 3, 0]}>
+      <HtmlContainer position={[-4.5, 3, 0]}>
         <TimelineProgress />
       </HtmlContainer>
 
       {/* Parallax Slider */}
-      <HtmlContainer position={[-7, 3, 0]}>
+      <HtmlContainer position={[-9.5, 3, 0]}>
         <ParallaxSlider />
       </HtmlContainer>
 
       {/* Sidebar */}
-      <HtmlContainer position={[-4.5, 4, 0]}>
+      <HtmlContainer position={[-7, 4, 0]}>
         <Sidebar />
       </HtmlContainer>
 
@@ -569,12 +569,12 @@ export const GlobalUI: React.FC = () => {
       </HtmlContainer>
 
       {/* Section Projects */}
-      <HtmlContainer position={[11, 3, 0]}>
+      <HtmlContainer position={[13, 3, 0]}>
         <SectionProjects />
       </HtmlContainer>
 
       {/* Section Installation */}
-      <HtmlContainer position={[14, 3, 0]}>
+      <HtmlContainer position={[20, 3, 0]}>
         <SectionInstallation />
       </HtmlContainer>
     </group>

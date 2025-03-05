@@ -38,7 +38,7 @@ export function CanvasLayout({ children }: { children: ReactNode }) {
       </directionalLight>
       <Suspense fallback={null}>
         {/* Performance Monitor */}
-        <Perf position="top-left" /> 
+        <Perf position="top-left" />
 
         {/* Debug Grid */}
         <Grid
@@ -49,7 +49,7 @@ export function CanvasLayout({ children }: { children: ReactNode }) {
           position={[0, 0.01, 0]}
         />
         <Physics gravity={[0, -15, 0]} debug={debugState}>
-          {children}  {/* Put the world scene here */}
+          {children} {/* Put the world scene here */}
         </Physics>
       </Suspense>
     </ThreeCanvas>

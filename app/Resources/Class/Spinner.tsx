@@ -25,9 +25,9 @@ export const SpinnerComponent = ({
   model,
   ...props
 }: { model?: Spinner } & Partial<Spinner>) => {
-    const object = useMemo(() => {
-        return { ...new Spinner(), ...model, ...props };
-      }, [model, props]);
+  const object = useMemo(() => {
+    return { ...new Spinner(), ...model, ...props };
+  }, [model, props]);
 
   const kicker = object.ref;
 

@@ -20,9 +20,9 @@ export const StairsComponent = ({
   model,
   ...props
 }: { model?: Stairs } & Partial<Stairs>) => {
-    const object = useMemo(() => {
-        return { ...new Stairs(), ...model, ...props };
-      }, [model, props]);
+  const object = useMemo(() => {
+    return { ...new Stairs(), ...model, ...props };
+  }, [model, props]);
 
   return (
     <RigidBody {...object}>

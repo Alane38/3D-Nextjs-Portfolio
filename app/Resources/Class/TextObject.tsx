@@ -20,7 +20,10 @@ export class TextObject extends Entity {
   }
 }
 
-export const TextObjectComponent = ({ model, ...props }: { model?: TextObject } & Partial<TextObject>) => {
+export const TextObjectComponent = ({
+  model,
+  ...props
+}: { model?: TextObject } & Partial<TextObject>) => {
   const object = useMemo(() => {
     return { ...new TextObject(), ...model, ...props };
   }, [model, props]);

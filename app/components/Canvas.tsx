@@ -10,9 +10,9 @@ export function Canvas() {
   return (
     <>
       <Leva collapsed={true} /> {/* Leva Panel Settings */}
-
-      <KeyboardControls map={characterControls}> {/* Controls */}
-        <CanvasLayout> 
+      {/* Controls */}
+      <KeyboardControls map={characterControls}>
+        <CanvasLayout>
           <MainWorld /> {/* Children */}
         </CanvasLayout>
       </KeyboardControls>
