@@ -8,6 +8,7 @@ import { useMemo } from "react";
 export class RestaurantSign extends Entity {
   constructor(path: string = classModelPath + "RestaurantSign.glb") {
     super("RestaurantSign");
+    // Modify the default settings(Entity) :
     this.path = path;
     this.scale = 0.3;
   }
@@ -20,6 +21,7 @@ export const RestaurantSignComponent = ({
   model,
   ...props
 }: { model?: RestaurantSign } & Partial<RestaurantSign>) => {
+  // Fusion of props and model
   const object = useMemo(() => {
     return { ...new RestaurantSign(), ...model, ...props };
   }, [model, props]);
@@ -32,6 +34,7 @@ export const RestaurantSignComponent = ({
           object.ref.current?.applyImpulse({ x: 0, y: 20, z: 0 }, true)
         }
       >
+        {/* Model */}
         <ModelRenderer path={object.path} />
         <mesh position={[0, 1, 0]}>
           <boxGeometry args={[2.5, 1.5, 0.2]} />

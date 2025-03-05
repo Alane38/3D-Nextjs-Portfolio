@@ -7,6 +7,7 @@ import { useMemo } from "react";
 export class Stairs extends Entity {
   constructor(path: string = classModelPath + "Stairs.glb") {
     super("Stairs");
+    // Modify the default settings(Entity) :
     this.path = path;
     this.type = "fixed";
   }
@@ -30,6 +31,7 @@ export const StairsComponent = ({
           object.ref.current?.applyImpulse({ x: 0, y: 20, z: 0 }, true)
         }
       >
+        {/* Model */}
         <ModelRenderer path={object.path} />
       </group>
     </RigidBody>

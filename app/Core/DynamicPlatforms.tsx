@@ -13,7 +13,7 @@ export default function DynamicPlatforms() {
   const rotatePlatformRef = useRef<RapierRigidBody>(null);
   const rotationDrumRef = useRef<RapierRigidBody>(null);
 
-  // Initializ animation settings
+  
   let time = null;
   const xRotationAxies = new THREE.Vector3(1, 0, 0);
   const yRotationAxies = new THREE.Vector3(0, 1, 0);

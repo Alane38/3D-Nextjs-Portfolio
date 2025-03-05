@@ -7,6 +7,7 @@ import { useMemo } from "react";
 export class Object extends Entity {
   constructor(path: string = classModelPath + "Object.glb") {
     super("Object");
+    // Modify the default settings(Entity) :
     this.path = path;
     this.type = "dynamic";
   }
@@ -19,6 +20,7 @@ export const ObjectComponent = ({
   model,
   ...props
 }: { model?: Object } & Partial<Object>) => {
+  // Fusion of props and model
   const object = useMemo(() => {
     return { ...new Object(), ...model, ...props };
   }, [model, props]);
@@ -30,6 +32,7 @@ export const ObjectComponent = ({
           object.ref.current?.applyImpulse({ x: 0, y: 20, z: 0 }, true)
         }
       >
+        {/* Model */}
         <ModelRenderer path={object.path} />
       </group>
     </RigidBody>

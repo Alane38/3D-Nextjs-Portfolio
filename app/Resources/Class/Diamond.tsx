@@ -8,6 +8,7 @@ import { useMemo, useRef } from "react";
 export class Diamond extends Entity {
   constructor(path: string = classModelPath + "Diamond.glb") {
     super("Diamond");
+    // Modify the default settings(Entity) : 
     this.path = path;
     this.type = "dynamic";
   }
@@ -47,6 +48,7 @@ export const DiamondComponent = ({
           object.ref.current?.applyImpulse({ x: 0, y: 20, z: 0 }, true)
         }
       >
+        {/* Model */}
         <ModelRenderer path={object.path} />
       </group>
     </RigidBody>

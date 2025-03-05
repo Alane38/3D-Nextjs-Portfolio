@@ -14,17 +14,16 @@ import { SpinnerComponent } from "../Class/Spinner";
 import { GlobalUI } from "../Class/UI/GlobalUI";
 
 export const MainWorld = () => {
-  const modelText = new TextObject();
-  modelText.position.set(3, 1, 0);
-  modelText.TextProps.text = "NEWALFOX";
+  /* INITIALIZATION */
 
-  // Ground
+  // Ground Class
   const ground = new Ground();
 
+  /* Example of class integration.
   const pathGround = new Ground();
   pathGround.color = "white";
   pathGround.scale = [5, (ground.scale as number) / 1.2, 1];
-  pathGround.position.set(0, ground.position.y + 0.01, 0);
+  pathGround.position.set(0, ground.position.y + 0.01, 0); */
 
   return (
     <>
@@ -36,24 +35,43 @@ export const MainWorld = () => {
       <CharacterController />
 
       <group>
-        <GroundComponent model={ground} />
-        <GroundComponent model={pathGround} />
+        {/* Ground */}
+        <GroundComponent model={ground} /> {/* Default Ground  */}
+        <GroundComponent
+          color="white"
+          scale={[5, (ground.scale as number) / 1.2, 1]}
+          position={new Vector3(0, ground.position.y + 0.01, 0)}
+        />{" "}
+        {/* Custom Ground with props includes */}
       </group>
 
-      <TextObjectComponent model={modelText} />
-      <DiamondComponent position={new Vector3(3, 2, 0)} />
+      <group>
+        {/* Entity Importations */}
+        <TextObjectComponent
+          position={new Vector3(3, 1, 0)}
+          TextProps={{ text: "NEWALFOX" }}
+        />
+        <DiamondComponent position={new Vector3(3, 2, 0)} />
+      </group>
+      
+      <group>
+        {/* Entity Importations */}
+        <Steps />
+        <SpinnerComponent position={new Vector3(-7, 0, 0)} speed={10} />
+        <KillBrickComponent position={new Vector3(0, 2, 6)} />
+        <RestaurantSignComponent
+          position={new Vector3(4, 0, 4)}
+          rotation={new Euler(0, Math.PI / 4, 0)}
+        />
+      </group>
 
-      <FloatingPlatform />
-      <DynamicPlatforms />
+      <group>
+        {/* Platforms Events Examples */}
+        <FloatingPlatform />
+        <DynamicPlatforms />
+      </group>
 
-      <Steps />
-      <SpinnerComponent position={new Vector3(-7, 0, 0)} speed={10} />
-      <KillBrickComponent position={new Vector3(0, 2, 6)} />
-      <RestaurantSignComponent
-        position={new Vector3(4, 0, 4)}
-        rotation={new Euler(0, Math.PI / 4, 0)}
-      />
-
+      {/* OTHERS */}
       <StairsComponent
         position={new Vector3(-20, 0, 10)}
         rotation={new Euler(0, Math.PI / 2, 0)}

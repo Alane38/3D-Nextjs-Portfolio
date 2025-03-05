@@ -23,6 +23,8 @@ export function CanvasLayout({ children }: { children: ReactNode }) {
     >
       {/* <OrbitControls /> */}
       <Sky distance={10000} sunPosition={sunPosition} />
+
+      {/* Light Settings */}
       <ambientLight intensity={Math.PI / 2} />
       <directionalLight position={[5, 5, 5]} intensity={Math.PI / 2} castShadow>
         <OrthographicCamera
@@ -34,10 +36,11 @@ export function CanvasLayout({ children }: { children: ReactNode }) {
           attach={"shadow-camera"}
         />
       </directionalLight>
-
       <Suspense fallback={null}>
-        <Perf position="top-left" />
+        {/* Performance Monitor */}
+        <Perf position="top-left" /> 
 
+        {/* Debug Grid */}
         <Grid
           infiniteGrid
           followCamera
@@ -45,9 +48,8 @@ export function CanvasLayout({ children }: { children: ReactNode }) {
           cellColor={"gray"}
           position={[0, 0.01, 0]}
         />
-
         <Physics gravity={[0, -15, 0]} debug={debugState}>
-          {children}
+          {children}  {/* Put the world scene here */}
         </Physics>
       </Suspense>
     </ThreeCanvas>

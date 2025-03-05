@@ -3,6 +3,7 @@ import { RigidBody, RigidBodyOptions } from "@react-three/rapier";
 import { Entity } from "./Entity";
 import { Text3DProps } from "@/types/TextProps";
 import { useMemo } from "react";
+import { defaultFont } from "@/constants/default";
 
 export class TextObject extends Entity {
   TextProps: Text3DProps;
@@ -12,7 +13,6 @@ export class TextObject extends Entity {
     this.TextProps = {
       text: "Text",
       size: 1,
-      font: "/fonts/DefaultFont.json",
     };
   }
   renderComponent() {
@@ -20,15 +20,15 @@ export class TextObject extends Entity {
   }
 }
 
-export const TextObjectComponent = ({ model }: { model?: TextObject }) => {
+export const TextObjectComponent = ({ model, ...props }: { model?: TextObject } & Partial<TextObject>) => {
   const object = useMemo(() => {
-    return { ...new TextObject(), ...model };
-  }, [model]);
+    return { ...new TextObject(), ...model, ...props };
+  }, [model, props]);
 
   return (
     <RigidBody {...object}>
       <Text3D
-        font={object.TextProps.font}
+        font={object.TextProps.font || defaultFont}
         position={object.position}
         size={object.TextProps.size}
         bevelEnabled
