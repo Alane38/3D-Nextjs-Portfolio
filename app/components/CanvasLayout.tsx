@@ -10,10 +10,17 @@ import React, { ReactNode, Suspense } from "react";
 import { useSunPosition } from "@resources/Settings/useSunPosition";
 import { useDebugState } from "@resources/Settings/useDebugState";
 import { Perf } from "r3f-perf";
+import { usePageVisible } from "../Resources/Settings/usePageVisible";
+import { useLoadingAssets } from "../Resources/Settings/useLoadingAssets";
+import WebGPU from "three/examples/jsm/capabilities/WebGPU.js";
 
 export function CanvasLayout({ children }: { children: ReactNode }) {
   const debugState = useDebugState();
   const sunPosition = useSunPosition();
+
+  const visible = usePageVisible();
+  const loading = useLoadingAssets();
+
   const shadowCameraRef = React.useRef<any>(null);
 
   return (
@@ -22,7 +29,7 @@ export function CanvasLayout({ children }: { children: ReactNode }) {
       shadows
     >
       {/* <OrbitControls /> */}
-      <Sky distance={10000} sunPosition={sunPosition} />
+      {/* <Sky distance={10000} sunPosition={sunPosition} /> */}
 
       {/* Light Settings */}
       <ambientLight intensity={Math.PI / 2} />
@@ -46,9 +53,9 @@ export function CanvasLayout({ children }: { children: ReactNode }) {
           followCamera
           sectionColor={"black"}
           cellColor={"gray"}
-          position={[0, 0.02, 0]}
+          position={[0, 0.05, 0]}
         />
-        <Physics gravity={[0, -15, 0]} debug={debugState}>
+        <Physics gravity={[0, -15, 0]} debug={debugState} paused={!visible || loading !== 100}>
           {children} {/* Put the world scene here */}
         </Physics>
       </Suspense>

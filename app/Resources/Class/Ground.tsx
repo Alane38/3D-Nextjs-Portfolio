@@ -1,17 +1,21 @@
 import { RigidBody } from "@react-three/rapier";
 import { Entity } from "./Entity";
-import { Plane } from "@react-three/drei";
+import { Box, Plane } from "@react-three/drei";
 import { Euler } from "three";
 import { useMemo } from "react";
 
 export class Ground extends Entity {
   color: string;
+  args: [number, number, number];
+  depth: number;
   constructor() {
     super("Ground");
     // Modify the default settings(Entity) :
     this.type = "fixed";
+    this.colliders = "cuboid"
     this.scale = 100;
-    this.rotation = new Euler(Math.PI * 1.5, 0, 0); // Math.PI * 1.5 = degtoRad(270)
+    this.depth = 0.1;
+    this.args = [this.scale, this.depth, this.scale];
     this.color = "black";
   }
 
@@ -35,11 +39,12 @@ export const GroundComponent = ({
       position={object.position}
       rotation={object.rotation}
       name={object.name}
+      colliders={object.colliders}
     >
       {/* Ground Mesh */}
-      <Plane scale={object.scale}>
+      <Box args={object.args}>
         <meshStandardMaterial attach="material" color={object.color} />
-      </Plane>
+      </Box>
     </RigidBody>
   );
 };
