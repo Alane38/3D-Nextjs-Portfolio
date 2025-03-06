@@ -1,10 +1,11 @@
+import { Entity } from "./Entity";
 import { quat, RapierRigidBody, RigidBody } from "@react-three/rapier";
+import { classModelPath } from "@constants/class";
 import { Box } from "@react-three/drei";
-import { useMemo, useRef } from "react";
 import { useFrame } from "@react-three/fiber";
+import { quat, RigidBody } from "@react-three/rapier";
+import { useMemo } from "react";
 import { Quaternion, Vector3 } from "three";
-import { Entity } from "../Entity";
-import { classModelPath } from "@constants/default";
 
 export class Spinner extends Entity {
   speed: number;

@@ -12,6 +12,8 @@ import { PerformanceWarning } from "./Utility/PerformanceWarning";
 
 export function Canvas() {
   const [visible, setVisible] = useState(true);
+
+  const [visible, setVisible] = useState(true);
   const loading = useLoadingAssets();
 
   return (
@@ -29,6 +31,7 @@ export function Canvas() {
           {/* Children */}
           <MainWorld />
           {/* <TestWorld /> */}
+          {/* <JumpGame /> */}
         </CanvasLayout>
       </KeyboardControls>
     </>

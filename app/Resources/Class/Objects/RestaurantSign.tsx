@@ -1,5 +1,9 @@
 import { classModelPath } from "@constants/default";
 import { ModelRenderer } from "@core/Utility/ModelRenderer";
+import { Entity } from "./Entity";
+import { RigidBody } from "@react-three/rapier";
+import { ModelRenderer } from "@core/ModelRenderer";
+import { classModelPath } from "@constants/class";
 import { useVideoTexture } from "@react-three/drei";
 import { RigidBody } from "@react-three/rapier";
 import { useMemo } from "react";

@@ -1,3 +1,7 @@
+import {
+  Grid,
+  OrthographicCamera
+} from "@react-three/drei";
 import { Grid, OrthographicCamera } from "@react-three/drei";
 import { Canvas as ThreeCanvas } from "@react-three/fiber";
 import { Physics } from "@react-three/rapier";
@@ -35,6 +39,7 @@ export function CanvasLayout({ children }: { children: ReactNode }) {
           attach={"shadow-camera"}
         />
       </directionalLight>
+      
       <Suspense fallback={null}>
         {/* Performance Monitor */}
         <Perf position="top-left" />
@@ -46,7 +51,9 @@ export function CanvasLayout({ children }: { children: ReactNode }) {
           sectionColor={"black"}
           cellColor={"gray"}
           position={[0, 0.055, 0]}
+          position={[0, 0.055, 0]}
         />
+        <Physics gravity={[0, -15, 0]} debug={debugState}>
         <Physics gravity={[0, -15, 0]} debug={debugState}>
           {children} {/* Put the world scene here */}
         </Physics>

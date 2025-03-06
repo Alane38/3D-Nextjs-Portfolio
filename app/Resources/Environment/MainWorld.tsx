@@ -46,6 +46,7 @@ export const MainWorld = () => {
           args={[5, 0.1, (ground.scale as number) / 1.2]}
           position={new Vector3(0, ground.position.y + 0.01, 0)}
         />
+        />
         {/* Custom Ground with props includes */}
       </group>
 
@@ -58,7 +59,7 @@ export const MainWorld = () => {
 
         <DiamondComponent position={new Vector3(3, 2, 0)} />
       </group>
-
+      
       <group>
         {/* Entity Importations */}
         <Steps />

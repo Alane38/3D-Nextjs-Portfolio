@@ -19,6 +19,7 @@
       }
     ],
     "baseUrl": "./",
+    "baseUrl": "./",
     "paths": {
       "@resources/*": ["./app/Resources/*"],
       "@core/*": ["./app/Core/*"],
