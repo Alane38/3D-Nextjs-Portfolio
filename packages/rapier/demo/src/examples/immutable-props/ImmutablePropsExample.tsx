@@ -15,15 +15,15 @@ export const ImmutablePropsExample: Demo = () => {
   useControls({
     canSleep: {
       value: canSleep,
-      onChange: (v) => setCanSleep(v)
-    }
+      onChange: (v) => setCanSleep(v),
+    },
   });
 
   useFrame(() => {
     let rot = performance.now() / 1000;
     rb.current!.setRotation(
       quat().setFromEuler(euler({ x: 0, y: rot, z: 0 })),
-      true
+      true,
     );
   });
 

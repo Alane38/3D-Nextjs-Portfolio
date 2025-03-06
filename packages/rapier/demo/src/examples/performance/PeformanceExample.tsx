@@ -12,7 +12,7 @@ type GroupProps = ThreeElements["group"];
 
 const useBendy = () => {
   return useGLTF(
-    new URL("../../models/bendy.glb", import.meta.url).toString()
+    new URL("../../models/bendy.glb", import.meta.url).toString(),
   ) as unknown as GLTF & {
     nodes: {
       BezierCurve: Mesh;
@@ -27,7 +27,7 @@ const Monkae = ({
   onDead: (pos: { x: number; y: number; z: number }) => void;
 }) => {
   const {
-    nodes: { Suzanne }
+    nodes: { Suzanne },
   } = useSuzanne();
 
   const monmon = useRef<RapierRigidBody>(null);
@@ -71,9 +71,9 @@ const Emitter = (props: GroupProps & { time?: number }) => {
           position: [
             Math.random() * 10 - 5,
             Math.random(),
-            Math.random() * 10 - 5
-          ]
-        }
+            Math.random() * 10 - 5,
+          ],
+        },
       ]);
     }, props.time || 1000);
 

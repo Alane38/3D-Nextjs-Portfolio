@@ -29,7 +29,7 @@ export default function Plinko({ ...props }: ThreeElements["group"]) {
 
   const { nodes, materials } = useGLTF(
     // @ts-ignore
-    new URL("../../models/plinko.glb", import.meta.url).toString()
+    new URL("../../models/plinko.glb", import.meta.url).toString(),
   ) as unknown as GLTFResult;
 
   useResetOrbitControls();

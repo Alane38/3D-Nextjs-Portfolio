@@ -4,7 +4,7 @@ import { Box, Html, Sphere, useGLTF } from "@react-three/drei";
 import {
   CylinderCollider,
   RigidBody,
-  RapierRigidBody
+  RapierRigidBody,
 } from "@react-three/rapier";
 import Plinko from "./Plinko";
 import { Mesh, Vector3 } from "three";
@@ -27,7 +27,7 @@ const Label = ({ label }: { label: string }) => {
           background: "#fff",
           border: "2px solid #000",
           padding: 8,
-          transform: "translate(100%, -100%)"
+          transform: "translate(100%, -100%)",
         }}
       >
         <span
@@ -38,7 +38,7 @@ const Label = ({ label }: { label: string }) => {
             top: "calc(100% - 5px)",
             left: -16,
             borderLeft: "2px solid black",
-            transform: "rotate(45deg)"
+            transform: "rotate(45deg)",
           }}
         ></span>
         {label}
@@ -105,12 +105,12 @@ const RigidBall = memo(() => {
 });
 
 useGLTF.preload(
-  new URL("../../models/objects.glb", import.meta.url).toString()
+  new URL("../../models/objects.glb", import.meta.url).toString(),
 );
 
 const HullPear = memo(() => {
   const { nodes } = useGLTF(
-    new URL("../../models/objects.glb", import.meta.url).toString()
+    new URL("../../models/objects.glb", import.meta.url).toString(),
   ) as unknown as {
     nodes: {
       pear: Mesh;
@@ -132,7 +132,7 @@ const HullPear = memo(() => {
 
 const MeshBoat = memo(() => {
   const { nodes } = useGLTF(
-    new URL("../../models/objects.glb", import.meta.url).toString()
+    new URL("../../models/objects.glb", import.meta.url).toString(),
   ) as unknown as {
     nodes: {
       boat: Mesh;
@@ -159,7 +159,7 @@ const itemMap: Record<string, FC> = {
   cylinder: RigidCylinder,
   ball: RigidBall,
   convexHull: HullPear,
-  convexMesh: MeshBoat
+  convexMesh: MeshBoat,
 };
 
 const randomItem = () => {
@@ -180,7 +180,7 @@ const Scene: FC = () => {
     cylinder: button(() => addItem("cylinder")),
     ball: button(() => addItem("ball")),
     convexHull: button(() => addItem("convexHull")),
-    convexMesh: button(() => addItem("convexMesh"))
+    convexMesh: button(() => addItem("convexMesh")),
   });
 
   useEffect(() => {

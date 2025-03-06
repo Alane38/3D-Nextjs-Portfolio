@@ -6,7 +6,7 @@ import {
   HeightfieldCollider,
   interactionGroups,
   RigidBody,
-  RigidBodyOptions
+  RigidBodyOptions,
 } from "@react-three/rapier";
 import {
   createContext,
@@ -16,7 +16,7 @@ import {
   SetStateAction,
   useCallback,
   useContext,
-  useState
+  useState,
 } from "react";
 import { PlaneGeometry } from "three";
 import { useSuzanne } from "../all-shapes/AllShapesExample";
@@ -39,7 +39,7 @@ const explosionContext = createContext<{
 const heightFieldHeight = 50;
 const heightFieldWidth = 50;
 const heightField = Array.from({
-  length: heightFieldHeight * heightFieldWidth
+  length: heightFieldHeight * heightFieldWidth,
 }).map((_, index) => {
   return Math.random();
 });
@@ -48,7 +48,7 @@ const heightFieldGeometry = new PlaneGeometry(
   heightFieldWidth,
   heightFieldHeight,
   heightFieldWidth - 1,
-  heightFieldHeight - 1
+  heightFieldHeight - 1,
 );
 
 heightField.forEach((v, index) => {
@@ -70,7 +70,7 @@ const Explosion = ({ position }: { position: [number, number, number] }) => {
 const Collisioner = (
   props: Omit<RigidBodyOptions, "children"> & {
     children(color: string): ReactNode;
-  }
+  },
 ) => {
   const [color, setColor] = useState("blue");
   const { setExplosions } = useContext(explosionContext) as {
@@ -92,11 +92,11 @@ const Collisioner = (
       if (contact) {
         setExplosions((curr: ReactNode[]) => [
           ...curr,
-          <Explosion position={[contact.x, contact.y, contact.z]} />
+          <Explosion position={[contact.x, contact.y, contact.z]} />,
         ]);
       }
     },
-    []
+    [],
   );
 
   const handleCollsionExit = useCallback(() => {
@@ -124,8 +124,8 @@ const heightFieldArgs: HeightfieldArgs = [
   {
     x: heightFieldWidth,
     y: 1,
-    z: heightFieldWidth
-  }
+    z: heightFieldWidth,
+  },
 ];
 
 const Collisioners = memo(() => {

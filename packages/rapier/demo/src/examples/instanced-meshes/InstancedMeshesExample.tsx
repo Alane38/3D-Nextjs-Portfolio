@@ -1,7 +1,7 @@
 import {
   InstancedRigidBodies,
   InstancedRigidBodyProps,
-  RapierRigidBody
+  RapierRigidBody,
 } from "@react-three/rapier";
 import { useEffect, useRef, useState } from "react";
 import { Color, InstancedMesh } from "three";
@@ -18,14 +18,14 @@ const createBody = (): InstancedRigidBodyProps => ({
   rotation: [
     Math.random() * Math.PI * 2,
     Math.random() * Math.PI * 2,
-    Math.random() * Math.PI * 2
+    Math.random() * Math.PI * 2,
   ],
-  scale: [0.5 + Math.random(), 0.5 + Math.random(), 0.5 + Math.random()]
+  scale: [0.5 + Math.random(), 0.5 + Math.random(), 0.5 + Math.random()],
 });
 
 export const InstancedMeshes: Demo = () => {
   const {
-    nodes: { Suzanne }
+    nodes: { Suzanne },
   } = useSuzanne();
 
   useResetOrbitControls(30);
@@ -34,8 +34,8 @@ export const InstancedMeshes: Demo = () => {
 
   const [bodies, setBodies] = useState<InstancedRigidBodyProps[]>(() =>
     Array.from({
-      length: 100
-    }).map(() => createBody())
+      length: 100,
+    }).map(() => createBody()),
   );
 
   const ref = useRef<InstancedMesh>(null);
@@ -66,9 +66,9 @@ export const InstancedMeshes: Demo = () => {
   useControls(
     {
       "add instanced mesh": button(addMesh),
-      "remove instanced mesh": button(removeMesh)
+      "remove instanced mesh": button(removeMesh),
     },
-    [bodies]
+    [bodies],
   );
 
   return (
@@ -84,9 +84,9 @@ export const InstancedMeshes: Demo = () => {
               {
                 x: 0,
                 y: 50,
-                z: 0
+                z: 0,
               },
-              true
+              true,
             );
           }}
         >

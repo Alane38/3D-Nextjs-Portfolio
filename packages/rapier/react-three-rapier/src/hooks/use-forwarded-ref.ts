@@ -3,7 +3,7 @@ import { ForwardedRef, RefObject, useRef } from "react";
 // Need to catch the case where forwardedRef is a function... how to do that?
 export const useForwardedRef = <T>(
   forwardedRef: ForwardedRef<T> | undefined,
-  defaultValue: T | null = null
+  defaultValue: T | null = null,
 ): RefObject<T> => {
   const innerRef = useRef<T>(defaultValue);
 

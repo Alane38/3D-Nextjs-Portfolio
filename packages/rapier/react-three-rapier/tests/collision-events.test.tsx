@@ -13,7 +13,7 @@ describe("collision events", () => {
         <>
           <TestRigidBody onCollisionEnter={collisionFn} />
           <TestRigidBody />
-        </>
+        </>,
       );
 
       await ReactThreeTestRenderer.act(async () => {
@@ -32,7 +32,7 @@ describe("collision events", () => {
         <>
           <TestRigidBody sensor onIntersectionEnter={intersectionFn} />
           <TestRigidBody />
-        </>
+        </>,
       );
 
       await ReactThreeTestRenderer.act(async () => {
@@ -55,7 +55,7 @@ describe("collision events", () => {
             linearVelocity={[0, -2, 0]}
           />
           <TestRigidBody />
-        </>
+        </>,
       );
 
       await ReactThreeTestRenderer.act(async () => {
@@ -79,7 +79,7 @@ describe("collision events", () => {
             linearVelocity={[0, -2, 0]}
           />
           <TestRigidBody />
-        </>
+        </>,
       );
 
       await ReactThreeTestRenderer.act(async () => {

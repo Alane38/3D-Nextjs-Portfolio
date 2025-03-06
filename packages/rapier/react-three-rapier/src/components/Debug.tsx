@@ -30,7 +30,7 @@ export const Debug = memo(() => {
 
     mesh.geometry.setAttribute(
       "position",
-      new BufferAttribute(buffers.vertices, 3)
+      new BufferAttribute(buffers.vertices, 3),
     );
     mesh.geometry.setAttribute("color", new BufferAttribute(buffers.colors, 4));
   });

@@ -13,7 +13,7 @@ import {
   RigidBodyProps,
   RapierCollider,
   RoundConeCollider,
-  RoundCylinderCollider
+  RoundCylinderCollider,
 } from "@react-three/rapier";
 import { useSuzanne } from "../all-shapes/AllShapesExample";
 import { RoundedBoxGeometry } from "three-stdlib";
@@ -55,7 +55,7 @@ const Suzanne = (props?: Object3DProps) => {
 const heightFieldHeight = 10;
 const heightFieldWidth = 10;
 const heightField = Array.from({
-  length: heightFieldHeight * heightFieldWidth
+  length: heightFieldHeight * heightFieldWidth,
 }).map((_, index) => {
   return Math.random();
 });
@@ -64,7 +64,7 @@ const heightFieldGeometry = new PlaneGeometry(
   heightFieldWidth,
   heightFieldHeight,
   heightFieldWidth - 1,
-  heightFieldHeight - 1
+  heightFieldHeight - 1,
 );
 
 heightField.forEach((v, index) => {
@@ -188,7 +188,7 @@ export const AllCollidersExample = () => {
             heightFieldWidth - 1,
             heightFieldHeight - 1,
             heightField,
-            { x: heightFieldWidth, y: 1, z: heightFieldHeight }
+            { x: heightFieldWidth, y: 1, z: heightFieldHeight },
           ]}
         />
         <Html>HeightfieldCollider</Html>

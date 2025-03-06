@@ -4,7 +4,7 @@ import {
   RigidBody,
   RapierRigidBody,
   RigidBodyProps,
-  ContactForceHandler
+  ContactForceHandler,
 } from "@react-three/rapier";
 import { useCallback, useRef, useState } from "react";
 import { Color } from "three";
@@ -63,7 +63,7 @@ export const ContactForceEventsExample: Demo = () => {
         .multiplyScalar(1 - totalForceMagnitude / startForce);
       setFloorColor(color.getHex());
     },
-    []
+    [],
   );
 
   useResetOrbitControls(10);

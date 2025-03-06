@@ -1,12 +1,12 @@
-import { Text3D } from "@react-three/drei";
+import { defaultFont } from "@constants/default";
+import { Text3D  } from "@react-three/drei";
 import { RigidBody, RigidBodyOptions } from "@react-three/rapier";
-import { Entity } from "./Entity";
-import { Text3DProps } from "@/types/TextProps";
 import { useMemo } from "react";
-import { defaultFont } from "@/constants/default";
+import { Entity } from "../Entity";
+import { TextProps } from "@type/TextProps";
 
 export class TextObject extends Entity {
-  TextProps: Text3DProps;
+  TextProps: TextProps;
   constructor(type: RigidBodyOptions["type"] = "fixed") {
     super("Text");
     this.type = type;

@@ -8,7 +8,7 @@ import {
   RigidBody,
   useBeforePhysicsStep,
   useRapier,
-  vec3
+  vec3,
 } from "../src";
 import React, { useEffect } from "react";
 import ReactThreeTestRenderer from "@react-three/test-renderer";
@@ -17,7 +17,7 @@ import {
   pause,
   RapierContextCatcher,
   renderHookWithErrors,
-  UseRapierMounter
+  UseRapierMounter,
 } from "./test-utils";
 import { useFrame } from "@react-three/fiber";
 
@@ -43,12 +43,12 @@ describe("physics", () => {
                     <meshStandardMaterial />
                   </mesh>
                 </RigidBody>
-              </Physics>
+              </Physics>,
             );
           } catch (e) {
             reject(e);
           }
-        }
+        },
       );
 
       const translation1 = vec3(rigidBody.current?.translation()).toArray();
@@ -87,7 +87,7 @@ describe("physics", () => {
     const BeforeStepper = ({
       onBeforePhysicsStep,
       onFrame,
-      onReady
+      onReady,
     }: {
       onBeforePhysicsStep: () => void;
       onReady: (value: unknown) => void;
@@ -122,7 +122,7 @@ describe("physics", () => {
               onFrame={frameCallback}
               onReady={resolve}
             />
-          </Physics>
+          </Physics>,
         );
       });
 
@@ -162,7 +162,7 @@ describe("physics", () => {
               onReady={resolve}
             />
           </Physics>,
-          { frameloop: "demand" }
+          { frameloop: "demand" },
         );
       });
 
@@ -191,7 +191,7 @@ describe("physics", () => {
 
   describe("errors", () => {
     const error = new Error(
-      "react-three-rapier: useRapier must be used within <Physics />!"
+      "react-three-rapier: useRapier must be used within <Physics />!",
     );
 
     it("throws a helpful error when useRapier is used outside of Physics", async () => {
@@ -207,7 +207,7 @@ describe("physics", () => {
             colliders="cuboid"
             restitution={2}
             linearVelocity={[20, 20, 20]}
-          />
+          />,
         );
       }).rejects.toEqual(error);
     });
@@ -235,7 +235,7 @@ describe("physics", () => {
           <RigidBody colliders="cuboid" position={[-2, -2, -2]}>
             <CuboidCollider args={[1, 1, 1]} />
           </RigidBody>
-        </Physics>
+        </Physics>,
       );
 
       // Advance 100 frames to move the boxes
@@ -255,7 +255,7 @@ describe("physics", () => {
 
       // Restore snapshot
       rapierContext!.setWorld(
-        rapierContext!.rapier.World.restoreSnapshot(snap)
+        rapierContext!.rapier.World.restoreSnapshot(snap),
       );
 
       // Advance 1 more frame to move boxes again

@@ -6,12 +6,12 @@
  */
 export const createSingletonProxy = <
   SingletonClass extends object,
-  CreationFn extends () => SingletonClass = () => SingletonClass
+  CreationFn extends () => SingletonClass = () => SingletonClass,
 >(
   /**
    * A function that returns a new instance of the class
    */
-  createInstance: CreationFn
+  createInstance: CreationFn,
 ): {
   proxy: SingletonClass;
   reset: () => void;
@@ -31,7 +31,7 @@ export const createSingletonProxy = <
         instance = createInstance();
       }
       return Reflect.set(instance!, prop, value);
-    }
+    },
   };
 
   const proxy = new Proxy({} as SingletonClass, handler) as SingletonClass;

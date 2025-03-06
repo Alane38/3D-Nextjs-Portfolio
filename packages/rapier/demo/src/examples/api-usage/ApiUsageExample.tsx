@@ -15,9 +15,9 @@ export const ApiUsage: Demo = () => {
         {
           x: 1,
           y: 3,
-          z: 0
+          z: 0,
         },
-        true
+        true,
       );
     }
 

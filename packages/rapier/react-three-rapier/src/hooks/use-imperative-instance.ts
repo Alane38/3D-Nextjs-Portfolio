@@ -6,7 +6,7 @@ import { DependencyList, useCallback, useEffect, useRef } from "react";
 export const useImperativeInstance = <InstanceType>(
   createFn: () => InstanceType,
   destroyFn: (instance: InstanceType) => void,
-  dependencyList: DependencyList
+  dependencyList: DependencyList,
 ) => {
   const ref = useRef<InstanceType | undefined>(undefined);
 

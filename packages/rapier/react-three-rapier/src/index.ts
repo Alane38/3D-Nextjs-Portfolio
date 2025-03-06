@@ -2,7 +2,7 @@ export * from "./types";
 export type { RigidBodyProps } from "./components/RigidBody";
 export type {
   InstancedRigidBodiesProps,
-  InstancedRigidBodyProps
+  InstancedRigidBodyProps,
 } from "./components/InstancedRigidBodies";
 export type {
   CylinderColliderProps,
@@ -14,13 +14,13 @@ export type {
   HeightfieldColliderProps,
   RoundCuboidColliderProps,
   TrimeshColliderProps,
-  ColliderOptionsRequiredArgs
+  ColliderOptionsRequiredArgs,
 } from "./components/AnyCollider";
 
 export type {
   PhysicsProps,
   RapierContext,
-  WorldStepCallback
+  WorldStepCallback,
 } from "./components/Physics";
 export type { MeshColliderProps } from "./components/MeshCollider";
 
@@ -34,7 +34,7 @@ export * from "./hooks/joints";
 export {
   useRapier,
   useBeforePhysicsStep,
-  useAfterPhysicsStep
+  useAfterPhysicsStep,
 } from "./hooks/hooks";
 export * from "./utils/interaction-groups";
 export * from "./utils/three-object-helpers";

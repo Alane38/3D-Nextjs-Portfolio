@@ -18,7 +18,7 @@ const Ball = () => {
 
     rb.current.setTranslation(
       { x: Math.sin(elapsedTime) * 3, y: 0, z: 0 },
-      true
+      true,
     );
   });
 

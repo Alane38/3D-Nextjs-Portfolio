@@ -8,16 +8,16 @@ import {
   RapierCollider,
   RapierRigidBody,
   RigidBody,
-  RigidBodyProps
+  RigidBodyProps,
 } from "../src";
 import { awaitReady } from "./test-utils";
 
 const RigidBodyArgsChanger = ({
-  onReady
+  onReady,
 }: {
   onReady: ({
     setProps,
-    ref
+    ref,
   }: {
     setProps: (props: RigidBodyProps) => void;
     ref: RefObject<RapierRigidBody>;
@@ -27,13 +27,13 @@ const RigidBodyArgsChanger = ({
   const [props, setProps] = useState<RigidBodyProps>({
     type: "dynamic",
     position: [0, 0, 0],
-    canSleep: true
+    canSleep: true,
   });
 
   useEffect(() => {
     onReady({
       setProps,
-      ref
+      ref,
     });
   }, []);
 
@@ -51,7 +51,7 @@ describe("RigidBody mutability", async () => {
           _ref = ref;
           _setProps = setProps;
         }}
-      />
+      />,
     );
 
     let ref = _ref!.current!;
@@ -65,7 +65,7 @@ describe("RigidBody mutability", async () => {
       _setProps({
         type: "fixed",
         position: [1, 0, 0],
-        canSleep: true
+        canSleep: true,
       });
     });
 
@@ -80,7 +80,7 @@ describe("RigidBody mutability", async () => {
       _setProps({
         type: "kinematicPosition",
         position: [1, 0, 0],
-        canSleep: false
+        canSleep: false,
       });
     });
 
@@ -94,11 +94,11 @@ describe("RigidBody mutability", async () => {
 });
 
 const ColliderArgsChanger = ({
-  onReady
+  onReady,
 }: {
   onReady: ({
     setProps,
-    ref
+    ref,
   }: {
     setProps: (props: CuboidColliderProps) => void;
     ref: RefObject<RapierCollider>;
@@ -107,13 +107,13 @@ const ColliderArgsChanger = ({
   const ref = useRef<RapierCollider>(null!);
   const [props, setProps] = useState<CuboidColliderProps>({
     position: [0, 0, 0],
-    args: [1, 1, 1]
+    args: [1, 1, 1],
   });
 
   useEffect(() => {
     onReady({
       setProps,
-      ref
+      ref,
     });
   }, []);
 
@@ -131,7 +131,7 @@ describe("Collider mutability", async () => {
           _ref = ref;
           _setProps = setProps;
         }}
-      />
+      />,
     );
 
     let ref = _ref!.current!;
@@ -143,7 +143,7 @@ describe("Collider mutability", async () => {
     await ReactThreeTestRenderer.act(async () => {
       _setProps({
         position: [1, 0, 0],
-        args: [2, 1, 1]
+        args: [2, 1, 1],
       });
     });
 
@@ -157,7 +157,7 @@ describe("Collider mutability", async () => {
     await ReactThreeTestRenderer.act(async () => {
       _setProps({
         position: [2, 0, 0],
-        args: [3, 1, 1]
+        args: [3, 1, 1],
       });
     });
 

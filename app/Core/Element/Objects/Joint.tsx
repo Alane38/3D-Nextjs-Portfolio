@@ -9,7 +9,7 @@ import {
   usePrismaticJoint,
 } from "@react-three/rapier";
 import { useFrame } from "@react-three/fiber";
-import { Mesh, Quaternion } from "three";
+import { Mesh } from "three";
 
 const ShadowElement = forwardRef<Mesh>((_, ref) => (
   <Sphere castShadow ref={ref} args={[0.5]}>

@@ -1,21 +1,21 @@
-import DynamicPlatforms from "@core/DynamicPlatforms";
-import FloatingPlatform from "@core/FloatingPlatform";
-import { CharacterController } from "@core/Player/CharacterController";
-import Steps from "@core/Steps";
-import { KeyboardControls } from "@react-three/drei";
-import { DiamondComponent } from "@resources/Class/Diamond";
-import { Ground, GroundComponent } from "@resources/Class/Ground";
-import { TextObjectComponent } from "@resources/Class/TextObject";
+import DynamicPlatforms from "@core/Element/Objects/DynamicPlatforms";
+import FloatingPlatform from "@core/Element/Objects/FloatingPlatform";
+import Steps from "@core/Element/Environment/Steps";
+import { TextObjectComponent } from "@resources/Class/Objects/TextObject";
 import { Euler, Vector3 } from "three";
-import { KillBrickComponent } from "../Class/KillBrick";
-import { RestaurantSignComponent } from "../Class/RestaurantSign";
-import { SpinnerComponent } from "../Class/Spinner";
-import { StairsComponent } from "../Class/Stairs";
-import {
-  RacingVehicle,
-  racingVehicleControls,
-} from "@core/Player/Vehicles/RacingCar/RacingVehicle";
+import { RestaurantSignComponent } from "../Class/Objects/RestaurantSign";
+import { SpinnerComponent } from "../Class/Objects/Spinner";
+import { RacingVehicle } from "@core/Element/Player/Vehicles/RacingCar/RacingVehicle";
 import { GlobalUI } from "../Class/UI/GlobalUI";
+import { Character } from "@core/Element/Player/Character";
+import {
+  DiamondComponent,
+  Ground,
+  GroundComponent,
+  KillBrickComponent,
+  StairsComponent,
+} from "../Class";
+import { KeyboardControls } from "@react-three/drei";
 
 export const MainWorld = () => {
   /* INITIALIZATION */
@@ -36,7 +36,7 @@ export const MainWorld = () => {
       {/* <KeyboardControls map={vehicleControls}>
         <Vehicle position={[15, 2, 0]} />
       </KeyboardControls> */}
-      <CharacterController />
+      <Character />
 
       <group>
         {/* Ground */}
@@ -45,7 +45,7 @@ export const MainWorld = () => {
           color="white"
           args={[5, 0.1, (ground.scale as number) / 1.2]}
           position={new Vector3(0, ground.position.y + 0.01, 0)}
-        />{" "}
+        />
         {/* Custom Ground with props includes */}
       </group>
 
@@ -83,10 +83,7 @@ export const MainWorld = () => {
       />
 
       {/* <GlobalUI /> */}
-
-      {/* <KeyboardControls map={racingVehicleControls}>
-        <RacingVehicle position={[15, 2, 0]} rotation={[0, Math.PI / 2, 0]} />
-      </KeyboardControls> */}
+      <RacingVehicle position={[15, 2, 0]} rotation={[0, Math.PI / 2, 0]} />
     </>
   );
 };

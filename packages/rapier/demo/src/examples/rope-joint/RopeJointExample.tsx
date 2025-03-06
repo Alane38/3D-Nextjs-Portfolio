@@ -4,7 +4,7 @@ import {
   RapierRigidBody,
   RigidBody,
   RigidBodyOptions,
-  useRopeJoint
+  useRopeJoint,
 } from "@react-three/rapier";
 import { useRef } from "react";
 import { Demo } from "../../App";
@@ -61,7 +61,7 @@ const BoxWall = ({ height, width, ...props }: BoxWallProps) => {
           density={2}
           color={WALL_COLORS[i % 5]}
           position={position}
-        />
+        />,
       );
     }
   }
@@ -76,7 +76,7 @@ const BoxWall = ({ height, width, ...props }: BoxWallProps) => {
 const RopeJoint = ({
   anchorPosition,
   ballPosition,
-  ropeLength
+  ropeLength,
 }: RopeJointProps) => {
   const anchor = useRef<RapierRigidBody>(null!);
   const ball = useRef<RapierRigidBody>(null!);

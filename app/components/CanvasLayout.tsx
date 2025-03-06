@@ -1,25 +1,13 @@
-import {
-  Grid,
-  OrbitControls,
-  OrthographicCamera,
-  Sky,
-} from "@react-three/drei";
+import { Grid, OrthographicCamera } from "@react-three/drei";
 import { Canvas as ThreeCanvas } from "@react-three/fiber";
 import { Physics } from "@react-three/rapier";
-import React, { ReactNode, Suspense } from "react";
-import { useSunPosition } from "@resources/Settings/useSunPosition";
-import { useDebugState } from "@resources/Settings/useDebugState";
+import { useDebugState } from "@resources/Hooks/Leva/useDebugState";
 import { Perf } from "r3f-perf";
-import { usePageVisible } from "../Resources/Settings/usePageVisible";
-import { useLoadingAssets } from "../Resources/Settings/useLoadingAssets";
+import React, { ReactNode, Suspense } from "react";
 import WebGPU from "three/examples/jsm/capabilities/WebGPU.js";
 
 export function CanvasLayout({ children }: { children: ReactNode }) {
   const debugState = useDebugState();
-  const sunPosition = useSunPosition();
-
-  const visible = usePageVisible();
-  const loading = useLoadingAssets();
 
   const shadowCameraRef = React.useRef<any>(null);
 
@@ -27,10 +15,13 @@ export function CanvasLayout({ children }: { children: ReactNode }) {
     <ThreeCanvas
       camera={{ position: [0, 16, 5], fov: 70, near: 0.1, far: 10000 }}
       shadows
-      gl={{ preserveDrawingBuffer: false, toneMapping: WebGPU ? 0 : 2, toneMappingExposure: 1 }}
+      gl={{
+        preserveDrawingBuffer: false,
+        toneMapping: WebGPU ? 0 : 2,
+        toneMappingExposure: 1,
+      }}
     >
       {/* <OrbitControls /> */}
-      {/* <Sky distance={10000} sunPosition={sunPosition} /> */}
 
       {/* Light Settings */}
       <ambientLight intensity={Math.PI / 2} />
@@ -54,9 +45,9 @@ export function CanvasLayout({ children }: { children: ReactNode }) {
           followCamera
           sectionColor={"black"}
           cellColor={"gray"}
-          position={[0, 0.05, 0]}
+          position={[0, 0.055, 0]}
         />
-        <Physics gravity={[0, -15, 0]} debug={debugState} paused={!visible || loading !== 100}>
+        <Physics gravity={[0, -15, 0]} debug={debugState}>
           {children} {/* Put the world scene here */}
         </Physics>
       </Suspense>

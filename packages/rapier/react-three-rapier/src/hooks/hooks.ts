@@ -1,16 +1,10 @@
-import React, {
-  RefObject,
-  useContext,
-  useEffect,
-  useRef,
-  useState
-} from "react";
+import { RefObject, useContext, useEffect, useRef, useState } from "react";
+import { Object3D } from "three";
 import {
   rapierContext,
   RapierContext,
-  WorldStepCallback
+  WorldStepCallback,
 } from "../components/Physics";
-import { Object3D } from "three";
 
 import { ColliderProps, RigidBodyProps } from "..";
 import { createColliderPropsFromChildren } from "../utils/utils-collider";
@@ -27,20 +21,20 @@ const useMutableCallback = <T>(fn: T) => {
 // External hooks
 /**
  * Exposes the Rapier context, and world
- * @category Hooks
+ * @constantsategory Hooks
  */
 export const useRapier = (): RapierContext => {
   const rapier = useContext(rapierContext);
   if (!rapier)
     throw new Error(
-      "react-three-rapier: useRapier must be used within <Physics />!"
+      "react-three-rapier: useRapier must be used within <Physics />!",
     );
   return rapier;
 };
 
 /**
  * Registers a callback to be called before the physics step
- * @category Hooks
+ * @constantsategory Hooks
  */
 export const useBeforePhysicsStep = (callback: WorldStepCallback) => {
   const { beforeStepCallbacks } = useRapier();
@@ -58,7 +52,7 @@ export const useBeforePhysicsStep = (callback: WorldStepCallback) => {
 
 /**
  * Registers a callback to be called after the physics step
- * @category Hooks
+ * @constantsategory Hooks
  */
 export const useAfterPhysicsStep = (callback: WorldStepCallback) => {
   const { afterStepCallbacks } = useRapier();
@@ -81,7 +75,7 @@ export const useAfterPhysicsStep = (callback: WorldStepCallback) => {
 export const useChildColliderProps = <O extends Object3D>(
   ref: RefObject<O | undefined | null>,
   options: RigidBodyProps,
-  ignoreMeshColliders = true
+  ignoreMeshColliders = true,
 ) => {
   const [colliderProps, setColliderProps] = useState<ColliderProps[]>([]);
 
@@ -93,8 +87,8 @@ export const useChildColliderProps = <O extends Object3D>(
         createColliderPropsFromChildren({
           object: ref.current!,
           options,
-          ignoreMeshColliders
-        })
+          ignoreMeshColliders,
+        }),
       );
     }
   }, [options.colliders]);

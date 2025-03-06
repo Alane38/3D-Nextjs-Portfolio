@@ -1,5 +1,5 @@
 // Basic Type for Text3D
-export interface Text3DProps {
+export interface TextProps {
   text: string;
   font?: string;
   size?: number;

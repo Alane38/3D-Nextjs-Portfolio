@@ -1,6 +1,5 @@
-import React, {
+import {
   createContext,
-  forwardRef,
   memo,
   ReactNode,
   Ref,
@@ -8,7 +7,7 @@ import React, {
   useContext,
   useEffect,
   useMemo,
-  useRef
+  useRef,
 } from "react";
 import { Object3D } from "three";
 import { useChildColliderProps, useRapier } from "../hooks/hooks";
@@ -20,7 +19,7 @@ import {
   immutableRigidBodyOptions,
   rigidBodyDescFromOptions,
   useRigidBodyEvents,
-  useUpdateRigidBodyOptions
+  useUpdateRigidBodyOptions,
 } from "../utils/utils-rigidbody";
 import { AnyCollider } from "./AnyCollider";
 
@@ -41,7 +40,7 @@ export interface RigidBodyProps extends RigidBodyOptions {
 
 /**
  * A rigid body is a physical object that can be simulated by the physics engine.
- * @category Components
+ * @constantsategory Components
  */
 export const RigidBody = memo((props: RigidBodyProps) => {
   const {
@@ -67,7 +66,7 @@ export const RigidBody = memo((props: RigidBodyProps) => {
     return {
       ...physicsOptions,
       ...props,
-      children: undefined
+      children: undefined,
     };
   }, [physicsOptions, props]);
 
@@ -97,7 +96,7 @@ export const RigidBody = memo((props: RigidBodyProps) => {
         world.removeRigidBody(rigidBody);
       }
     },
-    immutablePropArray
+    immutablePropArray,
   );
 
   // Only provide a object state after the ref has been set
@@ -106,12 +105,12 @@ export const RigidBody = memo((props: RigidBodyProps) => {
 
     const state = createRigidBodyState({
       rigidBody,
-      object: objectRef.current!
+      object: objectRef.current!,
     });
 
     rigidBodyStates.set(
       rigidBody.handle,
-      props.transformState ? props.transformState(state) : state
+      props.transformState ? props.transformState(state) : state,
     );
 
     return () => {
@@ -126,7 +125,7 @@ export const RigidBody = memo((props: RigidBodyProps) => {
     return {
       ref: objectRef as RigidBodyContextType["ref"],
       getRigidBody: getRigidBody,
-      options: mergedOptions
+      options: mergedOptions,
     };
   }, [getRigidBody]);
 

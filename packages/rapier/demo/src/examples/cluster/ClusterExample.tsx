@@ -3,7 +3,7 @@ import {
   InstancedRigidBodies,
   RapierRigidBody,
   useRapier,
-  vec3
+  vec3,
 } from "@react-three/rapier";
 import { useEffect, useRef } from "react";
 import { Color, InstancedMesh } from "three";
@@ -48,7 +48,7 @@ export const Cluster: Demo = () => {
         ref={api}
         instances={Array.from({ length: BALLS }, (_, i) => ({
           key: i,
-          position: [Math.floor(i / 30) * 1, (i % 30) * 0.5, 0]
+          position: [Math.floor(i / 30) * 1, (i % 30) * 0.5, 0],
         }))}
         colliders={"ball"}
         linearDamping={5}

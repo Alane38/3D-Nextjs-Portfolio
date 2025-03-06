@@ -6,7 +6,7 @@ import {
   RigidBodyTypeString,
   useSphericalJoint,
   Vector3Tuple,
-  usePrismaticJoint
+  usePrismaticJoint,
 } from "@react-three/rapier";
 import { useFrame } from "@react-three/fiber";
 import { Demo } from "../../App";
@@ -32,19 +32,19 @@ const RopeSegment = forwardRef<RapierRigidBody, RopeSegmentProps>(
         {component}
       </RigidBody>
     );
-  }
+  },
 );
 
 const RopeJoint = ({
   a,
-  b
+  b,
 }: {
   a: RefObject<RapierRigidBody>;
   b: RefObject<RapierRigidBody>;
 }) => {
   const joint = useSphericalJoint(a, b, [
     [-0.5, 0, 0],
-    [0.5, 0, 0]
+    [0.5, 0, 0],
   ]);
 
   return null;
@@ -53,14 +53,14 @@ const RopeJoint = ({
 const Rope = (props: { component: ReactNode; length: number }) => {
   const refs = useRef(
     Array.from({ length: props.length }).map(() =>
-      createRef<RapierRigidBody>()
-    ) as RefObject<RapierRigidBody>[]
+      createRef<RapierRigidBody>(),
+    ) as RefObject<RapierRigidBody>[],
   );
 
   useFrame(() => {
     const now = performance.now();
     refs.current[0].current!.setNextKinematicRotation(
-      new Quaternion(0, Math.sin(now / 500) * 3, 0)
+      new Quaternion(0, Math.sin(now / 500) * 3, 0),
     );
   });
 
@@ -79,7 +79,7 @@ const Rope = (props: { component: ReactNode; length: number }) => {
         (ref, i) =>
           i > 0 && (
             <RopeJoint a={refs.current[i]} b={refs.current[i - 1]} key={i} />
-          )
+          ),
       )}
     </group>
   );
@@ -92,7 +92,7 @@ const PrismaticExample = () => {
     [-4, 0, 0],
     [0, 4, 0],
     [1, 0, 0],
-    [-2, 2]
+    [-2, 2],
   ]);
 
   return (

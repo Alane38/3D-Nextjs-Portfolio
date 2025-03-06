@@ -1,10 +1,9 @@
-import { Entity } from "./Entity";
-import { RigidBody } from "@react-three/rapier";
-import { ModelRenderer } from "@core/ModelRenderer";
-import { classModelPath } from "@/constants/class";
+import { classModelPath } from "@constants/default";
+import { ModelRenderer } from "@core/Utility/ModelRenderer";
 import { useVideoTexture } from "@react-three/drei";
+import { RigidBody } from "@react-three/rapier";
 import { useMemo } from "react";
-import { useControls } from "leva";
+import { Entity } from "../Entity";
 
 export class RestaurantSign extends Entity {
   constructor(path: string = classModelPath + "RestaurantSign.glb") {

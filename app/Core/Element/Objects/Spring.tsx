@@ -1,6 +1,6 @@
-import { useForwardedRef } from "@/packages/rapier/react-three-rapier/src/hooks/use-forwarded-ref";
-import { vectorArrayToVector3 } from "@/packages/rapier/react-three-rapier/src/utils/utils";
-import { Box, Sphere } from "@react-three/drei";
+import { useForwardedRef } from "@packages/rapier/react-three-rapier/src/hooks/use-forwarded-ref";
+import { vectorArrayToVector3 } from "@packages/rapier/react-three-rapier/src/utils/utils";
+import { Box } from "@react-three/drei";
 import {
   BallCollider,
   RapierRigidBody,
@@ -8,7 +8,7 @@ import {
   RigidBodyOptions,
   useSpringJoint,
 } from "@react-three/rapier";
-import { forwardRef, useMemo, useRef } from "react";
+import { forwardRef, useRef } from "react";
 import { Vector3 } from "three";
 
 const COLORS_ARR = ["#335C67", "#FFF3B0", "#E09F3E", "#9E2A2B", "#540B0E"];

@@ -34,7 +34,7 @@ import { InteractionGroups } from "@dimforge/rapier3d-compat";
  */
 export const interactionGroups = (
   memberships: number | number[],
-  filters?: number | number[]
+  filters?: number | number[],
 ): InteractionGroups =>
   (bitmask(memberships) << 16) +
   (filters !== undefined ? bitmask(filters) : 0b1111_1111_1111_1111);

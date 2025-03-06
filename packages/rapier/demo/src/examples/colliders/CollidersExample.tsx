@@ -5,7 +5,7 @@ import {
   CuboidCollider,
   RapierCollider,
   RapierRigidBody,
-  RigidBody
+  RigidBody,
 } from "@react-three/rapier";
 import { useEffect, useRef } from "react";
 import { Demo } from "../../App";
@@ -19,7 +19,7 @@ const Ball = () => {
       if (ball.current.translation().y < -10) {
         ball.current.setTranslation(
           { x: Math.random() * 2, y: 20, z: 0 },
-          true
+          true,
         );
         ball.current.setLinvel({ x: 0, y: 0, z: 0 }, true);
       }

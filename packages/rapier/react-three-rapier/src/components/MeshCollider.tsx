@@ -1,9 +1,9 @@
-import React, { ReactNode, useRef, useMemo, memo } from "react";
+import { memo, ReactNode, useMemo, useRef } from "react";
 import { Object3D } from "three";
 import { AnyCollider } from "..";
 import { useChildColliderProps, useRapier } from "../hooks/hooks";
-import { useRigidBodyContext } from "./RigidBody";
 import { RigidBodyAutoCollider } from "../types";
+import { useRigidBodyContext } from "./RigidBody";
 
 export interface MeshColliderProps {
   children: ReactNode;
@@ -12,7 +12,7 @@ export interface MeshColliderProps {
 
 /**
  * A mesh collider is a collider that is automatically generated from the geometry of the children.
- * @category Colliders
+ * @constantsategory Colliders
  */
 export const MeshCollider = memo((props: MeshColliderProps) => {
   const { children, type } = props;
@@ -25,21 +25,21 @@ export const MeshCollider = memo((props: MeshColliderProps) => {
       ...physicsOptions,
       ...options,
       children: undefined,
-      colliders: type
+      colliders: type,
     };
   }, [physicsOptions, options]);
 
   const childColliderProps = useChildColliderProps(
     object,
     mergedOptions,
-    false
+    false,
   );
 
   return (
     <object3D
       ref={object}
       userData={{
-        r3RapierType: "MeshCollider"
+        r3RapierType: "MeshCollider",
       }}
     >
       {children}

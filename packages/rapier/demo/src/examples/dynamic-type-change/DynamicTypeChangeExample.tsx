@@ -11,11 +11,11 @@ export const DynamicTypeChangeExample = () => {
   const monkee = useRef<RapierRigidBody>(null);
   const [dragging, setDragging] = useState(false);
   const [s] = useState<{ mouse: { x: number; y: number } | null }>({
-    mouse: null
+    mouse: null,
   });
 
   const {
-    nodes: { Suzanne }
+    nodes: { Suzanne },
   } = useSuzanne();
 
   const { mouse } = useThree();
@@ -43,7 +43,7 @@ export const DynamicTypeChangeExample = () => {
         monkee.current?.setNextKinematicTranslation({
           x: x + (mouse.x - s.mouse.x) * 10,
           y: y + (mouse.y - s.mouse.y) * 10,
-          z: 0
+          z: 0,
         });
 
         s.mouse = { x: mouse.x, y: mouse.y };
@@ -86,7 +86,7 @@ export const DynamicTypeChangeExample = () => {
               background: "rgba(255,255,255,.2)",
               padding: 8,
               textAlign: "center",
-              backdropFilter: "blur(10px)"
+              backdropFilter: "blur(10px)",
             }}
           >
             <div>Drag me!</div>

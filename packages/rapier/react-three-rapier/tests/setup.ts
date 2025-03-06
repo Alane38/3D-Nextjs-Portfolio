@@ -11,7 +11,7 @@ const catcher =
     if (
       [
         "Multiple instances of Three.js being imported.",
-        "was not wrapped in act(...)"
+        "was not wrapped in act(...)",
       ].some((m) => args[0]?.includes?.(m))
     ) {
       return;

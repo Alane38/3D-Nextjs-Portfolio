@@ -1,23 +1,12 @@
-import {
-  euler,
-  interactionGroups,
-  quat,
-  RapierRigidBody,
-  RigidBody,
-  useSphericalJoint,
-  useSpringJoint,
-} from "@react-three/rapier";
+import { BallSpring } from "@core/Element/Objects/Spring";
+import { ModelRenderer } from "@core/Utility/ModelRenderer";
+import { vectorArrayToVector3 } from "@packages/rapier/react-three-rapier/src/utils/utils";
 import { useFrame } from "@react-three/fiber";
-import { ModelRenderer } from "@core/ModelRenderer";
-import { classModelPath } from "@/constants/class";
-import { Entity } from "./Entity";
-import { Euler, Object3D, Quaternion, Vector3 } from "three";
-import { useEffect, useMemo, useRef } from "react";
-import { BallSpring } from "@/app/Core/Spring";
-import { spring } from "framer-motion";
-import { Group } from "three/examples/jsm/libs/tween.module.js";
-import { vectorArrayToVector3 } from "@/packages/rapier/react-three-rapier/src/utils/utils";
-import { Attractor } from "@/packages/rapier/react-three-rapier-addons/src";
+import { euler, quat, RapierRigidBody, RigidBody } from "@react-three/rapier";
+import { useMemo, useRef } from "react";
+import { Object3D } from "three";
+import { Entity } from "../Entity";
+import { classModelPath } from "@constants/default";
 
 export class Diamond extends Entity {
   springed?: boolean;

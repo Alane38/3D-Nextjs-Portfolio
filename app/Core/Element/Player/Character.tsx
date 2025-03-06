@@ -1,4 +1,4 @@
-import { characterControllerConfig } from "@/constants/character";
+import { characterControllerConfig } from "@constants/character";
 import { Box, useKeyboardControls } from "@react-three/drei";
 import { useFrame } from "@react-three/fiber";
 import {
@@ -7,10 +7,11 @@ import {
   RigidBody,
   useRapier,
 } from "@react-three/rapier";
+import { usePlayerSelection } from "@resources/Hooks/Leva/usePlayerSelection";
 import { useControls } from "leva";
 import { useEffect, useRef, useState } from "react";
-import { MathUtils, Vector3 } from "three";
 import * as THREE from "three";
+import { MathUtils, Vector3 } from "three";
 
 // Initialization of normalizeAngle
 const normalizeAngle = (angle: number) => {
@@ -27,8 +28,9 @@ const lerpAngle = (start: number, end: number, t: number) => {
 };
 
 // Main Character Controller
-export const CharacterController = () => {
+export const Character = () => {
   const { rapier, world } = useRapier(); // Import Rappier for Colliders Events*
+  const Player = usePlayerSelection();
 
   // Import Character Value
   const {
@@ -45,7 +47,6 @@ export const CharacterController = () => {
   const character = useRef<THREE.Object3D>(null);
 
   const grounded = useRef<boolean>(false);
-  // const jumpTime = useRef<number>(0);
 
   const [animation, setAnimation] = useState("idle");
 
@@ -62,13 +63,24 @@ export const CharacterController = () => {
   const [, get] = useKeyboardControls();
   const isClicking = useRef(false);
 
-  // Events listeners
+  // Events Listeners
   useEffect(() => {
-    const onMouseDown = () => (isClicking.current = true);
-    const onMouseUp = () => (isClicking.current = false);
+    let timer: NodeJS.Timeout;
+    const onMouseDown = () => {
+      timer = setTimeout(() => (isClicking.current = true), 1000);
+    };
+    const onMouseUp = () => {
+      clearTimeout(timer);
+      isClicking.current = false;
+    };
 
-    const onTouchStart = () => (isClicking.current = true);
-    const onTouchEnd = () => (isClicking.current = false);
+    const onTouchStart = () => {
+      timer = setTimeout(() => (isClicking.current = true), 1000);
+    };
+    const onTouchEnd = () => {
+      clearTimeout(timer);
+      isClicking.current = false;
+    };
 
     document.addEventListener("mousedown", onMouseDown);
     document.addEventListener("mouseup", onMouseUp);
@@ -85,6 +97,8 @@ export const CharacterController = () => {
 
   // MOVEMENT, CAMERA, COLLISION DETECTION
   useFrame(({ camera, mouse }) => {
+    if (Player !== "Character") return;
+
     // Movement Forward_Backward
     if (rb.current) {
       const vel = rb.current.linvel();
@@ -124,7 +138,7 @@ export const CharacterController = () => {
       grounded.current = groundRayResult !== null;
 
       // Jump
-      if (get().jump && (grounded.current || INFINITE_JUMP === true)) {
+      if (get().jump_brake && (grounded.current || INFINITE_JUMP === true)) {
         movement.y = JUMP_FORCE;
         grounded.current = false;
       }

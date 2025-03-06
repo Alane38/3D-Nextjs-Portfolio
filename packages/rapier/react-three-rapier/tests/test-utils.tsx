@@ -8,7 +8,7 @@ import {
   RigidBodyProps,
   RigidBody,
   RapierContext,
-  useRapier
+  useRapier,
 } from "../src";
 import ReactThreeTestRenderer from "@react-three/test-renderer";
 
@@ -16,7 +16,7 @@ export const pause = (ms: number) =>
   new Promise((resolve) => setTimeout(resolve, ms));
 
 export const UseRapierMounter = ({
-  ready
+  ready,
 }: {
   ready: (context: RapierContext) => void;
 }) => {
@@ -50,9 +50,9 @@ export const createCollider = (props: CuboidColliderProps) =>
         await ReactThreeTestRenderer.create(
           <Physics>
             <TestCollider {...props} ready={resolve} />
-          </Physics>
+          </Physics>,
         );
-      })
+      }),
   );
 
 export const TestRigidBody = ({
@@ -79,13 +79,13 @@ export const createRigidBody = (props: RigidBodyProps) =>
         await ReactThreeTestRenderer.create(
           <Physics>
             <TestRigidBody {...props} ready={resolve} />
-          </Physics>
+          </Physics>,
         );
-      })
+      }),
   );
 
 const Mounter = ({
-  ready
+  ready,
 }: {
   ready: (step: (num: number) => void) => void;
 }) => {
@@ -104,7 +104,7 @@ export const awaitReady = async (children: ReactNode) => {
       <Physics paused>
         {children}
         <Mounter ready={resolve} />
-      </Physics>
+      </Physics>,
     );
   });
 
@@ -112,7 +112,7 @@ export const awaitReady = async (children: ReactNode) => {
 };
 
 export const RapierContextCatcher = ({
-  callback
+  callback,
 }: {
   callback: (obj: ReturnType<typeof useRapier>) => void;
 }) => {
@@ -126,7 +126,7 @@ export const RapierContextCatcher = ({
 };
 
 export const getScenePositions = (
-  renderer: Awaited<ReturnType<typeof ReactThreeTestRenderer.create>>
+  renderer: Awaited<ReturnType<typeof ReactThreeTestRenderer.create>>,
 ) => renderer.scene.children.map((c: any) => c.instance.position);
 
 import { renderHook } from "@testing-library/react"; // v14.0.0

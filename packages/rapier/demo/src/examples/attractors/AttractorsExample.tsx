@@ -3,7 +3,7 @@ import { useFrame } from "@react-three/fiber";
 import {
   InstancedRigidBodies,
   interactionGroups,
-  RigidBody
+  RigidBody,
 } from "@react-three/rapier";
 import { RapierRigidBody } from "@react-three/rapier";
 import { createRef, useEffect, useRef } from "react";
@@ -24,7 +24,7 @@ export const AttractorExample: Demo = () => {
         ref={api}
         instances={Array.from({ length: BALLS }, (_, i) => ({
           key: i,
-          position: [Math.floor(i / 30) * 1, (i % 30) * 0.5, 0]
+          position: [Math.floor(i / 30) * 1, (i % 30) * 0.5, 0],
         }))}
         colliders={"ball"}
       >

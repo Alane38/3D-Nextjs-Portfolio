@@ -5,7 +5,7 @@ import {
   RevoluteImpulseJoint,
   RopeImpulseJoint,
   SphericalImpulseJoint,
-  SpringImpulseJoint
+  SpringImpulseJoint,
 } from "@dimforge/rapier3d-compat";
 import { RefObject, useRef } from "react";
 import {
@@ -17,11 +17,11 @@ import {
   SphericalJointParams,
   SpringJointParams,
   UseImpulseJoint,
-  useRapier
+  useRapier,
 } from "..";
 import {
+  quaternionToRapierQuaternion,
   vector3ToRapierVector,
-  quaternionToRapierQuaternion
 } from "../utils/utils";
 
 import type Rapier from "@dimforge/rapier3d-compat";
@@ -33,7 +33,7 @@ import { useImperativeInstance } from "./use-imperative-instance";
 export const useImpulseJoint = <JointType extends ImpulseJoint>(
   body1: RefObject<RapierRigidBody>,
   body2: RefObject<RapierRigidBody>,
-  params: Rapier.JointData
+  params: Rapier.JointData,
 ) => {
   const { world } = useRapier();
   const jointRef = useRef<JointType | undefined>(undefined);
@@ -45,7 +45,7 @@ export const useImpulseJoint = <JointType extends ImpulseJoint>(
           params,
           body1.current,
           body2.current,
-          true
+          true,
         ) as JointType;
 
         jointRef.current = newJoint;
@@ -61,7 +61,7 @@ export const useImpulseJoint = <JointType extends ImpulseJoint>(
         }
       }
     },
-    []
+    [],
   );
 
   return jointRef;
@@ -72,7 +72,7 @@ export const useImpulseJoint = <JointType extends ImpulseJoint>(
  * Fixed joints are characterized by one local frame (represented by an isometry) on each rigid-body.
  * The fixed-joint makes these frames coincide in world-space.
  *
- * @category Hooks - Joints
+ * @constantsategory Hooks - Joints
  */
 export const useFixedJoint: UseImpulseJoint<
   FixedJointParams,
@@ -80,7 +80,7 @@ export const useFixedJoint: UseImpulseJoint<
 > = (
   body1,
   body2,
-  [body1Anchor, body1LocalFrame, body2Anchor, body2LocalFrame]
+  [body1Anchor, body1LocalFrame, body2Anchor, body2LocalFrame],
 ) => {
   const { rapier } = useRapier();
 
@@ -91,8 +91,8 @@ export const useFixedJoint: UseImpulseJoint<
       vector3ToRapierVector(body1Anchor),
       quaternionToRapierQuaternion(body1LocalFrame),
       vector3ToRapierVector(body2Anchor),
-      quaternionToRapierQuaternion(body2LocalFrame)
-    )
+      quaternionToRapierQuaternion(body2LocalFrame),
+    ),
   );
 };
 
@@ -102,7 +102,7 @@ export const useFixedJoint: UseImpulseJoint<
  * They are characterized by one local anchor on each rigid-body. Each anchor represents the location of the
  * points that need to coincide on the local-space of each rigid-body.
  *
- * @category Hooks - Joints
+ * @constantsategory Hooks - Joints
  */
 export const useSphericalJoint: UseImpulseJoint<
   SphericalJointParams,
@@ -115,8 +115,8 @@ export const useSphericalJoint: UseImpulseJoint<
     body2,
     rapier.JointData.spherical(
       vector3ToRapierVector(body1Anchor),
-      vector3ToRapierVector(body2Anchor)
-    )
+      vector3ToRapierVector(body2Anchor),
+    ),
   );
 };
 
@@ -125,7 +125,7 @@ export const useSphericalJoint: UseImpulseJoint<
  * rotations along one axis. This is typically used to simulate wheels, fans, etc.
  * They are characterized by one local anchor as well as one local axis on each rigid-body.
  *
- * @category Hooks - Joints
+ * @constantsategory Hooks - Joints
  */
 export const useRevoluteJoint: UseImpulseJoint<
   RevoluteJointParams,
@@ -136,7 +136,7 @@ export const useRevoluteJoint: UseImpulseJoint<
   const params = rapier.JointData.revolute(
     vector3ToRapierVector(body1Anchor),
     vector3ToRapierVector(body2Anchor),
-    vector3ToRapierVector(axis)
+    vector3ToRapierVector(axis),
   );
 
   if (limits) {
@@ -152,7 +152,7 @@ export const useRevoluteJoint: UseImpulseJoint<
  * It is characterized by one local anchor as well as one local axis on each rigid-body. In 3D, an optional
  * local tangent axis can be specified for each rigid-body.
  *
- * @category Hooks - Joints
+ * @constantsategory Hooks - Joints
  */
 export const usePrismaticJoint: UseImpulseJoint<
   PrismaticJointParams,
@@ -163,7 +163,7 @@ export const usePrismaticJoint: UseImpulseJoint<
   const params = rapier.JointData.prismatic(
     vector3ToRapierVector(body1Anchor),
     vector3ToRapierVector(body2Anchor),
-    vector3ToRapierVector(axis)
+    vector3ToRapierVector(axis),
   );
 
   if (limits) {
@@ -176,7 +176,7 @@ export const usePrismaticJoint: UseImpulseJoint<
 
 /**
  * The rope joint limits the max distance between two bodies.
- * @category Hooks - Joints
+ * @constantsategory Hooks - Joints
  */
 export const useRopeJoint: UseImpulseJoint<
   RopeJointParams,
@@ -194,7 +194,7 @@ export const useRopeJoint: UseImpulseJoint<
 
 /**
  * The spring joint applies a force proportional to the distance between two objects.
- * @category Hooks - Joints
+ * @constantsategory Hooks - Joints
  */
 export const useSpringJoint: UseImpulseJoint<
   SpringJointParams,
@@ -202,7 +202,7 @@ export const useSpringJoint: UseImpulseJoint<
 > = (
   body1,
   body2,
-  [body1Anchor, body2Anchor, restLength, stiffness, damping]
+  [body1Anchor, body2Anchor, restLength, stiffness, damping],
 ) => {
   const { rapier } = useRapier();
 
@@ -214,7 +214,7 @@ export const useSpringJoint: UseImpulseJoint<
     stiffness,
     damping,
     vBody1Anchor,
-    vBody2Anchor
+    vBody2Anchor,
   );
 
   return useImpulseJoint<SpringImpulseJoint>(body1, body2, params);

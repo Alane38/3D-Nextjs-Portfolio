@@ -12,7 +12,7 @@ type GroupProps = ThreeElements["group"];
 const Map = () => {
   const { nodes } = useGLTF(
     // @ts-ignore
-    new URL("../../models/map.glb", import.meta.url).toString()
+    new URL("../../models/map.glb", import.meta.url).toString(),
   ) as unknown as { nodes: { map: Mesh } };
 
   nodes.map.castShadow = true;
@@ -25,7 +25,7 @@ const Map = () => {
         <TrimeshCollider
           args={[
             nodes.map.geometry.attributes.position.array,
-            nodes.map.geometry.index?.array || []
+            nodes.map.geometry.index?.array || [],
           ]}
         />
       </RigidBody>
@@ -35,7 +35,7 @@ const Map = () => {
 
 const Pear = (props: GroupProps) => {
   const { nodes } = useGLTF(
-    new URL("../../models/objects.glb", import.meta.url).toString()
+    new URL("../../models/objects.glb", import.meta.url).toString(),
   ) as unknown as {
     nodes: {
       pear: Mesh;

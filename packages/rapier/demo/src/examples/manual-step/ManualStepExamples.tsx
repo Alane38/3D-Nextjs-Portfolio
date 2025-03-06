@@ -3,7 +3,7 @@ import {
   RigidBody,
   useAfterPhysicsStep,
   useBeforePhysicsStep,
-  useRapier
+  useRapier,
 } from "@react-three/rapier";
 import { Box } from "@react-three/drei";
 import { useControls, button } from "leva";
@@ -16,13 +16,13 @@ export const ManualStepExample = () => {
 
   const steps = useRef({
     before: 0,
-    after: 0
+    after: 0,
   });
 
   useControls({
     step: button(() => {
       step(1 / 60);
-    })
+    }),
   });
 
   useEffect(() => {

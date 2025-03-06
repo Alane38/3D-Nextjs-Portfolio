@@ -1,8 +1,8 @@
 import { RigidBody } from "@react-three/rapier";
-import { Entity } from "./Entity";
 import { Box, Plane } from "@react-three/drei";
 import { Euler } from "three";
 import { useMemo } from "react";
+import { Entity } from "../Entity";
 
 export class Ground extends Entity {
   color: string;
@@ -12,7 +12,7 @@ export class Ground extends Entity {
     super("Ground");
     // Modify the default settings(Entity) :
     this.type = "fixed";
-    this.colliders = "cuboid"
+    this.colliders = "cuboid";
     this.scale = 100;
     this.depth = 0.1;
     this.args = [this.scale, this.depth, this.scale];

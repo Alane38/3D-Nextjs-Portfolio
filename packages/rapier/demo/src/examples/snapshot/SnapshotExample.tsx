@@ -10,13 +10,13 @@ import { useResetOrbitControls } from "../../hooks/use-reset-orbit-controls";
 
 export const SnapshotExample: Demo = () => {
   const floor = useTexture(
-    new URL("../damping/white.png", import.meta.url).toString()
+    new URL("../damping/white.png", import.meta.url).toString(),
   );
   const ramp = useTexture(
-    new URL("../damping/red.png", import.meta.url).toString()
+    new URL("../damping/red.png", import.meta.url).toString(),
   );
   const ball = useTexture(
-    new URL("../damping/green.png", import.meta.url).toString()
+    new URL("../damping/green.png", import.meta.url).toString(),
   );
 
   floor.wrapS = floor.wrapT = RepeatWrapping;
@@ -31,8 +31,8 @@ export const SnapshotExample: Demo = () => {
     restoreSnapshot: button(
       () =>
         !!worldSnapshot.current &&
-        setWorld(rapier.World.restoreSnapshot(worldSnapshot.current))
-    )
+        setWorld(rapier.World.restoreSnapshot(worldSnapshot.current)),
+    ),
   });
   useResetOrbitControls(40, [0, 0.25, 0.75]);
 

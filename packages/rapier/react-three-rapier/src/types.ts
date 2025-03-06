@@ -6,7 +6,7 @@ import {
   InteractionGroups,
   Collider as RapierCollider,
   RigidBody as RapierRigidBody,
-  TempContactManifold
+  TempContactManifold,
 } from "@dimforge/rapier3d-compat";
 import { Rotation, Vector } from "@dimforge/rapier3d-compat/math";
 import { Quaternion, ThreeElements, Vector3 } from "@react-three/fiber";
@@ -29,7 +29,7 @@ export type RigidBodyAutoCollider =
 export type CuboidArgs = [
   halfWidth: number,
   halfHeight: number,
-  halfDepth: number
+  halfDepth: number,
 ];
 export type BallArgs = [radius: number];
 export type CapsuleArgs = [halfHeight: number, radius: number];
@@ -38,44 +38,44 @@ export type HeightfieldArgs = [
   width: number,
   height: number,
   heights: number[],
-  scale: { x: number; y: number; z: number }
+  scale: { x: number; y: number; z: number },
 ];
 export type TrimeshArgs = [
   vertices: ArrayLike<number>,
-  indices: ArrayLike<number>
+  indices: ArrayLike<number>,
 ];
 export type PolylineArgs = [vertices: Float32Array, indices: Uint32Array];
 export type RoundCuboidArgs = [
   halfWidth: number,
   halfHeight: number,
   halfDepth: number,
-  borderRadius: number
+  borderRadius: number,
 ];
 export type CylinderArgs = [halfHeight: number, radius: number];
 export type RoundCylinderArgs = [
   halfHeight: number,
   radius: number,
-  borderRadius: number
+  borderRadius: number,
 ];
 export type ConeArgs = [halfHeight: number, radius: number];
 export type RoundConeArgs = [
   halfHeight: number,
   radius: number,
-  borderRadius: number
+  borderRadius: number,
 ];
 export type ConvexMeshArgs = [
   vertices: ArrayLike<number>,
-  indices: ArrayLike<number>
+  indices: ArrayLike<number>,
 ];
 export type RoundConvexHullArgs = [
   vertices: ArrayLike<number>,
   indices: ArrayLike<number>,
-  borderRadius: number
+  borderRadius: number,
 ];
 export type RoundConvexMeshArgs = [
   vertices: ArrayLike<number>,
   indices: ArrayLike<number>,
-  borderRadius: number
+  borderRadius: number,
 ];
 
 export type UseBodyOptions = Omit<RigidBodyOptions, "shape">;
@@ -310,11 +310,11 @@ export type CollisionEnterHandler = (payload: CollisionEnterPayload) => void;
 export type CollisionExitHandler = (payload: CollisionExitPayload) => void;
 
 export type IntersectionEnterHandler = (
-  payload: IntersectionEnterPayload
+  payload: IntersectionEnterPayload,
 ) => void;
 
 export type IntersectionExitHandler = (
-  payload: IntersectionExitPayload
+  payload: IntersectionExitPayload,
 ) => void;
 
 export type ContactForceHandler = (payload: ContactForcePayload) => void;
@@ -500,27 +500,27 @@ export type FixedJointParams = [
   body1Anchor: Vector3,
   body1LocalFrame: Quaternion,
   body2Anchor: Vector3,
-  body2LocalFrame: Quaternion
+  body2LocalFrame: Quaternion,
 ];
 
 export type PrismaticJointParams = [
   body1Anchor: Vector3,
   body2Anchor: Vector3,
   axis: Vector3,
-  limits?: [min: number, max: number]
+  limits?: [min: number, max: number],
 ];
 
 export type RevoluteJointParams = [
   body1Anchor: Vector3,
   body2Anchor: Vector3,
   axis: Vector3,
-  limits?: [min: number, max: number]
+  limits?: [min: number, max: number],
 ];
 
 export type RopeJointParams = [
   body1Anchor: Vector3,
   body2Anchor: Vector3,
-  length: number
+  length: number,
 ];
 
 export type SpringJointParams = [
@@ -528,13 +528,13 @@ export type SpringJointParams = [
   body2Anchor: Vector3,
   restLength: number,
   stiffness: number,
-  damping: number
+  damping: number,
 ];
 
 export interface UseImpulseJoint<JointParams, JointType extends ImpulseJoint> {
   (
     body1: RefObject<RapierRigidBody>,
     body2: RefObject<RapierRigidBody>,
-    params: JointParams
+    params: JointParams,
   ): RefObject<JointType | undefined>;
 }

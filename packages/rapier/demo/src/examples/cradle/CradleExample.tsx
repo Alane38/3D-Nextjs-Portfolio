@@ -5,7 +5,7 @@ import {
   RapierRigidBody,
   RigidBody,
   RigidBodyOptions,
-  useSphericalJoint
+  useSphericalJoint,
 } from "@react-three/rapier";
 import { useRef } from "react";
 import { Demo } from "../../App";
@@ -17,7 +17,7 @@ const Rod = (props: RigidBodyOptions) => {
 
   useSphericalJoint(anchor, rod, [
     [0, 0, 0],
-    [0, 0, 0]
+    [0, 0, 0],
   ]);
 
   return (

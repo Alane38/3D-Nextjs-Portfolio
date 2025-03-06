@@ -64,7 +64,7 @@ const calcForceByType = {
   linear: (s: number, m2: number, r: number, d: number, G: number) =>
     s * (d / r),
   newtonian: (s: number, m2: number, r: number, d: number, G: number) =>
-    (G * s * m2) / Math.pow(d, 2)
+    (G * s * m2) / Math.pow(d, 2),
 };
 
 const _position = new Vector3();
@@ -78,10 +78,10 @@ export const applyAttractorForceOnRigidBody = (
     range,
     gravitationalConstant,
     collisionGroups,
-    type
+    type,
   }: AttractorState & {
     object: Object3D;
-  }
+  },
 ) => {
   const rbPosition = rigidBody.translation();
   _position.set(rbPosition.x, rbPosition.y, rbPosition.z);
@@ -96,7 +96,7 @@ export const applyAttractorForceOnRigidBody = (
       rigidBody.mass(),
       range,
       distance,
-      gravitationalConstant
+      gravitationalConstant,
     );
 
     // Prevent wild forces when Attractors collide
@@ -138,7 +138,7 @@ export const Attractor: FC<AttractorProps> = memo((props) => {
     range = 10,
     type = "static",
     gravitationalConstant = 6.673e-11,
-    collisionGroups
+    collisionGroups,
   } = props;
   const object = useRef<Object3D>(null!);
   const { isDebug } = useRapier();
@@ -153,7 +153,7 @@ export const Attractor: FC<AttractorProps> = memo((props) => {
             range,
             type,
             gravitationalConstant,
-            collisionGroups
+            collisionGroups,
           });
         }
       });

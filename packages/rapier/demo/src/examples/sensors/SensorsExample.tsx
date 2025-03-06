@@ -4,7 +4,7 @@ import {
   CuboidCollider,
   RigidBody,
   RapierRigidBody,
-  RigidBodyProps
+  RigidBodyProps,
 } from "@react-three/rapier";
 import { useEffect, useRef, useState } from "react";
 import { MeshPhysicalMaterial } from "three";

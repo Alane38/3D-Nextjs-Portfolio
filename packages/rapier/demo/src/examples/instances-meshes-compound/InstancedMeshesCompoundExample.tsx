@@ -2,7 +2,7 @@ import { ThreeEvent } from "@react-three/fiber";
 import {
   BallCollider,
   CuboidCollider,
-  InstancedRigidBodies
+  InstancedRigidBodies,
 } from "@react-three/rapier";
 import { useEffect, useRef } from "react";
 import { useSuzanne } from "../all-shapes/AllShapesExample";
@@ -14,7 +14,7 @@ const COUNT = 300;
 
 export const InstancedMeshesCompound: Demo = () => {
   const {
-    nodes: { Suzanne }
+    nodes: { Suzanne },
   } = useSuzanne();
 
   useResetOrbitControls(30);
@@ -36,9 +36,9 @@ export const InstancedMeshesCompound: Demo = () => {
           {
             x: -Math.random() * 5,
             y: Math.random() * 5,
-            z: -Math.random() * 5
+            z: -Math.random() * 5,
           },
-          true
+          true,
         );
       });
     }
@@ -54,19 +54,23 @@ export const InstancedMeshesCompound: Demo = () => {
           position: [
             Math.random() * 20,
             Math.random() * 20,
-            Math.random() * 20
+            Math.random() * 20,
           ],
           rotation: [
             Math.random() * Math.PI * 2,
             Math.random() * Math.PI * 2,
-            Math.random() * Math.PI * 2
+            Math.random() * Math.PI * 2,
           ],
-          scale: [0.5 + Math.random(), 0.5 + Math.random(), 0.5 + Math.random()]
+          scale: [
+            0.5 + Math.random(),
+            0.5 + Math.random(),
+            0.5 + Math.random(),
+          ],
         }))}
         colliderNodes={[
           <BallCollider args={[1]} />,
           <BallCollider args={[0.5]} position={[1, 0.3, -0.25]} />,
-          <CuboidCollider args={[0.5, 0.2, 0.5]} position={[-1, 0.3, -0.25]} />
+          <CuboidCollider args={[0.5, 0.2, 0.5]} position={[-1, 0.3, -0.25]} />,
         ]}
       >
         <instancedMesh

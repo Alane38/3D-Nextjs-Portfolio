@@ -5,7 +5,7 @@ import {
   MeshBasicMaterial,
   Object3D,
   SphereGeometry,
-  Vector3
+  Vector3,
 } from "three";
 import { VertexNormalsHelper } from "three-stdlib";
 import { AttractorState } from "./Attractor";
@@ -15,7 +15,7 @@ const _v3 = new Vector3();
 export const AttractorDebugHelper = (
   props: AttractorState & {
     object: RefObject<Object3D>;
-  }
+  },
 ) => {
   const { scene } = useThree();
   const ref = useRef<Mesh>(null!);
@@ -25,13 +25,13 @@ export const AttractorDebugHelper = (
   useEffect(() => {
     ref.current = new Mesh(
       new SphereGeometry(0.2, 6, 6),
-      new MeshBasicMaterial({ color, wireframe: true })
+      new MeshBasicMaterial({ color, wireframe: true }),
     );
 
     normalsHelper.current = new VertexNormalsHelper(
       ref.current,
       props.range,
-      color
+      color,
     );
     normalsHelper.current.frustumCulled = false;
 

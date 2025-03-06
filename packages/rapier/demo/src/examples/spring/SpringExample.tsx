@@ -4,7 +4,7 @@ import {
   RapierRigidBody,
   RigidBody,
   RigidBodyOptions,
-  useSpringJoint
+  useSpringJoint,
 } from "@react-three/rapier";
 import { forwardRef, useMemo, useRef } from "react";
 import { Demo } from "../../App";
@@ -55,7 +55,7 @@ const BallSpring = forwardRef<RapierRigidBody, BallSpringProps>(
       [ballPos.x, ballPos.y - 3, ballPos.z],
       0,
       stiffness,
-      damping
+      damping,
     ]);
 
     return (
@@ -75,7 +75,7 @@ const BallSpring = forwardRef<RapierRigidBody, BallSpringProps>(
         <BallCollider args={[0.5]} />
       </RigidBody>
     );
-  }
+  },
 );
 
 export const SpringExample: Demo = () => {

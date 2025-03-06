@@ -5,7 +5,7 @@ import { useRef, useState } from "react";
 
 import * as THREE from "three";
 
-export const Controls = {
+const JumpControls = {
   forward: "forward",
   back: "back",
   left: "left",
@@ -25,12 +25,14 @@ export const JumpGame = () => {
     }
   };
 
-  const jumpPressed = useKeyboardControls((state) => state[Controls.jump]);
-  const leftPressed = useKeyboardControls((state) => state[Controls.left]);
-  const rightPressed = useKeyboardControls((state) => state[Controls.right]);
-  const backPressed = useKeyboardControls((state) => state[Controls.back]);
+  const jumpPressed = useKeyboardControls((state) => state[JumpControls.jump]);
+  const leftPressed = useKeyboardControls((state) => state[JumpControls.left]);
+  const rightPressed = useKeyboardControls(
+    (state) => state[JumpControls.right],
+  );
+  const backPressed = useKeyboardControls((state) => state[JumpControls.back]);
   const forwardPressed = useKeyboardControls(
-    (state) => state[Controls.forward],
+    (state) => state[JumpControls.forward],
   );
 
   const handleMovement = () => {

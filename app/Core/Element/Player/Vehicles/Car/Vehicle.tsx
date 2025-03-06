@@ -1,34 +1,17 @@
-import { MeshReflectorMaterial, useKeyboardControls } from "@react-three/drei";
+import { useKeyboardControls } from "@react-three/drei";
 import { useFrame } from "@react-three/fiber";
 import {
   BallCollider,
-  CuboidCollider,
   RapierRigidBody,
   RigidBody,
   RigidBodyProps,
   useBeforePhysicsStep,
   useRapier,
 } from "@react-three/rapier";
+import { usePlayerSelection } from "@resources/Hooks/Leva/usePlayerSelection";
+import { VehicleControls } from "@type/VehicleControls";
 import { useRef } from "react";
 import * as THREE from "three";
-
-// KeyControls Type
-type KeyControls = {
-  accelerate: boolean;
-  decelerate: boolean;
-  left: boolean;
-  right: boolean;
-  hop: boolean;
-};
-
-// Vehicle Controls
-export const vehicleControls = [
-  { name: "accelerate", keys: ["KeyW"] },
-  { name: "decelerate", keys: ["KeyS"] },
-  { name: "left", keys: ["KeyA"] },
-  { name: "right", keys: ["KeyD"] },
-  { name: "hop", keys: ["Space"] },
-];
 
 // Vehicle Constants
 const up = new THREE.Vector3(0, 1, 0);
@@ -53,6 +36,7 @@ const _impulse = new THREE.Vector3();
 
 // VEHICLE COMPONENT
 export const Vehicle = (props: RigidBodyProps) => {
+  const Player = usePlayerSelection();
   const { rapier, world } = useRapier();
 
   const bodyRef = useRef<RapierRigidBody>(null!);
@@ -80,8 +64,9 @@ export const Vehicle = (props: RigidBodyProps) => {
   const [, getKeyboardControls] = useKeyboardControls();
 
   useBeforePhysicsStep(() => {
-    const controls = getKeyboardControls() as KeyControls;
-    const { accelerate, decelerate, left, right, hop } = controls;
+    if (Player !== "Car") return null;
+    const controls = getKeyboardControls() as VehicleControls;
+    const { forward, backward, left, right, jump } = controls;
 
     const impulse = _impulse.set(0, 0, -speed.current).multiplyScalar(5);
 
@@ -104,7 +89,7 @@ export const Vehicle = (props: RigidBodyProps) => {
     steeringAngle.current += steeringInput.current * 0.01;
 
     // Drifting controls
-    if (holdingJump.current && !hop) {
+    if (holdingJump.current && !jump) {
       holdingJump.current = false;
       driftingLeft.current = false;
       driftingRight.current = false;
@@ -160,16 +145,16 @@ export const Vehicle = (props: RigidBodyProps) => {
     // Acceleration and deceleration
     let speedTarget = 0;
 
-    if (accelerate) {
+    if (forward) {
       speedTarget = maxForwardSpeed;
-    } else if (decelerate) {
+    } else if (backward) {
       speedTarget = maxReverseSpeed;
     }
 
     speed.current = THREE.MathUtils.lerp(speed.current, speedTarget, 0.03);
 
     // jump
-    if (grounded.current && hop && !holdingJump.current) {
+    if (grounded.current && jump && !holdingJump.current) {
       impulse.y = 12;
       holdingJump.current = true;
 
@@ -194,6 +179,7 @@ export const Vehicle = (props: RigidBodyProps) => {
 
   // Update Vehicle
   useFrame((state, delta) => {
+    if (Player !== "Car") return null;
     // Body position
     const bodyPosition = _bodyPosition.copy(bodyRef.current.translation());
     groupRef.current.position.copy(bodyPosition);
@@ -286,110 +272,3 @@ export const Vehicle = (props: RigidBodyProps) => {
     </>
   );
 };
-
-// ARCHIVES DOCUMENTATION FOR RACETRACK
-
-/* const racetrackPoints: THREE.Vector3[] = [];
-
-const boxLength = 20;
-const trackWidth = 20;
-const numConesInner = 15;
-const numConesOuter = 60;
-const innerTrackRadius = boxLength / 2 - trackWidth;
-const outerTrackRadius = boxLength / 2 + trackWidth;
-
-for (let i = 0; i < numConesInner; i++) {
-  const angle = (i / numConesInner) * Math.PI * 2;
-  racetrackPoints.push(
-    new THREE.Vector3(
-      Math.cos(angle) * innerTrackRadius,
-      1,
-      Math.sin(angle) * innerTrackRadius,
-    ),
-  );
-}
-
-for (let i = 0; i < numConesOuter; i++) {
-  const angle = (i / numConesOuter) * Math.PI * 2;
-  racetrackPoints.push(
-    new THREE.Vector3(
-      Math.cos(angle) * outerTrackRadius,
-      1,
-      Math.sin(angle) * outerTrackRadius,
-    ),
-  );
-} */
-
-/* const colors = ["orange", "hotpink", "cyan"]; */
-
-/* const Floor = () => (
-  <>
-    <RigidBody type="fixed" position={[0, -1, 0]}>
-      <CuboidCollider args={[100, 1, 100]} />
-    </RigidBody>
-
-    <mesh rotation={[-Math.PI / 2, 0, 0]}>
-      <circleGeometry args={[50, 64]} />
-      <MeshReflectorMaterial
-        mirror={0}
-        blur={[300, 30]}
-        resolution={1024}
-        mixBlur={1}
-        mixStrength={50}
-        roughness={0.8}
-        depthScale={0.5}
-        minDepthThreshold={0.4}
-        maxDepthThreshold={1.4}
-        color="#111"
-        metalness={0.2}
-      />
-    </mesh>
-  </>
-); */
-
-// export function Sketch() {
-//     const { orbitControls, physicsDebug } = useControls(SKETCH, {
-//         orbitControls: false,
-//         physicsDebug: false,
-//     })
-
-//     return (
-//         <>
-//             <Canvas>
-//                 <Physics debug={physicsDebug}>
-//                     <KeyboardControls map={controls}>
-//                         <ArcadeVehicle position={[15, 2, 0]} />
-//                     </KeyboardControls>
-
-//                     <Floor />
-
-//                     {racetrackPoints.map((point, index) => (
-//                         <RigidBody key={index} position={point} type="dynamic" colliders={false}>
-//                             <mesh>
-//                                 <cylinderGeometry args={[1, 1, 2, 16]} />
-//                                 <meshStandardMaterial color={colors[index % colors.length]} />
-//                             </mesh>
-//                             <CylinderCollider args={[1, 1]} />
-//                         </RigidBody>
-//                     ))}
-
-//                     <ambientLight intensity={2} />
-//                     <pointLight intensity={40} decay={1.5} position={[0, 5, 0]} />
-
-//                     {orbitControls && <OrbitControls makeDefault />}
-//                     <PerspectiveCamera makeDefault position={[0, 5, 10]} fov={50} />
-//                 </Physics>
-
-//                 <color attach="background" args={['#0f0f0f']} />
-//             </Canvas>
-
-//             <Instructions>
-//                 * wasd to drive
-//                 <br />
-//                 space to jump
-//                 <br />
-//                 hold space while turning to drift
-//             </Instructions>
-//         </>
-//     )
-// }

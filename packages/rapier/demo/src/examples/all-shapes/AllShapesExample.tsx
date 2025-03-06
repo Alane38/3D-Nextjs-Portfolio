@@ -7,7 +7,7 @@ import {
   ConvexHullCollider,
   CuboidCollider,
   RigidBody,
-  TrimeshCollider
+  TrimeshCollider,
 } from "@react-three/rapier";
 
 import { Demo } from "../../App";
@@ -17,7 +17,7 @@ import { useResetOrbitControls } from "../../hooks/use-reset-orbit-controls";
 export const useSuzanne = () => {
   // @ts-ignore
   return useGLTF(
-    new URL("../../models/susanne.glb", import.meta.url).toString()
+    new URL("../../models/susanne.glb", import.meta.url).toString(),
   ) as {
     nodes: {
       Suzanne: Mesh;
@@ -28,7 +28,7 @@ export const useSuzanne = () => {
 const useOffsetTorus = () => {
   // @ts-ignore
   return useGLTF(
-    new URL("../../models/offset-torus.glb", import.meta.url).toString()
+    new URL("../../models/offset-torus.glb", import.meta.url).toString(),
   ) as {
     nodes: {
       Torus: Mesh;
@@ -110,7 +110,7 @@ export const AllShapesExample: Demo = () => {
           <TrimeshCollider
             args={[
               nodes.Suzanne.geometry.attributes.position.array,
-              nodes.Suzanne.geometry.index?.array || []
+              nodes.Suzanne.geometry.index?.array || [],
             ]}
             mass={1}
           />

@@ -1,31 +1,30 @@
 "use client";
 
+import { globalControls } from "@constants/default";
 import { KeyboardControls } from "@react-three/drei";
-import { CanvasLayout } from "./CanvasLayout";
 import { MainWorld } from "@resources/Environment/MainWorld";
 import { Leva } from "leva";
-import { characterControls } from "@/constants/character";
-import { Inventory } from "./Player/Inventory";
-import { TestWorld } from "../Resources/Environment/TestWorld";
-import { useLoadingAssets } from "../Resources/Settings/useLoadingAssets";
+import { useState } from "react";
+import { useLoadingAssets } from "../Resources/Hooks/useLoadingAssets";
+import { CanvasLayout } from "./CanvasLayout";
 import { Loading } from "./Loading";
-import { PerformanceWarning } from "./PerformanceWarning";
+import { PerformanceWarning } from "./Utility/PerformanceWarning";
 
 export function Canvas() {
+  const [visible, setVisible] = useState(true);
   const loading = useLoadingAssets();
 
   return (
     <>
-      {loading !== 100 && <Loading progress={loading} />}
+      {loading !== 100 && visible && (
+        <Loading progress={loading} onSkip={() => setVisible(false)} />
+      )}
       <PerformanceWarning />
-
       <Leva collapsed={true} /> {/* Leva Panel Settings */}
-
       {/* Player Inventory */}
       {/* <Inventory /> */}
-
       {/* Controls */}
-      <KeyboardControls map={characterControls}>
+      <KeyboardControls map={globalControls}>
         <CanvasLayout>
           {/* Children */}
           <MainWorld />

@@ -1,7 +1,7 @@
 import {
   CoefficientCombineRule,
   Collider,
-  World
+  World,
 } from "@dimforge/rapier3d-compat";
 import { Vector } from "@dimforge/rapier3d-compat/math";
 import ReactThreeTestRenderer from "@react-three/test-renderer";
@@ -13,7 +13,7 @@ import {
   expect,
   it,
   MockInstance,
-  vi
+  vi,
 } from "vitest";
 import {
   ConeCollider,
@@ -21,7 +21,7 @@ import {
   interactionGroups,
   Physics,
   RigidBody,
-  useRapier
+  useRapier,
 } from "../src";
 import { createCollider } from "./test-utils";
 
@@ -34,7 +34,7 @@ describe("colliders", () => {
         try {
           const collider = await createCollider({
             args: [1, 2, 3],
-            sensor: value
+            sensor: value,
           });
 
           if (value === undefined) {
@@ -56,7 +56,7 @@ describe("colliders", () => {
         interactionGroups([0], [0]),
         interactionGroups([0, 1], [0, 1, 2, 3]),
         interactionGroups([0, 1]),
-        interactionGroups(1, [0, 1])
+        interactionGroups(1, [0, 1]),
       ];
 
       it(`should have collisionGroups property correctly assigned`, async () => {
@@ -65,7 +65,7 @@ describe("colliders", () => {
           try {
             const collider = await createCollider({
               args: [1, 2, 3],
-              collisionGroups: value
+              collisionGroups: value,
             });
 
             expect(collider.collisionGroups()).to.equal(value);
@@ -84,7 +84,7 @@ describe("colliders", () => {
           try {
             const collider = await createCollider({
               args: [1, 2, 3],
-              solverGroups: value
+              solverGroups: value,
             });
 
             expect(collider.solverGroups()).to.equal(value);
@@ -104,7 +104,7 @@ describe("colliders", () => {
         try {
           const collider = await createCollider({
             args: [1, 2, 3],
-            friction: value
+            friction: value,
           });
 
           expect(collider.friction()).to.equal(value);
@@ -121,14 +121,14 @@ describe("colliders", () => {
         CoefficientCombineRule.Max,
         CoefficientCombineRule.Min,
         CoefficientCombineRule.Multiply,
-        CoefficientCombineRule.Average
+        CoefficientCombineRule.Average,
       ]) {
         const spy = vi.spyOn(Collider.prototype, "setFrictionCombineRule");
 
         try {
           const collider = await createCollider({
             args: [1, 2, 3],
-            frictionCombineRule: value
+            frictionCombineRule: value,
           });
 
           expect(collider.frictionCombineRule()).to.equal(value);
@@ -145,13 +145,13 @@ describe("colliders", () => {
         CoefficientCombineRule.Max,
         CoefficientCombineRule.Min,
         CoefficientCombineRule.Multiply,
-        CoefficientCombineRule.Average
+        CoefficientCombineRule.Average,
       ]) {
         const spy = vi.spyOn(Collider.prototype, "setRestitutionCombineRule");
         try {
           const collider = await createCollider({
             args: [1, 2, 3],
-            restitutionCombineRule: value
+            restitutionCombineRule: value,
           });
 
           expect(collider.restitutionCombineRule()).to.equal(value);
@@ -169,7 +169,7 @@ describe("colliders", () => {
         try {
           const collider = await createCollider({
             args: [1, 2, 3],
-            restitution: value
+            restitution: value,
           });
 
           expect(collider.restitution()).to.equal(value);
@@ -207,7 +207,7 @@ describe("colliders", () => {
         it(`should work with value ${value}`, async () => {
           const collider = await createCollider({
             args: [1, 2, 3],
-            mass: value
+            mass: value,
           });
 
           // Calculated with 1 density if undefined.
@@ -216,7 +216,7 @@ describe("colliders", () => {
           expect(collider.mass()).to.eq(expectedMassValue);
           expect(collider.density()).to.approximately(
             densityAtMass1 * expectedMassValue,
-            0.000001
+            0.000001,
           );
 
           if (value === undefined) {
@@ -245,8 +245,8 @@ describe("colliders", () => {
           mass: wantedMass,
           centerOfMass: centerOfMass,
           principalAngularInertia: principalAngularInertia,
-          angularInertiaLocalFrame: angularInertiaLocalFrame
-        }
+          angularInertiaLocalFrame: angularInertiaLocalFrame,
+        },
       });
 
       expect(collider.mass()).to.eq(wantedMass);
@@ -260,17 +260,17 @@ describe("colliders", () => {
       expect(setMassProperties.mock.calls[0][0]).to.equal(wantedMass); // mass
       expect(setMassProperties.mock.calls[0][1]).to.deep.equal(centerOfMass);
       expect(setMassProperties.mock.calls[0][2]).to.deep.equal(
-        principalAngularInertia
+        principalAngularInertia,
       );
       expect(setMassProperties.mock.calls[0][3]).to.deep.equal(
-        angularInertiaLocalFrame
+        angularInertiaLocalFrame,
       );
     });
 
     it("should have density property correctly assigned", async () => {
       const collider = await createCollider({
         args: [1, 2, 3],
-        density: 1
+        density: 1,
       });
 
       expect(collider.mass()).to.eq(48);
@@ -299,7 +299,7 @@ describe("colliders", () => {
       };
 
       const TestScene = ({
-        onMount
+        onMount,
       }: {
         onMount: (result: TestSceneResult) => void;
       }) => {
@@ -312,7 +312,7 @@ describe("colliders", () => {
             step,
             world,
             setShowCollider,
-            setShowRigidBody
+            setShowRigidBody,
           });
         }, []);
 
@@ -334,7 +334,7 @@ describe("colliders", () => {
           ReactThreeTestRenderer.create(
             <Physics paused>
               <TestScene onMount={resolve} />
-            </Physics>
+            </Physics>,
           );
         });
 

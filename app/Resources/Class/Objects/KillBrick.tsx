@@ -1,8 +1,8 @@
 import { RigidBody } from "@react-three/rapier";
-import { Entity } from "./Entity";
 import { Box, Text } from "@react-three/drei";
 import { Euler, Vector3 } from "three";
 import { useMemo, useState } from "react";
+import { Entity } from "../Entity";
 
 export class KillBrick extends Entity {
   color: string;
@@ -38,6 +38,7 @@ export const KillBrickComponent = ({
 
   return (
     // Body
+    <>
     <RigidBody
       {...object}
       onCollisionEnter={({ manifold, target, other }) => {
@@ -59,20 +60,22 @@ export const KillBrickComponent = ({
         }
       }}
     >
-      {/* Text */}
-      <Text
-        scale={0.5}
-        color="red"
-        maxWidth={10}
-        textAlign="center"
-        position={[0, 2.5, 0]}
-      >
-        Touch me to kill !
-      </Text>
       {/* Box */}
       <Box scale={object.scale}>
         <meshStandardMaterial attach="material" color={color} />
       </Box>
     </RigidBody>
+      {/* Text */}
+      <Text
+
+        scale={0.5}
+        color="red"
+        maxWidth={10}
+        textAlign="center"
+        position={object.position}
+      >
+        Touch me to kill !
+      </Text>
+    </>
   );
 };

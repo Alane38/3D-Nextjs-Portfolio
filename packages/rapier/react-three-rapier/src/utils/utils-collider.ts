@@ -3,7 +3,7 @@ import {
   ColliderDesc,
   ActiveEvents,
   RigidBody,
-  World
+  World,
 } from "@dimforge/rapier3d-compat";
 import { useEffect, useMemo } from "react";
 import { BufferGeometry, Euler, Mesh, Object3D, Vector3 } from "three";
@@ -12,14 +12,14 @@ import { ColliderProps, RigidBodyProps } from "..";
 import {
   ColliderState,
   ColliderStateMap,
-  EventMap
+  EventMap,
 } from "../components/Physics";
 import {
   _matrix4,
   _position,
   _rotation,
   _scale,
-  _vector3
+  _vector3,
 } from "./shared-objects";
 import { ColliderShape, RigidBodyAutoCollider } from "../types";
 import { scaleVertices, vectorToTuple } from "./utils";
@@ -27,7 +27,7 @@ import { scaleVertices, vectorToTuple } from "./utils";
 export const scaleColliderArgs = (
   shape: ColliderShape,
   args: (number | ArrayLike<number> | { x: number; y: number; z: number })[],
-  scale: Vector3
+  scale: Vector3,
 ) => {
   const newArgs = args.slice();
 
@@ -56,7 +56,7 @@ export const createColliderFromOptions = (
   options: ColliderProps,
   world: World,
   scale: Vector3,
-  getRigidBody?: () => RigidBody
+  getRigidBody?: () => RigidBody,
 ) => {
   const scaledArgs = scaleColliderArgs(options.shape!, options.args, scale);
   // @ts-ignore
@@ -69,14 +69,14 @@ type ImmutableColliderOptions = (keyof ColliderProps)[];
 
 export const immutableColliderOptions: ImmutableColliderOptions = [
   "shape",
-  "args"
+  "args",
 ];
 
 type MutableColliderOptions = {
   [key in keyof ColliderProps]: (
     collider: Collider,
     value: Exclude<ColliderProps[key], undefined>,
-    options: ColliderProps
+    options: ColliderProps,
   ) => void;
 };
 
@@ -86,7 +86,7 @@ const massPropertiesConflictError =
 type MassPropertiesType = "mass" | "massProperties" | "density";
 const setColliderMassOptions = (
   collider: Collider,
-  options: Pick<ColliderProps, MassPropertiesType>
+  options: Pick<ColliderProps, MassPropertiesType>,
 ) => {
   if (options.density !== undefined) {
     if (options.mass !== undefined || options.massProperties !== undefined) {
@@ -111,7 +111,7 @@ const setColliderMassOptions = (
       options.massProperties.mass,
       options.massProperties.centerOfMass,
       options.massProperties.principalAngularInertia,
-      options.massProperties.angularInertiaLocalFrame
+      options.massProperties.angularInertiaLocalFrame,
     );
   }
 };
@@ -148,17 +148,17 @@ const mutableColliderOptions: MutableColliderOptions = {
   quaternion: () => {},
   position: () => {},
   rotation: () => {},
-  scale: () => {}
+  scale: () => {},
 };
 
 const mutableColliderOptionKeys = Object.keys(
-  mutableColliderOptions
+  mutableColliderOptions,
 ) as (keyof ColliderProps)[];
 
 export const setColliderOptions = (
   collider: Collider,
   options: ColliderProps,
-  states: ColliderStateMap
+  states: ColliderStateMap,
 ) => {
   const state = states.get(collider.handle);
 
@@ -183,14 +183,14 @@ export const setColliderOptions = (
       collider.setTranslationWrtParent({
         x: _position.x * parentWorldScale.x,
         y: _position.y * parentWorldScale.y,
-        z: _position.z * parentWorldScale.z
+        z: _position.z * parentWorldScale.z,
       });
       collider.setRotationWrtParent(_rotation);
     } else {
       collider.setTranslation({
         x: _position.x * parentWorldScale.x,
         y: _position.y * parentWorldScale.y,
-        z: _position.z * parentWorldScale.z
+        z: _position.z * parentWorldScale.z,
       });
       collider.setRotation(_rotation);
     }
@@ -202,7 +202,7 @@ export const setColliderOptions = (
           collider,
           // @ts-ignore Option does not want to fit into the function, but it will
           option,
-          options
+          options,
         );
       }
     });
@@ -216,7 +216,7 @@ export const setColliderOptions = (
 export const useUpdateColliderOptions = (
   getCollider: () => Collider,
   props: ColliderProps,
-  states: ColliderStateMap
+  states: ColliderStateMap,
 ) => {
   // TODO: Improve this, split each prop into its own effect
   const mutablePropsAsFlatArray = useMemo(
@@ -224,7 +224,7 @@ export const useUpdateColliderOptions = (
       mutableColliderOptionKeys.flatMap((key) => {
         return vectorToTuple(props[key as keyof ColliderProps]);
       }),
-    [props]
+    [props],
   );
 
   useEffect(() => {
@@ -244,12 +244,12 @@ const isChildOfMeshCollider = (child: Mesh) => {
 export const createColliderState = (
   collider: Collider,
   object: Object3D,
-  rigidBodyObject?: Object3D | null
+  rigidBodyObject?: Object3D | null,
 ): ColliderState => {
   return {
     collider,
     worldParent: rigidBodyObject || undefined,
-    object
+    object,
   };
 };
 
@@ -257,7 +257,7 @@ const autoColliderMap: Record<string, string> = {
   cuboid: "cuboid",
   ball: "ball",
   hull: "convexHull",
-  trimesh: "trimesh"
+  trimesh: "trimesh",
 };
 
 interface CreateColliderPropsFromChildren {
@@ -295,7 +295,7 @@ export const createColliderPropsFromChildren: CreateColliderPropsFromChildren =
         const { geometry } = child as Mesh;
         const { args, offset } = getColliderArgsFromGeometry(
           geometry,
-          options.colliders || "cuboid"
+          options.colliders || "cuboid",
         );
 
         const colliderProps: ColliderProps = {
@@ -306,9 +306,9 @@ export const createColliderPropsFromChildren: CreateColliderPropsFromChildren =
           position: [
             _position.x + offset.x * worldScale.x,
             _position.y + offset.y * worldScale.y,
-            _position.z + offset.z * worldScale.z
+            _position.z + offset.z * worldScale.z,
           ],
-          scale: [worldScale.x, worldScale.y, worldScale.z]
+          scale: [worldScale.x, worldScale.y, worldScale.z],
         };
 
         childColliderProps.push(colliderProps);
@@ -326,7 +326,7 @@ export const createColliderPropsFromChildren: CreateColliderPropsFromChildren =
 
 export const getColliderArgsFromGeometry = (
   geometry: BufferGeometry,
-  colliders: RigidBodyAutoCollider
+  colliders: RigidBodyAutoCollider,
 ): { args: unknown[]; offset: Vector3 } => {
   switch (colliders) {
     case "cuboid":
@@ -338,7 +338,7 @@ export const getColliderArgsFromGeometry = (
 
         return {
           args: [size.x / 2, size.y / 2, size.z / 2],
-          offset: boundingBox!.getCenter(new Vector3())
+          offset: boundingBox!.getCenter(new Vector3()),
         };
       }
       break;
@@ -352,7 +352,7 @@ export const getColliderArgsFromGeometry = (
 
         return {
           args: [radius],
-          offset: boundingSphere!.center
+          offset: boundingSphere!.center,
         };
       }
       break;
@@ -366,9 +366,9 @@ export const getColliderArgsFromGeometry = (
         return {
           args: [
             clonedGeometry.attributes.position.array as Float32Array,
-            clonedGeometry.index?.array as Uint32Array
+            clonedGeometry.index?.array as Uint32Array,
           ],
-          offset: new Vector3()
+          offset: new Vector3(),
         };
       }
       break;
@@ -379,7 +379,7 @@ export const getColliderArgsFromGeometry = (
 
         return {
           args: [g.attributes.position.array as Float32Array],
-          offset: new Vector3()
+          offset: new Vector3(),
         };
       }
       break;
@@ -396,7 +396,7 @@ export const getActiveCollisionEventsFromProps = (props?: ColliderProps) => {
       props?.onIntersectionEnter ||
       props?.onIntersectionExit
     ),
-    contactForce: !!props?.onContactForce
+    contactForce: !!props?.onContactForce,
   };
 };
 
@@ -410,14 +410,14 @@ export const useColliderEvents = (
   activeEvents: {
     collision?: boolean;
     contactForce?: boolean;
-  } = {}
+  } = {},
 ) => {
   const {
     onCollisionEnter,
     onCollisionExit,
     onIntersectionEnter,
     onIntersectionExit,
-    onContactForce
+    onContactForce,
   } = props;
 
   useEffect(() => {
@@ -426,7 +426,7 @@ export const useColliderEvents = (
     if (collider) {
       const {
         collision: collisionEventsActive,
-        contactForce: contactForceEventsActive
+        contactForce: contactForceEventsActive,
       } = getActiveCollisionEventsFromProps(props);
 
       const hasCollisionEvent = collisionEventsActive || activeEvents.collision;
@@ -435,7 +435,7 @@ export const useColliderEvents = (
 
       if (hasCollisionEvent && hasContactForceEvent) {
         collider.setActiveEvents(
-          ActiveEvents.COLLISION_EVENTS | ActiveEvents.CONTACT_FORCE_EVENTS
+          ActiveEvents.COLLISION_EVENTS | ActiveEvents.CONTACT_FORCE_EVENTS,
         );
       } else if (hasCollisionEvent) {
         collider.setActiveEvents(ActiveEvents.COLLISION_EVENTS);
@@ -448,7 +448,7 @@ export const useColliderEvents = (
         onCollisionExit,
         onIntersectionEnter,
         onIntersectionExit,
-        onContactForce
+        onContactForce,
       });
     }
 
@@ -463,7 +463,7 @@ export const useColliderEvents = (
     onIntersectionEnter,
     onIntersectionExit,
     onContactForce,
-    activeEvents
+    activeEvents,
   ]);
 };
 

@@ -5,14 +5,14 @@ import { Boolean3Tuple, RigidBodyProps, Vector3Tuple } from "..";
 import {
   EventMap,
   RigidBodyState,
-  RigidBodyStateMap
+  RigidBodyStateMap,
 } from "../components/Physics";
 import {
   _matrix4,
   _position,
   _rotation,
   _scale,
-  _vector3
+  _vector3,
 } from "./shared-objects";
 import { rigidBodyTypeFromString, vectorToTuple } from "./utils";
 
@@ -42,7 +42,7 @@ export const createRigidBodyState = ({
   setMatrix,
   getMatrix,
   worldScale,
-  meshType = "mesh"
+  meshType = "mesh",
 }: CreateRigidBodyStateOptions): RigidBodyState => {
   object.updateWorldMatrix(true, false);
   const invertedWorldMatrix = object.parent!.matrixWorld.clone().invert();
@@ -61,7 +61,7 @@ export const createRigidBodyState = ({
       : (matrix: Matrix4) => matrix.copy(object.matrix),
     scale: worldScale || object.getWorldScale(_scale).clone(),
     isSleeping: false,
-    meshType
+    meshType,
   };
 };
 
@@ -70,7 +70,7 @@ type ImmutableRigidBodyOptions = (keyof RigidBodyProps)[];
 export const immutableRigidBodyOptions: ImmutableRigidBodyOptions = [
   "args",
   "colliders",
-  "canSleep"
+  "canSleep",
 ];
 
 type MutableRigidBodyOptions = {
@@ -126,7 +126,7 @@ export const mutableRigidBodyOptions: MutableRigidBodyOptions = {
   position: () => {},
   rotation: () => {},
   quaternion: () => {},
-  scale: () => {}
+  scale: () => {},
 };
 
 const mutableRigidBodyOptionKeys = Object.keys(mutableRigidBodyOptions);
@@ -135,7 +135,7 @@ export const setRigidBodyOptions = (
   rigidBody: RigidBody,
   options: RigidBodyProps,
   states: RigidBodyStateMap,
-  updateTranslations: boolean = true
+  updateTranslations: boolean = true,
 ) => {
   if (!rigidBody) {
     return;
@@ -159,7 +159,7 @@ export const setRigidBodyOptions = (
       if (key in options) {
         mutableRigidBodyOptions[key as keyof RigidBodyProps]!(
           rigidBody,
-          options[key as keyof RigidBodyProps]
+          options[key as keyof RigidBodyProps],
         );
       }
     });
@@ -170,7 +170,7 @@ export const useUpdateRigidBodyOptions = (
   getRigidBody: () => RigidBody,
   props: RigidBodyProps,
   states: RigidBodyStateMap,
-  updateTranslations: boolean = true
+  updateTranslations: boolean = true,
 ) => {
   // TODO: Improve this, split each prop into its own effect
   const mutablePropsAsFlatArray = useMemo(
@@ -178,7 +178,7 @@ export const useUpdateRigidBodyOptions = (
       mutableRigidBodyOptionKeys.flatMap((key) => {
         return vectorToTuple(props[key as keyof RigidBodyProps]);
       }),
-    [props]
+    [props],
   );
 
   useEffect(() => {
@@ -190,7 +190,7 @@ export const useUpdateRigidBodyOptions = (
 export const useRigidBodyEvents = (
   getRigidBody: () => RigidBody,
   props: RigidBodyProps,
-  events: EventMap
+  events: EventMap,
 ) => {
   const {
     onWake,
@@ -199,7 +199,7 @@ export const useRigidBodyEvents = (
     onCollisionExit,
     onIntersectionEnter,
     onIntersectionExit,
-    onContactForce
+    onContactForce,
   } = props;
 
   const eventHandlers = {
@@ -209,7 +209,7 @@ export const useRigidBodyEvents = (
     onCollisionExit,
     onIntersectionEnter,
     onIntersectionExit,
-    onContactForce
+    onContactForce,
   };
 
   useEffect(() => {
@@ -226,6 +226,6 @@ export const useRigidBodyEvents = (
     onCollisionExit,
     onIntersectionEnter,
     onIntersectionExit,
-    onContactForce
+    onContactForce,
   ]);
 };

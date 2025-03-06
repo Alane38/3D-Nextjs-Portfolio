@@ -14,7 +14,7 @@ const Ball = () => {
       if (ball.current.translation().y < -10) {
         ball.current.setTranslation(
           { x: Math.random() * 2, y: 20, z: 0 },
-          true
+          true,
         );
         ball.current.setLinvel({ x: 0, y: 0, z: 0 }, true);
       }
@@ -42,7 +42,7 @@ export const Kinematics: Demo = () => {
     if (torus.current) {
       const euler = new Euler(now / 1000, 0, 0);
       torus.current.setNextKinematicRotation(
-        new Quaternion().setFromEuler(euler)
+        new Quaternion().setFromEuler(euler),
       );
     }
 
@@ -50,7 +50,7 @@ export const Kinematics: Demo = () => {
       platform.current.setNextKinematicTranslation({
         x: Math.sin(now / 100),
         y: -8 + Math.sin(now / 50) * 0.5,
-        z: 0
+        z: 0,
       });
     }
   });

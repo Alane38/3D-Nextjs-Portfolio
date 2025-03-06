@@ -4,7 +4,7 @@ import React, {
   memo,
   ReactNode,
   useEffect,
-  useRef
+  useRef,
 } from "react";
 import { DynamicDrawUsage, InstancedMesh, Object3D } from "three";
 import { useChildColliderProps } from "../hooks/hooks";
@@ -49,7 +49,7 @@ export const InstancedRigidBodies = memo(
 
     const childColliderProps = useChildColliderProps(objectRef, {
       ...props,
-      children: undefined
+      children: undefined,
     });
 
     const getInstancedMesh = () => {
@@ -69,7 +69,7 @@ export const InstancedRigidBodies = memo(
         instancedMesh.instanceMatrix.setUsage(DynamicDrawUsage);
       } else {
         console.warn(
-          "InstancedRigidBodies expects exactly one child, which must be an InstancedMesh"
+          "InstancedRigidBodies expects exactly one child, which must be an InstancedMesh",
         );
       }
     }, []);
@@ -89,7 +89,7 @@ export const InstancedRigidBodies = memo(
             instancedMesh.setMatrixAt(index, matrix);
             instancedMesh.instanceMatrix.needsUpdate = true;
           },
-          meshType: "instancedMesh"
+          meshType: "instancedMesh",
         } as RigidBodyState;
       }
 
@@ -129,7 +129,7 @@ export const InstancedRigidBodies = memo(
         ))}
       </object3D>
     );
-  }
+  },
 );
 
 InstancedRigidBodies.displayName = "InstancedRigidBodies";
