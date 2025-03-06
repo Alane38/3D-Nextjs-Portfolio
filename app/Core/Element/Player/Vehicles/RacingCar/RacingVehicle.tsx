@@ -1,23 +1,18 @@
+// https://github.com/michael-go/raphcar
+// https://sketchfab.com/3d-models/low-poly-race-track-b40628339fde4b2fbe41711edc7c7a93
+
 import { spawn, wheels } from "@constants/vehicle";
-import { Collider } from "@dimforge/rapier3d-compat";
 import { useKeyboardControls } from "@react-three/drei";
-import { useFrame, useThree } from "@react-three/fiber";
-import {
-  CuboidCollider,
-  RapierRigidBody,
-  RigidBody,
-  useRapier,
-} from "@react-three/rapier";
+import { useThree, useFrame } from "@react-three/fiber";
+import { useRapier, RapierRigidBody, RigidBody, CuboidCollider } from "@react-three/rapier";
 import { usePlayerSelection } from "@resources/Hooks/Leva/usePlayerSelection";
 import { VehicleControls } from "@type/VehicleControls";
 import { VehicleProps } from "@type/VehicleProps";
 import { useControls } from "leva";
-import { RefObject, useRef, useState } from "react";
-import * as THREE from "three";
+import { useRef, RefObject, useState } from "react";
 import { useVehicleController } from "./use-vehicle-controller";
-
-// https://github.com/michael-go/raphcar
-// https://sketchfab.com/3d-models/low-poly-race-track-b40628339fde4b2fbe41711edc7c7a93
+import { Collider } from "@dimforge/rapier3d-compat";
+import * as THREE from "three";
 
 const cameraOffset = new THREE.Vector3(7, 3, 0);
 const cameraTargetOffset = new THREE.Vector3(0, 1.5, 0);
@@ -99,6 +94,36 @@ export const RacingVehicle = ({ position, rotation }: VehicleProps) => {
       // outOfBounds = userData?.outOfBounds
 
       ground.current = collider;
+    }
+
+    // TODO: Check if the vehicle is flipped
+    console.log(chassisRigidBody.translation().y);
+    if (chassisRigidBody.translation().y < 0.25) {
+        console.log("Flipped");
+      // Vehicle is flipped
+      const bodyEuler = new THREE.Euler().setFromQuaternion(
+        new THREE.Quaternion().setFromEuler(
+          new THREE.Euler(0, chassisRigidBody.rotation().x, 0),
+        ),
+        "XYZ",
+      );
+      const isFlipped =
+        bodyEuler.x > Math.PI / 2 || bodyEuler.x < -Math.PI / 2 || bodyEuler.z !== 0 || bodyEuler.y !== 0;
+        console.log(isFlipped);
+
+      if (isFlipped) {
+        // Calcul of the impulse
+        const impulse = new THREE.Vector3(0, 1, 0).multiplyScalar(
+          1 * chassisRigidBody.mass(),
+        );
+        chassisRigidBody.applyImpulse(impulse, true);
+
+        // Apply torque
+        const torque = new THREE.Vector3(1, 0, 0).multiplyScalar(
+          2 * chassisRigidBody.mass(),
+        );
+        chassisRigidBody.applyTorqueImpulse(torque, true);
+      }
     }
 
     const engineForce =

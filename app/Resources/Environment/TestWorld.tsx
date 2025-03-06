@@ -1,44 +1,9 @@
-import {
-  RacingVehicle,
-  racingVehicleControls,
-} from "@core/Player/Vehicles/RacingCar/RacingVehicle";
-import { KeyboardControls, OrbitControls } from "@react-three/drei";
-import { Ground, GroundComponent } from "../Class/Ground";
-import {
-  ExtrudeGeometry,
-  MeshStandardMaterialParameters,
-  Shape,
-  Vector2,
-  Vector3,
-} from "three";
+import { PrismGeometryComponent } from "@core/Element/Mesh/PrismGeometry";
+import { racingVehicleControls, RacingVehicle } from "@core/Player/Vehicles/RacingCar/RacingVehicle";
+import { OrbitControls, KeyboardControls } from "@react-three/drei";
 import { RigidBody } from "@react-three/rapier";
-
-class PrismGeometry extends ExtrudeGeometry {
-  constructor(vertices: Vector2[], height: number) {
-    super(new Shape(vertices), { depth: height, bevelEnabled: false });
-  }
-}
-
-// Interface pour le composant Prism
-interface PrismProps {
-  vertices: Vector2[];
-  height: number;
-  materialProps?: MeshStandardMaterialParameters;
-}
-
-const PrismGeometryComponent: React.FC<PrismProps> = ({
-  vertices,
-  height,
-  materialProps,
-}) => {
-  const prismGeom = new PrismGeometry(vertices, height);
-
-  return (
-    <mesh geometry={prismGeom}>
-      <meshStandardMaterial {...materialProps} />
-    </mesh>
-  );
-};
+import { Ground, GroundComponent } from "@resources/Class";
+import { Vector2 } from "three";
 
 export const TestWorld = () => {
   const ground = new Ground();

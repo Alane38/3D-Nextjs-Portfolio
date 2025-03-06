@@ -1,21 +1,10 @@
-import DynamicPlatforms from "@core/Element/Objects/DynamicPlatforms";
-import FloatingPlatform from "@core/Element/Objects/FloatingPlatform";
+import DynamicPlatforms from "@core/DynamicPlatforms";
 import Steps from "@core/Element/Environment/Steps";
-import { TextObjectComponent } from "@resources/Class/Objects/TextObject";
-import { Euler, Vector3 } from "three";
-import { RestaurantSignComponent } from "../Class/Objects/RestaurantSign";
-import { SpinnerComponent } from "../Class/Objects/Spinner";
-import { RacingVehicle } from "@core/Element/Player/Vehicles/RacingCar/RacingVehicle";
-import { GlobalUI } from "../Class/UI/GlobalUI";
+import FloatingPlatform from "@core/Element/Objects/FloatingPlatform";
 import { Character } from "@core/Element/Player/Character";
-import {
-  DiamondComponent,
-  Ground,
-  GroundComponent,
-  KillBrickComponent,
-  StairsComponent,
-} from "../Class";
-import { KeyboardControls } from "@react-three/drei";
+import { RacingVehicle } from "@core/Element/Player/Vehicles/RacingCar/RacingVehicle";
+import { DiamondComponent, Ground, GroundComponent, KillBrickComponent, RestaurantSignComponent, SpinnerComponent, StairsComponent, TextObjectComponent } from "@resources/Class";
+import { Euler, Vector3 } from "three";
 
 export const MainWorld = () => {
   /* INITIALIZATION */
@@ -45,7 +34,6 @@ export const MainWorld = () => {
           color="white"
           args={[5, 0.1, (ground.scale as number) / 1.2]}
           position={new Vector3(0, ground.position.y + 0.01, 0)}
-        />
         />
         {/* Custom Ground with props includes */}
       </group>

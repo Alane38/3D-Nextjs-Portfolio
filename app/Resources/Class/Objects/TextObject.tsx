@@ -1,9 +1,9 @@
-import { Text3D } from "@react-three/drei";
-import { RigidBody, RigidBodyOptions } from "@react-three/rapier";
-import { Entity } from "./Entity";
-import { useMemo } from "react";
 import { defaultFont } from "@constants/default";
-import { Text3DProps } from "@type/TextProps";
+import { Text3D } from "@react-three/drei";
+import { RigidBodyOptions, RigidBody } from "@react-three/rapier";
+import { TextProps } from "@type/TextProps";
+import { useMemo } from "react";
+import { Entity } from "../Entity";
 
 export class TextObject extends Entity {
   TextProps: TextProps;

@@ -1,11 +1,7 @@
-import {
-  Grid,
-  OrthographicCamera
-} from "@react-three/drei";
-import { Grid, OrthographicCamera } from "@react-three/drei";
-import { Canvas as ThreeCanvas } from "@react-three/fiber";
+import { Grid } from "@react-three/drei";
+import { Canvas } from "@react-three/fiber";
 import { Physics } from "@react-three/rapier";
-import { useDebugState } from "@resources/Hooks/Leva/useDebugState";
+import { useDebugState } from "@resources/Hooks";
 import { Perf } from "r3f-perf";
 import React, { ReactNode, Suspense } from "react";
 import WebGPU from "three/examples/jsm/capabilities/WebGPU.js";
@@ -16,7 +12,7 @@ export function CanvasLayout({ children }: { children: ReactNode }) {
   const shadowCameraRef = React.useRef<any>(null);
 
   return (
-    <ThreeCanvas
+    <Canvas
       camera={{ position: [0, 16, 5], fov: 70, near: 0.1, far: 10000 }}
       shadows
       gl={{
@@ -30,7 +26,7 @@ export function CanvasLayout({ children }: { children: ReactNode }) {
       {/* Light Settings */}
       <ambientLight intensity={Math.PI / 2} />
       <directionalLight position={[5, 5, 5]} intensity={Math.PI / 2}>
-        <OrthographicCamera
+        <orthographicCamera
           left={22}
           right={22}
           top={10}
@@ -51,13 +47,11 @@ export function CanvasLayout({ children }: { children: ReactNode }) {
           sectionColor={"black"}
           cellColor={"gray"}
           position={[0, 0.055, 0]}
-          position={[0, 0.055, 0]}
         />
-        <Physics gravity={[0, -15, 0]} debug={debugState}>
         <Physics gravity={[0, -15, 0]} debug={debugState}>
           {children} {/* Put the world scene here */}
         </Physics>
       </Suspense>
-    </ThreeCanvas>
+    </Canvas>
   );
 }

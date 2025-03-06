@@ -1,7 +1,6 @@
-import { useProdEnv } from "@resources/Hooks/useProdEnv";
-import { useEffect, useState } from "react";
-import { useProdEnv } from "@resources/hooks/useProdEnv";
-import React, { useEffect, useState } from "react";
+import { useProdEnv } from "@resources/Hooks";
+import { useState, useEffect } from "react";
+
 
 export const Loading = ({
   progress,

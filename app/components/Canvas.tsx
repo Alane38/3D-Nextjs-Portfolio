@@ -3,9 +3,9 @@
 import { globalControls } from "@constants/default";
 import { KeyboardControls } from "@react-three/drei";
 import { MainWorld } from "@resources/Environment/MainWorld";
+import { useLoadingAssets } from "@resources/Hooks";
 import { Leva } from "leva";
 import { useState } from "react";
-import { useLoadingAssets } from "../Resources/Hooks/useLoadingAssets";
 import { CanvasLayout } from "./CanvasLayout";
 import { Loading } from "./Loading";
 import { PerformanceWarning } from "./Utility/PerformanceWarning";
@@ -13,7 +13,6 @@ import { PerformanceWarning } from "./Utility/PerformanceWarning";
 export function Canvas() {
   const [visible, setVisible] = useState(true);
 
-  const [visible, setVisible] = useState(true);
   const loading = useLoadingAssets();
 
   return (

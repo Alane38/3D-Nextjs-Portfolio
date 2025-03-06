@@ -1,8 +1,8 @@
-import { Entity } from "./Entity";
+import { classModelPath } from "@constants/default";
+import { ModelRenderer } from "@core/Utility/ModelRenderer";
 import { RigidBody } from "@react-three/rapier";
-import { ModelRenderer } from "@core/ModelRenderer";
-import { classModelPath } from "@constants/class";
 import { useMemo } from "react";
+import { Entity } from "../Entity";
 
 export class Stairs extends Entity {
   constructor(path: string = classModelPath + "Stairs.glb") {
