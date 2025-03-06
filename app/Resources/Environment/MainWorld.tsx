@@ -1,7 +1,7 @@
-import DynamicPlatforms from "@/app/Core/DynamicPlatforms";
-import FloatingPlatform from "@/app/Core/FloatingPlatform";
-import { CharacterController } from "@/app/Core/Player/CharacterController";
-import Steps from "@/app/Core/Steps";
+import DynamicPlatforms from "@core/DynamicPlatforms";
+import FloatingPlatform from "@core/FloatingPlatform";
+import { CharacterController } from "@core/Player/CharacterController";
+import Steps from "@core/Steps";
 import { KeyboardControls } from "@react-three/drei";
 import { DiamondComponent } from "@resources/Class/Diamond";
 import { Ground, GroundComponent } from "@resources/Class/Ground";
@@ -11,7 +11,11 @@ import { KillBrickComponent } from "../Class/KillBrick";
 import { RestaurantSignComponent } from "../Class/RestaurantSign";
 import { SpinnerComponent } from "../Class/Spinner";
 import { StairsComponent } from "../Class/Stairs";
-import { RacingVehicle, racingVehicleControls } from "@/app/Core/Player/Vehicles/RacingCar/RacingVehicle";
+import {
+  RacingVehicle,
+  racingVehicleControls,
+} from "@core/Player/Vehicles/RacingCar/RacingVehicle";
+import { GlobalUI } from "../Class/UI/GlobalUI";
 
 export const MainWorld = () => {
   /* INITIALIZATION */
@@ -80,9 +84,9 @@ export const MainWorld = () => {
 
       {/* <GlobalUI /> */}
 
-       <KeyboardControls map={racingVehicleControls}>
+      {/* <KeyboardControls map={racingVehicleControls}>
         <RacingVehicle position={[15, 2, 0]} rotation={[0, Math.PI / 2, 0]} />
-      </KeyboardControls>
+      </KeyboardControls> */}
     </>
   );
 };

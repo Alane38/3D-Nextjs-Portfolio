@@ -28,22 +28,23 @@ export const PerformanceWarning = () => {
         <div className="flex items-center space-x-4">
           <div className="flex-shrink-0">
             <svg
-              className="h-6 w-6 text-white"
               xmlns="http://www.w3.org/2000/svg"
-              fill="none"
+              width="24"
+              height="24"
               viewBox="0 0 24 24"
+              fill="none"
               stroke="currentColor"
+              strokeWidth="2"
+              strokeLinecap="round"
+              strokeLinejoin="round"
             >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth="2"
-                d="M13 7h2a4 4 0 01-4 4H7M13 7V3m0 4l4-4m0 4l-4-4M17 3h2a4 4 0 00-4 4M3 3v18h18V3H3z"
-              />
+              <path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3" />
+              <path d="M12 9v4" />
+              <path d="M12 17h.01" />
             </svg>
           </div>
           <div className="flex-1 text-white">
-            <h1 className="text-lg font-semibold">WebGPU not supported</h1>
+            <h1 className="text-lg font-semibold">WebGPU not supported.</h1>
             <p className="text-sm">
               For optimal performance, use a browser that supports WebGPU.
             </p>

@@ -27,13 +27,14 @@ export function CanvasLayout({ children }: { children: ReactNode }) {
     <ThreeCanvas
       camera={{ position: [0, 16, 5], fov: 70, near: 0.1, far: 10000 }}
       shadows
+      gl={{ preserveDrawingBuffer: false, toneMapping: WebGPU ? 0 : 2, toneMappingExposure: 1 }}
     >
       {/* <OrbitControls /> */}
       {/* <Sky distance={10000} sunPosition={sunPosition} /> */}
 
       {/* Light Settings */}
       <ambientLight intensity={Math.PI / 2} />
-      <directionalLight position={[5, 5, 5]} intensity={Math.PI / 2} castShadow>
+      <directionalLight position={[5, 5, 5]} intensity={Math.PI / 2}>
         <OrthographicCamera
           left={22}
           right={22}
