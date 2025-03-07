@@ -83,7 +83,7 @@ const Ecctrl: ForwardRefRenderFunction<CustomEcctrlRigidBody, EcctrlProps> = ({
   turnVelMultiplier = 0.2,
   turnSpeed = 15,
   sprintMult = 2,
-  jumpVel = 4,
+  jumpVel = 6,
   jumpForceToGroundMult = 5,
   slopJumpMult = 0.25,
   sprintJumpMult = 1.2,
@@ -573,8 +573,9 @@ const Ecctrl: ForwardRefRenderFunction<CustomEcctrlRigidBody, EcctrlProps> = ({
     camUpLimit,
     camLowLimit,
     camInitDir,
-    camMoveSpeed: isModeFixedCamera ? 0 : camMoveSpeed, // Disable camera move in fixed camera mode
-    camZoomSpeed: isModeFixedCamera ? 0 : camZoomSpeed, // Disable camera zoom in fixed camera mode
+    // Disable camera move and zoom in fixed camera mode; (add)we don't need this for keep the camera movement in FixedCamera.
+    // camMoveSpeed: isModeFixedCamera ? 0 : camMoveSpeed, 
+    // camZoomSpeed: isModeFixedCamera ? 0 : camZoomSpeed,
     camCollisionOffset,
     camCollisionSpeedMult,
     camListenerTarget,
