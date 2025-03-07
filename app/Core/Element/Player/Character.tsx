@@ -1,6 +1,8 @@
 import { characterControllerConfig } from "@constants/character";
+import { classModelPath } from "@constants/default";
 import { EnumPlayerOption } from "@constants/playerSelection";
-import { Box, useKeyboardControls } from "@react-three/drei";
+import { ModelRenderer } from "@core/Utility/ModelRenderer";
+import { useKeyboardControls } from "@react-three/drei";
 import { useFrame } from "@react-three/fiber";
 import {
   CapsuleCollider,
@@ -233,9 +235,10 @@ export const Character = ({ defaultPlayer }: { defaultPlayer?: boolean } ) => {
           <group ref={character}>
             {" "}
             {/* Our player, who will be replaced by a model */}
-            <Box>
+            {/* <Box>
               <meshStandardMaterial color={"cyan"} />
-            </Box>
+            </Box> */}
+            <ModelRenderer path={classModelPath + "Fox.glb"} />
           </group>
         </group>
         <CapsuleCollider args={[0.1, 0.7]} />{" "}

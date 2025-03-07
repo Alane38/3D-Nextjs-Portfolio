@@ -73,6 +73,7 @@ export const KillBrickComponent = ({
         maxWidth={10}
         textAlign="center"
         position={object.position}
+        rotation={object.rotation}
       >
         Touch me to kill !
       </Text>
