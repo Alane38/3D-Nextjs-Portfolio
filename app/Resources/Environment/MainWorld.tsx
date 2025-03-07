@@ -2,9 +2,18 @@ import Steps from "@core/Element/Environment/Steps";
 import DynamicPlatforms from "@core/Element/Objects/DynamicPlatforms";
 import FloatingPlatform from "@core/Element/Objects/FloatingPlatform";
 import { Character } from "@core/Element/Player/Character";
+import { Vehicle } from "@core/Element/Player/Vehicles/Car/Vehicle";
 import { RacingVehicle } from "@core/Element/Player/Vehicles/RacingCar/RacingVehicle";
-import Ecctrl from "@packages/ecctrl/src/Ecctrl";
-import { DiamondComponent, Ground, GroundComponent, KillBrickComponent, RestaurantSignComponent, SpinnerComponent, StairsComponent, TextObjectComponent } from "@resources/Class";
+import {
+  DiamondComponent,
+  Ground,
+  GroundComponent,
+  KillBrickComponent,
+  RestaurantSignComponent,
+  SpinnerComponent,
+  StairsComponent,
+  TextObjectComponent,
+} from "@resources/Class";
 import { Euler, Vector3 } from "three";
 
 export const MainWorld = () => {
@@ -23,10 +32,7 @@ export const MainWorld = () => {
     <>
       {/* <ObjectComponent /> */}
 
-      {/* <KeyboardControls map={vehicleControls}>
-        <Vehicle position={[15, 2, 0]} />
-      </KeyboardControls> */}
-      <Character  />
+      <Character />
 
       <group>
         {/* Ground */}
@@ -48,7 +54,7 @@ export const MainWorld = () => {
 
         <DiamondComponent position={new Vector3(3, 2, 0)} />
       </group>
-      
+
       <group>
         {/* Entity Importations */}
         <Steps />
@@ -71,9 +77,9 @@ export const MainWorld = () => {
         position={new Vector3(-20, 0, 10)}
         rotation={new Euler(0, Math.PI / 2, 0)}
       />
-
       {/* <GlobalUI /> */}
       <RacingVehicle position={[15, 2, 0]} rotation={[0, Math.PI / 2, 0]} />
+      <Vehicle position={[8, 2, 0]} />
     </>
   );
 };

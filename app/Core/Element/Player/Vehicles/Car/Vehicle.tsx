@@ -55,8 +55,8 @@ export const Vehicle = (props: RigidBodyProps, defaultPlayer?: boolean) => {
 
   const driftSteeringAngle = useRef(0);
 
-  const driftingLeft = useRef(false);
-  const driftingRight = useRef(false);
+  const driftingleftward = useRef(false);
+  const driftingrightward = useRef(false);
   const driftSteeringVisualAngle = useRef(0);
 
   const speed = useRef(0);
@@ -72,7 +72,7 @@ export const Vehicle = (props: RigidBodyProps, defaultPlayer?: boolean) => {
   useBeforePhysicsStep(() => {
     if (player !== EnumPlayerOption.Car) return null;
     const controls = getKeyboardControls() as VehicleControls;
-    const { forward, backward, left, right, jump_brake } = controls;
+    const { forward, backward, leftward, rightward, jump_brake } = controls;
 
     const impulse = _impulse.set(0, 0, -speed.current).multiplyScalar(5);
 
@@ -89,7 +89,7 @@ export const Vehicle = (props: RigidBodyProps, defaultPlayer?: boolean) => {
     grounded.current = groundRayResult !== null;
 
     // Steering angle
-    steeringInput.current = Number(left) - Number(right);
+    steeringInput.current = Number(leftward) - Number(rightward);
 
     // Update vehicle angle
     steeringAngle.current += steeringInput.current * 0.01;
@@ -97,8 +97,8 @@ export const Vehicle = (props: RigidBodyProps, defaultPlayer?: boolean) => {
     // Drifting controls
     if (holdingJump.current && !jump_brake) {
       holdingJump.current = false;
-      driftingLeft.current = false;
-      driftingRight.current = false;
+      driftingleftward.current = false;
+      driftingrightward.current = false;
     }
 
     if (
@@ -107,32 +107,32 @@ export const Vehicle = (props: RigidBodyProps, defaultPlayer?: boolean) => {
       1 < speed.current &&
       jumpTime.current + 100 < Date.now()
     ) {
-      if (left) {
-        driftingLeft.current = true;
+      if (leftward) {
+        driftingleftward.current = true;
       }
 
-      if (right) {
-        driftingRight.current = true;
+      if (rightward) {
+        driftingrightward.current = true;
       }
 
       if (
-        (driftingLeft.current && driftingRight.current) ||
-        (!left && !right)
+        (driftingleftward.current && driftingrightward.current) ||
+        (!leftward && !rightward)
       ) {
-        driftingLeft.current = false;
-        driftingRight.current = false;
+        driftingleftward.current = false;
+        driftingrightward.current = false;
       }
     } else {
-      driftingLeft.current = false;
-      driftingRight.current = false;
+      driftingleftward.current = false;
+      driftingrightward.current = false;
     }
 
     // Drift steering
     let driftSteeringTarget = 0;
 
-    if (driftingLeft.current) {
+    if (driftingleftward.current) {
       driftSteeringTarget = 1;
-    } else if (driftingRight.current) {
+    } else if (driftingrightward.current) {
       driftSteeringTarget = -1;
     }
 

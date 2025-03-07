@@ -2,8 +2,8 @@
 export type VehicleControls = {
   forward: boolean;
   backward: boolean;
-  left: boolean;
-  right: boolean;
+  leftward: boolean;
+  rightward: boolean;
   jump_brake: boolean;
   run: boolean;
   reset: boolean;

@@ -152,7 +152,7 @@ export const RacingVehicle = ({ position, rotation, defaultPlayer }: VehicleProp
     controller.setWheelBrake(3, wheelBrake);
 
     const currentSteering = controller.wheelSteering(0) || 0;
-    const steerDirection = Number(controls.left) - Number(controls.right);
+    const steerDirection = Number(controls.leftward) - Number(controls.rightward);
 
     const steering = THREE.MathUtils.lerp(
       currentSteering,
@@ -167,7 +167,7 @@ export const RacingVehicle = ({ position, rotation, defaultPlayer }: VehicleProp
     if (!ground.current) {
       const forwardAngVel =
         Number(controls.forward) - Number(controls.backward);
-      const sideAngVel = Number(controls.left) - Number(controls.right);
+      const sideAngVel = Number(controls.leftward) - Number(controls.rightward);
 
       const angvel = _airControlAngVel.set(
         0,
@@ -230,6 +230,9 @@ export const RacingVehicle = ({ position, rotation, defaultPlayer }: VehicleProp
 
     state.camera.lookAt(smoothedCameraTarget);
   });
+
+
+
 
   return (
     <>
