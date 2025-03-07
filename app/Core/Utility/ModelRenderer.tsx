@@ -2,16 +2,16 @@ import { useFrame, useLoader } from "@react-three/fiber";
 import { useGLTF } from "@react-three/drei";
 import { DRACOLoader, GLTFLoader } from "three/examples/jsm/Addons.js";
 import { AnimationMixer, LoopPingPong, LoopRepeat } from "three";
-import { useEffect, useRef } from "react";
+import { ReactNode, useEffect, useRef } from "react";
 
-export const ModelRenderer = ({ path }: { path: string }) => {
+export const ModelRenderer = ({ path, children }: { path: string, children?: ReactNode }) => {
   // Preload the model to improve loading performance
   useGLTF.preload(path);
 
   if (path.endsWith(".gltf")) {
     // Load .gltf files using useGLTF for better integration with Drei
     const { scene } = useGLTF(path);
-    return <primitive object={scene} />;
+    return <primitive object={scene}>{children}</primitive>;
   } else {
     // Load .glb files using GLTFLoader with DRACOLoader for optimization
     const gltf = useLoader(GLTFLoader, path, (loader) => {
@@ -29,10 +29,10 @@ export const ModelRenderer = ({ path }: { path: string }) => {
         mixerRef.current = mixer;
 
         gltf.animations.forEach((clip) => {
-          if (clip.name === "idle") {
+          if (clip.name === "jump") {
             const action = mixer.clipAction(clip);
             // console.log(action);
-            action.setLoop(LoopPingPong, Infinity);
+            action.setLoop(LoopRepeat, Infinity);
             action.play();
           }
         });
@@ -45,6 +45,6 @@ export const ModelRenderer = ({ path }: { path: string }) => {
       }
     });
 
-    return <primitive object={gltf.scene} />;
+    return <primitive object={gltf.scene}>{children}</primitive>;
   }
 };

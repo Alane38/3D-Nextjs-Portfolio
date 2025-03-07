@@ -154,6 +154,7 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 - Isaac Mason: [https://github.com/isaac-mason](https://github.com/isaac-mason)
 - Poimandres: [https://github.com/pmndrs](https://github.com/pmndrs)
+- Erdong Chen: [https://github.com/ErdongChen-Andrew](https://github.com/ErdongChen-Andrew)
 
 ## 📧 Contact
 

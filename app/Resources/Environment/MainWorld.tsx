@@ -3,6 +3,7 @@ import DynamicPlatforms from "@core/Element/Objects/DynamicPlatforms";
 import FloatingPlatform from "@core/Element/Objects/FloatingPlatform";
 import { Character } from "@core/Element/Player/Character";
 import { RacingVehicle } from "@core/Element/Player/Vehicles/RacingCar/RacingVehicle";
+import Ecctrl from "@packages/ecctrl/src/Ecctrl";
 import { DiamondComponent, Ground, GroundComponent, KillBrickComponent, RestaurantSignComponent, SpinnerComponent, StairsComponent, TextObjectComponent } from "@resources/Class";
 import { Euler, Vector3 } from "three";
 

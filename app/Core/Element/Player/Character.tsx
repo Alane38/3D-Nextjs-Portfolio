@@ -2,6 +2,7 @@ import { characterControllerConfig } from "@constants/character";
 import { classModelPath } from "@constants/default";
 import { EnumPlayerOption } from "@constants/playerSelection";
 import { ModelRenderer } from "@core/Utility/ModelRenderer";
+import Ecctrl from "@packages/ecctrl/src/Ecctrl";
 import { useKeyboardControls } from "@react-three/drei";
 import { useFrame } from "@react-three/fiber";
 import {
@@ -31,7 +32,7 @@ const lerpAngle = (start: number, end: number, t: number) => {
 };
 
 // Main Character Controller
-export const Character = ({ defaultPlayer }: { defaultPlayer?: boolean } ) => {
+export const Character = ({ defaultPlayer }: { defaultPlayer?: boolean }) => {
   const { rapier, world } = useRapier(); // Import Rappier for Colliders Events*
   const { player, updatePlayer } = usePlayerSelection();
 
@@ -46,7 +47,6 @@ export const Character = ({ defaultPlayer }: { defaultPlayer?: boolean } ) => {
   } = useControls("Character Control", characterControllerConfig);
 
   const rb = useRef<RapierRigidBody>(null);
-  const container = useRef<THREE.Object3D>(null);
   const character = useRef<THREE.Object3D>(null);
 
   const grounded = useRef<boolean>(false);
@@ -56,11 +56,9 @@ export const Character = ({ defaultPlayer }: { defaultPlayer?: boolean } ) => {
   // Character Rotation & Camera Settings
   const characterRotationTarget = useRef(0);
   const rotationTarget = useRef(0);
-  const cameraTarget = useRef<THREE.OrthographicCamera>(null);
-  const cameraPosition = useRef<THREE.OrthographicCamera>(null);
-  const cameraWorldPosition = useRef(new Vector3());
-  const cameraLookAtWorldPosition = useRef(new Vector3());
-  const cameraLookAt = useRef(new Vector3());
+
+  const lookAtVec = new THREE.Vector3(0, 0, 0);
+  const cameraVector = new THREE.Vector3(0, 0, 0);
 
   // Keyboard Controls
   const [, get] = useKeyboardControls();
@@ -102,10 +100,12 @@ export const Character = ({ defaultPlayer }: { defaultPlayer?: boolean } ) => {
   defaultPlayer && updatePlayer(EnumPlayerOption.Character);
 
   // MOVEMENT, CAMERA, COLLISION DETECTION
-  useFrame(({ camera, mouse }) => {
+  useFrame(({ camera, mouse }, delta) => {
     if (player !== EnumPlayerOption.Character) return;
     // Initialize default player
     updatePlayer(EnumPlayerOption.Character);
+
+    const t = 1.0 - Math.pow(0.01, delta);
 
     // Movement Forward_Backward
     if (rb.current) {
@@ -183,36 +183,49 @@ export const Character = ({ defaultPlayer }: { defaultPlayer?: boolean } ) => {
       }
 
       rb.current.setLinvel(vel, true);
+
+      if (character.current && rb.current) {
+        // Interpolation pour lisser la rotation
+        const targetRotation = new THREE.Quaternion();
+        targetRotation.setFromAxisAngle(
+          new THREE.Vector3(0, 1, 0),
+          rotationTarget.current,
+        );
+
+        character.current.quaternion.slerp(targetRotation, 0.1);
+
+        // Appliquer cette rotation au rigidbody
+        rb.current.setRotation(character.current.quaternion, true);
+      }
     }
 
-    if (container.current) {
-      container.current.rotation.y = MathUtils.lerp(
-        container.current.rotation.y,
+    if (character.current) {
+      character.current.rotation.y = MathUtils.lerp(
+        character.current.rotation.y,
         rotationTarget.current,
         0.1,
       );
     }
 
-    // Camera
-    if (cameraPosition.current) {
-      cameraPosition.current.getWorldPosition(cameraWorldPosition.current);
-      camera.position.lerp(cameraWorldPosition.current, 0.1);
-    }
-
-    if (cameraTarget.current) {
-      cameraTarget.current.getWorldPosition(cameraLookAtWorldPosition.current);
-      cameraLookAt.current.lerp(cameraLookAtWorldPosition.current, 0.1);
-      camera.lookAt(cameraLookAt.current);
+    if (character.current && rb.current) {
+      const boxPos = rb.current.translation();
+      console.log(boxPos);
+      lookAtVec.set(boxPos.x, boxPos.y, boxPos.z);
+      cameraVector.lerp(lookAtVec, 0.1);
+      camera.lookAt(cameraVector);
+      camera.updateProjectionMatrix();
     }
   });
 
   return (
     <>
-      <RigidBody
+      <Ecctrl
+        debug
         name="Player"
-        colliders="cuboid"
-        lockRotations
-        ref={rb}
+        colliders="trimesh"
+        // lockRotations
+        // enabledRotations={[false, true, false]}
+        // ref={rb}
         position={[0, 10, 0]}
         onCollisionEnter={({ other }) => {
           if (other.rigidBodyObject?.name === "KillBrick") {
@@ -229,21 +242,13 @@ export const Character = ({ defaultPlayer }: { defaultPlayer?: boolean } ) => {
           }
         }}
       >
-        <group ref={container}>
-          <group ref={cameraTarget} position-z={1.5} />
-          <group ref={cameraPosition} position-y={3} position-z={-4} />
-          <group ref={character}>
-            {" "}
-            {/* Our player, who will be replaced by a model */}
-            {/* <Box>
-              <meshStandardMaterial color={"cyan"} />
-            </Box> */}
-            <ModelRenderer path={classModelPath + "Fox.glb"} />
-          </group>
-        </group>
-        <CapsuleCollider args={[0.1, 0.7]} />{" "}
+        {/* <group ref={character}> */}
+        {/* <group ref={character}> */}
+        <ModelRenderer path={classModelPath + "Fox.glb"} />
         {/* Enables obstacle management */}
-      </RigidBody>
+        {/* </group> */}
+        {/* <CapsuleCollider args={[0.1, 0.7]} /> */}
+      </Ecctrl>
     </>
   );
 };
