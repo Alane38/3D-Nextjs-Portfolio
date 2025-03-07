@@ -77,8 +77,8 @@ bun dev
 │   │   ├── Utility/                # UI utilities
 │   ├── Core/                       # Core components and controllers
 │   │   ├── Element/                # Global objects
-│   │   │   ├── Environment/        # Environment 3D objects
-│   │   │   ├── Objects/            # 3D objects components(not class)
+│   │   │   ├── Environment/        # Environment 3D objects (not class)
+│   │   │   ├── Objects/            # 3D objects components (not class)
 │   │   │   ├── Player/             # Character
 │   │   │   │   ├── Vehicles/       # Character vehicles  
 │   │   ├── Managers/               # Managers
@@ -88,7 +88,7 @@ bun dev
 │   │   │   ├── Environment/        # Environment 3D objects
 │   │   │   ├── Objects/            # 3D objects
 │   │   │   ├── Test/               # Examples and tests 3D objects
-│   │   │   ├── UI/                 # User interface components
+│   │   │   ├── UI/                 # 3D User interface components
 │   │   ├── Environment/            # World and environment components
 │   │   │   │   ├── Demo/           # Demos environment
 │   │   ├── Event/                  # Event handlers

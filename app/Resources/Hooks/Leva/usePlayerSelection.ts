@@ -1,9 +1,25 @@
+import { EnumPlayerOption } from "@constants/playerSelection";
 import { useControls } from "leva";
+import { useState } from "react";
 
 // Leva Settings -> Debug
 export const usePlayerSelection = () => {
-  const { Player } = useControls("Player Selection", {
-    Player: { value: "Character", options: ["Character", "Racing Car", "Car"] },
+  const [player, setPlayer] = useState<EnumPlayerOption>(EnumPlayerOption.Character); // Default Player
+  
+  const controls = useControls("Player Selection", {
+    Player: {
+      value: player,
+      options: Object.values(EnumPlayerOption) as EnumPlayerOption[],
+      onChange: (value: EnumPlayerOption) => setPlayer(value),
+    },
   });
-  return Player;
+
+  // Update player selection
+  const updatePlayer = (newPlayer: EnumPlayerOption) => {
+    if (newPlayer !== player) {
+      setPlayer(newPlayer);
+    }
+  };
+
+  return { player, updatePlayer };
 };

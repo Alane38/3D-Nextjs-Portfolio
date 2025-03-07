@@ -1,3 +1,4 @@
+import { EnumPlayerOption } from "@constants/playerSelection";
 import { useKeyboardControls } from "@react-three/drei";
 import { useFrame } from "@react-three/fiber";
 import {
@@ -8,7 +9,9 @@ import {
   useBeforePhysicsStep,
   useRapier,
 } from "@react-three/rapier";
-import { usePlayerSelection } from "@resources/Hooks/Leva/usePlayerSelection";
+import {
+  usePlayerSelection,
+} from "@resources/Hooks/Leva/usePlayerSelection";
 import { VehicleControls } from "@type/VehicleControls";
 import { useRef } from "react";
 import * as THREE from "three";
@@ -35,8 +38,8 @@ const _cameraPosition = new THREE.Vector3();
 const _impulse = new THREE.Vector3();
 
 // VEHICLE COMPONENT
-export const Vehicle = (props: RigidBodyProps) => {
-  const Player = usePlayerSelection();
+export const Vehicle = (props: RigidBodyProps, defaultPlayer?: boolean) => {
+  const { player, updatePlayer } = usePlayerSelection();
   const { rapier, world } = useRapier();
 
   const bodyRef = useRef<RapierRigidBody>(null!);
@@ -63,10 +66,13 @@ export const Vehicle = (props: RigidBodyProps) => {
 
   const [, getKeyboardControls] = useKeyboardControls();
 
+  // Initialize default player
+  defaultPlayer && updatePlayer(EnumPlayerOption.Car);
+
   useBeforePhysicsStep(() => {
-    if (Player !== "Car") return null;
+    if (player !== EnumPlayerOption.Car) return null;
     const controls = getKeyboardControls() as VehicleControls;
-    const { forward, backward, left, right, jump } = controls;
+    const { forward, backward, left, right, jump_brake } = controls;
 
     const impulse = _impulse.set(0, 0, -speed.current).multiplyScalar(5);
 
@@ -89,7 +95,7 @@ export const Vehicle = (props: RigidBodyProps) => {
     steeringAngle.current += steeringInput.current * 0.01;
 
     // Drifting controls
-    if (holdingJump.current && !jump) {
+    if (holdingJump.current && !jump_brake) {
       holdingJump.current = false;
       driftingLeft.current = false;
       driftingRight.current = false;
@@ -154,7 +160,7 @@ export const Vehicle = (props: RigidBodyProps) => {
     speed.current = THREE.MathUtils.lerp(speed.current, speedTarget, 0.03);
 
     // jump
-    if (grounded.current && jump && !holdingJump.current) {
+    if (grounded.current && jump_brake && !holdingJump.current) {
       impulse.y = 12;
       holdingJump.current = true;
 
@@ -179,7 +185,8 @@ export const Vehicle = (props: RigidBodyProps) => {
 
   // Update Vehicle
   useFrame((state, delta) => {
-    if (Player !== "Car") return null;
+    if (player !== EnumPlayerOption.Car) return null;
+
     // Body position
     const bodyPosition = _bodyPosition.copy(bodyRef.current.translation());
     groupRef.current.position.copy(bodyPosition);

@@ -1,5 +1,5 @@
-import DynamicPlatforms from "@core/DynamicPlatforms";
 import Steps from "@core/Element/Environment/Steps";
+import DynamicPlatforms from "@core/Element/Objects/DynamicPlatforms";
 import FloatingPlatform from "@core/Element/Objects/FloatingPlatform";
 import { Character } from "@core/Element/Player/Character";
 import { RacingVehicle } from "@core/Element/Player/Vehicles/RacingCar/RacingVehicle";
@@ -25,7 +25,7 @@ export const MainWorld = () => {
       {/* <KeyboardControls map={vehicleControls}>
         <Vehicle position={[15, 2, 0]} />
       </KeyboardControls> */}
-      <Character />
+      <Character  />
 
       <group>
         {/* Ground */}

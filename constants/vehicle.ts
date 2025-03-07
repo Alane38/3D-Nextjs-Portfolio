@@ -3,7 +3,7 @@ import * as THREE from "three";
 
 // Racing Vehicle Spawn
 export const spawn = {
-  position: [0, 8, 0] as THREE.Vector3Tuple,
+  position: [0, 2, 0] as THREE.Vector3Tuple,
   rotation: [0, Math.PI / 2, 0] as THREE.Vector3Tuple,
 };
 

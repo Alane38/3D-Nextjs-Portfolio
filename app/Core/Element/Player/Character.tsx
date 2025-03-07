@@ -1,4 +1,5 @@
 import { characterControllerConfig } from "@constants/character";
+import { EnumPlayerOption } from "@constants/playerSelection";
 import { Box, useKeyboardControls } from "@react-three/drei";
 import { useFrame } from "@react-three/fiber";
 import {
@@ -7,7 +8,7 @@ import {
   RigidBody,
   useRapier,
 } from "@react-three/rapier";
-import { usePlayerSelection } from "@resources/Hooks/Leva/usePlayerSelection";
+import { usePlayerSelection } from "@resources/Hooks";
 import { useControls } from "leva";
 import { useEffect, useRef, useState } from "react";
 import * as THREE from "three";
@@ -28,9 +29,9 @@ const lerpAngle = (start: number, end: number, t: number) => {
 };
 
 // Main Character Controller
-export const Character = () => {
+export const Character = ({ defaultPlayer }: { defaultPlayer?: boolean } ) => {
   const { rapier, world } = useRapier(); // Import Rappier for Colliders Events*
-  const Player = usePlayerSelection();
+  const { player, updatePlayer } = usePlayerSelection();
 
   // Import Character Value
   const {
@@ -95,9 +96,14 @@ export const Character = () => {
     };
   }, []);
 
+  // Initialize default player
+  defaultPlayer && updatePlayer(EnumPlayerOption.Character);
+
   // MOVEMENT, CAMERA, COLLISION DETECTION
   useFrame(({ camera, mouse }) => {
-    if (Player !== "Character") return;
+    if (player !== EnumPlayerOption.Character) return;
+    // Initialize default player
+    updatePlayer(EnumPlayerOption.Character);
 
     // Movement Forward_Backward
     if (rb.current) {

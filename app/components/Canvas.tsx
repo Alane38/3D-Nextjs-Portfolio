@@ -2,13 +2,13 @@
 
 import { globalControls } from "@constants/default";
 import { KeyboardControls } from "@react-three/drei";
-import { MainWorld } from "@resources/Environment/MainWorld";
 import { useLoadingAssets } from "@resources/Hooks";
 import { Leva } from "leva";
 import { useState } from "react";
 import { CanvasLayout } from "./CanvasLayout";
 import { Loading } from "./Loading";
 import { PerformanceWarning } from "./Utility/PerformanceWarning";
+import { MainWorld } from "@resources/Environment/MainWorld";
 
 export function Canvas() {
   const [visible, setVisible] = useState(true);
