@@ -129,6 +129,10 @@ const Ecctrl: ForwardRefRenderFunction<CustomEcctrlRigidBody, EcctrlProps> = ({
   bodySensorSize = [capsuleHalfHeight / 2, capsuleRadius],
   bodySensorPosition = { x: 0, y: 0, z: capsuleRadius / 2 },
   // Other rigibody props from parent
+
+  // custom props
+  infiniteJump = false,
+
   ...props
 }: EcctrlProps, ref) => {
   const characterRef = useRef<CustomEcctrlRigidBody>(null!)
@@ -1098,6 +1102,7 @@ const Ecctrl: ForwardRefRenderFunction<CustomEcctrlRigidBody, EcctrlProps> = ({
      */
     if (controllerIndex !== null) {
       const gamepad = navigator.getGamepads()[controllerIndex]
+      if (!gamepad) return
       handleButtons(gamepad.buttons)
       handleSticks(gamepad.axes)
       // Getting moving directions (IIFE)
@@ -1137,7 +1142,7 @@ const Ecctrl: ForwardRefRenderFunction<CustomEcctrlRigidBody, EcctrlProps> = ({
       moveCharacter(delta, run, slopeAngle, movingObjectVelocity);
 
     // Jump impulse
-    if ((jump || button1Pressed) && canJump) {
+    if ((jump || button1Pressed) && (canJump || infiniteJump)) {
       // characterRef.current.applyImpulse(jumpDirection.set(0, 0.5, 0), true);
       jumpVelocityVec.set(
         currentVel.x,
@@ -1154,7 +1159,7 @@ const Ecctrl: ForwardRefRenderFunction<CustomEcctrlRigidBody, EcctrlProps> = ({
       );
       // Apply jump force downward to the standing platform
       characterMassForce.y *= jumpForceToGroundMult;
-      rayHit.collider
+      rayHit?.collider
         .parent()
         ?.applyImpulseAtPoint(characterMassForce, standingForcePoint, true);
     }
@@ -1184,13 +1189,13 @@ const Ecctrl: ForwardRefRenderFunction<CustomEcctrlRigidBody, EcctrlProps> = ({
       rayLength,
       false,
       QueryFilterFlags.EXCLUDE_SENSORS,
-      null,
-      null,
+      undefined,
+      undefined,
       characterRef.current,
       // this exclude any collider with userData: excludeEcctrlRay
       ((collider: Collider) => (
         collider.parent()?.userData && !(collider.parent()?.userData as userDataType).excludeEcctrlRay
-      ))
+      )) as (collider: Collider) => boolean
     );
 
     /**Test shape ray */
@@ -1226,7 +1231,8 @@ const Ecctrl: ForwardRefRenderFunction<CustomEcctrlRigidBody, EcctrlProps> = ({
           rayOrigin.z
         );
         const rayHitObjectBodyType = rayHit.collider.parent()?.bodyType();
-        const rayHitObjectBodyMass = rayHit.collider.parent().mass();
+        const rayHitObjectBodyMass = rayHit.collider.parent()?.mass();
+        if (!rayHitObjectBodyMass) return
         massRatio = characterRef.current.mass() / rayHitObjectBodyMass;
         // Body type 0 is rigid body, body type 1 is fixed body, body type 2 is kinematic body
         if (rayHitObjectBodyType === 0 || rayHitObjectBodyType === 2) {
@@ -1234,15 +1240,13 @@ const Ecctrl: ForwardRefRenderFunction<CustomEcctrlRigidBody, EcctrlProps> = ({
           // Calculate distance between character and moving object
           distanceFromCharacterToObject
             .copy(currentPos)
-            .sub(rayHit.collider.parent().translation() as THREE.Vector3);
+            .sub(rayHit.collider.parent()?.translation() as THREE.Vector3);
           // Moving object linear velocity
           const movingObjectLinvel = rayHit.collider
-            .parent()
-            .linvel() as THREE.Vector3;
+            .parent()?.linvel() as THREE.Vector3;
           // Moving object angular velocity
           const movingObjectAngvel = rayHit.collider
-            .parent()
-            .angvel() as THREE.Vector3;
+            .parent()?.angvel() as THREE.Vector3;
           // Combine object linear velocity and angular velocity to movingObjectVelocity
           movingObjectVelocity.set(
             movingObjectLinvel.x +
@@ -1282,8 +1286,7 @@ const Ecctrl: ForwardRefRenderFunction<CustomEcctrlRigidBody, EcctrlProps> = ({
                 .negate();
             }
             rayHit.collider
-              .parent()
-              .applyImpulseAtPoint(
+              .parent()?.applyImpulseAtPoint(
                 movingObjectDragForce,
                 standingForcePoint,
                 true
@@ -1313,13 +1316,13 @@ const Ecctrl: ForwardRefRenderFunction<CustomEcctrlRigidBody, EcctrlProps> = ({
       slopeRayLength,
       false,
       QueryFilterFlags.EXCLUDE_SENSORS,
-      null,
-      null,
+      undefined,
+      undefined,
       characterRef.current,
       // this exclude any collider with userData: excludeEcctrlRay
       ((collider: Collider) => (
-        collider.parent().userData && !(collider.parent().userData as userDataType).excludeEcctrlRay
-      ))
+        collider.parent()?.userData && !(collider.parent()?.userData as userDataType).excludeEcctrlRay
+      )) as (collider: Collider) => boolean
     );
 
     // Calculate slope angle
@@ -1328,7 +1331,7 @@ const Ecctrl: ForwardRefRenderFunction<CustomEcctrlRigidBody, EcctrlProps> = ({
         slopeRayCast,
         slopeRayLength,
         false
-      )?.normal;
+      )?.normal as THREE.Vector3;
       if (actualSlopeNormal) {
         actualSlopeNormalVec?.set(
           actualSlopeNormal.x,
@@ -1636,6 +1639,10 @@ export interface EcctrlProps extends RigidBodyProps {
   bodySensorSize?: Array<number>;
   bodySensorPosition?: { x: number, y: number, z: number }
   // Other rigibody props from parent
+
+  // custom props
+  infiniteJump?: boolean;
+
   props?: RigidBodyProps;
 };
 

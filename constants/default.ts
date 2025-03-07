@@ -8,9 +8,9 @@ export const classModelPath = "/assets/models/";
 export const globalControls = [
   { name: "forward", keys: ["ArrowUp", "z", "Z"] },
   { name: "backward", keys: ["ArrowDown", "s", "S"] },
-  { name: "left", keys: ["ArrowLeft", "q", "Q"] },
-  { name: "right", keys: ["ArrowRight", "d", "D"] },
+  { name: "leftward", keys: ["ArrowLeft", "q", "Q"] },
+  { name: "rightward", keys: ["ArrowRight", "d", "D"] },
   { name: "run", keys: ["ShiftLeft"] },
-  { name: "jump_brake", keys: ["Space", " "] },
+  { name: "jump", keys: ["Space", " "] },
   { name: "reset", keys: ["KeyR", "r"] },
 ];

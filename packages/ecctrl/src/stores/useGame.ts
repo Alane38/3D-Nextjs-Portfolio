@@ -8,13 +8,13 @@ export const useGame = /* @__PURE__ */ create(
       /**
        * Point to move point
        */
-      moveToPoint: null as THREE.Vector3,
+      moveToPoint: new THREE.Vector3(),
 
       /**
        * Character animations state manegement
        */
       // Initial animation
-      curAnimation: null as string,
+      curAnimation: "",
       animationSet: {} as AnimationSet,
 
       initializeAnimationSet: (animationSet: AnimationSet) => {

@@ -27,9 +27,10 @@ export function EcctrlAnimation(props: EcctrlAnimationProps) {
   useEffect(() => {
     // Play animation
     const action =
-      actions[curAnimation ? curAnimation : props.animationSet.jumpIdle];
+      actions[curAnimation ?? props.animationSet.jumpIdle]
 
     // For jump and jump land animation, only play once and clamp when finish
+    if (!action) return
     if (
       curAnimation === props.animationSet.jump ||
       curAnimation === props.animationSet.jumpLand ||
@@ -41,7 +42,7 @@ export function EcctrlAnimation(props: EcctrlAnimationProps) {
       action
         .reset()
         .fadeIn(0.2)
-        .setLoop(THREE.LoopOnce, undefined)
+        .setLoop(THREE.LoopOnce, 1)
         .play();
       action.clampWhenFinished = true;
     } else {
