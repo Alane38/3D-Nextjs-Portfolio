@@ -1132,7 +1132,6 @@ const Ecctrl: ForwardRefRenderFunction<CustomEcctrlRigidBody, EcctrlProps> = ({
      * Getting all the useful keys from useKeyboardControls
      */
     const { forward, backward, leftward, rightward, jump, run } = isInsideKeyboardControls ? getKeys?.() ?? presetKeys : presetKeys;
-    console.log({ forward, backward, leftward, rightward, jump, run })
 
     // Getting moving directions (IIFE)
     modelEuler.y = ((movingDirection) => movingDirection === null ? modelEuler.y : movingDirection)

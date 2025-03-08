@@ -24,12 +24,25 @@ export const ModelRenderer = ({ path, children }: { path: string, children?: Rea
 
     useEffect(() => {
       // animate the model if it has animations
+      console.log(gltf);
       if (gltf.animations.length > 0) {
         const mixer = new AnimationMixer(gltf.scene);
         mixerRef.current = mixer;
 
+        // make the first object transparent
+        gltf.scene.traverse((child) => {
+          if (child.isObject3D) {
+            if (child.name === "FoxModel") {
+              console.log(child);
+            }
+            // child.opacity = 0.5;
+            // child.material.transparent = true;
+          }
+        });
+
         gltf.animations.forEach((clip) => {
-          if (clip.name === "jump") {
+          console.log(clip);
+          if (clip.name === "walk") {
             const action = mixer.clipAction(clip);
             // console.log(action);
             action.setLoop(LoopRepeat, Infinity);
