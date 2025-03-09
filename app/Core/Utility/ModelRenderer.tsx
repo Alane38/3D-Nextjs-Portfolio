@@ -12,7 +12,7 @@ export const ModelRenderer = ({ path, children }: { path: string, children?: Rea
     // Load .gltf files using useGLTF for better integration with Drei
     const { scene } = useGLTF(path);
     return <primitive object={scene}>{children}</primitive>;
-  } else {
+  } else if (path.endsWith(".glb")) {
     // Load .glb files using GLTFLoader with DRACOLoader for optimization
     const gltf = useLoader(GLTFLoader, path, (loader) => {
       const dracoLoader = new DRACOLoader();

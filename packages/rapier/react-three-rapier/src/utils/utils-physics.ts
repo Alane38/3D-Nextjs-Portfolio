@@ -10,7 +10,7 @@ export const useRaf = (callback: (dt: number) => void) => {
   }, [callback]);
 
   useEffect(() => {
-    const loop = () => {
+    const loop = async () => {
       const now = performance.now();
       const delta = now - lastFrame.current;
 

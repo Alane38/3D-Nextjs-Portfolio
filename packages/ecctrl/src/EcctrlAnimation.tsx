@@ -1,13 +1,15 @@
-import { useGLTF, useAnimations } from "@react-three/drei";
+import { useGLTF, useAnimations, useFBX } from "@react-three/drei";
 import { useEffect, useRef, Suspense } from "react";
 import * as THREE from "three";
 import { useGame, type AnimationSet } from "./stores/useGame";
 import React from "react";
+import { RigidBodyProps } from "@react-three/rapier";
 
 export function EcctrlAnimation(props: EcctrlAnimationProps) {
   // Change the character src to yours
   const group = useRef(null!);
-  const { animations } = useGLTF(props.characterURL);
+  const fbx = useFBX(props.characterURL);
+  const animations = fbx.animations;
   const { actions } = useAnimations(animations, group);
 
   /**
@@ -26,8 +28,10 @@ export function EcctrlAnimation(props: EcctrlAnimationProps) {
 
   useEffect(() => {
     // Play animation
+    console.log(curAnimation);
     const action =
-      actions[curAnimation ?? props.animationSet.jumpIdle]
+      actions[curAnimation ?? props.animationSet.idle]
+      console.log(action);
 
     // For jump and jump land animation, only play once and clamp when finish
     if (!action) return
@@ -68,7 +72,8 @@ export function EcctrlAnimation(props: EcctrlAnimationProps) {
     <Suspense fallback={null}>
       <group ref={group} dispose={null} userData={{ camExcludeCollision: true }}>
         {/* Replace character model here */}
-        {props.children}
+        {/* {props.children} */}
+        <primitive {...props.rigidBodyProps} object={fbx} />
       </group>
     </Suspense>
   );
@@ -77,5 +82,6 @@ export function EcctrlAnimation(props: EcctrlAnimationProps) {
 export type EcctrlAnimationProps = {
   characterURL: string;
   animationSet: AnimationSet;
-  children: React.ReactNode;
+  children?: React.ReactNode;
+  rigidBodyProps: RigidBodyProps;
 };
