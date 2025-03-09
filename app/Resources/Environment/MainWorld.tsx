@@ -32,7 +32,7 @@ export const MainWorld = () => {
     <>
       {/* <ObjectComponent /> */}
 
-      <Character path="FoxPam.fbx" />
+      <Character path="FoxPam.fbx" defaultPlayer/>
 
       <group>
         {/* Ground */}
@@ -79,7 +79,7 @@ export const MainWorld = () => {
       />
       {/* <GlobalUI /> */}
       <RacingVehicle position={[15, 2, 0]} rotation={[0, Math.PI / 2, 0]} />
-      <Vehicle position={[8, 2, 0]} />
+      {/* <Vehicle position={[8, 2, 0]} /> */}
     </>
   );
 };

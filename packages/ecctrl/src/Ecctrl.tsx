@@ -161,6 +161,7 @@ const Ecctrl: ForwardRefRenderFunction<CustomEcctrlRigidBody, EcctrlProps> = ({
   let isModeCameraBased: boolean = false
   const setMoveToPoint = useGame((state) => state.setMoveToPoint)
   const findMode = (mode: string, modes: string) => modes.split(" ").some(m => m === mode)
+  
   if (mode) {
     if (findMode("PointToMove", mode)) isModePointToMove = true
     if (findMode("FixedCamera", mode)) isModeFixedCamera = true

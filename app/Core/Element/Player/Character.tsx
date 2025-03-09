@@ -1,8 +1,9 @@
 import { classModelPath } from "@constants/default";
 import { EnumPlayerOption } from "@constants/playerSelection";
-import Ecctrl, {
-  EcctrlAnimation
-} from "@packages/ecctrl/src/Ecctrl";
+import { CharacterRenderer } from "@core/Utility/CharacterRenderer";
+import Ecctrl, { EcctrlAnimation } from "@packages/ecctrl/src/Ecctrl";
+import Galaad from "@packages/Galaad/Galaad";
+import { GalaadAnimation } from "@packages/Galaad/GalaadAnimation";
 import { RapierRigidBody } from "@react-three/rapier";
 import { usePlayerSelection } from "@resources/Hooks";
 import { useRef } from "react";
@@ -17,7 +18,7 @@ export const Character = ({
   const { player, updatePlayer } = usePlayerSelection();
   const rb = useRef<RapierRigidBody>(null);
 
-  const animationPrefix = "rig|"
+  const animationPrefix = "rig|";
   const animationSet = {
     idle: animationPrefix + "idle",
     walk: animationPrefix + "walk",
@@ -27,18 +28,20 @@ export const Character = ({
     jumpLand: animationPrefix + "jumpLand",
   };
 
-  updatePlayer(EnumPlayerOption.Character);
+
   let disableControl = player !== EnumPlayerOption.Character;
   let disableFollowCam = disableControl;
 
   return (
     <>
-      <Ecctrl
-        debug
+      <Galaad
         name="Player"
-        infiniteJump={true}
-        capsuleHalfHeight={0.5}
-        capsuleRadius={0.3}
+        colliders="trimesh"
+        infiniteJump={false}
+        hitboxHeight ={0.4}
+        hitboxWidth={0.05}
+        hitboxLenght={0.8}
+        hitboxRadius={0.3}
         floatHeight={0}
         characterInitDir={0}
         followLight={false}
@@ -56,9 +59,9 @@ export const Character = ({
         camCollision={true}
         camCollisionOffset={0.5}
         camCollisionSpeedMult={5}
-        fixedCamRotMult={1.5}
+        controlCamRotMult={1.5}
         camListenerTarget="domElement"
-        maxVelLimit={5}
+        maxVelLim={5}
         turnVelMultiplier={0.1}
         turnSpeed={12}
         sprintMult={1.8}
@@ -95,12 +98,12 @@ export const Character = ({
         autoBalanceSpringOnY={0.5}
         autoBalanceDampingOnY={0.02}
         animated={true}
-        mode="FixedCamera"
+        camMode="ControlCamera"
         controllerKeys={{
           forward: 12,
-          backward: 13,
-          leftward: 14,
-          rightward: 15,
+          back: 13,
+          left: 14,
+          right: 15,
           jump: 2,
           action1: 11,
           action2: 3,
@@ -113,15 +116,15 @@ export const Character = ({
           }
         }}
       >
-        <EcctrlAnimation
+        <GalaadAnimation
           characterURL={classModelPath + path} // Must have property
           animationSet={animationSet}
           rigidBodyProps={{
             scale: 0.013,
-            position: [0, -0.75, 0],
-          }}
+            position: [0, 0, 0],
+            }}
         />
-      </Ecctrl>
+      </Galaad>
     </>
   );
 };
