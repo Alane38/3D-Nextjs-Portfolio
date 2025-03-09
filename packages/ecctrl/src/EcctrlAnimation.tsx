@@ -1,9 +1,8 @@
-import { useGLTF, useAnimations, useFBX } from "@react-three/drei";
-import { useEffect, useRef, Suspense } from "react";
+import { useAnimations, useFBX } from "@react-three/drei";
+import { RigidBodyProps } from "@react-three/rapier";
+import React, { Suspense, useEffect, useRef } from "react";
 import * as THREE from "three";
 import { useGame, type AnimationSet } from "./stores/useGame";
-import React from "react";
-import { RigidBodyProps } from "@react-three/rapier";
 
 export function EcctrlAnimation(props: EcctrlAnimationProps) {
   // Change the character src to yours
@@ -28,9 +27,8 @@ export function EcctrlAnimation(props: EcctrlAnimationProps) {
 
   useEffect(() => {
     // Play animation
-    console.log(curAnimation);
     const action =
-      actions[curAnimation ?? props.animationSet.idle]
+      actions[curAnimation]
       console.log(action);
 
     // For jump and jump land animation, only play once and clamp when finish

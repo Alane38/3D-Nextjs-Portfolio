@@ -9,7 +9,7 @@ services:
     ports:
       - "3000:3000"  # Expose le port 3000 pour accéder à ton application
     working_dir: /app
-    command: npm run dev  # Exécute Next.js en mode développement
+    command: yarn dev  # Exécute Next.js en mode développement
     environment:
       - NODE_ENV=development
     tty: true  # Permet une session interactive dans le conteneur (utile pour le debug)

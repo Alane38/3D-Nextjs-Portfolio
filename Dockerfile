@@ -8,10 +8,10 @@ WORKDIR /app
 COPY package*.json ./
 
 # Installer les dépendances avec npm
-RUN npm install
+RUN yarn
 
 # Copier le reste de l'application
 COPY . .
 
 # Lancer l'application Next.js en mode développement
-CMD ["npm", "run", "dev"]
+CMD ["yarn", "run", "dev"]
