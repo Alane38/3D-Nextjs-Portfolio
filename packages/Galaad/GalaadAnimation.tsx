@@ -1,5 +1,4 @@
 import { useAnimations, useFBX } from "@react-three/drei";
-import { RigidBodyProps } from "@react-three/rapier";
 import React, { Suspense, useEffect, useRef } from "react";
 import * as THREE from "three";
 import { GalaadAnimationProps } from "./types/GalaadAnimationProps";
@@ -68,10 +67,15 @@ export function GalaadAnimation(props: GalaadAnimationProps) {
 
   return (
     <Suspense fallback={null}>
-      <group ref={group} dispose={null} userData={{ camExcludeCollision: true }}>
+      <group
+        ref={group}
+        dispose={null}
+        userData={{ camExcludeCollision: true }}
+      >
+        {/* <boxGeometry args={[1, 1, 1]} /> */}
         {/* Replace character model here */}
         {/* {props.children} */}
-        <primitive {...props.rigidBodyProps} object={fbx} position={[0, 0, 0]} />
+        <primitive {...props.rigidBodyProps} object={fbx} />
       </group>
     </Suspense>
   );

@@ -979,6 +979,8 @@ const Galaad: ForwardRefRenderFunction<customRigidBody, GalaadProps> = (
       ) => boolean,
     );
 
+    console.log(rayHit)
+
     /**Test shape ray */
     // rayHit = world.castShape(
     //   currentPos,
@@ -1341,7 +1343,6 @@ const Galaad: ForwardRefRenderFunction<customRigidBody, GalaadProps> = (
 
   return (
     <RigidBody
-
       ref={characterRef}
       position={props.position || [0, 5, 0]}
       friction={props.friction || -0.5}

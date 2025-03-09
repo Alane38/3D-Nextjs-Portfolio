@@ -36,7 +36,7 @@ export const Character = ({
     <>
       <Galaad
         name="Player"
-        colliders="trimesh"
+        colliders="hull"
         infiniteJump={false}
         hitboxHeight ={0.4}
         hitboxWidth={0.05}
@@ -80,7 +80,7 @@ export const Character = ({
         fallingMaxVel={-25}
         wakeUpDelay={100}
         rayOriginOffest={{ x: 0, y: -0.5, z: 0 }}
-        rayHitForgiveness={0.05}
+        rayHitForgiveness={1}
         rayLength={1.5}
         rayDir={{ x: 0, y: -1, z: 0 }}
         floatingDis={0}
@@ -121,7 +121,7 @@ export const Character = ({
           animationSet={animationSet}
           rigidBodyProps={{
             scale: 0.013,
-            position: [0, 0, 0],
+            position: [0, -0.7, 0],
             }}
         />
       </Galaad>
