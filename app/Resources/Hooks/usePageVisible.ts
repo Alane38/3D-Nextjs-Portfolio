@@ -7,7 +7,7 @@ export const usePageVisible = () => {
   const [visible, setVisible] = useState(true);
 
   useEffect(() => {
-    const onPageVisibilityChange = () => {
+    const onPageVisibilityChange = async () => {
       if (document.visibilityState === VISIBLE_STATE) {
         requestAnimationFrame(() => setVisible(true));
       } else {
