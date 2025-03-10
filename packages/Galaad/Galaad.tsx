@@ -111,7 +111,7 @@ const Galaad: ForwardRefRenderFunction<customRigidBody, GalaadProps> = (
     // Floating Ray setups
     rayOriginOffest = { x: 0, y: -hitboxWidth, z: 0 },
     rayHitForgiveness = 0.1,
-    rayLength = hitboxHeight + 2,
+    rayLength = hitboxHeight,
     rayDir = { x: 0, y: -1, z: 0 },
     floatingDis = hitboxHeight + floatHeight,
     springK = 1.2,
@@ -159,7 +159,7 @@ const Galaad: ForwardRefRenderFunction<customRigidBody, GalaadProps> = (
   }: GalaadProps,
   ref,
 ) => {
-  // // 
+  // //
   const characterRef = useRef<customRigidBody>(null!);
   const characterModelRef = useRef<THREE.Group>(null!);
   const characterModelIndicator = useMemo(() => new THREE.Object3D(), []);
@@ -174,7 +174,7 @@ const Galaad: ForwardRefRenderFunction<customRigidBody, GalaadProps> = (
     action3: 1,
     action4: 0,
   };
-  // // 
+  // //
   useImperativeHandle(ref, () => {
     if (!characterRef.current) {
       throw new Error("characterRef is not initialized");
@@ -220,14 +220,14 @@ const Galaad: ForwardRefRenderFunction<customRigidBody, GalaadProps> = (
   const runAnimation = !animated ? null : useGame((state) => state.run);
   const jumpAnimation = !animated ? null : useGame((state) => state.jump);
   const jumpIdleAnimation = !animated
-  ? null
-  : useGame((state) => state.jumpIdle);
+    ? null
+    : useGame((state) => state.jumpIdle);
   const fallAnimation = !animated ? null : useGame((state) => state.fall);
   const action1Animation = !animated ? null : useGame((state) => state.action1);
   const action2Animation = !animated ? null : useGame((state) => state.action2);
   const action3Animation = !animated ? null : useGame((state) => state.action3);
   const action4Animation = !animated ? null : useGame((state) => state.action4);
-  
+
   // World setup
   const { rapier, world } = useRapier();
 
@@ -259,7 +259,6 @@ const Galaad: ForwardRefRenderFunction<customRigidBody, GalaadProps> = (
   const resetJoystick = useJoystick((state) => state.resetJoystick);
 
   // // Gamepad controls setup
-
   const [controllerIndex, setControllerIndex] = useState<number | null>(null);
   const gamepadKeys = {
     forward: false,
@@ -330,9 +329,8 @@ const Galaad: ForwardRefRenderFunction<customRigidBody, GalaadProps> = (
     }
   };
 
-
   // // Can jump State
-  let canJump = false;
+  let canJump = false; // Not used only for jumping, it's used to check if the character can jump, is on groud, raycast, ....
   let isFalling = false;
   const initialGravityScale: number = useMemo(
     () => props.gravityScale ?? 1,
@@ -781,7 +779,7 @@ const Galaad: ForwardRefRenderFunction<customRigidBody, GalaadProps> = (
     });
   }
 
-// // 
+  // //
   useEffect(() => {
     // Lock character rotations at Y axis
     characterRef.current.setEnabledRotations(
@@ -799,7 +797,7 @@ const Galaad: ForwardRefRenderFunction<customRigidBody, GalaadProps> = (
       }
     };
   }, [autoBalance]);
- // // 
+  // //
   useEffect(() => {
     // Initialize character facing direction
     modelEuler.y = characterInitDir;
@@ -815,7 +813,7 @@ const Galaad: ForwardRefRenderFunction<customRigidBody, GalaadProps> = (
     };
   }, []);
 
-  // // 
+  // //
   useFrame((state, delta) => {
     if (delta > 1) delta %= 1;
 
@@ -915,6 +913,7 @@ const Galaad: ForwardRefRenderFunction<customRigidBody, GalaadProps> = (
       moveCharacter(delta, run, slopeAngle, movingObjectVelocity);
 
     // // Jump impulse
+   
     if ((jump || button1Pressed) && (canJump || infiniteJump)) {
       const jumpStrength =
         (run ? sprintJumpMult * jumpVel : jumpVel) * slopJumpMult;
@@ -932,21 +931,23 @@ const Galaad: ForwardRefRenderFunction<customRigidBody, GalaadProps> = (
         true,
       );
 
-      // // Appliquer la force de saut vers le bas sur la plateforme
+      // // Apply jump force to the ground
       characterMassForce.y *= jumpForceToGroundMult;
       rayHit?.collider
         .parent()
         ?.applyImpulseAtPoint(characterMassForce, standingForcePoint, true);
+      // If infiniteJump is false, the character can't jump again if it's not on the ground
+      if (!infiniteJump) canJump = false;
     }
 
-    // // Rotation de l'indicateur du personnage
+    // // Rotate character on Y
     modelQuat.setFromEuler(modelEuler);
     characterModelIndicator.quaternion.rotateTowards(
       modelQuat,
       delta * turnSpeed,
     );
 
-    //// Gestion de l'autobalance
+    // // Auto Balance Gestion
     if (!autoBalance) {
       characterModelRef.current.quaternion.copy(
         isModeOnlyCamera
@@ -956,7 +957,6 @@ const Galaad: ForwardRefRenderFunction<customRigidBody, GalaadProps> = (
     }
 
     // // Ray casting detect if on ground
-
     rayOrigin.addVectors(currentPos, rayOriginOffest as THREE.Vector3);
     rayHit = world.castRay(
       rayCast,
@@ -966,15 +966,13 @@ const Galaad: ForwardRefRenderFunction<customRigidBody, GalaadProps> = (
       undefined,
       undefined,
       characterRef.current,
-      // this exclude any collider with userData: excludeEcctrlRay
+      // this exclude any collider with CharacterState: excluseRay
       ((collider: Collider) =>
         collider.parent()?.userData &&
         !(collider.parent()?.userData as CharacterState).excludeRay) as (
         collider: Collider,
       ) => boolean,
     );
-
-    console.log(rayHit);
 
     // //  Test shape ray
     // rayHit = world.castShape(
@@ -991,14 +989,13 @@ const Galaad: ForwardRefRenderFunction<customRigidBody, GalaadProps> = (
 
     if (rayHit && rayHit.timeOfImpact < floatingDis + rayHitForgiveness) {
       if (slopeRayHit && actualSlopeAngle < slopeMaxAngle) {
-        canJump = true;
+          canJump = true;
       } else {
         canJump = false;
       }
     }
 
     // // Ray detect if on rigid body or dynamic platform, then apply the linear velocity and angular velocity to character
-
     if (rayHit && canJump) {
       const parent = rayHit.collider.parent();
       if (!parent) return;
