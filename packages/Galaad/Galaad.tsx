@@ -5,7 +5,7 @@ import {
   Vector,
 } from "@dimforge/rapier3d-compat";
 import { useKeyboardControls } from "@react-three/drei";
-import { useFrame } from "@react-three/fiber";
+import { useFrame, useThree } from "@react-three/fiber";
 import {
   CylinderCollider,
   quat,
@@ -31,6 +31,8 @@ import { customRigidBody } from "./types/customRigidBody";
 import { GalaadProps } from "./types/GalaadProps";
 import { getObjectDirection } from "./Utils/getObjectDirection";
 import { insideKeyboardControls } from "./Utils/insideKeyboardControls";
+import { PointerLockControls } from "three/examples/jsm/Addons.js";
+import { LockCamera } from "./Utils/LockCamera";
 
 const Galaad: ForwardRefRenderFunction<customRigidBody, GalaadProps> = (
   {
@@ -194,6 +196,9 @@ const Galaad: ForwardRefRenderFunction<customRigidBody, GalaadProps> = (
   const isModePointToMove = modeSet.has("PointToMove");
   const isModeOnlyCamera = modeSet.has("OnlyCamera");
   const isModeControlCamera = modeSet.has("ControlCamera");
+
+  // LockCamera Props
+  const { camera, gl } = useThree();
 
   // // Body collider
   const vector3Factory = () => useMemo(() => new THREE.Vector3(), []);
@@ -1327,6 +1332,7 @@ const Galaad: ForwardRefRenderFunction<customRigidBody, GalaadProps> = (
           onIntersectionExit={handleOnIntersectionExit}
         />
       )}
+      <LockCamera camera={camera} renderer={gl} />
       <group ref={characterModelRef} userData={{ camExcludeCollision: true }}>
         {/* This mesh is used for positioning the slope ray origin */}
         <mesh

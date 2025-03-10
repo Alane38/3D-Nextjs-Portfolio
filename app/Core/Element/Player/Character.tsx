@@ -2,9 +2,11 @@ import { modelPath } from "@constants/default";
 import { EnumPlayerOption } from "@constants/playerSelection";
 import Galaad from "@packages/Galaad/Galaad";
 import { GalaadAnimation } from "@packages/Galaad/GalaadAnimation";
+import { LockCamera } from "@packages/Galaad/Utils/LockCamera";
+import { useThree } from "@react-three/fiber";
 import { RapierRigidBody } from "@react-three/rapier";
 import { usePlayerSelection } from "@resources/Hooks";
-import { useRef } from "react";
+import { useEffect, useRef } from "react";
 
 export const Character = ({
   defaultPlayer,
@@ -28,6 +30,8 @@ export const Character = ({
 
   let disableControl = player !== EnumPlayerOption.Character;
   let disableFollowCam = disableControl;
+
+  const { camera, gl } = useThree();
 
   return (
     <>

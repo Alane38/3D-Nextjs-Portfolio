@@ -1,5 +1,6 @@
+import { LockCamera } from "@packages/Galaad/Utils/LockCamera";
 import { Grid } from "@react-three/drei";
-import { Canvas } from "@react-three/fiber";
+import { Canvas, useThree } from "@react-three/fiber";
 import { Physics } from "@react-three/rapier";
 import { useDebugState } from "@resources/Hooks";
 import { Perf } from "r3f-perf";
@@ -8,7 +9,6 @@ import WebGPU from "three/examples/jsm/capabilities/WebGPU.js";
 
 export function CanvasLayout({ children }: { children: ReactNode }) {
   const debugState = useDebugState();
-
   const shadowCameraRef = React.useRef<any>(null);
 
   return (

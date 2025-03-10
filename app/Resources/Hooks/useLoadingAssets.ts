@@ -19,6 +19,6 @@ export const useLoadingAssets = () => {
       DefaultLoadingManager.onProgress = originalOnProgress;
     };
   }, []);
-
+  
   return Number(progress.toFixed());
 };
