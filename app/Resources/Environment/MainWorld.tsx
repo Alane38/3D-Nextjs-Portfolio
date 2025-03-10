@@ -2,7 +2,6 @@ import Steps from "@core/Element/Environment/Steps";
 import DynamicPlatforms from "@core/Element/Objects/DynamicPlatforms";
 import FloatingPlatform from "@core/Element/Objects/FloatingPlatform";
 import { Character } from "@core/Element/Player/Character";
-import { Vehicle } from "@core/Element/Player/Vehicles/Car/Vehicle";
 import { RacingVehicle } from "@core/Element/Player/Vehicles/RacingCar/RacingVehicle";
 import {
   DiamondComponent,
@@ -12,8 +11,9 @@ import {
   RestaurantSignComponent,
   SpinnerComponent,
   StairsComponent,
-  TextObjectComponent,
+  TextObjectComponent
 } from "@resources/Class";
+import { TestObjectComponent } from "@resources/Class/Test/TestObject";
 import { Euler, Vector3 } from "three";
 
 export const MainWorld = () => {
@@ -80,6 +80,8 @@ export const MainWorld = () => {
       {/* <GlobalUI /> */}
       <RacingVehicle position={[15, 2, 0]} rotation={[0, Math.PI / 2, 0]} />
       {/* <Vehicle position={[8, 2, 0]} /> */}
+
+      <TestObjectComponent />
     </>
   );
 };

@@ -1,12 +1,11 @@
 import { RapierRigidBody, RigidBodyOptions } from "@react-three/rapier";
-import { createRef } from "react";
+import { forwardRef, useImperativeHandle, useRef } from "react";
 import { Euler, Group, Vector3 } from "three";
 
-export class Entity {
-  // private ref = createRef<RapierRigidBody>();
-  ref = createRef<RapierRigidBody>();
-  groupRef = createRef<Group>();
-  optionsRef = createRef<RigidBodyOptions>();
+export class EntityTest {
+  ref = useRef<RapierRigidBody | null>(null);
+  groupRef = useRef<Group | null>(null);
+  optionsRef = useRef<RigidBodyOptions | null>(null);
   name: string;
   path: string;
   position: Vector3;
@@ -25,10 +24,8 @@ export class Entity {
     this.type = "fixed";
     this.colliders = "hull";
     this.scale = 1;
-    // console.log(`${name} initialized`);
   }
 
-  // Add any common logic or helpers here
   applyImpulse(impulse: { x: number; y: number; z: number }) {
     this.ref.current?.applyImpulse(impulse, true);
   }
@@ -45,9 +42,8 @@ export class Entity {
     this.mass = mass;
   }
 
-  setScale(scale: number) {
+  setScale(scale: number | [number, number, number]) {
     this.scale = scale;
-    console.log(scale);
   }
 
   setPath(path: string) {
@@ -66,3 +62,11 @@ export class Entity {
     this.optionsRef.current = options;
   }
 }
+
+export const EntityTestWrapper = forwardRef<EntityTest, { name: string }>((props, ref) => {
+  const entity = new EntityTest(props.name);
+
+  useImperativeHandle(ref, () => entity);
+
+  return null;
+});
