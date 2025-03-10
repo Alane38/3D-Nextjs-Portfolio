@@ -9,9 +9,7 @@ import {
   useBeforePhysicsStep,
   useRapier,
 } from "@react-three/rapier";
-import {
-  usePlayerSelection,
-} from "@resources/Hooks/Leva/usePlayerSelection";
+import { usePlayerSelection } from "@resources/Hooks/Leva/usePlayerSelection";
 import { VehicleControls } from "@type/VehicleControls";
 import { useRef } from "react";
 import * as THREE from "three";

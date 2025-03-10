@@ -1,16 +1,16 @@
-import { classModelPath } from "@constants/default";
+import { modelPath } from "@constants/default";
 import { BallSpring } from "@core/Element/Objects/Spring";
 import { ModelRenderer } from "@core/Utility/ModelRenderer";
 import { vectorArrayToVector3 } from "@packages/rapier/react-three-rapier/src/utils/utils";
 import { useFrame } from "@react-three/fiber";
-import { RapierRigidBody, quat, euler, RigidBody } from "@react-three/rapier";
+import { euler, quat, RapierRigidBody, RigidBody } from "@react-three/rapier";
 import { useMemo, useRef } from "react";
 import { Object3D } from "three";
 import { Entity } from "../Entity";
 
 export class Diamond extends Entity {
   springed?: boolean;
-  constructor(path: string = classModelPath + "Diamond.glb") {
+  constructor(path: string = modelPath + "Diamond.glb") {
     super("Diamond");
     // Modify the default settings(Entity) :
     this.path = path;

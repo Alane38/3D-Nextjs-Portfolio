@@ -1,11 +1,11 @@
-import { classModelPath } from "@constants/default";
+import { modelPath } from "@constants/default";
 import { ModelRenderer } from "@core/Utility/ModelRenderer";
 import { RigidBody } from "@react-three/rapier";
 import { useMemo } from "react";
 import { Entity } from "../Entity";
 
 export class Object extends Entity {
-  constructor(path: string = classModelPath + "Object.glb") {
+  constructor(path: string = modelPath + "Object.glb") {
     super("Object");
     // Modify the default settings(Entity) :
     this.path = path;

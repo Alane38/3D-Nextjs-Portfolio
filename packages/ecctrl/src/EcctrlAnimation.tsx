@@ -17,7 +17,7 @@ export function EcctrlAnimation(props: EcctrlAnimationProps) {
   const curAnimation = useGame((state) => state.curAnimation);
   const resetAnimation = useGame((state) => state.reset);
   const initializeAnimationSet = useGame(
-    (state) => state.initializeAnimationSet
+    (state) => state.initializeAnimationSet,
   );
 
   useEffect(() => {
@@ -27,12 +27,11 @@ export function EcctrlAnimation(props: EcctrlAnimationProps) {
 
   useEffect(() => {
     // Play animation
-    const action =
-      actions[curAnimation]
-      console.log(action);
+    const action = actions[curAnimation];
+    console.log(action);
 
     // For jump and jump land animation, only play once and clamp when finish
-    if (!action) return
+    if (!action) return;
     if (
       curAnimation === props.animationSet.jump ||
       curAnimation === props.animationSet.jumpLand ||
@@ -41,11 +40,7 @@ export function EcctrlAnimation(props: EcctrlAnimationProps) {
       curAnimation === props.animationSet.action3 ||
       curAnimation === props.animationSet.action4
     ) {
-      action
-        .reset()
-        .fadeIn(0.2)
-        .setLoop(THREE.LoopOnce, 1)
-        .play();
+      action.reset().fadeIn(0.2).setLoop(THREE.LoopOnce, 1).play();
       action.clampWhenFinished = true;
     } else {
       action.reset().fadeIn(0.2).play();
@@ -60,7 +55,7 @@ export function EcctrlAnimation(props: EcctrlAnimationProps) {
 
       // Clean up mixer listener, and empty the _listeners array
       (action as any)._mixer.removeEventListener("finished", () =>
-        resetAnimation()
+        resetAnimation(),
       );
       (action as any)._mixer._listeners = [];
     };
@@ -68,7 +63,11 @@ export function EcctrlAnimation(props: EcctrlAnimationProps) {
 
   return (
     <Suspense fallback={null}>
-      <group ref={group} dispose={null} userData={{ camExcludeCollision: true }}>
+      <group
+        ref={group}
+        dispose={null}
+        userData={{ camExcludeCollision: true }}
+      >
         {/* Replace character model here */}
         {/* {props.children} */}
         <primitive {...props.rigidBodyProps} object={fbx} />

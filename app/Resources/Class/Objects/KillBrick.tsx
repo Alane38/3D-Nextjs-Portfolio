@@ -33,6 +33,7 @@ export const KillBrickComponent = ({
   const textRef = useRef<THREE.Mesh>(null);
 
   useFrame(() => {
+    // Link the text element to Box's rigid body, copying all movements.
     if (rbRef.current && textRef.current) {
       textRef.current.position.copy(
         new THREE.Vector3(

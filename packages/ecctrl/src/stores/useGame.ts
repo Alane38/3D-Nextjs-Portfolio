@@ -160,7 +160,7 @@ export const useGame = /* @__PURE__ */ create(
         };
       },
     };
-  })
+  }),
 );
 
 export type AnimationSet = {
@@ -187,7 +187,7 @@ type State = {
   setMoveToPoint: (point: THREE.Vector3) => void;
   getMoveToPoint: () => {
     moveToPoint: THREE.Vector3;
-  }
+  };
 } & {
   [key in keyof AnimationSet]: () => void;
 };

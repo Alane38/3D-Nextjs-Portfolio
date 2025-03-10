@@ -1,4 +1,4 @@
-import { classModelPath } from "@constants/default";
+import { modelPath } from "@constants/default";
 import { ModelRenderer } from "@core/Utility/ModelRenderer";
 import { useVideoTexture } from "@react-three/drei";
 import { RigidBody } from "@react-three/rapier";
@@ -6,7 +6,7 @@ import { useMemo } from "react";
 import { Entity } from "../Entity";
 
 export class RestaurantSign extends Entity {
-  constructor(path: string = classModelPath + "RestaurantSign.glb") {
+  constructor(path: string = modelPath + "RestaurantSign.glb") {
     super("RestaurantSign");
     // Modify the default settings(Entity) :
     this.path = path;

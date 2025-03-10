@@ -4,7 +4,13 @@ import { DRACOLoader, GLTFLoader } from "three/examples/jsm/Addons.js";
 import { AnimationMixer, LoopPingPong, LoopRepeat } from "three";
 import { ReactNode, useEffect, useRef } from "react";
 
-export const ModelRenderer = ({ path, children }: { path: string, children?: ReactNode }) => {
+export const ModelRenderer = ({
+  path,
+  children,
+}: {
+  path: string;
+  children?: ReactNode;
+}) => {
   // Preload the model to improve loading performance
   useGLTF.preload(path);
 

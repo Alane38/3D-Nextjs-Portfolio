@@ -1,11 +1,12 @@
-import { classModelPath } from "@constants/default";
+import { modelPath } from "@constants/default";
 import { EnumPlayerOption } from "@constants/playerSelection";
-import Ecctrl, {
-  EcctrlAnimation
-} from "@packages/ecctrl/src/Ecctrl";
+import Galaad from "@packages/Galaad/Galaad";
+import { GalaadAnimation } from "@packages/Galaad/GalaadAnimation";
+import { LockCamera } from "@packages/Galaad/Utils/LockCamera";
+import { useThree } from "@react-three/fiber";
 import { RapierRigidBody } from "@react-three/rapier";
 import { usePlayerSelection } from "@resources/Hooks";
-import { useRef } from "react";
+import { useEffect, useRef } from "react";
 
 export const Character = ({
   defaultPlayer,
@@ -17,7 +18,7 @@ export const Character = ({
   const { player, updatePlayer } = usePlayerSelection();
   const rb = useRef<RapierRigidBody>(null);
 
-  const animationPrefix = "rig|"
+  const animationPrefix = "rig|";
   const animationSet = {
     idle: animationPrefix + "idle",
     walk: animationPrefix + "walk",
@@ -27,23 +28,31 @@ export const Character = ({
     jumpLand: animationPrefix + "jumpLand",
   };
 
-  updatePlayer(EnumPlayerOption.Character);
   let disableControl = player !== EnumPlayerOption.Character;
   let disableFollowCam = disableControl;
 
+  const { camera, gl } = useThree();
+
   return (
     <>
-      <Ecctrl
-        debug
+      <Galaad
+        // Character
         name="Player"
-        infiniteJump={true}
-        capsuleHalfHeight={0.5}
-        capsuleRadius={0.3}
+        colliders="hull"
+        infiniteJump={false}
+        animated={true}
+        // Collider
+        hitboxHeight={0.4}
+        hitboxWidth={0.05}
+        hitboxLenght={0.8}
+        hitboxRadius={0.3}
         floatHeight={0}
-        characterInitDir={0}
-        followLight={false}
+        // Control & Camera
         disableControl={disableControl}
         disableFollowCam={disableFollowCam}
+        // Direction & Camera
+        camMode="ControlCamera"
+        characterInitDir={0}
         camInitDis={-3.5}
         camMaxDis={-5}
         camMinDis={-1.5}
@@ -56,13 +65,18 @@ export const Character = ({
         camCollision={true}
         camCollisionOffset={0.5}
         camCollisionSpeedMult={5}
-        fixedCamRotMult={1.5}
+        controlCamRotMult={0.5}
         camListenerTarget="domElement"
-        maxVelLimit={5}
+        camFollowMult={10}
+        camLerpMult={20}
+        // Follow light
+        followLight={false}
+        // Physics
+        maxVelLim={5}
         turnVelMultiplier={0.1}
-        turnSpeed={12}
+        turnSpeed={5}
         sprintMult={1.8}
-        jumpVel={4.5}
+        jumpVel={6}
         jumpForceToGroundMult={1}
         slopJumpMult={0}
         sprintJumpMult={1}
@@ -71,57 +85,43 @@ export const Character = ({
         accDeltaTime={5}
         rejectVelMult={1}
         moveImpulsePointY={0.3}
-        camFollowMult={10}
-        camLerpMult={20}
         fallingGravityScale={3.5}
         fallingMaxVel={-25}
         wakeUpDelay={100}
         rayOriginOffest={{ x: 0, y: -0.5, z: 0 }}
-        rayHitForgiveness={0.05}
-        rayLength={1.5}
+        rayHitForgiveness={1}
+        rayLength={0.35}
         rayDir={{ x: 0, y: -1, z: 0 }}
-        floatingDis={0}
         springK={1.5}
-        dampingC={0.1}
+        dampingC={0}
         slopeMaxAngle={0.7}
         slopeRayOriginOffest={0.2}
         slopeRayLength={2}
         slopeRayDir={{ x: 0, y: -1, z: 0 }}
         slopeUpExtraForce={0.05}
         slopeDownExtraForce={0.1}
+        // Auto balance
         autoBalance={true}
-        autoBalanceSpringK={0.5}
-        autoBalanceDampingC={0.05}
-        autoBalanceSpringOnY={0.5}
+        autoBalanceSpringK={0.2}
+        autoBalanceDampingC={0.2}
+        autoBalanceSpringOnY={0.1}
         autoBalanceDampingOnY={0.02}
-        animated={true}
-        mode="FixedCamera"
-        controllerKeys={{
-          forward: 12,
-          backward: 13,
-          leftward: 14,
-          rightward: 15,
-          jump: 2,
-          action1: 11,
-          action2: 3,
-          action3: 1,
-          action4: 0,
-        }}
         onCollisionEnter={({ other }) => {
           if (other.rigidBodyObject?.name === "Spinner") {
             rb.current?.applyImpulse({ x: 3, y: 3, z: 3 }, true);
           }
         }}
       >
-        <EcctrlAnimation
-          characterURL={classModelPath + path} // Must have property
+        {/* Import Model and Animation in FBX */}
+        <GalaadAnimation
+          path={modelPath + path} // Must have property
           animationSet={animationSet}
           rigidBodyProps={{
             scale: 0.013,
-            position: [0, -0.75, 0],
+            position: [0, -0.7, 0],
           }}
         />
-      </Ecctrl>
+      </Galaad>
     </>
   );
 };
