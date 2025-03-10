@@ -210,4 +210,3 @@ export const useFollowCam = ({
 
   return { pivot, followCam, cameraCollisionDetect, joystickCamMove };
 };
-

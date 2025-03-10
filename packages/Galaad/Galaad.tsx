@@ -653,7 +653,6 @@ const Galaad: ForwardRefRenderFunction<customRigidBody, GalaadProps> = (
   };
 
   if (isModeOnlyCamera) {
-    
   }
 
   // // Character sleep function

@@ -1,7 +1,6 @@
 import { useProdEnv } from "@resources/Hooks";
 import { useState, useEffect } from "react";
 
-
 export const Loading = ({
   progress,
   onSkip,

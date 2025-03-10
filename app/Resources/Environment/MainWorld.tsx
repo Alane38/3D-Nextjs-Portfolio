@@ -10,7 +10,7 @@ import {
   KillBrickComponent,
   RestaurantSignComponent,
   SpinnerComponent,
-  StairsComponent
+  StairsComponent,
 } from "@resources/Class";
 import { Euler, Vector3 } from "three";
 
@@ -30,7 +30,7 @@ export const MainWorld = () => {
     <>
       {/* <ObjectComponent /> */}
 
-      <Character path="FoxPam.fbx" defaultPlayer/>
+      <Character path="FoxPam.fbx" defaultPlayer />
 
       <group>
         {/* Ground */}

@@ -35,7 +35,7 @@ export function CanvasLayout({ children }: { children: ReactNode }) {
           attach={"shadow-camera"}
         />
       </directionalLight>
-      
+
       <Suspense fallback={null}>
         {/* Performance Monitor */}
         <Perf position="top-left" />

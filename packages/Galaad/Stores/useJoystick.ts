@@ -13,15 +13,24 @@ export const useJoystick = create(
     curButton4Pressed: false,
     curButton5Pressed: false,
 
-    setJoystick: (joystickDis: number, joystickAng: number, runState: boolean) => {
-      set({ curJoystickDis: joystickDis, curJoystickAng: joystickAng, curRunState: runState });
+    setJoystick: (
+      joystickDis: number,
+      joystickAng: number,
+      runState: boolean,
+    ) => {
+      set({
+        curJoystickDis: joystickDis,
+        curJoystickAng: joystickAng,
+        curRunState: runState,
+      });
     },
 
-    resetJoystick: () => set({
-      curJoystickDis: 0,
-      curJoystickAng: 0,
-      curRunState: false
-    }),
+    resetJoystick: () =>
+      set({
+        curJoystickDis: 0,
+        curJoystickAng: 0,
+        curRunState: false,
+      }),
 
     // Press button utility
     pressButton: (buttonId: number) => {
@@ -64,7 +73,7 @@ export const useJoystick = create(
       button4Pressed: get().curButton4Pressed,
       button5Pressed: get().curButton5Pressed,
     }),
-  }))
+  })),
 );
 
 type State = {
@@ -76,7 +85,11 @@ type State = {
   curButton3Pressed: boolean;
   curButton4Pressed: boolean;
   curButton5Pressed: boolean;
-  setJoystick: (joystickDis: number, joystickAng: number, runState: boolean) => void;
+  setJoystick: (
+    joystickDis: number,
+    joystickAng: number,
+    runState: boolean,
+  ) => void;
   resetJoystick: () => void;
   pressButton: (buttonId: number) => void;
   releaseButton: (buttonId: number) => void;

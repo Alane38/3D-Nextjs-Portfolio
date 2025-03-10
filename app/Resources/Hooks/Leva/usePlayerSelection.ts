@@ -4,8 +4,10 @@ import { useState } from "react";
 
 // Leva Settings -> Debug
 export const usePlayerSelection = () => {
-  const [player, setPlayer] = useState<EnumPlayerOption>(EnumPlayerOption.Character); // Default Player
-  
+  const [player, setPlayer] = useState<EnumPlayerOption>(
+    EnumPlayerOption.Character,
+  ); // Default Player
+
   const controls = useControls("Player Selection", {
     Player: {
       value: player,

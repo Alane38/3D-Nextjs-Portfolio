@@ -26,20 +26,19 @@ export const Character = ({
     jumpLand: animationPrefix + "jumpLand",
   };
 
-
   let disableControl = player !== EnumPlayerOption.Character;
   let disableFollowCam = disableControl;
 
   return (
     <>
       <Galaad
-      // Character
+        // Character
         name="Player"
         colliders="hull"
         infiniteJump={true}
         animated={true}
         // Collider
-        hitboxHeight ={0.4}
+        hitboxHeight={0.4}
         hitboxWidth={0.05}
         hitboxLenght={0.8}
         hitboxRadius={0.3}
@@ -116,7 +115,7 @@ export const Character = ({
           rigidBodyProps={{
             scale: 0.013,
             position: [0, -0.7, 0],
-            }}
+          }}
         />
       </Galaad>
     </>

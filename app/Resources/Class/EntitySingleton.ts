@@ -12,7 +12,7 @@ export default class EntitySingleton {
 
     // If the instance doesn't exist, create it
     if (!EntitySingleton.instances.has(entityName)) {
-      console.log("soesn't exist",entityName);
+      console.log("soesn't exist", entityName);
       EntitySingleton.instances.set(entityName, new entity() as Entity);
     }
 

@@ -1,9 +1,6 @@
 import { defaultFont } from "@constants/default";
 import { Text3D } from "@react-three/drei";
-import {
-  RigidBody,
-  RigidBodyOptions
-} from "@react-three/rapier";
+import { RigidBody, RigidBodyOptions } from "@react-three/rapier";
 import { TextProps } from "@type/TextProps";
 import { useMemo } from "react";
 import { Entity } from "../Entity";
