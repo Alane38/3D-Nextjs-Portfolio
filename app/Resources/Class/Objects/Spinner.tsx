@@ -1,10 +1,11 @@
 import { modelPath } from "@constants/default";
 import { Box } from "@react-three/drei";
 import { useFrame } from "@react-three/fiber";
-import { quat, RigidBody } from "@react-three/rapier";
-import { useMemo } from "react";
+import { quat, RapierRigidBody, RigidBody } from "@react-three/rapier";
+import { useMemo, useRef } from "react";
 import { Quaternion, Vector3 } from "three";
 import { Entity } from "../Entity";
+import EntitySingleton from "../EntitySingleton";
 
 export class Spinner extends Entity {
   speed: number;
@@ -25,26 +26,26 @@ export const SpinnerComponent = ({
   model,
   ...props
 }: { model?: Spinner } & Partial<Spinner>) => {
-  const object = useMemo(() => {
-    return { ...new Spinner(), ...model, ...props };
-  }, [model, props]);
+  // Fusion of props and model
+  const instance = model || EntitySingleton.getInstance(Spinner);
+  const object = useMemo(() => ({ ...instance, ...props }), [model, props]);
 
-  const kicker = object.ref;
+  const kicker = useRef<RapierRigidBody>(null);
 
   useFrame((_state, delta) => {
-    if (!kicker.current || !kicker.current.rotation()) return;
+    if (!kicker.current?.rotation()) return;
 
-    const curRotation = quat(kicker.current?.rotation());
+    const curRotation = quat(kicker.current.rotation());
     const incrementRotation = new Quaternion().setFromAxisAngle(
       new Vector3(0, 1, 0),
       delta * object.speed,
     );
     curRotation.multiply(incrementRotation);
-    kicker.current?.setNextKinematicRotation(curRotation);
+    kicker.current.setNextKinematicRotation(curRotation);
   });
 
   return (
-    <RigidBody {...object}>
+    <RigidBody ref={kicker} {...object}>
       <group>
         <Box args={[1, 0.5, 5]} />
         <meshStandardMaterial color={object.color} />

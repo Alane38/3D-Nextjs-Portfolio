@@ -5,6 +5,7 @@ import { useMemo, useRef, useState } from "react";
 import { Euler, Vector3 } from "three";
 import { Entity } from "../Entity";
 import * as THREE from "three";
+import EntitySingleton from "../EntitySingleton";
 
 export class KillBrick extends Entity {
   color: string;
@@ -23,10 +24,13 @@ export class KillBrick extends Entity {
 }
 
 export const KillBrickComponent = ({
-  model = new KillBrick(),
+  model,
   ...props
 }: { model?: KillBrick } & Partial<KillBrick>) => {
-  const object = useMemo(() => ({ ...model, ...props }), [model, props]);
+  // Fusion of props and model
+  const instance = model || EntitySingleton.getInstance(KillBrick);
+  const object = useMemo(() => ({ ...instance, ...props }), [model, props]);
+
   const [color, setColor] = useState(object.color);
 
   const rbRef = useRef<RapierRigidBody>(null);

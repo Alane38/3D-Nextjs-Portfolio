@@ -3,36 +3,22 @@ import { createRef } from "react";
 import { Euler, Group, Vector3 } from "three";
 
 export class Entity {
-  // private ref = createRef<RapierRigidBody>();
-  ref = createRef<RapierRigidBody>();
-  groupRef = createRef<Group>();
-  optionsRef = createRef<RigidBodyOptions>();
   name: string;
-  path: string;
-  position: Vector3;
-  rotation: Euler;
-  mass: number;
-  type: RigidBodyOptions["type"];
-  colliders: RigidBodyOptions["colliders"];
-  scale: number | [number, number, number];
+  path: string = "";
+  position: Vector3 = new Vector3(0, 0, 0);
+  rotation: Euler = new Euler(0, 0, 0);
+  mass: number = 1;
+  type: RigidBodyOptions["type"] = "fixed";
+  colliders: RigidBodyOptions["colliders"] = "hull";
+  scale: number | [number, number, number] = 1;
+  rigidBody?: RapierRigidBody; // Reference to the physics body
 
   constructor(name: string) {
     this.name = name;
-    this.path = "";
-    this.position = new Vector3(0, 0, 0);
-    this.rotation = new Euler(0, 0, 0);
-    this.mass = 1;
-    this.type = "fixed";
-    this.colliders = "hull";
-    this.scale = 1;
     // console.log(`${name} initialized`);
   }
 
-  // Add any common logic or helpers here
-  applyImpulse(impulse: { x: number; y: number; z: number }) {
-    this.ref.current?.applyImpulse(impulse, true);
-  }
-
+  // Métodos simplificados para setters
   setPosition(position: Vector3) {
     this.position.copy(position);
   }
@@ -47,22 +33,9 @@ export class Entity {
 
   setScale(scale: number) {
     this.scale = scale;
-    console.log(scale);
   }
 
   setPath(path: string) {
     this.path = path;
-  }
-
-  getRigidBody() {
-    return this.ref.current;
-  }
-
-  getRigidBodyOptions() {
-    return this.optionsRef.current;
-  }
-
-  setRigidBodyOptions(options: RigidBodyOptions) {
-    this.optionsRef.current = options;
   }
 }

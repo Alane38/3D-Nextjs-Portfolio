@@ -36,7 +36,7 @@ export const Character = ({
       // Character
         name="Player"
         colliders="hull"
-        infiniteJump={false}
+        infiniteJump={true}
         animated={true}
         // Collider
         hitboxHeight ={0.4}
@@ -48,7 +48,7 @@ export const Character = ({
         disableControl={disableControl}
         disableFollowCam={disableFollowCam}
         // Direction & Camera
-        camMode="OnlyCamera"
+        camMode="ControlCamera"
         characterInitDir={0}
         camInitDis={-3.5}
         camMaxDis={-5}

@@ -3,6 +3,7 @@ import { Box, Plane } from "@react-three/drei";
 import { Euler } from "three";
 import { useMemo } from "react";
 import { Entity } from "../Entity";
+import EntitySingleton from "../EntitySingleton";
 
 export class Ground extends Entity {
   color: string;
@@ -28,9 +29,8 @@ export const GroundComponent = ({
   ...props
 }: { model?: Ground } & Partial<Ground>) => {
   // Fusion of props and model
-  const object = useMemo(() => {
-    return { ...new Ground(), ...model, ...props };
-  }, [model, props]);
+  const instance = model || EntitySingleton.getInstance(Ground);
+  const object = useMemo(() => ({ ...instance, ...props }), [model, props]);
 
   return (
     // Body

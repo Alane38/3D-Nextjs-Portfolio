@@ -7,6 +7,7 @@ import { euler, quat, RapierRigidBody, RigidBody } from "@react-three/rapier";
 import { useMemo, useRef } from "react";
 import { Object3D } from "three";
 import { Entity } from "../Entity";
+import EntitySingleton from "../EntitySingleton";
 
 export class Diamond extends Entity {
   springed?: boolean;
@@ -27,15 +28,12 @@ export const DiamondComponent = ({
   model,
   ...props
 }: { model?: Diamond } & Partial<Diamond>) => {
-  const object = useMemo(
-    () => ({ ...new Diamond(), ...model, ...props }),
-    [model, props],
-  );
+  // Fusion of props and model
+  const instance = model || EntitySingleton.getInstance(Diamond);
+  const object = useMemo(() => ({ ...instance, ...props }), [model, props]);
 
-  const timeRef = useRef<number>(0);
   const groupRef = useRef<Object3D>(null);
-  const globalGroupRef = useRef<Object3D>(null);
-  const diamondRef = useRef<RapierRigidBody>(object.ref.current!);
+  const diamondRef = useRef<RapierRigidBody>(null);
 
   useFrame(() => {
     if (!groupRef.current || object.springed) return;
@@ -77,12 +75,12 @@ export const DiamondComponent = ({
 
       {/* Diamond Object */}
       <RigidBody
+        ref={diamondRef}
         enabledRotations={
           !object.springed ? [true, true, true] : [true, false, true]
         }
         lockTranslations={!object.springed && true}
         {...object}
-        ref={diamondRef}
       >
         <group
           ref={groupRef}

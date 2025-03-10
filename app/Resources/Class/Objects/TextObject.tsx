@@ -7,6 +7,7 @@ import {
 import { TextProps } from "@type/TextProps";
 import { useMemo } from "react";
 import { Entity } from "../Entity";
+import EntitySingleton from "../EntitySingleton";
 
 export class TextObject extends Entity {
   TextProps: TextProps;
@@ -27,9 +28,9 @@ export const TextObjectComponent = ({
   model,
   ...props
 }: { model?: TextObject } & Partial<TextObject>) => {
-  const object = useMemo(() => {
-    return { ...new TextObject(), ...model, ...props };
-  }, [model, props]);
+  // Fusion of props and model
+  const instance = model || EntitySingleton.getInstance(TextObject);
+  const object = useMemo(() => ({ ...instance, ...props }), [model, props]);
 
   return (
     <RigidBody {...object}>

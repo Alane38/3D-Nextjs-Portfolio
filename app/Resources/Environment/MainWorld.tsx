@@ -10,10 +10,8 @@ import {
   KillBrickComponent,
   RestaurantSignComponent,
   SpinnerComponent,
-  StairsComponent,
-  TextObjectComponent
+  StairsComponent
 } from "@resources/Class";
-import { TestObjectComponent } from "@resources/Class/Test/TestObject";
 import { Euler, Vector3 } from "three";
 
 export const MainWorld = () => {
@@ -47,10 +45,10 @@ export const MainWorld = () => {
 
       <group>
         {/* Entity Importations */}
-        <TextObjectComponent
+        {/* <TextObjectComponent
           position={new Vector3(3, 1, 0)}
           TextProps={{ text: "NEWALFOX" }}
-        />
+        /> */}
 
         <DiamondComponent position={new Vector3(3, 2, 0)} />
       </group>
@@ -80,8 +78,6 @@ export const MainWorld = () => {
       {/* <GlobalUI /> */}
       <RacingVehicle position={[15, 2, 0]} rotation={[0, Math.PI / 2, 0]} />
       {/* <Vehicle position={[8, 2, 0]} /> */}
-
-      <TestObjectComponent />
     </>
   );
 };
