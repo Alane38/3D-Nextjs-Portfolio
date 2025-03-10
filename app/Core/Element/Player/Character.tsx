@@ -73,7 +73,7 @@ export const Character = ({
         turnVelMultiplier={0.1}
         turnSpeed={5}
         sprintMult={1.8}
-        jumpVel={4.5}
+        jumpVel={6}
         jumpForceToGroundMult={1}
         slopJumpMult={0}
         sprintJumpMult={1}
@@ -103,18 +103,6 @@ export const Character = ({
         autoBalanceDampingC={0.2}
         autoBalanceSpringOnY={0.1}
         autoBalanceDampingOnY={0.02}
-        // Controller Keys
-        controllerKeys={{
-          forward: 12,
-          back: 13,
-          left: 14,
-          right: 15,
-          jump: 2,
-          action1: 11,
-          action2: 3,
-          action3: 1,
-          action4: 0,
-        }}
         onCollisionEnter={({ other }) => {
           if (other.rigidBodyObject?.name === "Spinner") {
             rb.current?.applyImpulse({ x: 3, y: 3, z: 3 }, true);

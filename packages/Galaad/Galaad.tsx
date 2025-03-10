@@ -37,12 +37,12 @@ const Galaad: ForwardRefRenderFunction<customRigidBody, GalaadProps> = (
     // TypeScript interface for Galaad component
     children,
     // Colliders settings
-    hitboxHeight = 0.35,
+    hitboxHeight = 0.5,
     hitboxWidth = 0.3,
-    hitboxLenght = 0.3,
+    hitboxLenght = 0.1,
     hitboxRadius = 0.3,
 
-    floatHeight = 0.3,
+    floatHeight = 0,
 
     // Character initial direction
     characterInitDir = 0, // Rad
@@ -122,14 +122,14 @@ const Galaad: ForwardRefRenderFunction<customRigidBody, GalaadProps> = (
     slopeRayOriginOffest = hitboxHeight - 0.03,
     slopeRayLength = hitboxHeight + 3,
     slopeRayDir = { x: 0, y: -1, z: 0 },
-    slopeUpExtraForce = 0.1,
+    slopeUpExtraForce = 0.05,
     slopeDownExtraForce = 0.2,
     // AutoBalance Force setups
     autoBalance = true,
-    autoBalanceSpringK = 0.3,
-    autoBalanceDampingC = 0.03,
-    autoBalanceSpringOnY = 0.5,
-    autoBalanceDampingOnY = 0.015,
+    autoBalanceSpringK = 0.2,
+    autoBalanceDampingC = 0.2,
+    autoBalanceSpringOnY = 0.1,
+    autoBalanceDampingOnY = 0.02,
     // Animation I/O
     animated = false,
     // Mode setups
@@ -915,7 +915,6 @@ const Galaad: ForwardRefRenderFunction<customRigidBody, GalaadProps> = (
       moveCharacter(delta, run, slopeAngle, movingObjectVelocity);
 
     // // Jump impulse
-
     if ((jump || button1Pressed) && (canJump || infiniteJump)) {
       const jumpStrength =
         (run ? sprintJumpMult * jumpVel : jumpVel) * slopJumpMult;
