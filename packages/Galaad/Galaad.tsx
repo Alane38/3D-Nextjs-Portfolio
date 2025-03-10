@@ -73,8 +73,8 @@ const Galaad: ForwardRefRenderFunction<customRigidBody, GalaadProps> = (
     camCollision = true,
     camCollisionOffset = 0.7,
     camCollisionSpeedMult = 4,
-    // Camera fixed rotation
-    controlCamRotMult = 1,
+    // Camera control rotation
+    controlCamRotMult = 0.5,
     // Follow light settings
     // Follow Light I/O
     followLight = false,
@@ -666,51 +666,53 @@ const Galaad: ForwardRefRenderFunction<customRigidBody, GalaadProps> = (
   };
 
   // // Point-to-move function
-  const pointToMove = (
-    delta: number,
-    slopeAngle: number,
-    movingObjectVelocity: THREE.Vector3,
-    functionKeyDown: boolean,
-  ) => {
-    const moveToPoint = getMoveToPoint().moveToPoint;
-    if (moveToPoint) {
-      pointToPoint.set(
-        moveToPoint.x - currentPos.x,
-        0,
-        moveToPoint.z - currentPos.z,
-      );
-      crossVector.crossVectors(pointToPoint, vectorZ);
-      // Rotate character to moving direction
-      modelEuler.y =
-        (crossVector.y > 0 ? -1 : 1) * pointToPoint.angleTo(vectorZ);
-      // If mode is also set to Control Camera. Keep the camera on the back of character.
-      if (isModeControlCamera)
-        pivot.rotation.y = THREE.MathUtils.lerp(
-          pivot.rotation.y,
-          modelEuler.y,
-          controlCamRotMult * delta * 3,
-        );
-      // Once character close to the target point (distance<0.3),
-      // Or character close to the wall (bodySensor intersects)
-      // stop moving
-      if (characterRef.current) {
-        if (pointToPoint.length() > 0.3 && !isBodyHitWall && !functionKeyDown) {
-          moveCharacter(delta, false, slopeAngle, movingObjectVelocity);
-          isPointMoving = true;
-        } else {
-          setMoveToPoint(new THREE.Vector3(0, 0, 0));
-          isPointMoving = false;
-        }
-      }
-    }
-  };
+  // const pointToMove = (
+  //   delta: number,
+  //   slopeAngle: number,
+  //   movingObjectVelocity: THREE.Vector3,
+  //   functionKeyDown: boolean,
+  // ) => {
+  //   const moveToPoint = getMoveToPoint().moveToPoint;
+  //   if (moveToPoint) {
+  //     pointToPoint.set(
+  //       moveToPoint.x - currentPos.x,
+  //       0,
+  //       moveToPoint.z - currentPos.z,
+  //     );
+  //     crossVector.crossVectors(pointToPoint, vectorZ);
+  //     // Rotate character to moving direction
+  //     modelEuler.y =
+  //       (crossVector.y > 0 ? -1 : 1) * pointToPoint.angleTo(vectorZ);
+  //     // If mode is also set to Control Camera. Keep the camera on the back of character.
+  //     if (isModeControlCamera)
+  //       pivot.rotation.y = THREE.MathUtils.lerp(
+  //         pivot.rotation.y,
+  //         modelEuler.y,
+  //         controlCamRotMult * delta * 3,
+  //       );
+  //     // Once character close to the target point (distance<0.3),
+  //     // Or character close to the wall (bodySensor intersects)
+  //     // stop moving
+  //     if (characterRef.current) {
+  //       if (pointToPoint.length() > 0.3 && !isBodyHitWall && !functionKeyDown) {
+  //         moveCharacter(delta, false, slopeAngle, movingObjectVelocity);
+  //         isPointMoving = true;
+  //       } else {
+  //         setMoveToPoint(new THREE.Vector3(0, 0, 0));
+  //         isPointMoving = false;
+  //       }
+  //     }
+  //   }
+  // };
 
   // // Stop character movement: used to stop the character movement when you stop press a key.
+  const resetAnimation = useGame((state) => state.reset);
   const characterStopMove = () => {
     setTimeout(() => {
       characterRef.current.setLinvel({ x: 0, y: currentVel.y, z: 0 }, true);
       characterRef.current.setAngvel({ x: 0, y: 0, z: 0 }, true);
     }, 200);
+    resetAnimation();
   };
 
   // Rotate camera function
@@ -913,7 +915,7 @@ const Galaad: ForwardRefRenderFunction<customRigidBody, GalaadProps> = (
       moveCharacter(delta, run, slopeAngle, movingObjectVelocity);
 
     // // Jump impulse
-   
+
     if ((jump || button1Pressed) && (canJump || infiniteJump)) {
       const jumpStrength =
         (run ? sprintJumpMult * jumpVel : jumpVel) * slopJumpMult;
@@ -989,7 +991,7 @@ const Galaad: ForwardRefRenderFunction<customRigidBody, GalaadProps> = (
 
     if (rayHit && rayHit.timeOfImpact < floatingDis + rayHitForgiveness) {
       if (slopeRayHit && actualSlopeAngle < slopeMaxAngle) {
-          canJump = true;
+        canJump = true;
       } else {
         canJump = false;
       }
@@ -1196,22 +1198,22 @@ const Galaad: ForwardRefRenderFunction<customRigidBody, GalaadProps> = (
     // // Apply auto balance force to the character
     if (autoBalance && characterRef.current) autoBalanceCharacter();
 
-    // // Point to move feature
-    if (isModePointToMove) {
-      functionKeyDown =
-        forward ||
-        back ||
-        left ||
-        right ||
-        joystickDis > 0 ||
-        gamepadKeys.forward ||
-        gamepadKeys.back ||
-        gamepadKeys.left ||
-        gamepadKeys.right ||
-        jump ||
-        button1Pressed;
-      pointToMove(delta, slopeAngle, movingObjectVelocity, functionKeyDown);
-    }
+    // // // Point to move feature
+    // if (isModePointToMove) {
+    //   functionKeyDown =
+    //     forward ||
+    //     back ||
+    //     left ||
+    //     right ||
+    //     joystickDis > 0 ||
+    //     gamepadKeys.forward ||
+    //     gamepadKeys.back ||
+    //     gamepadKeys.left ||
+    //     gamepadKeys.right ||
+    //     jump ||
+    //     button1Pressed;
+    //   pointToMove(delta, slopeAngle, movingObjectVelocity, functionKeyDown);
+    // }
 
     // // Camera
     // Rotate left ?
@@ -1245,7 +1247,8 @@ const Galaad: ForwardRefRenderFunction<customRigidBody, GalaadProps> = (
 
     // // Apply all the animations
     if (animated) {
-      if (
+      const isJumping = (jump || button1Pressed) && canJump;
+      const isIdle =
         !forward &&
         !back &&
         !left &&
@@ -1258,13 +1261,8 @@ const Galaad: ForwardRefRenderFunction<customRigidBody, GalaadProps> = (
         !gamepadKeys.back &&
         !gamepadKeys.left &&
         !gamepadKeys.right &&
-        canJump
-      ) {
-        idleAnimation?.(); // ✅ Safe call
-      } else if ((jump || button1Pressed) && canJump) {
-        jumpAnimation?.(); // ✅ Safe call
-      } else if (
-        canJump &&
+        canJump;
+      const isMoving =
         (forward ||
           back ||
           left ||
@@ -1274,15 +1272,22 @@ const Galaad: ForwardRefRenderFunction<customRigidBody, GalaadProps> = (
           gamepadKeys.forward ||
           gamepadKeys.back ||
           gamepadKeys.left ||
-          gamepadKeys.right)
-      ) {
-        run || runState ? runAnimation?.() : walkAnimation?.(); // ✅ Safe call
-      } else if (!canJump) {
-        jumpIdleAnimation?.(); // ✅ Safe call
+          gamepadKeys.right) &&
+        canJump;
+
+      if (isIdle) {
+        idleAnimation?.();
       }
-      // On high sky, play falling animation
+      if (isJumping) {
+        jumpAnimation?.();
+      } else if (isMoving) {
+        run || runState ? runAnimation?.() : walkAnimation?.();
+      } else if (!canJump) {
+        jumpIdleAnimation?.();
+      }
+      // Falling animation
       if (rayHit == null && isFalling) {
-        fallAnimation?.(); // ✅ Safe call
+        fallAnimation?.();
       }
     }
   });

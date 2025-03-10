@@ -4,8 +4,8 @@ import { subscribeWithSelector } from "zustand/middleware";
 import { AnimationSet } from "../types/AnimationSet";
 import { State } from "../types/State";
 
-export const useGame = /* @__PURE__ */ create(
-  /* @__PURE__ */ subscribeWithSelector<State>((set, get) => ({
+export const useGame = create(
+   subscribeWithSelector<State>((set, get) => ({
     moveToPoint: new THREE.Vector3(),
     curAnimation: "",
     animationSet: {} as AnimationSet,

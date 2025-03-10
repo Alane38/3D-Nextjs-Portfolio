@@ -11,9 +11,8 @@ export function GalaadAnimation(props: GalaadAnimationProps) {
   const animations = fbx.animations;
   const { actions } = useAnimations(animations, group);
 
-  /**bun de
-   * Character animations setup
-   */
+  // // Character animations setup
+
   const curAnimation = useGame((state) => state.curAnimation);
   const resetAnimation = useGame((state) => state.reset);
   const initializeAnimationSet = useGame(

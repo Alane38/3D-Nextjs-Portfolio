@@ -48,7 +48,7 @@ export const Character = ({
         disableControl={disableControl}
         disableFollowCam={disableFollowCam}
         // Direction & Camera
-        camMode="PointToMove"
+        camMode="ControlCamera"
         characterInitDir={0}
         camInitDis={-3.5}
         camMaxDis={-5}
@@ -62,7 +62,7 @@ export const Character = ({
         camCollision={true}
         camCollisionOffset={0.5}
         camCollisionSpeedMult={5}
-        controlCamRotMult={1.5}
+        controlCamRotMult={0.5}
         camListenerTarget="domElement"
         camFollowMult={10}
         camLerpMult={20}
@@ -90,7 +90,7 @@ export const Character = ({
         rayLength={0.35}
         rayDir={{ x: 0, y: -1, z: 0 }}
         springK={1.5}
-        dampingC={0.1}
+        dampingC={0}
         slopeMaxAngle={0.7}
         slopeRayOriginOffest={0.2}
         slopeRayLength={2}
@@ -100,8 +100,8 @@ export const Character = ({
         // Auto balance
         autoBalance={true}
         autoBalanceSpringK={0.2}
-        autoBalanceDampingC={0.05}
-        autoBalanceSpringOnY={0.2}
+        autoBalanceDampingC={0.2}
+        autoBalanceSpringOnY={0.1}
         autoBalanceDampingOnY={0.02}
         // Controller Keys
         controllerKeys={{
