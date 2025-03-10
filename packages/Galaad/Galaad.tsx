@@ -605,7 +605,7 @@ const Galaad: ForwardRefRenderFunction<customRigidBody, GalaadProps> = (
     bodyFacingVecOnY.set(bodyFacingVec.x, 0, bodyFacingVec.z);
     bodyBalanceVecOnZ.set(bodyBalanceVec.x, bodyBalanceVec.y, 0);
 
-    // Check if is camera based movement
+    // Check if is camera only movement
     if (isModeOnlyCamera) {
       modelEuler.y = pivot.rotation.y;
       pivot.getWorldDirection(modelFacingVec);
@@ -651,6 +651,10 @@ const Galaad: ForwardRefRenderFunction<customRigidBody, GalaadProps> = (
     // Apply balance torque impulse
     characterRef.current.applyTorqueImpulse(dragAngForce, true);
   };
+
+  if (isModeOnlyCamera) {
+    
+  }
 
   // // Character sleep function
   const sleepCharacter = () => {
