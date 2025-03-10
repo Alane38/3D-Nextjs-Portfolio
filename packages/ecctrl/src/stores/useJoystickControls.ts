@@ -20,7 +20,7 @@ export const useJoystickControls = /* @__PURE__ */ create(
       setJoystick: (
         joystickDis: number,
         joystickAng: number,
-        runState: boolean
+        runState: boolean,
       ) => {
         set(() => {
           return {
@@ -143,7 +143,7 @@ export const useJoystickControls = /* @__PURE__ */ create(
         };
       },
     };
-  })
+  }),
 );
 
 type State = {
@@ -158,7 +158,7 @@ type State = {
   setJoystick: (
     joystickDis: number,
     joystickAng: number,
-    runState: boolean
+    runState: boolean,
   ) => void;
   resetJoystick: () => void;
   pressButton1: () => void;

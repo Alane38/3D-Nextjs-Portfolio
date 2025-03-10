@@ -21,12 +21,14 @@ export const useLoadingAssets = () => {
 
   useEffect(() => {
     if (!navigator.gpu) {
-      console.warn("WebGPU non disponible, utilisation du CPU pour le chargement des assets.");
-      
+      console.warn(
+        "WebGPU non disponible, utilisation du CPU pour le chargement des assets.",
+      );
+
       let interval = setInterval(() => {
         setProgress((prev) => (prev < 100 ? prev + 5 : 100));
       }, 500);
-      
+
       return () => clearInterval(interval);
     }
   }, []);

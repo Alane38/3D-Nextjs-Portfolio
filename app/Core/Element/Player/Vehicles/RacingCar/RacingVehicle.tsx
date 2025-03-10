@@ -28,7 +28,11 @@ const _airControlAngVel = new THREE.Vector3();
 const _cameraPosition = new THREE.Vector3();
 const _cameraTarget = new THREE.Vector3();
 
-export const RacingVehicle = ({ position, rotation, defaultPlayer }: VehicleProps) => {
+export const RacingVehicle = ({
+  position,
+  rotation,
+  defaultPlayer,
+}: VehicleProps) => {
   const { player, updatePlayer } = usePlayerSelection();
   const { world, rapier } = useRapier();
   const threeControls = useThree((s) => s.controls);
@@ -152,7 +156,8 @@ export const RacingVehicle = ({ position, rotation, defaultPlayer }: VehicleProp
     controller.setWheelBrake(3, wheelBrake);
 
     const currentSteering = controller.wheelSteering(0) || 0;
-    const steerDirection = Number(controls.leftward) - Number(controls.rightward);
+    const steerDirection =
+      Number(controls.leftward) - Number(controls.rightward);
 
     const steering = THREE.MathUtils.lerp(
       currentSteering,
@@ -230,9 +235,6 @@ export const RacingVehicle = ({ position, rotation, defaultPlayer }: VehicleProp
 
     state.camera.lookAt(smoothedCameraTarget);
   });
-
-
-
 
   return (
     <>

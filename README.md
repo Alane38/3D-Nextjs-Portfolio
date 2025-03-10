@@ -118,6 +118,7 @@ bun dev
 - **Mouse** - Move Character
 - **Shift** - Run
 - **Space** - Jump OR Brake
+- **TAB**   - Lock Camera to Character
 - **R**     - Reset Character
 - **Click** - Interact with objects
 

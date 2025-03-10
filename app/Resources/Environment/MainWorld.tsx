@@ -32,7 +32,7 @@ export const MainWorld = () => {
     <>
       {/* <ObjectComponent /> */}
 
-      <Character path="FoxPam.fbx" defaultPlayer/>
+      <Character path="FoxPam.fbx" defaultPlayer />
 
       <group>
         {/* Ground */}

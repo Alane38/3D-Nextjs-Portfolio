@@ -5,7 +5,7 @@ import { AnimationSet } from "../types/AnimationSet";
 import { State } from "../types/State";
 
 export const useGame = create(
-   subscribeWithSelector<State>((set, get) => ({
+  subscribeWithSelector<State>((set, get) => ({
     moveToPoint: new THREE.Vector3(),
     curAnimation: "",
     animationSet: {} as AnimationSet,
@@ -38,50 +38,73 @@ export const useGame = create(
       const { animationSet, curAnimation } = get();
       if (curAnimation === animationSet.jumpIdle) {
         get().setAnimation(animationSet.jumpLand || "");
-      } else if (![animationSet.action1, animationSet.action2, animationSet.action3, animationSet.action4].includes(curAnimation)) {
-        get().setAnimation(animationSet.idle  || "");
+      } else if (
+        ![
+          animationSet.action1,
+          animationSet.action2,
+          animationSet.action3,
+          animationSet.action4,
+        ].includes(curAnimation)
+      ) {
+        get().setAnimation(animationSet.idle || "");
       }
     },
 
     walk: () => {
       const { curAnimation, animationSet } = get();
       if (curAnimation !== animationSet.action4) {
-        get().setAnimation(animationSet.walk  || "");
+        get().setAnimation(animationSet.walk || "");
       }
     },
 
     run: () => {
       const { curAnimation, animationSet } = get();
       if (curAnimation !== animationSet.action4) {
-        get().setAnimation(animationSet.run  || "");
+        get().setAnimation(animationSet.run || "");
       }
     },
 
-    jump: () => get().setAnimation(get().animationSet.jump  || ""),
+    jump: () => get().setAnimation(get().animationSet.jump || ""),
 
     jumpIdle: () => {
       const { curAnimation, animationSet } = get();
       if (curAnimation === animationSet.jump) {
-        get().setAnimation(animationSet.jumpIdle  || "");
+        get().setAnimation(animationSet.jumpIdle || "");
       }
     },
 
     jumpLand: () => {
       const { curAnimation, animationSet } = get();
       if (curAnimation === animationSet.jumpIdle) {
-        get().setAnimation(animationSet.jumpLand  || "");
+        get().setAnimation(animationSet.jumpLand || "");
       }
     },
 
-    fall: () => get().setAnimation(get().animationSet.fall  || ""),
+    fall: () => get().setAnimation(get().animationSet.fall || ""),
 
-    action1: () => get().setAnimation(get().animationSet.action1  || "", get().curAnimation === get().animationSet.idle),
-    action2: () => get().setAnimation(get().animationSet.action2  || "", get().curAnimation === get().animationSet.idle),
-    action3: () => get().setAnimation(get().animationSet.action3  || "", get().curAnimation === get().animationSet.idle),
+    action1: () =>
+      get().setAnimation(
+        get().animationSet.action1 || "",
+        get().curAnimation === get().animationSet.idle,
+      ),
+    action2: () =>
+      get().setAnimation(
+        get().animationSet.action2 || "",
+        get().curAnimation === get().animationSet.idle,
+      ),
+    action3: () =>
+      get().setAnimation(
+        get().animationSet.action3 || "",
+        get().curAnimation === get().animationSet.idle,
+      ),
     action4: () => {
       const { curAnimation, animationSet } = get();
-      if ([animationSet.idle, animationSet.walk, animationSet.run].includes(curAnimation)) {
-        get().setAnimation(animationSet.action4  || "");
+      if (
+        [animationSet.idle, animationSet.walk, animationSet.run].includes(
+          curAnimation,
+        )
+      ) {
+        get().setAnimation(animationSet.action4 || "");
       }
     },
 
@@ -93,8 +116,5 @@ export const useGame = create(
     getMoveToPoint: () => ({
       moveToPoint: get().moveToPoint,
     }),
-  }))
+  })),
 );
-
-
-
