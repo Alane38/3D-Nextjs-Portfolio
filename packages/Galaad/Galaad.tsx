@@ -2,19 +2,16 @@ import {
   Collider,
   QueryFilterFlags,
   RayColliderHit,
-  RoundCuboid,
   Vector,
 } from "@dimforge/rapier3d-compat";
 import { useKeyboardControls } from "@react-three/drei";
 import { useFrame } from "@react-three/fiber";
 import {
-  CuboidCollider,
   CylinderCollider,
   quat,
-  RapierCollider,
   RigidBody,
   RoundCuboidCollider,
-  useRapier
+  useRapier,
 } from "@react-three/rapier";
 import {
   forwardRef,
@@ -44,7 +41,7 @@ const Galaad: ForwardRefRenderFunction<customRigidBody, GalaadProps> = (
     hitboxWidth = 0.3,
     hitboxLenght = 0.3,
     hitboxRadius = 0.3,
-    
+
     floatHeight = 0.3,
 
     // Character initial direction
@@ -88,7 +85,7 @@ const Galaad: ForwardRefRenderFunction<customRigidBody, GalaadProps> = (
     maxVelLim = 2.5,
     // Turn vel/speed
     turnVelMultiplier = 0.2,
-    turnSpeed = 15,
+    turnSpeed = 5,
     // Sprint
     sprintMult = 2,
     // Jump
@@ -112,18 +109,18 @@ const Galaad: ForwardRefRenderFunction<customRigidBody, GalaadProps> = (
     // Wake up
     wakeUpDelay = 200,
     // Floating Ray setups
-    rayOriginOffest = { x: 0, y: -hitboxWidth , z: 0 },
+    rayOriginOffest = { x: 0, y: -hitboxWidth, z: 0 },
     rayHitForgiveness = 0.1,
-    rayLength = hitboxHeight   + 2,
+    rayLength = hitboxHeight + 2,
     rayDir = { x: 0, y: -1, z: 0 },
-    floatingDis = hitboxHeight   + floatHeight,
+    floatingDis = hitboxHeight + floatHeight,
     springK = 1.2,
     dampingC = 0.08,
     // Slope Ray setups
     showSlopeRayOrigin = false,
     slopeMaxAngle = 1, // in rad
-    slopeRayOriginOffest = hitboxHeight   - 0.03,
-    slopeRayLength = hitboxHeight   + 3,
+    slopeRayOriginOffest = hitboxHeight - 0.03,
+    slopeRayLength = hitboxHeight + 3,
     slopeRayDir = { x: 0, y: -1, z: 0 },
     slopeUpExtraForce = 0.1,
     slopeDownExtraForce = 0.2,
@@ -151,8 +148,8 @@ const Galaad: ForwardRefRenderFunction<customRigidBody, GalaadProps> = (
       action4: 0,
     },
     // Point-to-move setups
-    bodySensorSize = [hitboxHeight  / 2, hitboxWidth ],
-    bodySensorPosition = { x: 0, y: 0, z: hitboxWidth  / 2 },
+    bodySensorSize = [hitboxHeight / 2, hitboxWidth],
+    bodySensorPosition = { x: 0, y: 0, z: hitboxWidth / 2 },
     // Other rigibody props from parent
 
     // custom props
@@ -162,6 +159,7 @@ const Galaad: ForwardRefRenderFunction<customRigidBody, GalaadProps> = (
   }: GalaadProps,
   ref,
 ) => {
+  // // 
   const characterRef = useRef<customRigidBody>(null!);
   const characterModelRef = useRef<THREE.Group>(null!);
   const characterModelIndicator = useMemo(() => new THREE.Object3D(), []);
@@ -176,6 +174,7 @@ const Galaad: ForwardRefRenderFunction<customRigidBody, GalaadProps> = (
     action3: 1,
     action4: 0,
   };
+  // // 
   useImperativeHandle(ref, () => {
     if (!characterRef.current) {
       throw new Error("characterRef is not initialized");
@@ -187,7 +186,7 @@ const Galaad: ForwardRefRenderFunction<customRigidBody, GalaadProps> = (
     return characterRef.current;
   }, [characterRef]);
 
-  // Move and Camera mode
+  // // Move and Camera mode
   const setMoveToPoint = useGame((state) => state.setMoveToPoint);
   const modeSet = new Set(camMode?.split(" ") || []);
 
@@ -196,7 +195,7 @@ const Galaad: ForwardRefRenderFunction<customRigidBody, GalaadProps> = (
   const isModeOnlyCamera = modeSet.has("OnlyCamera");
   const isModeControlCamera = modeSet.has("ControlCamera");
 
-  // Body collider
+  // // Body collider
   const vector3Factory = () => useMemo(() => new THREE.Vector3(), []);
 
   const modelFacingVec = vector3Factory();
@@ -221,13 +220,16 @@ const Galaad: ForwardRefRenderFunction<customRigidBody, GalaadProps> = (
   const runAnimation = !animated ? null : useGame((state) => state.run);
   const jumpAnimation = !animated ? null : useGame((state) => state.jump);
   const jumpIdleAnimation = !animated
-    ? null
-    : useGame((state) => state.jumpIdle);
+  ? null
+  : useGame((state) => state.jumpIdle);
   const fallAnimation = !animated ? null : useGame((state) => state.fall);
   const action1Animation = !animated ? null : useGame((state) => state.action1);
   const action2Animation = !animated ? null : useGame((state) => state.action2);
   const action3Animation = !animated ? null : useGame((state) => state.action3);
   const action4Animation = !animated ? null : useGame((state) => state.action4);
+  
+  // World setup
+  const { rapier, world } = useRapier();
 
   // Check if controls exists
   const inKeyboardControls = insideKeyboardControls();
@@ -245,8 +247,7 @@ const Galaad: ForwardRefRenderFunction<customRigidBody, GalaadProps> = (
     run: false,
   };
 
-  //Joystick controls setup
-
+  // // Joystick controls setup
   const getJoystickValues = useJoystick((state) => state.getJoystickValues);
   const pressButton1 = useJoystick((state) => state.pressButton);
   const pressButton2 = useJoystick((state) => state.pressButton);
@@ -257,9 +258,8 @@ const Galaad: ForwardRefRenderFunction<customRigidBody, GalaadProps> = (
   const setJoystick = useJoystick((state) => state.setJoystick);
   const resetJoystick = useJoystick((state) => state.resetJoystick);
 
-  /**
-   * Gamepad controls setup
-   */
+  // // Gamepad controls setup
+
   const [controllerIndex, setControllerIndex] = useState<number | null>(null);
   const gamepadKeys = {
     forward: false,
@@ -330,10 +330,8 @@ const Galaad: ForwardRefRenderFunction<customRigidBody, GalaadProps> = (
     }
   };
 
-  // World setup
-  const { rapier, world } = useRapier();
 
-  // Can jump
+  // // Can jump State
   let canJump = false;
   let isFalling = false;
   const initialGravityScale: number = useMemo(
@@ -341,7 +339,7 @@ const Galaad: ForwardRefRenderFunction<customRigidBody, GalaadProps> = (
     [],
   );
 
-  // inMotion State
+  // // inMotion State
   let massRatio: number = 1;
   let inMotion: boolean = false;
   const standingForcePoint: THREE.Vector3 = useMemo(
@@ -370,7 +368,7 @@ const Galaad: ForwardRefRenderFunction<customRigidBody, GalaadProps> = (
   );
   const velocityDiff: THREE.Vector3 = useMemo(() => new THREE.Vector3(), []);
 
-  // Follow cam initial setups
+  // // Follow cam initial setups
   const cameraSetups = {
     disableFollowCam,
     disableFollowCamPos,
@@ -386,7 +384,7 @@ const Galaad: ForwardRefRenderFunction<customRigidBody, GalaadProps> = (
     camListenerTarget,
   };
 
-  // Load camera pivot and character move
+  // // Load camera pivot and character move
   const { pivot, followCam, cameraCollisionDetect, joystickCamMove } =
     useFollowCam(cameraSetups);
   const pivotPosition: THREE.Vector3 = useMemo(() => new THREE.Vector3(), []);
@@ -420,7 +418,7 @@ const Galaad: ForwardRefRenderFunction<customRigidBody, GalaadProps> = (
   const wantToMoveVel: THREE.Vector3 = useMemo(() => new THREE.Vector3(), []);
   const rejectVel: THREE.Vector3 = useMemo(() => new THREE.Vector3(), []);
 
-  // Ray Force
+  // // Ray Force
   let floatingForce = null;
   const springDirVec: THREE.Vector3 = useMemo(() => new THREE.Vector3(), []);
   const characterMassForce: THREE.Vector3 = useMemo(
@@ -431,7 +429,7 @@ const Galaad: ForwardRefRenderFunction<customRigidBody, GalaadProps> = (
   const rayCast = new rapier.Ray(rayOrigin, rayDir);
   let rayHit: RayColliderHit | null = null;
 
-  // Slope Detection Ray
+  // // Slope Detection Ray
   let slopeAngle: number = 0;
   let actualSlopeNormal: Vector;
   let actualSlopeAngle: number = 0;
@@ -462,6 +460,7 @@ const Galaad: ForwardRefRenderFunction<customRigidBody, GalaadProps> = (
     isBodyHitWall = false;
   };
 
+  // //  Move Character
   let characterRotated: boolean = true;
   const moveCharacter = (
     _: number,
@@ -491,11 +490,10 @@ const Galaad: ForwardRefRenderFunction<customRigidBody, GalaadProps> = (
       movingDirection.set(0, 0, 1);
     }
 
-    // Apply character quaternion to moving direction
+    // // Apply character quaternion to moving direction
     movingDirection.applyQuaternion(characterModelIndicator.quaternion);
 
-    // Moving object conditions
-
+    // // Moving object conditions
     // Calculate moving object velocity direction according to character moving direction
     movingObjectVelocityInCharacterDir
       .copy(movingObjectVelocity)
@@ -505,7 +503,7 @@ const Galaad: ForwardRefRenderFunction<customRigidBody, GalaadProps> = (
     const angleBetweenCharacterDirAndObjectDir =
       movingObjectVelocity.angleTo(movingDirection);
 
-    // Setup Rejection Velocity
+    // // Setup Rejection Velocity
     const wantToMoveMeg = currentVel.dot(movingDirection);
     wantToMoveVel.set(
       movingDirection.x * wantToMoveMeg,
@@ -595,7 +593,7 @@ const Galaad: ForwardRefRenderFunction<customRigidBody, GalaadProps> = (
     );
   };
 
-  // Character auto balance function
+  // // Character auto balance function
   const autoBalanceCharacter = () => {
     // Match body component to character model rotation on Y
     bodyFacingVec
@@ -656,7 +654,7 @@ const Galaad: ForwardRefRenderFunction<customRigidBody, GalaadProps> = (
     characterRef.current.applyTorqueImpulse(dragAngForce, true);
   };
 
-  // Character sleep function
+  // // Character sleep function
   const sleepCharacter = () => {
     if (characterRef.current) {
       if (document.visibilityState === "hidden") {
@@ -669,7 +667,7 @@ const Galaad: ForwardRefRenderFunction<customRigidBody, GalaadProps> = (
     }
   };
 
-  // Point-to-move function
+  // // Point-to-move function
   const pointToMove = (
     delta: number,
     slopeAngle: number,
@@ -709,7 +707,7 @@ const Galaad: ForwardRefRenderFunction<customRigidBody, GalaadProps> = (
     }
   };
 
-  // Stop character movement: used to stop the character movement when you stop press a key.
+  // // Stop character movement: used to stop the character movement when you stop press a key.
   const characterStopMove = () => {
     setTimeout(() => {
       characterRef.current.setLinvel({ x: 0, y: currentVel.y, z: 0 }, true);
@@ -726,12 +724,12 @@ const Galaad: ForwardRefRenderFunction<customRigidBody, GalaadProps> = (
     );
   };
 
-  // Rotate character on Y
+  // // Rotate character on Y
   const rotateCharacterOnY = (rad: number) => {
     modelEuler.y += rad;
   };
 
-  // If inside keyboardcontrols, active subscribeKeys
+  // // If inside keyboardcontrols, active subscribeKeys
   if (inKeyboardControls) {
     useEffect(() => {
       // Action 1 key subscribe for special animation
@@ -783,6 +781,7 @@ const Galaad: ForwardRefRenderFunction<customRigidBody, GalaadProps> = (
     });
   }
 
+// // 
   useEffect(() => {
     // Lock character rotations at Y axis
     characterRef.current.setEnabledRotations(
@@ -800,7 +799,7 @@ const Galaad: ForwardRefRenderFunction<customRigidBody, GalaadProps> = (
       }
     };
   }, [autoBalance]);
-
+ // // 
   useEffect(() => {
     // Initialize character facing direction
     modelEuler.y = characterInitDir;
@@ -816,10 +815,11 @@ const Galaad: ForwardRefRenderFunction<customRigidBody, GalaadProps> = (
     };
   }, []);
 
+  // // 
   useFrame((state, delta) => {
     if (delta > 1) delta %= 1;
 
-    // Character current position/velocity
+    // // Character current position/velocity
     if (characterRef.current) {
       currentPos.copy(characterRef.current.translation() as THREE.Vector3);
       currentVel.copy(characterRef.current.linvel() as THREE.Vector3);
@@ -831,7 +831,7 @@ const Galaad: ForwardRefRenderFunction<customRigidBody, GalaadProps> = (
       (characterRef.current.userData as CharacterState).inMotion = inMotion;
     }
 
-    // Camera movement
+    // // Camera movement
     pivotXAxis.set(1, 0, 0);
     pivotXAxis.applyQuaternion(pivot.quaternion);
     pivotZAxis.set(0, 0, 1);
@@ -841,7 +841,7 @@ const Galaad: ForwardRefRenderFunction<customRigidBody, GalaadProps> = (
       .addScaledVector(pivotXAxis, camTargetPos.x)
       .addScaledVector(
         pivotYAxis,
-        camTargetPos.y + (hitboxHeight  + hitboxWidth / 2),
+        camTargetPos.y + (hitboxHeight + hitboxWidth / 2),
       )
       .addScaledVector(pivotZAxis, camTargetPos.z);
     pivot.position.lerp(pivotPosition, 1 - Math.exp(-camFollowMult * delta));
@@ -855,10 +855,10 @@ const Galaad: ForwardRefRenderFunction<customRigidBody, GalaadProps> = (
       state.camera.lookAt(pivot.position);
     }
 
-    // Camera collision detect
+    // // Camera collision detect
     camCollision && cameraCollisionDetect(delta);
 
-    // Getting all the useful keys from useKeyboardControls
+    // // Getting all the useful keys from useKeyboardControls
     const { forward, back, left, right, jump, run } = inKeyboardControls
       ? (getKeys?.() ?? presetKeys)
       : presetKeys;
@@ -871,9 +871,7 @@ const Galaad: ForwardRefRenderFunction<customRigidBody, GalaadProps> = (
       characterStopMove();
     }
 
-    /**
-     * Getting all gamepad control values
-     */
+    // // Getting all gamepad control values
     if (controllerIndex !== null) {
       const gamepad = navigator.getGamepads()[controllerIndex];
       if (!gamepad) return;
@@ -886,9 +884,7 @@ const Galaad: ForwardRefRenderFunction<customRigidBody, GalaadProps> = (
       );
     }
 
-    /**
-     * Getting all joystick control values
-     */
+    // // Getting all joystick control values
     const { joystickDis, joystickAng, runState, button1Pressed } =
       getJoystickValues();
 
@@ -905,7 +901,7 @@ const Galaad: ForwardRefRenderFunction<customRigidBody, GalaadProps> = (
       getObjectDirection(forward, back, left, right, pivot),
     );
 
-    // Move character to the moving direction
+    // // Move character to the moving direction
     if (
       forward ||
       back ||
@@ -918,50 +914,49 @@ const Galaad: ForwardRefRenderFunction<customRigidBody, GalaadProps> = (
     )
       moveCharacter(delta, run, slopeAngle, movingObjectVelocity);
 
-    // Jump impulse
+    // // Jump impulse
     if ((jump || button1Pressed) && (canJump || infiniteJump)) {
-      // characterRef.current.applyImpulse(jumpDirection.set(0, 0.5, 0), true);
+      const jumpStrength =
+        (run ? sprintJumpMult * jumpVel : jumpVel) * slopJumpMult;
       jumpVelocityVec.set(
         currentVel.x,
         run ? sprintJumpMult * jumpVel : jumpVel,
         currentVel.z,
       );
-      // Apply slope normal to jump direction
+
       characterRef.current.setLinvel(
         jumpDirection
-          .set(0, (run ? sprintJumpMult * jumpVel : jumpVel) * slopJumpMult, 0)
+          .set(0, jumpStrength, 0)
           .projectOnVector(actualSlopeNormalVec)
           .add(jumpVelocityVec),
         true,
       );
-      // Apply jump force downward to the standing platform
+
+      // // Appliquer la force de saut vers le bas sur la plateforme
       characterMassForce.y *= jumpForceToGroundMult;
       rayHit?.collider
         .parent()
         ?.applyImpulseAtPoint(characterMassForce, standingForcePoint, true);
     }
 
-    // Rotate character Indicator
+    // // Rotation de l'indicateur du personnage
     modelQuat.setFromEuler(modelEuler);
     characterModelIndicator.quaternion.rotateTowards(
       modelQuat,
       delta * turnSpeed,
     );
 
-    // If autobalance is off, rotate character model itself
+    //// Gestion de l'autobalance
     if (!autoBalance) {
-      if (isModeOnlyCamera) {
-        characterModelRef.current.quaternion.copy(pivot.quaternion);
-      } else {
-        characterModelRef.current.quaternion.copy(
-          characterModelIndicator.quaternion,
-        );
-      }
+      characterModelRef.current.quaternion.copy(
+        isModeOnlyCamera
+          ? pivot.quaternion
+          : characterModelIndicator.quaternion,
+      );
     }
 
-    /**
-     * Ray casting detect if on ground
-     */
+    // // Ray casting detect if on ground
+
     rayOrigin.addVectors(currentPos, rayOriginOffest as THREE.Vector3);
     rayHit = world.castRay(
       rayCast,
@@ -979,9 +974,9 @@ const Galaad: ForwardRefRenderFunction<customRigidBody, GalaadProps> = (
       ) => boolean,
     );
 
-    console.log(rayHit)
+    console.log(rayHit);
 
-    /**Test shape ray */
+    // //  Test shape ray
     // rayHit = world.castShape(
     //   currentPos,
     //   { w: 0, x: 0, y: 0, z: 0 },
@@ -997,122 +992,95 @@ const Galaad: ForwardRefRenderFunction<customRigidBody, GalaadProps> = (
     if (rayHit && rayHit.timeOfImpact < floatingDis + rayHitForgiveness) {
       if (slopeRayHit && actualSlopeAngle < slopeMaxAngle) {
         canJump = true;
-        console.log("can jump -> true", canJump);
-
-        
-    } else {
-      canJump = false;
-      console.log("can jump -> false", canJump);
-      
+      } else {
+        canJump = false;
+      }
     }
-  }
 
-    /**
-     * Ray detect if on rigid body or dynamic platform, then apply the linear velocity and angular velocity to character
-     */
+    // // Ray detect if on rigid body or dynamic platform, then apply the linear velocity and angular velocity to character
+
     if (rayHit && canJump) {
-      if (rayHit.collider.parent()) {
-        // Getting the standing force apply point
-        standingForcePoint.set(
-          rayOrigin.x,
-          rayOrigin.y - rayHit.timeOfImpact,
-          rayOrigin.z,
-        );
-        const rayHitObjectBodyType = rayHit.collider.parent()?.bodyType();
-        const rayHitObjectBodyMass = rayHit.collider.parent()?.mass();
-        if (!rayHitObjectBodyMass) return;
-        massRatio = characterRef.current.mass() / rayHitObjectBodyMass;
-        // Body type 0 is rigid body, body type 1 is fixed body, body type 2 is kinematic body
-        if (rayHitObjectBodyType === 0 || rayHitObjectBodyType === 2) {
-          inMotion = true;
-          // Calculate distance between character and moving object
-          distanceFromCharacterToObject
-            .copy(currentPos)
-            .sub(rayHit.collider.parent()?.translation() as THREE.Vector3);
-          // Moving object linear velocity
-          const movingObjectLinvel = rayHit.collider
-            .parent()
-            ?.linvel() as THREE.Vector3;
-          // Moving object angular velocity
-          const movingObjectAngvel = rayHit.collider
-            .parent()
-            ?.angvel() as THREE.Vector3;
-          // Combine object linear velocity and angular velocity to movingObjectVelocity
-          movingObjectVelocity
-            .set(
-              movingObjectLinvel.x +
-                objectAngvelToLinvel.crossVectors(
-                  movingObjectAngvel,
-                  distanceFromCharacterToObject,
-                ).x,
-              movingObjectLinvel.y,
-              movingObjectLinvel.z +
-                objectAngvelToLinvel.crossVectors(
-                  movingObjectAngvel,
-                  distanceFromCharacterToObject,
-                ).z,
-            )
-            .multiplyScalar(Math.min(1, 1 / massRatio));
-          // If the velocity diff is too high (> 30), ignore movingObjectVelocity
-          velocityDiff.subVectors(movingObjectVelocity, currentVel);
-          if (velocityDiff.length() > 30)
-            movingObjectVelocity.multiplyScalar(1 / velocityDiff.length());
+      const parent = rayHit.collider.parent();
+      if (!parent) return;
 
-          // Apply opposite drage force to the stading rigid body, body type 0
-          // Character moving and unmoving should provide different drag force to the platform
-          if (rayHitObjectBodyType === 0) {
-            if (
+      standingForcePoint.set(
+        rayOrigin.x,
+        rayOrigin.y - rayHit.timeOfImpact,
+        rayOrigin.z,
+      );
+      const bodyType = parent.bodyType(),
+        bodyMass = parent.mass();
+      if (!bodyMass) return;
+
+      massRatio = characterRef.current.mass() / bodyMass;
+
+      if (bodyType === 0 || bodyType === 2) {
+        inMotion = true;
+        distanceFromCharacterToObject
+          .copy(currentPos)
+          .sub(parent.translation());
+        const movingObjectLinvel = parent.linvel(),
+          movingObjectAngvel = parent.angvel();
+        movingObjectVelocity
+          .set(
+            movingObjectLinvel.x +
+              objectAngvelToLinvel.crossVectors(
+                movingObjectAngvel,
+                distanceFromCharacterToObject,
+              ).x,
+            movingObjectLinvel.y,
+            movingObjectLinvel.z +
+              objectAngvelToLinvel.crossVectors(
+                movingObjectAngvel,
+                distanceFromCharacterToObject,
+              ).z,
+          )
+          .multiplyScalar(Math.min(1, 1 / massRatio));
+
+        velocityDiff.subVectors(movingObjectVelocity, currentVel);
+        if (velocityDiff.length() > 30)
+          movingObjectVelocity.multiplyScalar(1 / velocityDiff.length());
+
+        if (bodyType === 0) {
+          movingObjectDragForce
+            .copy(
               !forward &&
-              !back &&
-              !left &&
-              !right &&
-              canJump &&
-              joystickDis === 0 &&
-              !isPointMoving &&
-              !gamepadKeys.forward &&
-              !gamepadKeys.back &&
-              !gamepadKeys.left &&
-              !gamepadKeys.right
-            ) {
-              movingObjectDragForce
-                .copy(bodyContactForce)
-                .multiplyScalar(delta)
-                .multiplyScalar(Math.min(1, 1 / massRatio)) // Scale up/down base on different masses ratio
-                .negate();
-              bodyContactForce.set(0, 0, 0);
-            } else {
-              movingObjectDragForce
-                .copy(moveImpulse)
-                .multiplyScalar(Math.min(1, 1 / massRatio)) // Scale up/down base on different masses ratio
-                .negate();
-            }
-            rayHit.collider
-              .parent()
-              ?.applyImpulseAtPoint(
-                movingObjectDragForce,
-                standingForcePoint,
-                true,
-              );
-          }
-        } else {
-          // on fixed body
-          massRatio = 1;
-          inMotion = false;
+                !back &&
+                !left &&
+                !right &&
+                canJump &&
+                joystickDis === 0 &&
+                !isPointMoving &&
+                !gamepadKeys.forward &&
+                !gamepadKeys.back &&
+                !gamepadKeys.left &&
+                !gamepadKeys.right
+                ? bodyContactForce.multiplyScalar(delta)
+                : moveImpulse,
+            )
+            .multiplyScalar(Math.min(1, 1 / massRatio))
+            .negate();
+
           bodyContactForce.set(0, 0, 0);
-          movingObjectVelocity.set(0, 0, 0);
+          parent.applyImpulseAtPoint(
+            movingObjectDragForce,
+            standingForcePoint,
+            true,
+          );
         }
+      } else {
+        inMotion = false;
+        bodyContactForce.set(0, 0, 0);
+        movingObjectVelocity.set(0, 0, 0);
       }
     } else {
-      // in the air
       massRatio = 1;
       inMotion = false;
       bodyContactForce.set(0, 0, 0);
       movingObjectVelocity.set(0, 0, 0);
     }
 
-    /**
-     * Slope ray casting detect if on slope
-     */
+    // // Slope ray casting detect if on slope
     slopeRayOriginRef.current.getWorldPosition(slopeRayorigin);
     slopeRayorigin.y = rayOrigin.y;
     slopeRayHit = world.castRay(
@@ -1138,34 +1106,26 @@ const Galaad: ForwardRefRenderFunction<customRigidBody, GalaadProps> = (
         slopeRayLength,
         false,
       )?.normal as THREE.Vector3;
-      if (actualSlopeNormal) {
-        actualSlopeNormalVec?.set(
-          actualSlopeNormal.x,
-          actualSlopeNormal.y,
-          actualSlopeNormal.z,
-        );
-        actualSlopeAngle = actualSlopeNormalVec?.angleTo(floorNormal);
-      }
-    }
-    if (slopeRayHit && rayHit && slopeRayHit.timeOfImpact < floatingDis + 0.5) {
-      if (canJump) {
-        // Round the slope angle to 2 decimal places
-        slopeAngle = Number(
-          Math.atan(
-            (rayHit.timeOfImpact - slopeRayHit.timeOfImpact) /
-              slopeRayOriginOffest,
-          ).toFixed(2),
-        );
-      } else {
-        slopeAngle;
-      }
-    } else {
-      slopeAngle;
+
+      actualSlopeNormalVec?.copy(actualSlopeNormal);
+      actualSlopeAngle = actualSlopeNormalVec?.angleTo(floorNormal);
     }
 
-    /**
-     * Apply floating force
-     */
+    if (
+      slopeRayHit &&
+      rayHit &&
+      slopeRayHit.timeOfImpact < floatingDis + 0.5 &&
+      canJump
+    ) {
+      slopeAngle = Number(
+        Math.atan(
+          (rayHit.timeOfImpact - slopeRayHit.timeOfImpact) /
+            slopeRayOriginOffest,
+        ).toFixed(2),
+      );
+    }
+
+    // // Apply floating force
     if (rayHit != null) {
       if (canJump && rayHit.collider.parent()) {
         floatingForce =
@@ -1198,59 +1158,48 @@ const Galaad: ForwardRefRenderFunction<customRigidBody, GalaadProps> = (
       !gamepadKeys.left &&
       !gamepadKeys.right
     ) {
-      // not on a moving object
-      if (!inMotion) {
-        dragForce.set(
-          -currentVel.x * dragDampingC,
-          0,
-          -currentVel.z * dragDampingC,
-        );
-        characterRef.current.applyImpulse(dragForce, false);
-      }
-      // on a moving object
-      else {
-        dragForce.set(
-          (movingObjectVelocity.x - currentVel.x) * dragDampingC,
-          0,
-          (movingObjectVelocity.z - currentVel.z) * dragDampingC,
-        );
-        characterRef.current.applyImpulse(dragForce, true);
-      }
+      const isMovingObject = inMotion;
+      const velocityDiffX = isMovingObject
+        ? movingObjectVelocity.x - currentVel.x
+        : -currentVel.x;
+      const velocityDiffZ = isMovingObject
+        ? movingObjectVelocity.z - currentVel.z
+        : -currentVel.z;
+
+      dragForce.set(
+        velocityDiffX * dragDampingC,
+        0,
+        velocityDiffZ * dragDampingC,
+      );
+      characterRef.current.applyImpulse(dragForce, isMovingObject);
     }
 
-    // Detect character falling state
+    // // Detect character falling state
     isFalling = currentVel.y < 0 && !canJump ? true : false;
 
-    /**
-     * Setup max falling speed && extra falling gravity
-     * Remove gravity if falling speed higher than fallingMaxVel (negetive number so use "<")
-     */
-    if (characterRef.current) {
-      if (currentVel.y < fallingMaxVel) {
-        if (characterRef.current.gravityScale() !== 0) {
-          characterRef.current.setGravityScale(0, true);
-        }
-      } else {
-        if (
-          !isFalling &&
-          characterRef.current.gravityScale() !== initialGravityScale
-        ) {
-          // Apply initial gravity after landed
-          characterRef.current.setGravityScale(initialGravityScale, true);
-        } else if (
-          isFalling &&
-          characterRef.current.gravityScale() !== fallingGravityScale
-        ) {
-          // Apply larger gravity when falling (if initialGravityScale === fallingGravityScale, won't trigger this)
-          characterRef.current.setGravityScale(fallingGravityScale, true);
-        }
+    // // Setup max falling speed && extra falling gravity
+    // Remove gravity if falling speed higher than fallingMaxVel (negetive number so use "<")
+    if (!characterRef.current) return;
+
+    const currentGravity = characterRef.current.gravityScale();
+
+    if (currentVel.y < fallingMaxVel) {
+      if (currentGravity !== 0) {
+        characterRef.current.setGravityScale(0, true);
+      }
+    } else {
+      const targetGravity = isFalling
+        ? fallingGravityScale
+        : initialGravityScale;
+      if (currentGravity !== targetGravity) {
+        characterRef.current.setGravityScale(targetGravity, true);
       }
     }
 
-    // Apply auto balance force to the character
+    // // Apply auto balance force to the character
     if (autoBalance && characterRef.current) autoBalanceCharacter();
 
-    // Point to move feature
+    // // Point to move feature
     if (isModePointToMove) {
       functionKeyDown =
         forward ||
@@ -1267,36 +1216,37 @@ const Galaad: ForwardRefRenderFunction<customRigidBody, GalaadProps> = (
       pointToMove(delta, slopeAngle, movingObjectVelocity, functionKeyDown);
     }
 
-    // Control camera feature
+    // // Camera
+    // Rotate left ?
+    const isRotatingLeft =
+      left ||
+      gamepadKeys.left ||
+      ((joystickDis > 0 || gamepadJoystickDis > 0) &&
+        ((joystickAng > (2 * Math.PI) / 3 && joystickAng < (4 * Math.PI) / 3) ||
+          (gamepadJoystickAng > (2 * Math.PI) / 3 &&
+            gamepadJoystickAng < (4 * Math.PI) / 3)));
+
+    // Rotate right ?
+    const isRotatingRight =
+      right ||
+      gamepadKeys.right ||
+      ((joystickDis > 0 || gamepadJoystickDis > 0) &&
+        (joystickAng < Math.PI / 3 ||
+          joystickAng > (5 * Math.PI) / 3 ||
+          gamepadJoystickAng < Math.PI / 3 ||
+          gamepadJoystickAng > (5 * Math.PI) / 3));
+
+    // Camera Rotation
     if (isModeControlCamera) {
-      if (
-        left ||
-        gamepadKeys.left ||
-        (joystickDis > 0 &&
-          joystickAng > (2 * Math.PI) / 3 &&
-          joystickAng < (4 * Math.PI) / 3) ||
-        (gamepadJoystickDis > 0 &&
-          gamepadJoystickAng > (2 * Math.PI) / 3 &&
-          gamepadJoystickAng < (4 * Math.PI) / 3)
-      ) {
-        pivot.rotation.y += run
-          ? delta * sprintMult * controlCamRotMult
-          : delta * controlCamRotMult;
-      } else if (
-        right ||
-        gamepadKeys.right ||
-        (joystickDis > 0 && joystickAng < Math.PI / 3) ||
-        joystickAng > (5 * Math.PI) / 3 ||
-        (gamepadJoystickDis > 0 && gamepadJoystickAng < Math.PI / 3) ||
-        gamepadJoystickAng > (5 * Math.PI) / 3
-      ) {
-        pivot.rotation.y -= run
-          ? delta * sprintMult * controlCamRotMult
-          : delta * controlCamRotMult;
+      const rotationSpeed = delta * controlCamRotMult * (run ? sprintMult : 1);
+      if (isRotatingLeft) {
+        pivot.rotation.y += rotationSpeed;
+      } else if (isRotatingRight) {
+        pivot.rotation.y -= rotationSpeed;
       }
     }
 
-    // Apply all the animations
+    // // Apply all the animations
     if (animated) {
       if (
         !forward &&
@@ -1340,7 +1290,6 @@ const Galaad: ForwardRefRenderFunction<customRigidBody, GalaadProps> = (
     }
   });
 
-
   return (
     <RigidBody
       ref={characterRef}
@@ -1355,7 +1304,7 @@ const Galaad: ForwardRefRenderFunction<customRigidBody, GalaadProps> = (
     >
       <RoundCuboidCollider
         name="character-capsule-collider"
-        args={[hitboxWidth , hitboxHeight, hitboxLenght, hitboxRadius]}
+        args={[hitboxWidth, hitboxHeight, hitboxLenght, hitboxRadius]}
         position={[0, 0, 0]}
       />
       {/* Body collide sensor (only for point to move mode) */}

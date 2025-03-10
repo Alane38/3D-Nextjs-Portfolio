@@ -7,17 +7,17 @@ import { useGame } from "./Stores/useGame";
 export function GalaadAnimation(props: GalaadAnimationProps) {
   // Change the character src to yours
   const group = useRef(null!);
-  const fbx = useFBX(props.characterURL);
+  const fbx = useFBX(props.path);
   const animations = fbx.animations;
   const { actions } = useAnimations(animations, group);
 
-  /**
+  /**bun de
    * Character animations setup
    */
   const curAnimation = useGame((state) => state.curAnimation);
   const resetAnimation = useGame((state) => state.reset);
   const initializeAnimationSet = useGame(
-    (state) => state.initializeAnimationSet
+    (state) => state.initializeAnimationSet,
   );
 
   useEffect(() => {
@@ -27,11 +27,10 @@ export function GalaadAnimation(props: GalaadAnimationProps) {
 
   useEffect(() => {
     // Play animation
-    const action =
-      actions[curAnimation]
+    const action = actions[curAnimation];
 
     // For jump and jump land animation, only play once and clamp when finish
-    if (!action) return
+    if (!action) return;
     if (
       curAnimation === props.animationSet.jump ||
       curAnimation === props.animationSet.jumpLand ||
@@ -40,11 +39,7 @@ export function GalaadAnimation(props: GalaadAnimationProps) {
       curAnimation === props.animationSet.action3 ||
       curAnimation === props.animationSet.action4
     ) {
-      action
-      .reset()
-      .fadeIn(0.2)
-      .setLoop(THREE.LoopOnce, 1)
-      .play();
+      action.reset().fadeIn(0.2).setLoop(THREE.LoopOnce, 1).play();
       action.clampWhenFinished = true;
     } else {
       action.reset().fadeIn(0.2).play();
@@ -59,7 +54,7 @@ export function GalaadAnimation(props: GalaadAnimationProps) {
 
       // Clean up mixer listener, and empty the _listeners array
       (action as any)._mixer.removeEventListener("finished", () =>
-        resetAnimation()
+        resetAnimation(),
       );
       (action as any)._mixer._listeners = [];
     };
@@ -72,10 +67,9 @@ export function GalaadAnimation(props: GalaadAnimationProps) {
         dispose={null}
         userData={{ camExcludeCollision: true }}
       >
-        {/* <boxGeometry args={[1, 1, 1]} /> */}
-        {/* Replace character model here */}
-        {/* {props.children} */}
         <primitive {...props.rigidBodyProps} object={fbx} />
+        {/* Replace character model here */}
+        {props.children}
       </group>
     </Suspense>
   );

@@ -1,4 +1,4 @@
-import { classModelPath } from "@constants/default";
+import { modelPath } from "@constants/default";
 import { Box } from "@react-three/drei";
 import { useFrame } from "@react-three/fiber";
 import { quat, RigidBody } from "@react-three/rapier";
@@ -9,7 +9,7 @@ import { Entity } from "../Entity";
 export class Spinner extends Entity {
   speed: number;
   color: string;
-  constructor(path: string = classModelPath + "Spinner.glb") {
+  constructor(path: string = modelPath + "Spinner.glb") {
     super("Spinner");
     this.path = path;
     this.type = "kinematicPosition";

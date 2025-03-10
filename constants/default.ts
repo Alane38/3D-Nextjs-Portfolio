@@ -2,7 +2,7 @@
 export const defaultFont = "/fonts/DefaultFont.json";
 
 // Folder Shortcut Path
-export const classModelPath = "/assets/models/";
+export const modelPath = "/assets/models/";
 
 // Controls
 export const globalControls = [

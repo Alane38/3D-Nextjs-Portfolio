@@ -1,7 +1,5 @@
-import { classModelPath } from "@constants/default";
+import { modelPath } from "@constants/default";
 import { EnumPlayerOption } from "@constants/playerSelection";
-import { CharacterRenderer } from "@core/Utility/CharacterRenderer";
-import Ecctrl, { EcctrlAnimation } from "@packages/ecctrl/src/Ecctrl";
 import Galaad from "@packages/Galaad/Galaad";
 import { GalaadAnimation } from "@packages/Galaad/GalaadAnimation";
 import { RapierRigidBody } from "@react-three/rapier";
@@ -35,18 +33,23 @@ export const Character = ({
   return (
     <>
       <Galaad
+      // Character
         name="Player"
         colliders="hull"
         infiniteJump={false}
+        animated={true}
+        // Collider
         hitboxHeight ={0.4}
         hitboxWidth={0.05}
         hitboxLenght={0.8}
         hitboxRadius={0.3}
         floatHeight={0}
-        characterInitDir={0}
-        followLight={false}
+        // Control & Camera
         disableControl={disableControl}
         disableFollowCam={disableFollowCam}
+        // Direction & Camera
+        camMode="PointToMove"
+        characterInitDir={0}
         camInitDis={-3.5}
         camMaxDis={-5}
         camMinDis={-1.5}
@@ -61,9 +64,14 @@ export const Character = ({
         camCollisionSpeedMult={5}
         controlCamRotMult={1.5}
         camListenerTarget="domElement"
+        camFollowMult={10}
+        camLerpMult={20}
+        // Follow light
+        followLight={false}
+        // Physics
         maxVelLim={5}
         turnVelMultiplier={0.1}
-        turnSpeed={12}
+        turnSpeed={5}
         sprintMult={1.8}
         jumpVel={4.5}
         jumpForceToGroundMult={1}
@@ -74,8 +82,6 @@ export const Character = ({
         accDeltaTime={5}
         rejectVelMult={1}
         moveImpulsePointY={0.3}
-        camFollowMult={10}
-        camLerpMult={20}
         fallingGravityScale={3.5}
         fallingMaxVel={-25}
         wakeUpDelay={100}
@@ -92,13 +98,13 @@ export const Character = ({
         slopeRayDir={{ x: 0, y: -1, z: 0 }}
         slopeUpExtraForce={0.05}
         slopeDownExtraForce={0.1}
+        // Auto balance
         autoBalance={true}
-        autoBalanceSpringK={0.5}
+        autoBalanceSpringK={0.2}
         autoBalanceDampingC={0.05}
-        autoBalanceSpringOnY={0.5}
+        autoBalanceSpringOnY={0.2}
         autoBalanceDampingOnY={0.02}
-        animated={true}
-        camMode="ControlCamera"
+        // Controller Keys
         controllerKeys={{
           forward: 12,
           back: 13,
@@ -116,8 +122,9 @@ export const Character = ({
           }
         }}
       >
+        {/* Import Model and Animation in FBX */}
         <GalaadAnimation
-          characterURL={classModelPath + path} // Must have property
+          path={modelPath + path} // Must have property
           animationSet={animationSet}
           rigidBodyProps={{
             scale: 0.013,
