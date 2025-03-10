@@ -48,7 +48,7 @@ export const Character = ({
         disableControl={disableControl}
         disableFollowCam={disableFollowCam}
         // Direction & Camera
-        camMode="OnlyCamera"
+        camMode="ControlCamera"
         characterInitDir={0}
         camInitDis={-3.5}
         camMaxDis={-5}
