@@ -39,7 +39,7 @@ export const Character = ({
         // Character
         name="Player"
         colliders="hull"
-        infiniteJump={false}
+        infiniteJump={true}
         animated={true}
         // Collider
         hitboxHeight={0.4}

@@ -4,6 +4,7 @@ import { useVideoTexture } from "@react-three/drei";
 import { RigidBody } from "@react-three/rapier";
 import { useMemo } from "react";
 import { Entity } from "../Entity";
+import EntitySingleton from "../EntitySingleton";
 
 export class RestaurantSign extends Entity {
   constructor(path: string = modelPath + "RestaurantSign.glb") {
@@ -22,20 +23,16 @@ export const RestaurantSignComponent = ({
   ...props
 }: { model?: RestaurantSign } & Partial<RestaurantSign>) => {
   // Fusion of props and model
-  const object = useMemo(() => {
-    return { ...new RestaurantSign(), ...model, ...props };
-  }, [model, props]);
+  const instance = model || EntitySingleton.getInstance(RestaurantSign);
+  const object = useMemo(() => ({ ...instance, ...props }), [model, props]);
+
   const videoTexture = useVideoTexture(
     "/assets/videos/newalfox-compressed.webm",
   );
 
   return (
     <RigidBody {...object}>
-      <group
-        onPointerDown={() =>
-          object.ref.current?.applyImpulse({ x: 0, y: 20, z: 0 }, true)
-        }
-      >
+      <group>
         {/* Model */}
         <ModelRenderer path={object.path} />
         <mesh position={[-1.14, 7.3, -0.2]}>

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState } from "react";
 
 export const Inventory = () => {
   const [items, setItems] = useState(Array(10).fill(null));

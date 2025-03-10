@@ -2,7 +2,6 @@ import Steps from "@core/Element/Environment/Steps";
 import DynamicPlatforms from "@core/Element/Objects/DynamicPlatforms";
 import FloatingPlatform from "@core/Element/Objects/FloatingPlatform";
 import { Character } from "@core/Element/Player/Character";
-import { Vehicle } from "@core/Element/Player/Vehicles/Car/Vehicle";
 import { RacingVehicle } from "@core/Element/Player/Vehicles/RacingCar/RacingVehicle";
 import {
   DiamondComponent,
@@ -12,7 +11,6 @@ import {
   RestaurantSignComponent,
   SpinnerComponent,
   StairsComponent,
-  TextObjectComponent,
 } from "@resources/Class";
 import { Euler, Vector3 } from "three";
 
@@ -47,10 +45,10 @@ export const MainWorld = () => {
 
       <group>
         {/* Entity Importations */}
-        <TextObjectComponent
+        {/* <TextObjectComponent
           position={new Vector3(3, 1, 0)}
           TextProps={{ text: "NEWALFOX" }}
-        />
+        /> */}
 
         <DiamondComponent position={new Vector3(3, 2, 0)} />
       </group>
