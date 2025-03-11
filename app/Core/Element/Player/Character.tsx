@@ -1,24 +1,18 @@
-import { modelPath } from "@constants/default";
-import { EnumPlayerOption } from "@constants/playerSelection";
+import { animationPrefix, modelPath } from "@constants/default";
 import Galaad from "@packages/Galaad/Galaad";
 import { GalaadAnimation } from "@packages/Galaad/GalaadAnimation";
-import { LockCamera } from "@packages/Galaad/Utils/LockCamera";
-import { useThree } from "@react-three/fiber";
+import { CharacterProps } from "@packages/Galaad/types/CharacterProps";
 import { RapierRigidBody } from "@react-three/rapier";
-import { usePlayerSelection } from "@resources/Hooks";
-import { useEffect, useRef } from "react";
+import { useRef } from "react";
 
 export const Character = ({
+  name,
+  position,
   defaultPlayer,
   path,
-}: {
-  defaultPlayer?: boolean;
-  path: string;
-}) => {
-  const { player, updatePlayer } = usePlayerSelection();
+}: CharacterProps) => {
   const rb = useRef<RapierRigidBody>(null);
 
-  const animationPrefix = "rig|";
   const animationSet = {
     idle: animationPrefix + "idle",
     walk: animationPrefix + "walk",
@@ -28,28 +22,32 @@ export const Character = ({
     jumpLand: animationPrefix + "jumpLand",
   };
 
-  let disableControl = player !== EnumPlayerOption.Character;
-  let disableFollowCam = disableControl;
-
-  const { camera, gl } = useThree();
+  let enableControl = true;
+  let enableFollowCam = true;
+  if (!defaultPlayer) {
+    enableControl = false;
+    enableFollowCam = false;
+  }
 
   return (
     <>
       <Galaad
         // Character
-        name="Player"
-        colliders="hull"
+        name={name}
+        defaultPlayer={defaultPlayer}
+        position={position}
         infiniteJump={true}
         animated={true}
         // Collider
+        colliders="hull"
         hitboxHeight={0.4}
         hitboxWidth={0.05}
         hitboxLenght={0.8}
         hitboxRadius={0.3}
         floatHeight={0}
         // Control & Camera
-        disableControl={disableControl}
-        disableFollowCam={disableFollowCam}
+        enableControl={enableControl}
+        enableFollowCam={enableFollowCam}
         // Direction & Camera
         camMode="ControlCamera"
         characterInitDir={0}

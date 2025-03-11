@@ -4,6 +4,8 @@ import { camListenerTargetType } from "../Galaad";
 
 export interface GalaadProps extends RigidBodyProps {
   children?: ReactNode;
+
+  defaultPlayer?: boolean;
   // Colliders settings
   hitboxHeight?: number;
   hitboxWidth?: number;
@@ -12,15 +14,16 @@ export interface GalaadProps extends RigidBodyProps {
 
   floatHeight?: number;
 
-  // Character initial direction
+  // Character initial 
   characterInitDir?: number;
+
   // Control I/O
-  disableControl?: boolean;
+  enableControl?: boolean;
 
   // Camera I/O
-  disableFollowCam?: boolean;
-  disableFollowCamPos?: { x: number; y: number; z: number } | null;
-  disableFollowCamTarget?: { x: number; y: number; z: number } | null;
+  enableFollowCam?: boolean;
+  enableFollowCamPos?: { x: number; y: number; z: number } | null;
+  enableFollowCamTarget?: { x: number; y: number; z: number } | null;
 
   // Follow camera settings
   // Camera distance/limit

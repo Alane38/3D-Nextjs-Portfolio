@@ -31,13 +31,15 @@ import { customRigidBody } from "./types/customRigidBody";
 import { GalaadProps } from "./types/GalaadProps";
 import { getObjectDirection } from "./Utils/getObjectDirection";
 import { insideKeyboardControls } from "./Utils/insideKeyboardControls";
-import { PointerLockControls } from "three/examples/jsm/Addons.js";
 import { LockCamera } from "./Utils/LockCamera";
+import { generateUUID } from "three/src/math/MathUtils.js";
 
 const Galaad: ForwardRefRenderFunction<customRigidBody, GalaadProps> = (
   {
     // TypeScript interface for Galaad component
     children,
+
+    defaultPlayer = false,
     // Colliders settings
     hitboxHeight = 0.5,
     hitboxWidth = 0.3,
@@ -46,16 +48,16 @@ const Galaad: ForwardRefRenderFunction<customRigidBody, GalaadProps> = (
 
     floatHeight = 0,
 
-    // Character initial direction
+    // Character initial setup
     characterInitDir = 0, // Rad
 
     // Control I/O
-    disableControl = false,
+    enableControl = false,
 
     // Camera I/O
-    disableFollowCam = false,
-    disableFollowCamPos = null,
-    disableFollowCamTarget = null,
+    enableFollowCam = false,
+    enableFollowCamPos = null,
+    enableFollowCamTarget = null,
 
     // Follow camera settings
     // Camera distance/limit
@@ -373,9 +375,9 @@ const Galaad: ForwardRefRenderFunction<customRigidBody, GalaadProps> = (
 
   // // Follow cam initial setups
   const cameraSetups = {
-    disableFollowCam,
-    disableFollowCamPos,
-    disableFollowCamTarget,
+    enableFollowCam,
+    enableFollowCamPos,
+    enableFollowCamTarget,
     camInitDis,
     camMaxDis,
     camMinDis,
@@ -740,6 +742,7 @@ const Galaad: ForwardRefRenderFunction<customRigidBody, GalaadProps> = (
   // // If inside keyboardcontrols, active subscribeKeys
   if (inKeyboardControls) {
     useEffect(() => {
+      if (!defaultPlayer) return; // Only active for default player
       // Action 1 key subscribe for special animation
       const unSubscribeAction1 = subscribeKeys?.(
         (state) => state.action1,
@@ -791,6 +794,7 @@ const Galaad: ForwardRefRenderFunction<customRigidBody, GalaadProps> = (
 
   // //
   useEffect(() => {
+    if (!defaultPlayer) return; // Only active for default player
     // Lock character rotations at Y axis
     characterRef.current.setEnabledRotations(
       autoBalance ? true : false,
@@ -809,6 +813,7 @@ const Galaad: ForwardRefRenderFunction<customRigidBody, GalaadProps> = (
   }, [autoBalance]);
   // //
   useEffect(() => {
+    if (!defaultPlayer) return; // Only active for default player
     // Initialize character facing direction
     modelEuler.y = characterInitDir;
 
@@ -826,6 +831,7 @@ const Galaad: ForwardRefRenderFunction<customRigidBody, GalaadProps> = (
   // //
   useFrame((state, delta) => {
     if (delta > 1) delta %= 1;
+    if (!defaultPlayer) return; // Only active for default player
 
     // // Character current position/velocity
     if (characterRef.current) {
@@ -854,7 +860,7 @@ const Galaad: ForwardRefRenderFunction<customRigidBody, GalaadProps> = (
       .addScaledVector(pivotZAxis, camTargetPos.z);
     pivot.position.lerp(pivotPosition, 1 - Math.exp(-camFollowMult * delta));
 
-    if (!disableFollowCam) {
+    if (enableFollowCam) {
       followCam.getWorldPosition(followCamPosition);
       state.camera.position.lerp(
         followCamPosition,
@@ -871,8 +877,8 @@ const Galaad: ForwardRefRenderFunction<customRigidBody, GalaadProps> = (
       ? (getKeys?.() ?? presetKeys)
       : presetKeys;
 
-    // If disableControl is true, skip all following features
-    if (disableControl) return;
+    // If enableControl is true, skip all following features
+    if (!enableControl) return;
 
     if (!forward && !back && !left && !right && !jump && !run) {
       // if no key pressed, the character stop move
@@ -1299,11 +1305,14 @@ const Galaad: ForwardRefRenderFunction<customRigidBody, GalaadProps> = (
     }
   });
 
+  console.log(children);
+
   return (
     <RigidBody
       ref={characterRef}
       position={props.position || [0, 5, 0]}
       friction={props.friction || -0.5}
+      mass={props.mass || 100}
       onContactForce={(e) =>
         bodyContactForce.set(e.totalForce.x, e.totalForce.y, e.totalForce.z)
       }

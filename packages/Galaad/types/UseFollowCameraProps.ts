@@ -1,9 +1,9 @@
 import { camListenerTargetType } from "../Galaad";
 
 export type UseFollowCameraProps = {
-  disableFollowCam?: boolean;
-  disableFollowCamPos?: { x: number; y: number; z: number } | null;
-  disableFollowCamTarget?: { x: number; y: number; z: number } | null;
+  enableFollowCam?: boolean;
+  enableFollowCamPos?: { x: number; y: number; z: number } | null;
+  enableFollowCamTarget?: { x: number; y: number; z: number } | null;
   camInitDis?: number;
   camMaxDis?: number;
   camMinDis?: number;

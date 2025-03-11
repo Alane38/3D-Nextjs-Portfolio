@@ -4,6 +4,9 @@ export const defaultFont = "/fonts/DefaultFont.json";
 // Folder Shortcut Path
 export const modelPath = "/assets/models/";
 
+// Animation Prefix Shortcut
+export const animationPrefix = "rig|";
+
 // Controls
 export const globalControls = [
   { name: "forward", keys: ["ArrowUp", "z", "Z"] },

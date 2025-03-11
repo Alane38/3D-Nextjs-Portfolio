@@ -1,13 +1,12 @@
 import { useThree } from "@react-three/fiber";
-import { useEffect, useMemo, useRef, useCallback } from "react";
+import { useCallback, useEffect, useMemo, useRef } from "react";
 import * as THREE from "three";
-import { camListenerTargetType } from "../Galaad";
 import { UseFollowCameraProps } from "../types/UseFollowCameraProps";
 
 export const useFollowCam = ({
-  disableFollowCam = false,
-  disableFollowCamPos = null,
-  disableFollowCamTarget = null,
+  enableFollowCam = false,
+  enableFollowCamPos = null,
+  enableFollowCamTarget = null,
   camInitDis = -5,
   camMaxDis = -7,
   camMinDis = -0.7,
