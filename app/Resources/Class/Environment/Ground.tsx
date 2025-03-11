@@ -1,6 +1,5 @@
+import { Box } from "@react-three/drei";
 import { RigidBody } from "@react-three/rapier";
-import { Box, Plane } from "@react-three/drei";
-import { Euler } from "three";
 import { useMemo } from "react";
 import { Entity } from "../Entity";
 import EntitySingleton from "../EntitySingleton";
@@ -14,7 +13,7 @@ export class Ground extends Entity {
     // Modify the default settings(Entity) :
     this.type = "fixed";
     this.colliders = "cuboid";
-    this.scale = 100;
+    this.scale = 500;
     this.depth = 0.1;
     this.args = [this.scale, this.depth, this.scale];
     this.color = "black";

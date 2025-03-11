@@ -14,8 +14,6 @@ import {
   StairsComponent,
 } from "@resources/Class";
 import { useSky } from "@resources/Hooks";
-import { useControls } from "leva";
-import { useState } from "react";
 import { Euler, Vector3 } from "three";
 
 export const MainWorld = () => {
@@ -53,7 +51,7 @@ export const MainWorld = () => {
         {/* Ground */}
         <GroundComponent model={ground} /> {/* Default Ground  */}
         <GroundComponent
-          color="white"
+          color="black"
           args={[5, 0.1, (ground.scale as number) / 1.2]}
           position={new Vector3(0, ground.position.y + 0.01, 0)}
         />

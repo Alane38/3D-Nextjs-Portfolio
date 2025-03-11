@@ -1,3 +1,4 @@
+import classNames from "classnames";
 import { motion } from "framer-motion";
 import { useEffect, useState } from "react";
 
@@ -31,7 +32,15 @@ export const Notification = ({
 
   return (
     <motion.div
-      className={`fixed right-4 bottom-4 z-50 flex w-80 max-w-sm items-start space-x-3 rounded-lg bg-${color}-900 p-4 text-white shadow-lg`}
+      className={classNames(
+        "fixed right-4 bottom-4 z-50 flex w-80 max-w-sm items-start space-x-3 rounded-lg p-4 text-white shadow-lg",
+        {
+          "bg-red-900": color === "red",
+          "bg-green-900": color === "green",
+          "bg-blue-900": color === "blue",
+          "bg-neutral-900": color === "neutral",
+        },
+      )}
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       exit={{ opacity: 0, y: 20 }}
@@ -41,7 +50,9 @@ export const Notification = ({
       <div className="flex-1">
         <h1 className="text-sm font-semibold">{title}</h1>
         <p className="text-xs">{message}</p>
-        {description && <p className="mt-1 text-xs opacity-75">{description}</p>}
+        {description && (
+          <p className="mt-1 text-xs opacity-75">{description}</p>
+        )}
       </div>
       <button
         onClick={() => setIsVisible(false)}
