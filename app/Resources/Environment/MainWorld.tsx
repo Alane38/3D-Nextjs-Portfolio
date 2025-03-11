@@ -46,10 +46,6 @@ export const MainWorld = () => {
       />
 
       <Character name="Player1" path="FoxPam.fbx" position={[0, 2, 0]} defaultPlayer />
-      <Character name="Player2 "path="Fox.fbx" position={[10, 2, 0]} />
-      <Character name="Player3 "path="Fox.fbx" position={[12, 2, 0]} />
-      <Character name="Player4 "path="Fox.fbx" position={[14, 2, 0]} />
-      <Character name="Player5 "path="Fox.fbx" position={[16, 2, 0]} />
 
       <group>
         {/* Ground */}
