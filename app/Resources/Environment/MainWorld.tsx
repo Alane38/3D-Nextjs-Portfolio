@@ -3,6 +3,7 @@ import DynamicPlatforms from "@core/Element/Objects/DynamicPlatforms";
 import FloatingPlatform from "@core/Element/Objects/FloatingPlatform";
 import { Character } from "@core/Element/Player/Character";
 import { RacingVehicle } from "@core/Element/Player/Vehicles/RacingCar/RacingVehicle";
+import { Sky } from "@react-three/drei";
 import {
   DiamondComponent,
   Ground,
@@ -12,9 +13,15 @@ import {
   SpinnerComponent,
   StairsComponent,
 } from "@resources/Class";
+import { useSky } from "@resources/Hooks";
+import { useControls } from "leva";
+import { useState } from "react";
 import { Euler, Vector3 } from "three";
 
 export const MainWorld = () => {
+  /* Leva Settings */
+  const sky = useSky();
+
   /* INITIALIZATION */
 
   // Ground Class
@@ -29,6 +36,16 @@ export const MainWorld = () => {
   return (
     <>
       {/* <ObjectComponent /> */}
+      <Sky
+        turbidity={sky.turbidity}
+        rayleigh={sky.rayleigh}
+        mieCoefficient={sky.mieCoefficient}
+        mieDirectionalG={sky.mieDirectionalG}
+        azimuth={sky.azimuth}
+        distance={sky.distance}
+        inclination={0}
+        sunPosition={sky.sunPosition}
+      />
 
       <Character path="FoxPam.fbx" defaultPlayer />
 

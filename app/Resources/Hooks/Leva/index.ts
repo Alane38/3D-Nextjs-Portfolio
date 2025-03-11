@@ -1,3 +1,3 @@
 export * from "./useDebugState";
-export * from "./useSunPosition";
+export * from "./useSky";
 export * from "./usePlayerSelection";

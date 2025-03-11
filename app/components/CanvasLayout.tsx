@@ -43,8 +43,9 @@ export function CanvasLayout({ children }: { children: ReactNode }) {
         {/* Debug Grid */}
         <Grid
           infiniteGrid
+          fadeDistance={100}
           followCamera
-          sectionColor={"black"}
+          sectionColor={"blue"}
           cellColor={"gray"}
           position={[0, 0.055, 0]}
         />
