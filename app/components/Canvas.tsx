@@ -2,15 +2,13 @@
 
 import { globalControls } from "@constants/default";
 import { KeyboardControls } from "@react-three/drei";
+import { MainWorld } from "@resources/Environment/MainWorld";
 import { useLoadingAssets } from "@resources/Hooks";
 import { Leva } from "leva";
 import { useState } from "react";
 import { CanvasLayout } from "./CanvasLayout";
-import { Loading } from "./Loading";
+import { Loading } from "./Utility/Loading";
 import { PerformanceWarning } from "./Utility/PerformanceWarning";
-import { MainWorld } from "@resources/Environment/MainWorld";
-import { useLockCamera } from "@packages/Galaad/Utils/LockCamera";
-import { LockCameraProps } from "@packages/Galaad/types/LockCameraProps";
 
 export function Canvas() {
   const [visible, setVisible] = useState(true);

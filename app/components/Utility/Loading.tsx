@@ -1,5 +1,5 @@
 import { useProdEnv } from "@resources/Hooks";
-import { useState, useEffect } from "react";
+import { useState } from "react";
 
 export const Loading = ({
   progress,
@@ -12,13 +12,13 @@ export const Loading = ({
 
   const [showSkip, setShowSkip] = useState(false);
 
-  useEffect(() => {
-    const timer = setTimeout(() => {
-      productionMode ? setShowSkip(true) : onSkip();
-    }, 2000);
+  // useEffect(() => {
+  //   const timer = setTimeout(() => {
+  //     productionMode ? setShowSkip(true) : onSkip();
+  //   }, 2000);
 
-    return () => clearTimeout(timer);
-  }, []);
+  //   return () => clearTimeout(timer);
+  // }, []);
 
   return (
     <div className="bg-opacity-80 fixed inset-0 z-50 flex items-center justify-center bg-black">
