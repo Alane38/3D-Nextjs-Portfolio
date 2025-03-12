@@ -45,7 +45,7 @@ export const MainWorld = () => {
         sunPosition={sky.sunPosition}
       />
 
-      <Character name="Player1" path="FoxPam.fbx" position={[0, 2, 0]} defaultPlayer />
+      <Character name="Player" path="FoxPam.fbx" position={[0, 2, 0]} defaultPlayer />
 
       <group>
         {/* Ground */}
