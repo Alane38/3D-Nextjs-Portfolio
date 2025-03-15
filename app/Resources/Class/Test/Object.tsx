@@ -11,6 +11,7 @@ export class Object extends Entity {
     // Modify default settings of Entity:
     this.path = modelPath + "Object.glb";
     this.type = "fixed";
+    this.colliders = "trimesh";
   }
   renderComponent() {
     return <ObjectComponent model={this} />;

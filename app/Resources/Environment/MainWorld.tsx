@@ -11,14 +11,16 @@ import {
   KillBrickComponent,
   RestaurantSignComponent,
   SpinnerComponent,
-  StairsComponent,
+  StairsComponent
 } from "@resources/Class";
+import { NeonDoorComponent } from "@resources/Class/Objects/Door";
 import { useSky } from "@resources/Hooks";
 import { Euler, Vector3 } from "three";
 
 export const MainWorld = () => {
   /* Leva Settings */
   const sky = useSky();
+
 
   /* INITIALIZATION */
 
@@ -93,6 +95,8 @@ export const MainWorld = () => {
       {/* <GlobalUI /> */}
       <RacingVehicle position={[15, 2, 0]} rotation={[0, Math.PI / 2, 0]} />
       {/* <Vehicle position={[8, 2, 0]} /> */}
+
+      <NeonDoorComponent position={new Vector3(0, 0.05, 15)} scale={2} />
     </>
   );
 };

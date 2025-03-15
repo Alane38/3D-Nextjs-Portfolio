@@ -1,8 +1,13 @@
-import { LockCamera } from "@packages/Galaad/Utils/LockCamera";
 import { Grid } from "@react-three/drei";
-import { Canvas, useThree } from "@react-three/fiber";
+import { Canvas } from "@react-three/fiber";
+import {
+  EffectComposer,
+  Bloom,
+  ToneMapping,
+} from "@react-three/postprocessing";
 import { Physics } from "@react-three/rapier";
 import { useDebugState } from "@resources/Hooks";
+import { useControls } from "leva";
 import { Perf } from "r3f-perf";
 import React, { ReactNode, Suspense } from "react";
 import WebGPU from "three/examples/jsm/capabilities/WebGPU.js";
@@ -11,15 +16,19 @@ export function CanvasLayout({ children }: { children: ReactNode }) {
   const debugState = useDebugState();
   const shadowCameraRef = React.useRef<any>(null);
 
+  const { intensity, mipmapBlur, luminanceSmoothing, luminanceThreshold } =
+    useControls({
+      intensity: { value: 0.26, min: 0, max: 1.5, step: 0.01 },
+      mipmapBlur: { value: 0, min: 0, max: 1.5, step: 0.01 },
+      luminanceSmoothing: { value: 0, min: 0, max: 1.5, step: 0.01 },
+      luminanceThreshold: { value: 1.14, min: 0, max: 1.5, step: 0.01 },
+    });
+
   return (
     <Canvas
       camera={{ position: [0, 16, 5], fov: 70, near: 0.1, far: 10000 }}
       shadows
-      gl={{
-        preserveDrawingBuffer: false,
-        toneMapping: WebGPU ? 0 : 2,
-        toneMappingExposure: 1,
-      }}
+      gl={{ powerPreference: "high-performance" }}
     >
       {/* <OrbitControls /> */}
 
@@ -53,6 +62,15 @@ export function CanvasLayout({ children }: { children: ReactNode }) {
           {children} {/* Put the world scene here */}
         </Physics>
       </Suspense>
+      
+      <EffectComposer multisampling={0}>
+        <Bloom
+          mipmapBlur={true  }
+          luminanceThreshold={luminanceThreshold}
+          luminanceSmoothing={luminanceSmoothing}
+          intensity={intensity}
+        />
+      </EffectComposer>
     </Canvas>
   );
 }
