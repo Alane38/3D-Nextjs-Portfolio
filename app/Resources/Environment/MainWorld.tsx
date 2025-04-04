@@ -47,7 +47,6 @@ export const MainWorld = () => {
         inclination={0}
         sunPosition={sky.sunPosition}
       />
-
       <Character name="Player" path="FoxPam.fbx" position={[0, 2, 0]} defaultPlayer />
 
       <group>
@@ -68,37 +67,37 @@ export const MainWorld = () => {
           TextProps={{ text: "NEWALFOX" }}
         /> */}
 
-        {/* <DiamondComponent position={new Vector3(3, 2, 0)} /> */}
+        <DiamondComponent position={new Vector3(10, 2, 10)} />
         <ObjectComponent position={new Vector3(0, 0.5, 0)} />
       </group>
 
       <group>
         {/* Entity Importations */}
-        {/* <Steps />
+        {/* <Steps /> */}
         <SpinnerComponent position={new Vector3(-7, 0, 0)} speed={10} />
-        <KillBrickComponent position={new Vector3(0, 2, 6)} />
+        <KillBrickComponent position={new Vector3(15, 1, 10)} />
         <RestaurantSignComponent
           position={new Vector3(4, 0, 4)}
           rotation={new Euler(0, Math.PI / 4, 0)}
-        /> */}
+        />
       </group>
 
       <group>
         {/* Platforms Events Examples */}
-        {/* <FloatingPlatform />
-        <DynamicPlatforms /> */}
+        <FloatingPlatform />
+        <DynamicPlatforms />
       </group>
 
       {/* OTHERS */}
-      {/* <StairsComponent
-        position={new Vector3(-20, 0, 10)}
-        rotation={new Euler(0, Math.PI / 2, 0)}
-      /> */}
-      {/* <GlobalUI /> */}
+      <StairsComponent
+        position={new Vector3(-30, 0, 15)}
+        rotation={new Euler(0, 0, 0)}
+      />
+      d
       {/* <RacingVehicle position={[15, 2, 0]} rotation={[0, Math.PI / 2, 0]} /> */}
       {/* <Vehicle position={[8, 2, 0]} /> */}
 
-      {/* <NeonDoorComponent position={new Vector3(0, 0.05, 15)} scale={2} /> */}
+      <NeonDoorComponent position={new Vector3(11, 0.05, -7)} scale={2} />z
     </>
   );
 };
