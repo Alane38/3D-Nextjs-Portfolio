@@ -1,4 +1,4 @@
-import { Grid } from "@react-three/drei";
+import { Environment, Grid } from "@react-three/drei";
 import { Canvas } from "@react-three/fiber";
 import {
   EffectComposer,
@@ -18,7 +18,7 @@ export function CanvasLayout({ children }: { children: ReactNode }) {
 
   const { intensity, mipmapBlur, luminanceSmoothing, luminanceThreshold } =
     useControls({
-      intensity: { value: 0.26, min: 0, max: 1.5, step: 0.01 },
+      intensity: { value: 0.15, min: 0, max: 1.5, step: 0.01 },
       mipmapBlur: { value: 0, min: 0, max: 1.5, step: 0.01 },
       luminanceSmoothing: { value: 0, min: 0, max: 1.5, step: 0.01 },
       luminanceThreshold: { value: 1.14, min: 0, max: 1.5, step: 0.01 },
@@ -59,13 +59,12 @@ export function CanvasLayout({ children }: { children: ReactNode }) {
           position={[0, 0.055, 0]}
         />
         <Physics gravity={[0, -15, 0]} debug={debugState}>
-          {children} {/* Put the world scene here */}
+          {children}
         </Physics>
       </Suspense>
-      
       <EffectComposer multisampling={0}>
         <Bloom
-          mipmapBlur={true  }
+          mipmapBlur={true}
           luminanceThreshold={luminanceThreshold}
           luminanceSmoothing={luminanceSmoothing}
           intensity={intensity}

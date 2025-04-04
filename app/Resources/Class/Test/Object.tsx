@@ -9,7 +9,7 @@ export class Object extends Entity {
   constructor() {
     super("Object");
     // Modify default settings of Entity:
-    this.path = modelPath + "Object.glb";
+    this.path = modelPath + "Demo.glb";
     this.type = "fixed";
     this.colliders = "trimesh";
   }

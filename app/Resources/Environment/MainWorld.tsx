@@ -9,6 +9,7 @@ import {
   Ground,
   GroundComponent,
   KillBrickComponent,
+  ObjectComponent,
   RestaurantSignComponent,
   SpinnerComponent,
   StairsComponent
@@ -67,36 +68,37 @@ export const MainWorld = () => {
           TextProps={{ text: "NEWALFOX" }}
         /> */}
 
-        <DiamondComponent position={new Vector3(3, 2, 0)} />
+        {/* <DiamondComponent position={new Vector3(3, 2, 0)} /> */}
+        <ObjectComponent position={new Vector3(0, 0.5, 0)} />
       </group>
 
       <group>
         {/* Entity Importations */}
-        <Steps />
+        {/* <Steps />
         <SpinnerComponent position={new Vector3(-7, 0, 0)} speed={10} />
         <KillBrickComponent position={new Vector3(0, 2, 6)} />
         <RestaurantSignComponent
           position={new Vector3(4, 0, 4)}
           rotation={new Euler(0, Math.PI / 4, 0)}
-        />
+        /> */}
       </group>
 
       <group>
         {/* Platforms Events Examples */}
-        <FloatingPlatform />
-        <DynamicPlatforms />
+        {/* <FloatingPlatform />
+        <DynamicPlatforms /> */}
       </group>
 
       {/* OTHERS */}
-      <StairsComponent
+      {/* <StairsComponent
         position={new Vector3(-20, 0, 10)}
         rotation={new Euler(0, Math.PI / 2, 0)}
-      />
+      /> */}
       {/* <GlobalUI /> */}
-      <RacingVehicle position={[15, 2, 0]} rotation={[0, Math.PI / 2, 0]} />
+      {/* <RacingVehicle position={[15, 2, 0]} rotation={[0, Math.PI / 2, 0]} /> */}
       {/* <Vehicle position={[8, 2, 0]} /> */}
 
-      <NeonDoorComponent position={new Vector3(0, 0.05, 15)} scale={2} />
+      {/* <NeonDoorComponent position={new Vector3(0, 0.05, 15)} scale={2} /> */}
     </>
   );
 };

@@ -31,7 +31,7 @@ export function Canvas() {
       {/* Controls */}
       <KeyboardControls map={globalControls}>
         <CanvasLayout>
-          {/* Children */}
+           {/* Put the world scene here */}
           <MainWorld />
           {/* <TestWorld /> */}
           {/* <JumpGame /> */}

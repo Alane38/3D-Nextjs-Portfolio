@@ -64,6 +64,6 @@ export const ModelRenderer = ({
       }
     });
 
-    return <primitive object={gltf.scene.clone()}>{children}</primitive>;
+    return <primitive  object={gltf.scene.clone()}>{children}</primitive>;
   }
 };
