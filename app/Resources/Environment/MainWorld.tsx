@@ -77,7 +77,7 @@ export const MainWorld = () => {
         <SpinnerComponent position={new Vector3(-7, 0, 0)} speed={10} />
         <KillBrickComponent position={new Vector3(15, 1, 10)} />
         <RestaurantSignComponent
-          position={new Vector3(4, 0, 4)}
+          position={new Vector3(6, 0.5, 6)}
           rotation={new Euler(0, Math.PI / 4, 0)}
         />
       </group>
