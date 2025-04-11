@@ -20,12 +20,11 @@
     ],
     "baseUrl": "./",
     "paths": {
-      "@resources/*": ["./app/Resources/*"],
-      "@core/*": ["./app/Core/*"],
-      "@components/*": ["./app/components/*"],
-      "@constants/*": ["./constants/*"],
-      "@packages/*": ["./packages/*"],
-      "@type/*": ["./types/*"],
+      "@/*": ["src/*"],
+      "@resources/*": ["src/app/modules/*"],
+      "@core/*": ["src/playground/core/*"],
+      "@components/*": ["src/components/*"],
+      "@constants/*": ["src/constants/*"],
       "@utils/*": ["./utils/*"]
     }
   },
