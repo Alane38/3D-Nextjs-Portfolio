@@ -3,8 +3,8 @@ import { Sky } from "@react-three/drei";
 import { Euler, Vector3 } from "three";
 import { Character } from "../core/character/Character";
 import { DiamondComponent, Ground, GroundComponent, KillBrickComponent, NeonDoorComponent, ObjectComponent, RestaurantSignComponent, SpinnerComponent, StairsComponent } from "../core/class";
-import { FPPushtoMoveComponent } from "../core/class/entities/platforms/FloatingPlatform";
-import { KinematicMovingPlatformComponent } from "../core/class/entities/platforms/KineticMovingPlatform";
+import { KinematicMovingPlatformComponent } from "../core/class/entities/platform/dynamic/KineticMovingPlatform";
+import { FPPushtoMoveComponent } from "../core/class/entities/platform/floating/FPPushtoMove";
 
 export const MainWorld = () => {
   /* Leva Settings */

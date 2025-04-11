@@ -3,8 +3,8 @@ import { useFrame } from "@react-three/fiber";
 import { CylinderCollider, RigidBody } from "@react-three/rapier";
 import { useMemo, useRef } from "react";
 import * as THREE from "three";
-import { Entity } from "../../Entity";
-import EntitySingleton from "../../EntitySingleton";
+import { Entity } from "../../../Entity";
+import EntitySingleton from "../../../EntitySingleton";
 
 export class KinematicRotatingDrumEntity extends Entity {
   constructor() {

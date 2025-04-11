@@ -1,4 +1,4 @@
-import { useDebugState } from "@/hooks";
+import { useDebugState } from "@/hooks/leva";
 import { Grid } from "@react-three/drei";
 import { Canvas } from "@react-three/fiber";
 import {

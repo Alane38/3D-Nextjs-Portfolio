@@ -3,8 +3,8 @@ import { useFrame } from "@react-three/fiber";
 import { RigidBody } from "@react-three/rapier";
 import { useMemo, useRef } from "react";
 import { Vector3 } from "three";
-import { Entity } from "../../Entity";
-import EntitySingleton from "../../EntitySingleton";
+import { Entity } from "../../../Entity";
+import EntitySingleton from "../../../EntitySingleton";
 
 export class KinematicMovingPlatformEntity extends Entity {
   constructor() {
