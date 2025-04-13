@@ -1,10 +1,7 @@
 import { useDebugState } from "@/hooks/leva";
 import { Grid } from "@react-three/drei";
 import { Canvas } from "@react-three/fiber";
-import {
-    Bloom,
-    EffectComposer
-} from "@react-three/postprocessing";
+import { Bloom, EffectComposer } from "@react-three/postprocessing";
 import { Physics } from "@react-three/rapier";
 import { useControls } from "leva";
 import { Perf } from "r3f-perf";
@@ -43,7 +40,7 @@ export function GameCanvas({ children }: { children: ReactNode }) {
         />
       </directionalLight>
 
-      <Suspense fallback={null}>
+      {/* <Suspense fallback={null}> */}
         {/* Performance Monitor */}
         <Perf position="top-left" />
 
@@ -59,7 +56,7 @@ export function GameCanvas({ children }: { children: ReactNode }) {
         <Physics gravity={[0, -15, 0]} debug={debugState}>
           {children}
         </Physics>
-      </Suspense>
+      {/* </Suspense> */}
       <EffectComposer multisampling={0}>
         <Bloom
           mipmapBlur={true}

@@ -1,9 +1,9 @@
 import { ModelLoader } from "@/app/playground/core/class/rendering/ModelLoader";
 import { RigidBody } from "@react-three/rapier";
-import { useMemo } from "react";
 import { modelPath } from "src/constants/default";
 import { Entity } from "../Entity";
-import EntitySingleton from "../EntitySingleton";
+import { createEntityComponent } from "../createEntityComponent";
+import { Euler, Vector3 } from "three";
 
 export class NeonDoor extends Entity {
   constructor(path: string = modelPath + "NeonDoor.glb") {
@@ -19,13 +19,11 @@ export class NeonDoor extends Entity {
   }
 }
 
-export const NeonDoorComponent = ({
-  model,
-  ...props
-}: { model?: NeonDoor } & Partial<NeonDoor>) => {
-  // Fusion of props and model
-  const instance = model || EntitySingleton.getInstance(NeonDoor);
-  const object = useMemo(() => ({ ...instance, ...props }), [model, props]);
+export const NeonDoorComponent = createEntityComponent(NeonDoor, (object) => {
+
+  //don't pick rotation and position from object
+  object.rotation = new Euler(0, 0, 0);
+  object.position = new Vector3(0, 0, 0);
 
   return (
     <group>
@@ -35,4 +33,4 @@ export const NeonDoorComponent = ({
       </RigidBody>
     </group>
   );
-};
+});

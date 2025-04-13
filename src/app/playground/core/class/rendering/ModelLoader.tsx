@@ -1,7 +1,6 @@
 import { useGLTF } from "@react-three/drei";
-import { useFrame, useLoader } from "@react-three/fiber";
-import { ReactNode, useEffect, useRef } from "react";
-import { AnimationMixer, LoopRepeat } from "three";
+import { useLoader } from "@react-three/fiber";
+import { ReactNode } from "react";
 import { DRACOLoader, GLTFLoader } from "three/examples/jsm/Addons.js";
 
 export const ModelLoader = ({

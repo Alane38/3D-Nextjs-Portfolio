@@ -1,15 +1,13 @@
-version: '3.8'
+version: '3.5'
 
 services:
-  next:
-    build: .
-    container_name: next-app
-    volumes:
-      - .:/app  # Monte le répertoire courant dans le conteneur
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: docker-next
     ports:
-      - "3000:3000"  # Expose le port 3000 pour accéder à ton application
-    working_dir: /app
-    command: yarn dev  # Exécute Next.js en mode développement
-    environment:
-      - NODE_ENV=development
-    tty: true  # Permet une session interactive dans le conteneur (utile pour le debug)
+      - '3000:3000'
+    volumes:
+      - .:/app
+      - /app/node_modules

@@ -1,15 +1,30 @@
 import { useSky } from "@/hooks";
 import { Sky } from "@react-three/drei";
+import { useControls } from "leva";
 import { Euler, Vector3 } from "three";
 import { Character } from "../core/character/Character";
-import { DiamondComponent, Ground, GroundComponent, KillBrickComponent, NeonDoorComponent, ObjectComponent, RestaurantSignComponent, SpinnerComponent, StairsComponent } from "../core/class";
+import {
+  DiamondComponent,
+  Ground,
+  GroundComponent,
+  KillBrickComponent,
+  NeonDoorComponent,
+  ObjectComponent,
+  RestaurantSignComponent,
+  SpinnerComponent,
+  StairsComponent,
+} from "../core/class";
 import { KinematicMovingPlatformComponent } from "../core/class/entities/platform/dynamic/KineticMovingPlatform";
 import { FPPushtoMoveComponent } from "../core/class/entities/platform/floating/FPPushtoMove";
+import { MoveTool } from "../core/client/inventory/move-tool/MoveTool";
 
 export const MainWorld = () => {
   /* Leva Settings */
   const sky = useSky();
 
+  const rotateSpeed = useControls("RotateSpeed", {
+    speed: { value: 1, step: 0.3 },
+  });
 
   /* INITIALIZATION */
 
@@ -35,7 +50,12 @@ export const MainWorld = () => {
         inclination={0}
         sunPosition={sky.sunPosition}
       />
-      <Character name="Player" path="FoxPam.fbx" position={[0, 20, 0]} defaultPlayer />
+      <Character
+        name="Player"
+        path="FoxPam.fbx"
+        position={[0, 20, 0]}
+        defaultPlayer
+      />
 
       <group>
         {/* Ground */}
@@ -62,7 +82,10 @@ export const MainWorld = () => {
       <group>
         {/* Entity Importations */}
         {/* <Steps /> */}
-        <SpinnerComponent position={new Vector3(-7, 0, 0)} speed={10} />
+        <SpinnerComponent
+          position={new Vector3(10, 1, 20)}
+          speed={rotateSpeed.speed}
+        />
         <KillBrickComponent position={new Vector3(15, 1, 10)} />
         <RestaurantSignComponent
           position={new Vector3(6, 0.5, 6)}
@@ -72,8 +95,8 @@ export const MainWorld = () => {
 
       <group>
         {/* Platforms Events Examples */}
-        <FPPushtoMoveComponent position={new Vector3(15, 5, 15)}/>
-        <KinematicMovingPlatformComponent position={new Vector3(20, 5, 20)}/>
+        <FPPushtoMoveComponent position={new Vector3(15, 5, 15)} />
+        <KinematicMovingPlatformComponent position={new Vector3(20, 5, 20)} />
       </group>
 
       {/* OTHERS */}
@@ -81,11 +104,13 @@ export const MainWorld = () => {
         position={new Vector3(-30, 0, 15)}
         rotation={new Euler(0, 0, 0)}
       />
-      d
+
       {/* <RacingVehicle position={[15, 2, 0]} rotation={[0, Math.PI / 2, 0]} /> */}
       {/* <Vehicle position={[8, 2, 0]} /> */}
 
-      <NeonDoorComponent position={new Vector3(11, 0.05, -7)} scale={2} />z
+      <NeonDoorComponent position={new Vector3(11.00, 0.34, -7.00)} scale={1.3} />
+
+      <MoveTool />
     </>
   );
 };

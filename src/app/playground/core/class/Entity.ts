@@ -1,6 +1,6 @@
 import { RapierRigidBody, RigidBodyOptions } from "@react-three/rapier";
 import { createRef } from "react";
-import { Euler, Group, Vector3 } from "three";
+import { Euler, Object3D, Vector3 } from "three";
 
 export class Entity {
   name: string;
@@ -11,16 +11,15 @@ export class Entity {
   type: RigidBodyOptions["type"] = "fixed";
   colliders: RigidBodyOptions["colliders"] = "hull";
   scale: number | [number, number, number] = 1;
-  rigidBody?: RapierRigidBody; // Reference to the physics body
-  ccd: boolean = false; // Continuous Collision Detection
-  canSleep: boolean = true; // Allow the body to sleep
+  rigidBody?: RapierRigidBody;
+  ccd: boolean = false;
+  canSleep: boolean = true;
 
   constructor(name: string) {
     this.name = name;
-    // console.log(`${name} initialized`);
+    this.position = new Vector3();
   }
 
-  // Métodos simplificados para setters
   setPosition(position: Vector3) {
     this.position.copy(position);
   }

@@ -7,45 +7,56 @@ export default class EntitySingleton {
   public static getInstance<T extends Entity>(
     entity: new (...args: any[]) => T,
   ): T {
-    const entityName = entity.name;
-    // console.log(entityName);
-
-    // If the instance doesn't exist, create it
-    if (!EntitySingleton.instances.has(entityName)) {
-      console.log("soesn't exist", entityName);
-      EntitySingleton.instances.set(entityName, new entity() as Entity);
+    const entityTemp = new entity();
+    const entityName = entityTemp.name;
+  
+    if (!this.hasInstance(entityName)) {
+      this.instances.set(entityName, entityTemp);
     }
 
-    return EntitySingleton.instances.get(entityName) as T;
+    // console.log(entityName, "added");
+  
+    return this.instances.get(entityName) as T;
+  }
+  
+  // Method to remove an instance of the entity
+  public static removeInstance(instance: Entity): void {
+    this.instances.delete(instance.name);
   }
 
-  // Method to remove an instance of the entity
-  public static removeInstance(entityName: string): void {
-    EntitySingleton.instances.delete(entityName);
+  // Method to remove an instance of the entity by name
+  public static removeInstanceByEntityName(entityInstanceName: string): void {
+    console.log(entityInstanceName, "removed");
+    for (const [key, instance] of this.instances) {
+      if (instance.name === entityInstanceName) {
+        this.instances.delete(key);
+        break;
+      }
+    }
   }
 
   // Method to remove all instances of the entity
   public static removeAllInstances(): void {
-    EntitySingleton.instances.clear();
+    this.instances.clear();
   }
 
   // Method to get all instances of the entity
   public static getAllInstances(): Map<string, Entity> {
-    return EntitySingleton.instances;
+    return this.instances;
   }
 
   // Method to get the number of instances of the entity
   public static getInstanceCount(): number {
-    return EntitySingleton.instances.size;
+    return this.instances.size;
   }
 
   // Method to check if an instance of the entity exists
   public static hasInstance(entityName: string): boolean {
-    return EntitySingleton.instances.has(entityName);
+    return this.instances.has(entityName);
   }
 
   // Method to get an instance of the entity by name
   public static getInstanceByName<T extends Entity>(entityName: string): T {
-    return EntitySingleton.instances.get(entityName) as T;
+    return this.instances.get(entityName) as T;
   }
 }

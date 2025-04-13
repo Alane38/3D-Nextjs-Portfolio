@@ -8,27 +8,28 @@ import { globalControls } from "src/constants/default";
 import { Loading } from "../../components/Loading";
 import { PerformanceWarning } from "../../components/PerformanceWarning";
 
-import { MainWorld } from "./world/MainWorld";
+import Inventory from "./core/client/inventory/Inventory";
 import { GameCanvas } from "./GameCanvas";
+import { MainWorld } from "./world/MainWorld";
 
 export function Game() {
   const [visible, setVisible] = useState(true);
-  const loading = useLoadingAssets();
+  // const loading = useLoadingAssets();
 
   return (
     <>
-      {loading !== 100 && visible && (
+      {/* {loading !== 100 && visible && (
         <Loading
           progress={loading}
           onSkip={() => {
             setVisible(false);
           }}
         />
-      )}
+      )} */}
       <PerformanceWarning />
       <Leva collapsed={true} /> {/* Leva Panel Settings */}
       {/* Player Inventory */}
-      {/* <Inventory /> */}
+      <Inventory />
       {/* Controls */}
       <KeyboardControls map={globalControls}>
         <GameCanvas>
