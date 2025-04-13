@@ -16,12 +16,14 @@ import {
 import {
   forwardRef,
   ForwardRefRenderFunction,
+  useCallback,
   useEffect,
   useImperativeHandle,
   useMemo,
   useRef,
   useState,
 } from "react";
+import { Vector3 } from "three";
 import * as THREE from "three";
 import { useFollowCam } from "./hooks/useFollowCam";
 import { useGame } from "./store/useGame";
@@ -87,15 +89,15 @@ const Galaad: ForwardRefRenderFunction<customRigidBody, GalaadProps> = (
     // Controls settings
     maxVelLim = 2.5,
     // Turn vel/speed
-    turnVelMultiplier = 0.2,
-    turnSpeed = 5,
+    turnVelMultiplier = 0.1,
+    turnSpeed = 4,
     // Sprint
     sprintMult = 2,
     // Jump
-    jumpVel = 6,
+    jumpVel = 8,
     jumpForceToGroundMult = 5,
     slopJumpMult = 0.25,
-    sprintJumpMult = 1.2,
+    sprintJumpMult = 1.1,
     // Air drag
     airDragMultiplier = 0.2,
     dragDampingC = 0.15,
@@ -107,10 +109,10 @@ const Galaad: ForwardRefRenderFunction<customRigidBody, GalaadProps> = (
     camFollowMult = 11,
     camLerpMult = 25,
     // Falling
-    fallingGravityScale = 2.5,
+    fallingGravityScale = 3,
     fallingMaxVel = -20,
     // Wake up
-    wakeUpDelay = 200,
+    wakeUpDelay = 100,
     // Floating Ray setups
     rayOriginOffest = { x: 0, y: -hitboxWidth, z: 0 },
     rayHitForgiveness = 0.1,
@@ -123,16 +125,16 @@ const Galaad: ForwardRefRenderFunction<customRigidBody, GalaadProps> = (
     showSlopeRayOrigin = false,
     slopeMaxAngle = 1, // in rad
     slopeRayOriginOffest = hitboxHeight - 0.03,
-    slopeRayLength = hitboxHeight + 3,
+    slopeRayLength = hitboxHeight + 2,
     slopeRayDir = { x: 0, y: -1, z: 0 },
     slopeUpExtraForce = 0.05,
     slopeDownExtraForce = 0.2,
     // AutoBalance Force setups
     autoBalance = true,
-    autoBalanceSpringK = 0.2,
+    autoBalanceSpringK = 0.5,
     autoBalanceDampingC = 0.2,
     autoBalanceSpringOnY = 0.1,
-    autoBalanceDampingOnY = 0.02,
+    autoBalanceDampingOnY = 0.01,
     // Animation I/O
     animated = false,
     // Mode setups
@@ -597,7 +599,97 @@ const Galaad: ForwardRefRenderFunction<customRigidBody, GalaadProps> = (
     );
   };
 
-  // // Character auto balance function
+  // Detect Moving Platform and apply movement to character
+  let isOnMovingPlatform = false;
+  let movingPlatformVelocity = new Vector3();
+
+  // Detect if the character is on a moving platform and get the platform velocity
+  const detectPlatformUnderPlayer = () => {
+    const character = characterRef.current;
+    if (!character) return;
+
+    isOnMovingPlatform = false;
+    movingPlatformVelocity.set(0, 0, 0);
+
+    const rayDirection = new Vector3(0, -1, 0); // Raycast vers le bas
+    const translation = character.translation();
+    const widthOffset = 0.3; // Écart pour créer une grille sous le personnage
+
+    // Grille 3x3 de points sous le personnage (x et z)
+    const offsets = [-widthOffset, 0, widthOffset];
+    for (let dx of offsets) {
+      for (let dz of offsets) {
+        const rayOrigin = new Vector3(
+          translation.x + dx,
+          translation.y + 0.2, // Départ légèrement au-dessus
+          translation.z + dz,
+        );
+
+        const ray = new rapier.Ray(rayOrigin, rayDirection);
+        const raycastResult = world.castRay(
+          ray,
+          1.5,
+          true,
+          QueryFilterFlags.ONLY_KINEMATIC,
+        );
+
+        if (raycastResult && raycastResult.collider) {
+          const otherBody = raycastResult.collider.parent();
+          if (!otherBody || otherBody === character) continue;
+
+          const normal = raycastResult.collider.castRayAndGetNormal(
+            ray,
+            1.5,
+            false,
+          )?.normal;
+          if (normal && normal.y > 0.5) {
+            isOnMovingPlatform = true;
+
+            const platformVel = otherBody.linvel();
+            movingPlatformVelocity.set(
+              platformVel.x,
+              platformVel.y,
+              platformVel.z,
+            );
+            return; // Dès qu'on détecte une plateforme correcte, on arrête
+          }
+        }
+      }
+    }
+  };
+
+  // Character movement and platform detection
+  useFrame((state, delta) => {
+    const character = characterRef.current;
+    if (!character) return;
+
+    detectPlatformUnderPlayer(); // Update isOnMovingPlatform and movingPlatformVelocity
+
+    const currentVel = character.linvel();
+    const currentVelVec = new Vector3(currentVel.x, currentVel.y, currentVel.z);
+
+    if (isOnMovingPlatform) {
+      const platformDeltaPosition = new Vector3();
+      platformDeltaPosition.set(
+        movingPlatformVelocity.x * delta,
+        movingPlatformVelocity.y * delta,
+        movingPlatformVelocity.z * delta,
+      );
+
+      const currentTranslation = new THREE.Vector3(
+        character.translation().x,
+        character.translation().y,
+        character.translation().z,
+      );
+
+      character.setTranslation(
+        currentTranslation.add(platformDeltaPosition),
+        true,
+      );
+    }
+  });
+
+  // // Character Auto Balance function
   const autoBalanceCharacter = () => {
     // Match body component to character model rotation on Y
     bodyFacingVec
@@ -657,9 +749,6 @@ const Galaad: ForwardRefRenderFunction<customRigidBody, GalaadProps> = (
     // Apply balance torque impulse
     characterRef.current.applyTorqueImpulse(dragAngForce, true);
   };
-
-  if (isModeOnlyCamera) {
-  }
 
   // // Character sleep function
   const sleepCharacter = () => {
@@ -1303,8 +1392,6 @@ const Galaad: ForwardRefRenderFunction<customRigidBody, GalaadProps> = (
       }
     }
   });
-
-  console.log(children);
 
   return (
     <RigidBody

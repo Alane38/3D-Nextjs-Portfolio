@@ -11,7 +11,6 @@ export class KinematicMovingPlatformEntity extends Entity {
     super("KinematicMovingPlatform");
     this.type = "kinematicPosition";
     this.position = new Vector3(-12, 0.7, -10);
-    this.colliders = false;
   }
 
   renderComponent() {
@@ -38,7 +37,7 @@ export const KinematicMovingPlatformComponent = ({
   });
 
   return (
-    <RigidBody ref={ref} {...object}>
+    <RigidBody ref={ref} {...object} >
       <Text scale={0.5} color="black" maxWidth={10} textAlign="center" position={[0, 2.5, 0]}>
         Kinematic Moving Platform
       </Text>

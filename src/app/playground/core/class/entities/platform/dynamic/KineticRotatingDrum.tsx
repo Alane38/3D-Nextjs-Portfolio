@@ -11,7 +11,6 @@ export class KinematicRotatingDrumEntity extends Entity {
     super("KinematicRotatingDrum");
     this.type = "kinematicPosition";
     this.position = new THREE.Vector3(-15, -0.5, -15);
-    this.colliders = false;
   }
 
   renderComponent() {

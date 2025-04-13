@@ -73,18 +73,18 @@ export const Character = ({
         // Physics
         maxVelLim={5}
         turnVelMultiplier={0.1}
-        turnSpeed={5}
+        turnSpeed={4}
         sprintMult={1.8}
-        jumpVel={6}
+        jumpVel={8}
         jumpForceToGroundMult={1}
         slopJumpMult={0}
-        sprintJumpMult={1}
+        sprintJumpMult={1.1}
         airDragMultiplier={0.1}
         dragDampingC={0.1}
         accDeltaTime={5}
         rejectVelMult={1}
         moveImpulsePointY={0.3}
-        fallingGravityScale={3.5}
+        fallingGravityScale={3}
         fallingMaxVel={-25}
         wakeUpDelay={100}
         rayOriginOffest={{ x: 0, y: -0.5, z: 0 }}
@@ -101,10 +101,10 @@ export const Character = ({
         slopeDownExtraForce={0.1}
         // Auto balance
         autoBalance={true}
-        autoBalanceSpringK={0.2}
-        autoBalanceDampingC={0.2}
+        autoBalanceSpringK={1}
+        autoBalanceDampingC={0.05}
         autoBalanceSpringOnY={0.1}
-        autoBalanceDampingOnY={0.02}
+        autoBalanceDampingOnY={0.01}
         onCollisionEnter={({ other }) => {
           if (other.rigidBodyObject?.name === "Spinner") {
             rb.current?.applyImpulse({ x: 3, y: 3, z: 3 }, true);
