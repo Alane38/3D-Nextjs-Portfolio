@@ -1,10 +1,8 @@
 import { ModelLoader } from "@/app/playground/core/class/rendering/ModelLoader";
 import { useVideoTexture } from "@react-three/drei";
-import { RigidBody } from "@react-three/rapier";
-import { useMemo } from "react";
 import { modelPath } from "src/constants/default";
 import { Entity } from "../Entity";
-import EntitySingleton from "../EntitySingleton";
+import { EntityComponent } from "../EntityComponent";
 
 export class RestaurantSign extends Entity {
   constructor(path: string = modelPath + "RestaurantSign.glb") {
@@ -18,20 +16,14 @@ export class RestaurantSign extends Entity {
   }
 }
 
-export const RestaurantSignComponent = ({
-  model,
-  ...props
-}: { model?: RestaurantSign } & Partial<RestaurantSign>) => {
-  // Fusion of props and model
-  const instance = model || EntitySingleton.getInstance(RestaurantSign);
-  const object = useMemo(() => ({ ...instance, ...props }), [model, props]);
+export const RestaurantSignComponent = EntityComponent(
+  RestaurantSign, (object, rigidBodyRef) => {
 
   const videoTexture = useVideoTexture(
     "/assets/videos/newalfox-compressed.webm",
   );
 
   return (
-    <RigidBody {...object}>
       <group>
         {/* Model */}
         <ModelLoader path={object.path} />
@@ -44,6 +36,5 @@ export const RestaurantSignComponent = ({
           <meshBasicMaterial map={videoTexture} />
         </mesh>
       </group>
-    </RigidBody>
   );
-};
+});

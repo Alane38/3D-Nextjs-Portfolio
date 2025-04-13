@@ -1,11 +1,11 @@
 import { JSX, useEffect, useMemo, useRef } from "react";
-import { Group } from "three";
 import { useMoveToolStore } from "../client/inventory/move-tool/store/useMoveTool.store";
 import { Entity } from "./Entity";
+import { RapierRigidBody, RigidBody } from "@react-three/rapier";
 
-export function createEntityComponent<T extends Entity>(
+export function EntityComponent<T extends Entity>(
   EntityClass: new () => T,
-  RenderMesh: (object: T) => JSX.Element,
+  RenderMesh: (object: T, rigidBodyRef: React.RefObject<RapierRigidBody | null> ) => JSX.Element,
   useMoveTool = true,
 ) {
   return ({ model, ...props }: { model?: T } & Partial<T>) => {
@@ -17,18 +17,17 @@ export function createEntityComponent<T extends Entity>(
       }
     }, [model]);
 
+    const bodyRef = useRef<RapierRigidBody>(null);
+    const { setPosition, setSelectedGroup } = useMoveToolStore((s) => s);
+    
     const object = useMemo(() => {
       return { ...instance.current, ...props };
     }, [props]);
-
-    const bodyRef = useRef<Group>(null);
-    const { setPosition, setSelectedGroup, selectedGroup } = useMoveToolStore((s) => s);
-
+    
     return (
-      <>
-      <group
+      <RigidBody
         ref={bodyRef}
-        onPointerDown={(e) => {
+        onPointerDown={(e: PointerEvent) => {
           if (useMoveTool) {
             e.stopPropagation();
             if (!bodyRef.current) return;
@@ -38,10 +37,8 @@ export function createEntityComponent<T extends Entity>(
         }}
         {...object}
       >
-        {RenderMesh(object)}
-      </group>
-
-      </>
+        {RenderMesh(object, bodyRef)}
+      </RigidBody>
     );
   };
 }

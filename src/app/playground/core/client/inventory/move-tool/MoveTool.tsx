@@ -35,7 +35,7 @@ export const MoveTool = () => {
   useFrame(() => {
     if (!mooveToolEnabled || !selectedGroup || !axis || !dragging) return;
     
-    const objectPosition = selectedGroup.position;
+    const objectPosition = selectedGroup.translation();
     const origin = new Vector3(objectPosition.x, objectPosition.y, objectPosition.z);
     const normal = new Vector3();
     
@@ -68,7 +68,7 @@ export const MoveTool = () => {
       if (axis === "y") next.y += delta.y;
       if (axis === "z") next.z += delta.z;
       
-      selectedGroup.position.copy(next);
+      selectedGroup.setTranslation(next, true);
       setPosition({ x: next.x, y: next.y, z: next.z });
       
       // console.debug("[Drag] After position:", next);

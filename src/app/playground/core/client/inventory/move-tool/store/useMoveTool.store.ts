@@ -1,6 +1,4 @@
-// src/stores/useMoveToolStore.ts
-
-import { Group } from "three";
+import { RapierRigidBody } from "@react-three/rapier";
 import { create } from "zustand";
 
 type Axis = "x" | "y" | "z" | null;
@@ -8,12 +6,12 @@ type Vec3 = { x: number; y: number; z: number };
 
 interface MoveToolState {
   mooveToolEnabled: boolean;
-  selectedGroup: Group | null;
-  // selectedModel: Entity | null; 
+  selectedGroup: RapierRigidBody | null;
+  // selectedModel: Entity | null;
   axis: Axis;
   dragging: boolean;
   setMooveToolEnabled: (enabled: boolean) => void;
-  setSelectedGroup: (body: Group | null) => void;
+  setSelectedGroup: (body: RapierRigidBody | null) => void;
   // setSelectedModel: (model: Entity | null) => void;
   setAxis: (axis: Axis) => void;
   setDragging: (dragging: boolean) => void;
@@ -31,7 +29,7 @@ export const useMoveToolStore = create<MoveToolState>((set) => ({
   dragging: false,
   setMooveToolEnabled: (enabled) => set({ mooveToolEnabled: enabled }),
   setSelectedGroup: (selectedGroup) => set({ selectedGroup }),
-  // setSelectedModel: (selectedModel) => set({ selectedModel }), 
+  // setSelectedModel: (selectedModel) => set({ selectedModel }),
   setAxis: (axis) => set({ axis }),
   setDragging: (dragging) => set({ dragging }),
   reset: () => set({ selectedGroup: null, axis: null, dragging: false }),

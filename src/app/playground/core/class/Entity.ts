@@ -1,8 +1,9 @@
 import { RapierRigidBody, RigidBodyOptions } from "@react-three/rapier";
-import { createRef } from "react";
-import { Euler, Object3D, Vector3 } from "three";
+import { useRef } from "react";
+import { Euler, Vector3 } from "three";
 
 export class Entity {
+  rigidBodyRef: React.RefObject<RapierRigidBody | null> = useRef<RapierRigidBody>(null);
   name: string;
   path: string = "";
   position: Vector3 = new Vector3(0, 0, 0);
@@ -14,6 +15,8 @@ export class Entity {
   rigidBody?: RapierRigidBody;
   ccd: boolean = false;
   canSleep: boolean = true;
+  lockTranslations: boolean = false;
+  enabledRotations: [boolean, boolean, boolean] = [true, true, true];
 
   constructor(name: string) {
     this.name = name;

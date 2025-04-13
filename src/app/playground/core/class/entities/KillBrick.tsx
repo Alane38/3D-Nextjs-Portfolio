@@ -3,7 +3,7 @@ import { RigidBody } from "@react-three/rapier";
 import { useState } from "react";
 import { Euler, Vector3 } from "three";
 import { Entity } from "../Entity";
-import { createEntityComponent } from "../createEntityComponent";
+import { EntityComponent } from "../EntityComponent";
 
 export class KillBrick extends Entity {
   color: string;
@@ -21,7 +21,7 @@ export class KillBrick extends Entity {
   }
 }
 
-export const KillBrickComponent = createEntityComponent(KillBrick, (object) => {
+export const KillBrickComponent = EntityComponent(KillBrick, (object) => {
   const [color, setColor] = useState(object.color);
 
   return (
