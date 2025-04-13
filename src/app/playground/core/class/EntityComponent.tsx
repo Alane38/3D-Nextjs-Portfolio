@@ -5,7 +5,10 @@ import { RapierRigidBody, RigidBody } from "@react-three/rapier";
 
 export function EntityComponent<T extends Entity>(
   EntityClass: new () => T,
-  RenderMesh: (object: T, rigidBodyRef: React.RefObject<RapierRigidBody | null> ) => JSX.Element,
+  RenderMesh: (
+    object: T,
+    rigidBodyRef: React.RefObject<RapierRigidBody | null>,
+  ) => JSX.Element,
   useMoveTool = true,
 ) {
   return ({ model, ...props }: { model?: T } & Partial<T>) => {
@@ -19,11 +22,10 @@ export function EntityComponent<T extends Entity>(
 
     const bodyRef = useRef<RapierRigidBody>(null);
     const { setPosition, setSelectedGroup } = useMoveToolStore((s) => s);
-    
-    const object = useMemo(() => {
-      return { ...instance.current, ...props };
-    }, [props]);
-    
+
+    const object = instance.current;
+    Object.assign(object, props); // merge les props sans casser l'instance
+
     return (
       <RigidBody
         ref={bodyRef}
@@ -35,6 +37,7 @@ export function EntityComponent<T extends Entity>(
             setPosition(object.position);
           }
         }}
+        onCollisionEnter={object.onCollisionEnter}
         {...object}
       >
         {RenderMesh(object, bodyRef)}

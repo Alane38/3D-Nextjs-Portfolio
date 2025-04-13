@@ -1,10 +1,8 @@
 import { Box, Text } from "@react-three/drei";
-import { useRef, useState } from "react";
-import { Euler, Group, Vector3 } from "three";
+import { useState } from "react";
+import { Euler, Vector3 } from "three";
 import { Entity } from "../Entity";
 import { EntityComponent } from "../EntityComponent";
-import { useFrame } from "@react-three/fiber";
-import { text } from "stream/consumers";
 
 export class KillBrick extends Entity {
   color: string;
@@ -26,6 +24,13 @@ export const KillBrickComponent = EntityComponent(
   KillBrick,
   (object, rigidBodyRef) => {
     const [color, setColor] = useState(object.color);
+
+    // Add a function to the object
+    object.onCollisionEnter = ({ other }) => {
+      if (other.rigidBodyObject?.name === "Player") {
+        setColor("green"); // React state update
+      }
+    };
 
     return (
       <>

@@ -1,4 +1,4 @@
-import { RapierRigidBody, RigidBodyOptions } from "@react-three/rapier";
+import { CollisionEnterHandler, RapierRigidBody, RigidBodyOptions } from "@react-three/rapier";
 import { useRef } from "react";
 import { Euler, Vector3 } from "three";
 
@@ -17,6 +17,8 @@ export class Entity {
   canSleep: boolean = true;
   lockTranslations: boolean = false;
   enabledRotations: [boolean, boolean, boolean] = [true, true, true];
+
+  onCollisionEnter?: CollisionEnterHandler;
 
   constructor(name: string) {
     this.name = name;
