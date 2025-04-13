@@ -108,7 +108,7 @@ export const MainWorld = () => {
       {/* <RacingVehicle position={[15, 2, 0]} rotation={[0, Math.PI / 2, 0]} /> */}
       {/* <Vehicle position={[8, 2, 0]} /> */}
 
-      <NeonDoorComponent position={new Vector3(11.00, 0.34, -7.00)} scale={1.3} />
+      <NeonDoorComponent position={new Vector3(11.00, 0.34, -7.00)} scale={2} />
 
       <MoveTool />
     </>

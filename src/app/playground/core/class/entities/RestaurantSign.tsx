@@ -17,13 +17,13 @@ export class RestaurantSign extends Entity {
 }
 
 export const RestaurantSignComponent = EntityComponent(
-  RestaurantSign, (object, rigidBodyRef) => {
+  RestaurantSign,
+  (object, rigidBodyRef) => {
+    const videoTexture = useVideoTexture(
+      "/assets/videos/newalfox-compressed.webm",
+    );
 
-  const videoTexture = useVideoTexture(
-    "/assets/videos/newalfox-compressed.webm",
-  );
-
-  return (
+    return (
       <group>
         {/* Model */}
         <ModelLoader path={object.path} />
@@ -36,5 +36,6 @@ export const RestaurantSignComponent = EntityComponent(
           <meshBasicMaterial map={videoTexture} />
         </mesh>
       </group>
-  );
-});
+    );
+  },
+);
