@@ -1,4 +1,3 @@
-import { usePlayerSelection } from "@/hooks/Leva/usePlayerSelection";
 import { useKeyboardControls } from "@react-three/drei";
 import { useFrame } from "@react-three/fiber";
 import {
@@ -13,6 +12,7 @@ import { useRef } from "react";
 import { EnumPlayerOption } from "src/constants/playerSelection";
 import * as THREE from "three";
 import { VehicleControls } from "../types/VehicleControls";
+import { usePlayerSelection } from "@/hooks";
 
 // Vehicle Constants
 const up = new THREE.Vector3(0, 1, 0);

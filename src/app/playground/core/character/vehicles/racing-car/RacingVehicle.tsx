@@ -1,17 +1,14 @@
 // https://github.com/michael-go/raphcar
 // https://sketchfab.com/3d-models/low-poly-race-track-b40628339fde4b2fbe41711edc7c7a93
 
-import { usePlayerSelection } from "@/hooks";
-import { VehicleControls } from "@/playground/core/character/vehicles/types/VehicleControls";
-import { VehicleProps } from "@/playground/core/character/vehicles/types/VehicleProps";
 import { Collider } from "@dimforge/rapier3d-compat";
 import { useKeyboardControls } from "@react-three/drei";
 import { useFrame, useThree } from "@react-three/fiber";
 import {
-    CuboidCollider,
-    RapierRigidBody,
-    RigidBody,
-    useRapier,
+  CuboidCollider,
+  RapierRigidBody,
+  RigidBody,
+  useRapier,
 } from "@react-three/rapier";
 import { useControls } from "leva";
 import { RefObject, useRef, useState } from "react";
@@ -19,6 +16,8 @@ import { EnumPlayerOption } from "src/constants/playerSelection";
 import { spawn, wheels } from "src/constants/vehicle";
 import * as THREE from "three";
 import { useVehicleController } from "./use-vehicle-controller";
+import { VehicleControls } from "../types/VehicleControls";
+import { VehicleProps } from "../types/VehicleProps";
 
 const cameraOffset = new THREE.Vector3(7, 3, 0);
 const cameraTargetOffset = new THREE.Vector3(0, 1.5, 0);
@@ -28,15 +27,19 @@ const _airControlAngVel = new THREE.Vector3();
 const _cameraPosition = new THREE.Vector3();
 const _cameraTarget = new THREE.Vector3();
 
-export const RacingVehicle = ({
-  position,
-  rotation,
-  defaultPlayer,
-}: VehicleProps) => {
-  const { player, updatePlayer } = usePlayerSelection();
+export const racingVehicleControls = [
+  { name: "forward", keys: ["ArrowUp", "KeyW"] },
+  { name: "back", keys: ["ArrowDown", "KeyS"] },
+  { name: "left", keys: ["ArrowLeft", "KeyA"] },
+  { name: "right", keys: ["ArrowRight", "KeyD"] },
+  { name: "brake", keys: ["Space"] },
+  { name: "reset", keys: ["KeyR"] },
+];
+
+export const RacingVehicle = ({ position, rotation }: VehicleProps) => {
   const { world, rapier } = useRapier();
   const threeControls = useThree((s) => s.controls);
-  const [, getKeyboardControls] = useKeyboardControls<keyof VehicleControls>();
+  const [, getKeyboardControls] = useKeyboardControls();
 
   const chasisMeshRef = useRef<THREE.Mesh>(null!);
   const chasisBodyRef = useRef<RapierRigidBody>(null!);
@@ -62,12 +65,7 @@ export const RacingVehicle = ({
 
   const ground = useRef<Collider>(null);
 
-  // Initialize default player
-  defaultPlayer && updatePlayer(EnumPlayerOption.RacingCar);
-
   useFrame((state, delta) => {
-    if (player !== EnumPlayerOption.RacingCar) return null;
-
     if (!chasisMeshRef.current || !vehicleController.current || !!threeControls)
       return;
 
@@ -111,9 +109,9 @@ export const RacingVehicle = ({
     }
 
     // TODO: Check if the vehicle is flipped
-    console.log(chassisRigidBody.translation().y);
+    // console.log(chassisRigidBody.translation().y);
     if (chassisRigidBody.translation().y < 0.25) {
-      console.log("Flipped");
+        console.log("Flipped");
       // Vehicle is flipped
       const bodyEuler = new THREE.Euler().setFromQuaternion(
         new THREE.Quaternion().setFromEuler(
@@ -121,12 +119,10 @@ export const RacingVehicle = ({
         ),
         "XYZ",
       );
+      // console.log(bodyEuler);
       const isFlipped =
-        bodyEuler.x > Math.PI / 2 ||
-        bodyEuler.x < -Math.PI / 2 ||
-        bodyEuler.z !== 0 ||
-        bodyEuler.y !== 0;
-      console.log(isFlipped);
+        bodyEuler.x > Math.PI / 2 || bodyEuler.x < -Math.PI / 2 || bodyEuler.z !== 0 || bodyEuler.y !== 0;
+        // console.log(isFlipped);
 
       if (isFlipped) {
         // Calcul of the impulse
@@ -144,20 +140,19 @@ export const RacingVehicle = ({
     }
 
     const engineForce =
-      Number(controls.forward) * accelerateForce - Number(controls.backward);
+      Number(controls.forward) * accelerateForce - Number(controls.back);
 
     controller.setWheelEngineForce(0, engineForce);
     controller.setWheelEngineForce(1, engineForce);
 
-    const wheelBrake = Number(controls.jump_brake) * brakeForce;
+    const wheelBrake = Number(controls.brake) * brakeForce;
     controller.setWheelBrake(0, wheelBrake);
     controller.setWheelBrake(1, wheelBrake);
     controller.setWheelBrake(2, wheelBrake);
     controller.setWheelBrake(3, wheelBrake);
 
     const currentSteering = controller.wheelSteering(0) || 0;
-    const steerDirection =
-      Number(controls.leftward) - Number(controls.rightward);
+    const steerDirection = Number(controls.left) - Number(controls.right);
 
     const steering = THREE.MathUtils.lerp(
       currentSteering,
@@ -170,9 +165,8 @@ export const RacingVehicle = ({
 
     // air control
     if (!ground.current) {
-      const forwardAngVel =
-        Number(controls.forward) - Number(controls.backward);
-      const sideAngVel = Number(controls.leftward) - Number(controls.rightward);
+      const forwardAngVel = Number(controls.forward) - Number(controls.back);
+      const sideAngVel = Number(controls.left) - Number(controls.right);
 
       const angvel = _airControlAngVel.set(
         0,
