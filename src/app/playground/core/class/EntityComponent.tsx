@@ -1,13 +1,15 @@
-import { JSX, useEffect, useMemo, useRef } from "react";
-import { useMoveToolStore } from "../client/inventory/move-tool/store/useMoveTool.store";
-import { Entity } from "./Entity";
 import { RapierRigidBody, RigidBody } from "@react-three/rapier";
+import { JSX, useEffect, useRef } from "react";
+import { useEditToolStore } from "../client/inventory/edit-tool/store/useEditTool.store";
+import { Entity } from "./Entity";
+import * as THREE from "three";
 
 export function EntityComponent<T extends Entity>(
   EntityClass: new () => T,
   RenderMesh: (
     object: T,
     rigidBodyRef: React.RefObject<RapierRigidBody | null>,
+    visualRef?: React.RefObject<THREE.Group | null>,
   ) => JSX.Element,
   useMoveTool = true,
 ) {
@@ -21,10 +23,12 @@ export function EntityComponent<T extends Entity>(
     }, [model]);
 
     const bodyRef = useRef<RapierRigidBody>(null);
-    const { setPosition, setSelectedGroup } = useMoveToolStore((s) => s);
+    const visualRef = useRef<THREE.Group>(null);
+    const { setPosition, setSelectedGroup, setSelectedVisual } =
+      useEditToolStore();
 
     const object = instance.current;
-    Object.assign(object, props); // merge les props sans casser l'instance
+    Object.assign(object, props);
 
     return (
       <RigidBody
@@ -34,13 +38,14 @@ export function EntityComponent<T extends Entity>(
             e.stopPropagation();
             if (!bodyRef.current) return;
             setSelectedGroup(bodyRef.current);
+            setSelectedVisual(visualRef.current);
             setPosition(object.position);
           }
         }}
         onCollisionEnter={object.onCollisionEnter}
         {...object}
       >
-        {RenderMesh(object, bodyRef)}
+        { visualRef ? <group ref={visualRef}>{RenderMesh(object, bodyRef, visualRef)}</group> : RenderMesh(object, bodyRef)}
       </RigidBody>
     );
   };

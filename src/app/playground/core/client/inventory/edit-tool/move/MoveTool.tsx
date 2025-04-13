@@ -1,11 +1,11 @@
 import { useThree, useFrame } from "@react-three/fiber";
 import { useRef, useEffect } from "react";
 import { Raycaster, Plane, Vector3, Vector2 } from "three";
-import { useMoveToolStore } from "./store/useMoveTool.store";
+import { useEditToolStore } from "../store/useEditTool.store";
 
 export const MoveTool = () => {
   const {
-    mooveToolEnabled,
+    moveToolEnabled,
     selectedGroup,
     dragging,
     axis,
@@ -13,7 +13,7 @@ export const MoveTool = () => {
     setDragging,
     setAxis,
     position,
-  } = useMoveToolStore((s) => s);
+  } = useEditToolStore((s) => s);
 
   
   const { camera, pointer } = useThree();
@@ -33,7 +33,7 @@ export const MoveTool = () => {
   }, []);
   
   useFrame(() => {
-    if (!mooveToolEnabled || !selectedGroup || !axis || !dragging) return;
+    if (!moveToolEnabled || !selectedGroup || !axis || !dragging) return;
     
     const objectPosition = selectedGroup.translation();
     const origin = new Vector3(objectPosition.x, objectPosition.y, objectPosition.z);
@@ -79,7 +79,7 @@ export const MoveTool = () => {
 
   // console.debug("[Render] MoveGizmo position:", position);
   
-  if (!selectedGroup || !mooveToolEnabled) return null;
+  if (!selectedGroup || !moveToolEnabled) return null;
   
   return (
     <group position={[position.x, position.y, position.z]} rotation={[0, Math.PI, 0]}>

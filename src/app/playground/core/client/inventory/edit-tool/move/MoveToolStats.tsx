@@ -1,8 +1,8 @@
 import { useEffect } from "react";
-import { useMoveToolStore } from "./store/useMoveTool.store";
+import { useEditToolStore } from "../store/useEditTool.store";
 
 export const MoveToolStats = ({ active }: { active: boolean }) => {
-  const { position, setPosition } = useMoveToolStore();
+  const { position, setPosition } = useEditToolStore();
 
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {

@@ -16,7 +16,7 @@ import {
 } from "../core/class";
 import { KinematicMovingPlatformComponent } from "../core/class/entities/platform/dynamic/KineticMovingPlatform";
 import { FPPushtoMoveComponent } from "../core/class/entities/platform/floating/FPPushtoMove";
-import { MoveTool } from "../core/client/inventory/move-tool/MoveTool";
+import { EditTool } from "../core/client/inventory/edit-tool/EditTool";
 
 export const MainWorld = () => {
   /* Leva Settings */
@@ -110,7 +110,7 @@ export const MainWorld = () => {
 
       <NeonDoorComponent position={new Vector3(11.00, 0.34, -7.00)} scale={2} />
 
-      <MoveTool />
+      <EditTool />
     </>
   );
 };
