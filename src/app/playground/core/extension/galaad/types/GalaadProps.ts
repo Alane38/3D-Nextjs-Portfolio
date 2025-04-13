@@ -12,9 +12,10 @@ export interface GalaadProps extends RigidBodyProps {
   hitboxLenght?: number;
   hitboxRadius?: number;
 
+  floatMode?: boolean;
   floatHeight?: number;
 
-  // Character initial 
+  // Character initial
   characterInitDir?: number;
 
   // Control I/O

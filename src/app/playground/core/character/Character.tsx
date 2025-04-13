@@ -39,6 +39,7 @@ export const Character = ({
         position={position}
         infiniteJump={true}
         animated={true}
+        floatMode={false}
         // Collider
         colliders="hull"
         hitboxHeight={0.4}

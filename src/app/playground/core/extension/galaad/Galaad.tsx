@@ -34,6 +34,7 @@ import { GalaadProps } from "./types/GalaadProps";
 import { getObjectDirection } from "./utils/getObjectDirection";
 import { insideKeyboardControls } from "./utils/insideKeyboardControls";
 import { LockCamera } from "./utils/LockCamera";
+import { is } from "@react-three/fiber/dist/declarations/src/core/utils";
 
 const Galaad: ForwardRefRenderFunction<customRigidBody, GalaadProps> = (
   {
@@ -47,6 +48,7 @@ const Galaad: ForwardRefRenderFunction<customRigidBody, GalaadProps> = (
     hitboxLenght = 0.1,
     hitboxRadius = 0.3,
 
+    floatMode = false,
     floatHeight = 0,
 
     // Character initial setup
@@ -1191,7 +1193,7 @@ const Galaad: ForwardRefRenderFunction<customRigidBody, GalaadProps> = (
       undefined,
       undefined,
       characterRef.current,
-      // this exclude any collider with userData: excludeEcctrlRay
+      // this exclude any collider with userData
       ((collider: Collider) =>
         collider.parent()?.userData &&
         !(collider.parent()?.userData as CharacterState).excludeRay) as (
@@ -1226,21 +1228,23 @@ const Galaad: ForwardRefRenderFunction<customRigidBody, GalaadProps> = (
     }
 
     // // Apply floating force
-    if (rayHit != null) {
-      if (canJump && rayHit.collider.parent()) {
-        floatingForce =
-          springK * (floatingDis - rayHit.timeOfImpact) -
-          characterRef.current.linvel().y * dampingC;
-        characterRef.current.applyImpulse(
-          springDirVec.set(0, floatingForce, 0),
-          false,
-        );
+    if (floatMode === true) {
+      if (rayHit != null) {
+        if (canJump && rayHit.collider.parent()) {
+          floatingForce =
+            springK * (floatingDis - rayHit.timeOfImpact) -
+            characterRef.current.linvel().y * dampingC;
+          characterRef.current.applyImpulse(
+            springDirVec.set(0, floatingForce, 0),
+            false,
+          );
 
-        // Apply opposite force to standing object (gravity g in rapier is 0.11 ?_?)
-        characterMassForce.set(0, floatingForce > 0 ? -floatingForce : 0, 0);
-        rayHit.collider
-          .parent()
-          ?.applyImpulseAtPoint(characterMassForce, standingForcePoint, true);
+          // Apply opposite force to standing object (gravity g in rapier is 0.11 ?_?)
+          characterMassForce.set(0, floatingForce > 0 ? -floatingForce : 0, 0);
+          rayHit.collider
+            .parent()
+            ?.applyImpulseAtPoint(characterMassForce, standingForcePoint, true);
+        }
       }
     }
 
@@ -1382,7 +1386,9 @@ const Galaad: ForwardRefRenderFunction<customRigidBody, GalaadProps> = (
       if (isJumping) {
         jumpAnimation?.();
       } else if (isMoving) {
-        run || runState ? runAnimation?.() : walkAnimation?.();
+        if (rayHit !== null) {
+          run || runState ? runAnimation?.() : walkAnimation?.();
+        }
       } else if (!canJump) {
         jumpIdleAnimation?.();
       }
