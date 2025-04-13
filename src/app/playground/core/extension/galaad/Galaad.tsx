@@ -660,37 +660,6 @@ const Galaad: ForwardRefRenderFunction<customRigidBody, GalaadProps> = (
     }
   };
 
-  // Character movement and platform detection
-  useFrame((state, delta) => {
-    const character = characterRef.current;
-    if (!character) return;
-
-    detectPlatformUnderPlayer(); // Update isOnMovingPlatform and movingPlatformVelocity
-
-    const currentVel = character.linvel();
-    const currentVelVec = new Vector3(currentVel.x, currentVel.y, currentVel.z);
-
-    if (isOnMovingPlatform) {
-      const platformDeltaPosition = new Vector3();
-      platformDeltaPosition.set(
-        movingPlatformVelocity.x * delta,
-        movingPlatformVelocity.y * delta,
-        movingPlatformVelocity.z * delta,
-      );
-
-      const currentTranslation = new THREE.Vector3(
-        character.translation().x,
-        character.translation().y,
-        character.translation().z,
-      );
-
-      character.setTranslation(
-        currentTranslation.add(platformDeltaPosition),
-        true,
-      );
-    }
-  });
-
   // // Character Auto Balance function
   const autoBalanceCharacter = () => {
     // Match body component to character model rotation on Y
@@ -919,6 +888,39 @@ const Galaad: ForwardRefRenderFunction<customRigidBody, GalaadProps> = (
   }, []);
 
   // //
+
+  // Local character and plaform management !
+  useFrame((state, delta) => {
+    const character = characterRef.current;
+    if (!character) return;
+
+    detectPlatformUnderPlayer(); // Update isOnMovingPlatform and movingPlatformVelocity
+
+    const currentVel = character.linvel();
+    const currentVelVec = new Vector3(currentVel.x, currentVel.y, currentVel.z);
+
+    if (isOnMovingPlatform) {
+      const platformDeltaPosition = new Vector3();
+      platformDeltaPosition.set(
+        movingPlatformVelocity.x * delta,
+        movingPlatformVelocity.y * delta,
+        movingPlatformVelocity.z * delta,
+      );
+
+      const currentTranslation = new THREE.Vector3(
+        character.translation().x,
+        character.translation().y,
+        character.translation().z,
+      );
+
+      character.setTranslation(
+        currentTranslation.add(platformDeltaPosition),
+        true,
+      );
+    }
+  });
+
+  // Global
   useFrame((state, delta) => {
     if (delta > 1) delta %= 1;
     if (!defaultPlayer) return; // Only active for default player
@@ -1079,7 +1081,16 @@ const Galaad: ForwardRefRenderFunction<customRigidBody, GalaadProps> = (
       ) => boolean,
     );
 
-    // //  Test shape ray
+    // Character Flip
+    // Check if the character is flipped based on its rotation
+
+    const rotation = characterRef.current.rotation();
+    const isFlipped = rotation.x > 0.5 || rotation.x < -0.5;
+    if (isFlipped) {
+      characterRef.current.rotation().x = 0;
+    }
+
+    // Shape Ray Detection (not used)
     // rayHit = world.castShape(
     //   currentPos,
     //   { w: 0, x: 0, y: 0, z: 0 },
