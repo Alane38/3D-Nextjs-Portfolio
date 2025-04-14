@@ -12,7 +12,7 @@ import {
   ObjectComponent,
   RestaurantSignComponent,
   SpinnerComponent,
-  StairsComponent
+  StairsComponent,
 } from "../core/class";
 import { KinematicMovingPlatformComponent } from "../core/class/entities/platform/dynamic/KineticMovingPlatform";
 import { FPPushtoMoveComponent } from "../core/class/entities/platform/floating/FPPushtoMove";
@@ -21,12 +21,14 @@ import { useEntityStore } from "../core/class/entity.store";
 
 export function MainWorld() {
   /* Leva Settings */
-  const sky = useSky();
-  const {entities, setEntities} = useEntityStore();
-  
+  // Leva Const initialization
   const rotateSpeed = useControls("RotateSpeed", {
     speed: { value: 1, step: 0.3 },
   });
+  const sky = useSky();
+
+  // Store initialization
+  const { entities } = useEntityStore();
 
   /* INITIALIZATION */
 
@@ -45,12 +47,13 @@ export function MainWorld() {
   //     console.log("Diamond2 removed");
   //   }, 10000)
   // }, [])
-  
+
   return (
     <>
-    {entities?.map((entity, i) => (
-       <Fragment key={i}>{entity.renderComponent()}</Fragment>
-    ))}
+      {/* Load Entities */}
+      {entities?.map((entity, i) => (
+        <Fragment key={i}>{entity.renderComponent()}</Fragment>
+      ))}
       {/* <ObjectComponent /> */}
       <Sky
         turbidity={sky.turbidity}
@@ -68,12 +71,10 @@ export function MainWorld() {
         position={[0, 20, 0]}
         defaultPlayer
       />
-
-        {/* Ground */}
-        <GroundComponent /> {/* Default Ground  */}
-
+      {/* Ground */}
+      <GroundComponent /> {/* Default Ground  */}
+      {/* Entity Importations */}
       <group>
-        {/* Entity Importations */}
         {/* <TextObjectComponent
           position={new Vector3(3, 1, 0)}
           TextProps={{ text: "NEWALFOX" }}
@@ -85,7 +86,6 @@ export function MainWorld() {
         <DiamondComponent position={new Vector3(10, 2, 10)} name="Diamond3" />
         <ObjectComponent position={new Vector3(0, 0.5, 0)} />
       </group>
-
       <group>
         {/* Entity Importations */}
         {/* <Steps /> */}
@@ -93,32 +93,30 @@ export function MainWorld() {
           position={new Vector3(10, 1, 20)}
           speed={rotateSpeed.speed}
         />
-        <KillBrickComponent position={new Vector3(15, 1, 10)} name="KillBrick1" />
+        <KillBrickComponent
+          position={new Vector3(15, 1, 10)}
+          name="KillBrick1"
+        />
         <KillBrickComponent position={new Vector3(15, 1, 10)} />
         <RestaurantSignComponent
           position={new Vector3(6, 0.5, 6)}
           rotation={new Euler(0, Math.PI / 4, 0)}
         />
       </group>
-
       <group>
         {/* Platforms Events Examples */}
         <FPPushtoMoveComponent position={new Vector3(15, 5, 15)} />
         <KinematicMovingPlatformComponent position={new Vector3(20, 5, 20)} />
       </group>
-
       {/* OTHERS */}
       <StairsComponent
         position={new Vector3(-30, 0, 15)}
         rotation={new Euler(0, 0, 0)}
       />
-
       {/* <RacingVehicle position={[15, 2, 0]} rotation={[0, Math.PI / 2, 0]} /> */}
       {/* <Vehicle position={[8, 2, 0]} /> */}
-
-      <NeonDoorComponent position={new Vector3(11.00, 0.34, -7.00)} scale={2} />
-
+      <NeonDoorComponent position={new Vector3(11.0, 0.34, -7.0)} scale={2} />
       <EditTool />
     </>
   );
-};
+}

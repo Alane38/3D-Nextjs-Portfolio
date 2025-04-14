@@ -10,6 +10,7 @@ import { Euler, Vector3 } from "three";
 //   entity: Entity;
 // };
 
+// 3D Object class, extends to create the EntityComponent.
 export class Entity {
   rigidBodyRef?: React.RefObject<RapierRigidBody | null> = createRef();
   name: string;

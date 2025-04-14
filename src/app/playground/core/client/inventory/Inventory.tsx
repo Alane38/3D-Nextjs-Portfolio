@@ -16,7 +16,7 @@ const itemsData = [
     description: "Scale Tool",
     image: "/assets/images/inventory/scale-tool.png",
   },
-  // Ajoutez d'autres éléments ici si nécessaire
+  // Add more items/tools here.
 ];
 
 export const Inventory = () => {
@@ -48,21 +48,26 @@ export const Inventory = () => {
   };
 
   useEffect(() => {
-    console.log("Entities FROM INVENTORY", entities);
-    // Vérifier si tous les RigidBody sont montés
-    const allMounted = entities.every(entity => entity.rigidBodyRef?.current !== null);
-    setAllRigidBodiesMounted(allMounted);
-  }, [entities]);
+    setTimeout(() => {
+      // Check if all RigidBodies are mounted
+      const allMounted = entities.every(entity => entity.rigidBodyRef?.current !== null); // False
+      // Return a boolean
+      setAllRigidBodiesMounted(allMounted);
+    }, 10000);
+  }, []);
 
   const handleSave = () => {
+    // Check if all RigidBodies are mounted; if not you can't save the world.
     if (!allRigidBodiesMounted) {
       console.warn("⚠️ Some RigidBody are not mounted yet. Cannot save.");
       return;
     }
-    // Synchroniser les entités avant de les sauvegarder
-    // Mettre à jour le store avec les entités actuelles
+
+    // Synchronize all entities
+
+    // Update the store with all entities
     setEntities([...entities]);
-    // Sauvegarder le monde
+    // Save the world, create a file and download it
     const json = PlacementManager.save(entities);
     const blob = new Blob([json], { type: "application/json" });
     const url = URL.createObjectURL(blob);

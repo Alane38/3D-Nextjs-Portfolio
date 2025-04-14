@@ -4,18 +4,22 @@ import { Entity } from "./class/Entity";
 export const ENTITY_TYPES: Record<string, new () => Entity> = {
   KillBrick,
   Diamond,
-  // RestaurantSign,
-  // ajoute d'autres entités ici si besoin
+  // Add more entity types here
 };
 
 export class PlacementManager {
   // TODO: TO fix (work but not correctly)
+  // Save registered entities to a JSON file
   static save(entities: Entity[]): string {
     console.log("Saving entities:", entities);
+    // For all entities, get his props and add it to the serialized array
     const serialized = entities.map((e: Entity) => e.toSerializable());
+    console.log("Serialized entities:", serialized);
+    // Return the serialized array, create a JSON 
     return JSON.stringify(serialized, null, 2);
   }
 
+  // Load a json file and return an array of entities
   static load(json: string): Entity[] {
     const data = JSON.parse(json);
     return data.map((entry: any) => {

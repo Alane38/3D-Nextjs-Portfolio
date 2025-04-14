@@ -10,15 +10,16 @@ import { useEntityStore } from "./core/class/entity.store";
 import Inventory from "./core/client/inventory/Inventory";
 import { ENTITY_TYPES, PlacementManager } from "./core/PlacementManager";
 import { GameCanvas } from "./GameCanvas";
-import { FileWorld } from "./world/FileWorld";
+import { MainWorld } from "./world/MainWorld";
 
 export function Game() {
   const [visible, setVisible] = useState(true);
   // const loading = useLoadingAssets();
 
-  const {entities, setEntities} = useEntityStore();
+  // Store initial entities
+  const { entities, setEntities } = useEntityStore();
 
-  // Chargement auto
+  // Load the world, and load the entities.
   useEffect(() => {
     const loadFromFile = async () => {
       try {
@@ -38,8 +39,16 @@ export function Game() {
         // Set all entity types
         Object.values(ENTITY_TYPES).forEach((EntityClass) => {
           const entity = new EntityClass();
-          entity.position.set(entity.position.x, entity.position.y, entity.position.z);
-          entity.rotation.set(entity.rotation.x, entity.rotation.y, entity.rotation.z);
+          entity.position.set(
+            entity.position.x,
+            entity.position.y,
+            entity.position.z,
+          );
+          entity.rotation.set(
+            entity.rotation.x,
+            entity.rotation.y,
+            entity.rotation.z,
+          );
           entity.scale = entity.scale;
           entity.type = entity.type;
           entity.path = entity.name;
@@ -66,13 +75,13 @@ export function Game() {
       <PerformanceWarning />
       <Leva collapsed={true} /> {/* Leva Panel Settings */}
       {/* Player Inventory */}
-      <Inventory  />
+      <Inventory />
       {/* Controls */}
       <KeyboardControls map={globalControls}>
         <GameCanvas>
           {/* Put the world scene here */}
-          {/* <MainWorld /> */}
-          <FileWorld />
+          <MainWorld />
+          {/* <FileWorld /> */}
           {/* <TestWorld /> */}
           {/* <JumpGame /> */}
         </GameCanvas>
