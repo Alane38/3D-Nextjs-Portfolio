@@ -16,15 +16,14 @@ import {
 import {
   forwardRef,
   ForwardRefRenderFunction,
-  useCallback,
   useEffect,
   useImperativeHandle,
   useMemo,
   useRef,
-  useState,
+  useState
 } from "react";
-import { Vector3 } from "three";
 import * as THREE from "three";
+import { Vector3 } from "three";
 import { useFollowCam } from "./hooks/useFollowCam";
 import { useGame } from "./store/useGame";
 import { useJoystick } from "./store/useJoystick";
@@ -34,7 +33,6 @@ import { GalaadProps } from "./types/GalaadProps";
 import { getObjectDirection } from "./utils/getObjectDirection";
 import { insideKeyboardControls } from "./utils/insideKeyboardControls";
 import { LockCamera } from "./utils/LockCamera";
-import { is } from "@react-three/fiber/dist/declarations/src/core/utils";
 
 const Galaad: ForwardRefRenderFunction<customRigidBody, GalaadProps> = (
   {

@@ -4,7 +4,7 @@ import { Entity } from "./class/Entity";
 export const ENTITY_TYPES: Record<string, new () => Entity> = {
   Diamond,
   KillBrick,
-  NeonDoor,
+  // NeonDoor,
   // Add more entity types here
 };
 
@@ -30,8 +30,8 @@ export class PlacementManager {
       }
       const entity = new EntityClass();
       entity.entityId = entry.entityId;
-      entity.position.fromArray(entry.position?.toArray() || [0, 0, 0]);
-      entity.rotation.fromArray(entry.rotation?.toArray() || [0, 0, 0]);
+      entity.position.fromArray(entry.position || [0, 0, 0]);
+      entity.rotation.fromArray(entry.rotation || [0, 0, 0]);
       entity.scale = entry.scale || 1;
       entity.type = entry.type || "fixed";
       entity.path = entry.path;

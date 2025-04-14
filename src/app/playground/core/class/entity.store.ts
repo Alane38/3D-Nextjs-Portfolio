@@ -5,7 +5,7 @@ import { Entity } from "./Entity";
 interface EntityStoreState {
   entities: Entity[];
   setEntities: (entities: Entity[]) => void;
-updateEntity: (entity: Entity) => void;
+  updateEntity: (updater: (entity: Entity) => Entity) => void;
   reset: () => void;
 }
 
@@ -13,6 +13,9 @@ updateEntity: (entity: Entity) => void;
 export const useEntityStore = create<EntityStoreState>((set) => ({
   entities: [],
   setEntities: (entities: Entity[]) => set({ entities }),
-  updateEntity: (entity: Entity) => set((state) => ({ entities: state.entities.map((e) => (e.entityId === entity.entityId ? entity : e)) })),
+  updateEntity: (updater: (entity: Entity) => Entity) =>
+    set((state) => ({
+      entities: state.entities.map(updater),
+    })),
   reset: () => set({ entities: [] }),
 }));

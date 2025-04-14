@@ -1,6 +1,7 @@
 import { RapierRigidBody } from "@react-three/rapier";
 import { create } from "zustand";
 import * as THREE from "three";
+import { Entity } from "@/app/playground/core/class/Entity";
 
 type Axis = "x" | "y" | "z" | null;
 type Vec3 = { x: number; y: number; z: number };
@@ -23,9 +24,11 @@ interface EditToolState {
   setScaleMode: (mode: "uniform" | "free") => void;
 
   // Global
+  selectedEntity: Entity | null;
   selectedGroup: RapierRigidBody | null;
   selectedVisual: THREE.Group | null;
   position: Vec3;
+  setSelectedEntity: (entity: Entity | null) => void;
   setSelectedGroup: (body: RapierRigidBody | null) => void;
   setSelectedVisual: (visual: THREE.Group | null) => void;
   setPosition: (pos: Vec3 | ((prev: Vec3) => Vec3)) => void;
@@ -57,9 +60,11 @@ export const useEditToolStore = create<EditToolState>((set) => ({
   setScaleMode: (mode) => set({ scaleMode: mode }),
 
   // Global
+  selectedEntity: null,
   selectedGroup: null,
   selectedVisual: null,
   position: { x: 0, y: 0, z: 0 },
+  setSelectedEntity: (selectedEntity) => set({ selectedEntity }),
   setSelectedGroup: (selectedGroup) => set({ selectedGroup }),
   setSelectedVisual: (visual) => set({ selectedVisual: visual }),
   setPosition: (pos) => {

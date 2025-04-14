@@ -1,9 +1,8 @@
-import { useEffect, useState } from "react";
+import { useEntityStore } from "../../class/entity.store";
 import { PlacementManager } from "../../PlacementManager";
 import { MoveToolStats } from "./edit-tool/move/MoveToolStats";
 import { ScaleToolStats } from "./edit-tool/scale/ScaleToolStats";
 import { useEditToolStore } from "./edit-tool/store/useEditTool.store";
-import { useEntityStore } from "../../class/entity.store";
 
 const itemsData = [
   {
@@ -30,8 +29,8 @@ export const Inventory = () => {
     setScaleToolEnabled,
   } = useEditToolStore((s) => s);
 
+  // const [allRigidBodiesMounted, setAllRigidBodiesMounted] = useState(false);
   const { entities, setEntities } = useEntityStore();
-  const [allRigidBodiesMounted, setAllRigidBodiesMounted] = useState(false);
 
   const handleItemClick = (index: number) => {
     // Disable other tools
@@ -47,30 +46,26 @@ export const Inventory = () => {
     }
   };
 
-  useEffect(() => {
-    setTimeout(() => {
-      // Check if all RigidBodies are mounted
-      const allMounted = entities.every(entity => {console.log(entity.entityId); return entity.entityId;}); // False
-      // Return a boolean
-      setAllRigidBodiesMounted(allMounted);
-    }, 15000);
-  }, []);
+  // useEffect(() => {
+  //   setTimeout(() => {
+  //     // Check if all RigidBodies are mounted
+  //     const allMounted = entities.every(entity => {console.log(entity.entityId); return entity.entityId;}); // False
+  //     // Return a boolean
+  //     setAllRigidBodiesMounted(allMounted);
+  //   }, 15000);
+  // }, []);
 
-  useEffect(() => {
-    console.log("CALL TO BE SAVED:", entities);
-  }, [entities]);
+  // useEffect(() => {
+  //   console.log("CALL TO BE SAVED:", entities);
+  // }, [entities]);
 
   const handleSave = () => {
     // Check if all RigidBodies are mounted; if not you can't save the world.
-    if (!allRigidBodiesMounted) {
-      console.warn("⚠️ Some RigidBody are not mounted yet. Cannot save.");
-      return;
-    }
+    // if (!allRigidBodiesMounted) {
+    //   console.warn("⚠️ Some RigidBody are not mounted yet. Cannot save.");
+    //   return;
+    // }
 
-    // Synchronize all entities
-
-    // Update the store with all entities (forcing => bad!)
-    // setEntities([...entities]);
     // Save the world, create a file and download it
     const json = PlacementManager.save(entities);
     const blob = new Blob([json], { type: "application/json" });
@@ -91,7 +86,7 @@ export const Inventory = () => {
           onClick={handleSave}
           className="rounded-lg bg-gradient-to-r from-blue-500 to-purple-600 px-4 py-2 font-bold text-white shadow-lg transition-all duration-300 hover:from-blue-600 hover:to-purple-700"
         >
-          💾 Sauvegarder
+          💾 Snapshot
         </button>
 
         <input
@@ -117,7 +112,7 @@ export const Inventory = () => {
           htmlFor="file-input"
           className="cursor-pointer rounded-lg bg-gradient-to-r from-green-500 to-teal-600 px-4 py-2 font-bold text-white shadow-lg transition-all duration-300 hover:from-green-600 hover:to-teal-700"
         >
-          📂 Charger un monde
+          📂 Load world
         </label>
 
         <button
@@ -126,7 +121,6 @@ export const Inventory = () => {
             //   console.warn("⚠️ Some RigidBody are not mounted yet. Cannot save.");
             //   return;
             // }
-            // Synchroniser les entités avant de les sauvegarder
             const json = PlacementManager.save(entities);
             console.log(json);
 
@@ -140,7 +134,7 @@ export const Inventory = () => {
           }}
           className="rounded-lg bg-gradient-to-r from-red-500 to-orange-600 px-4 py-2 font-bold text-white shadow-lg transition-all duration-300 hover:from-red-600 hover:to-orange-700"
         >
-          🌍 Sauvegarder le Monde
+          🌍 Save world
         </button>
 
         <div className="flex items-center justify-center">

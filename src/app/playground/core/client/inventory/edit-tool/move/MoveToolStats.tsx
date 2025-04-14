@@ -2,7 +2,7 @@ import { useEffect } from "react";
 import { useEditToolStore } from "../store/useEditTool.store";
 
 export const MoveToolStats = ({ active }: { active: boolean }) => {
-  const { position, setPosition } = useEditToolStore();
+  const { position, selectedEntity, setPosition } = useEditToolStore();
 
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
@@ -41,11 +41,18 @@ export const MoveToolStats = ({ active }: { active: boolean }) => {
 
   return (
     <>
-      <div className="fixed top-4 left-1/2 z-50 -translate-x-1/2 text-white font-mono text-xl">
-        Position: ({position.x.toFixed(2)}, {position.y.toFixed(2)}, {position.z.toFixed(2)})
-      </div>
-      <div className="fixed top-10 left-1/2 z-50 -translate-x-1/2 text-white font-mono text-xl">
-        new Vector3({position.x.toFixed(2)}, {position.y.toFixed(2)}, {position.z.toFixed(2)})
+      <div className="fixed top-4 left-1/2 z-50 flex -translate-x-1/2 flex-col gap-2 font-mono text-xl text-white">
+        <p>
+          selected: {selectedEntity?.entityId}
+        </p>
+        <p>
+          Position: ({position.x.toFixed(2)}, {position.y.toFixed(2)},{" "}
+          {position.z.toFixed(2)})
+        </p>
+        <p>
+          new Vector3({position.x.toFixed(2)}, {position.y.toFixed(2)},{" "}
+          {position.z.toFixed(2)})
+        </p>
       </div>
     </>
   );

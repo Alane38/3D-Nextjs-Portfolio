@@ -26,40 +26,62 @@ export function EntityComponent<T extends Entity>(
     Object.assign(object, props);
 
     // DEBUG logs
-    const allEntityByName = entityManager.getAllByName(object.name);
-    const allEntity = entityManager.getAll();
+    // const allEntityByName = entityManager.getAllByName(object.name);
+    // const allEntity = entityManager.getAll();
     // console.log("EntityComponent by Name", object.name, allEntityByName);
     // console.log("ALL EntityComponent", object.name, allEntity);
 
     // console.log("EntityComponent", object.name);
 
-    //TODO: TO CONSOLE.LOG
-    // useEffect(() => {
-    //   if (model) {
-    //     Object.assign(instance.current, model);
-    //   }
-    // }, [model]);
+    // Update instance (make it reactive to get current datas for example the position)
+    useEffect(() => {
+      if (model && instance.current) {
+        Object.assign(instance.current, model);
+      }
+    }, [model]);
 
     const bodyRef = useRef<RapierRigidBody>(null);
     const visualRef = useRef<THREE.Group>(null);
     const pendingUpdate = useRef<T | null>(null);
 
-
-    const { setPosition, setSelectedGroup, setSelectedVisual } =
-      useEditToolStore();
+    const {
+      setPosition,
+      setSelectedEntity,
+      setSelectedGroup,
+      setSelectedVisual,
+    } = useEditToolStore();
 
     const lastUpdateTimeRef = useRef<number>(0);
 
-    const { updateEntity } = useEntityStore();
+    const { entities, updateEntity } = useEntityStore();
 
     useEffect(() => {
       const id = setInterval(() => {
+        // console.log(
+        //   "UPDATE ENTITY ------ VERIFY INTERVAL",
+        //   pendingUpdate.current,
+        // );
         if (pendingUpdate.current) {
-          updateEntity(pendingUpdate.current);
+          updateEntity((e) => {
+            if (e.entityId === object.entityId && pendingUpdate.current) {
+              // console.log(
+              //   "UPDATE ENTITY ------ VERIFY ID",
+              //   e.entityId,
+              //   object.entityId,
+              // );
+              e.position = pendingUpdate.current.position;
+              e.rotation = pendingUpdate.current.rotation;
+              e.scale = pendingUpdate.current.scale;
+            }
+            return e;
+          });
+
+          // console.log("UPDATE ENTITY ------ VERIFY RESULT", entities);
+
           pendingUpdate.current = null;
         }
-      }, 500); // Can adjust frequency
-    
+      }, 5000); // Can adjust frequency
+
       return () => clearInterval(id);
     }, []);
 
@@ -67,25 +89,21 @@ export function EntityComponent<T extends Entity>(
     useFrame(() => {
       const now = performance.now();
       if (now - lastUpdateTimeRef.current >= 5000) {
-        if (bodyRef.current && visualRef.current) {
+        if (!bodyRef.current || !visualRef.current) return;
+        
           const pos = bodyRef.current.translation();
           const rot = bodyRef.current.rotation();
           const scale = visualRef.current.scale;
-    
+
           pendingUpdate.current = {
             ...object,
             position: new THREE.Vector3(pos.x, pos.y, pos.z),
             rotation: new THREE.Euler(rot.x, rot.y, rot.z),
             scale: [scale.x, scale.y, scale.z],
           };
-        }
-    
         lastUpdateTimeRef.current = now;
       }
     });
-    
-    
-    
 
     return (
       <>
@@ -96,6 +114,7 @@ export function EntityComponent<T extends Entity>(
             if (useMoveTool) {
               e.stopPropagation();
               if (!bodyRef.current) return;
+              setSelectedEntity(object);
               setSelectedGroup(bodyRef.current);
               setSelectedVisual(visualRef.current);
               setPosition(object.position);

@@ -9,7 +9,7 @@ import { EditTool } from "../core/client/inventory/edit-tool/EditTool";
 export function FileWorld() {
   /* Leva Settings */
   const sky = useSky();
-  const { entities, setEntities } = useEntityStore();
+  const { entities } = useEntityStore();
 
   return (
     <>
@@ -24,7 +24,7 @@ export function FileWorld() {
         inclination={0}
         sunPosition={sky.sunPosition}
       />
-      {/* <GroundComponent /> TODO: Fix groundcomponent into EntityComponent */}
+      <GroundComponent /> 
       <Character
         name="Player"
         path="FoxPam.fbx"

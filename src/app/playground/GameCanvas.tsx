@@ -1,15 +1,15 @@
 import { useDebugState } from "@/hooks/leva";
 import { Grid } from "@react-three/drei";
-import { Canvas } from "@react-three/fiber";
+import { Camera, Canvas } from "@react-three/fiber";
 import { Bloom, EffectComposer } from "@react-three/postprocessing";
 import { Physics } from "@react-three/rapier";
 import { useControls } from "leva";
 import { Perf } from "r3f-perf";
-import React, { ReactNode, Suspense } from "react";
+import React, { ReactNode } from "react";
 
 export function GameCanvas({ children }: { children: ReactNode }) {
   const debugState = useDebugState();
-  const shadowCameraRef = React.useRef<any>(null);
+  const shadowCameraRef = React.useRef<Camera>(null);
 
   const { intensity, mipmapBlur, luminanceSmoothing, luminanceThreshold } =
     useControls({
