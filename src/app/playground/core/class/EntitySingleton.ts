@@ -5,7 +5,7 @@ export default class EntitySingleton {
 
   // Method to get an instance of the entity
   public static getInstance<T extends Entity>(
-    entity: new (...args: any[]) => T,
+    entity: new () => T
   ): T {
     const entityTemp = new entity();
     const entityName = entityTemp.name;
@@ -58,5 +58,9 @@ export default class EntitySingleton {
   // Method to get an instance of the entity by name
   public static getInstanceByName<T extends Entity>(entityName: string): T {
     return this.instances.get(entityName) as T;
+  }
+
+  public static ifInstanceByNameExists(entityName: string): boolean {
+    return this.instances.has(entityName);
   }
 }

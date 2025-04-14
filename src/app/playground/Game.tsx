@@ -1,20 +1,57 @@
 "use client";
 
-import { useLoadingAssets } from "@/hooks";
 import { KeyboardControls } from "@react-three/drei";
 import { Leva } from "leva";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { globalControls } from "src/constants/default";
-import { Loading } from "../../components/Loading";
 import { PerformanceWarning } from "../../components/PerformanceWarning";
 
+import { useEntityStore } from "./core/class/entity.store";
 import Inventory from "./core/client/inventory/Inventory";
+import { ENTITY_TYPES, PlacementManager } from "./core/PlacementManager";
 import { GameCanvas } from "./GameCanvas";
-import { MainWorld } from "./world/MainWorld";
+import { FileWorld } from "./world/FileWorld";
 
 export function Game() {
   const [visible, setVisible] = useState(true);
   // const loading = useLoadingAssets();
+
+  const {entities, setEntities} = useEntityStore();
+
+  // Chargement auto
+  useEffect(() => {
+    const loadFromFile = async () => {
+      try {
+        const data = PlacementManager.load(
+          await fetch("/save.json").then((r) => r.text()),
+        );
+
+        console.log(
+          "Chargement par défaut (fichier chargé)",
+          data.map((e) => e.name),
+        );
+        setEntities(data);
+      } catch (e) {
+        console.warn("Chargement par défaut (aucun fichier trouvé)");
+
+        // ENTITY_TYPES
+        // Set all entity types
+        Object.values(ENTITY_TYPES).forEach((EntityClass) => {
+          const entity = new EntityClass();
+          entity.position.set(entity.position.x, entity.position.y, entity.position.z);
+          entity.rotation.set(entity.rotation.x, entity.rotation.y, entity.rotation.z);
+          entity.scale = entity.scale;
+          entity.type = entity.type;
+          entity.path = entity.name;
+          entities.push(entity);
+        });
+
+        setEntities(entities);
+      }
+    };
+
+    loadFromFile();
+  }, []);
 
   return (
     <>
@@ -29,12 +66,13 @@ export function Game() {
       <PerformanceWarning />
       <Leva collapsed={true} /> {/* Leva Panel Settings */}
       {/* Player Inventory */}
-      <Inventory />
+      <Inventory  />
       {/* Controls */}
       <KeyboardControls map={globalControls}>
         <GameCanvas>
-           {/* Put the world scene here */}
-          <MainWorld />
+          {/* Put the world scene here */}
+          {/* <MainWorld /> */}
+          <FileWorld />
           {/* <TestWorld /> */}
           {/* <JumpGame /> */}
         </GameCanvas>
