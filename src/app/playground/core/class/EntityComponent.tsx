@@ -1,10 +1,11 @@
+import { useFrame } from "@react-three/fiber";
 import { RapierRigidBody, RigidBody } from "@react-three/rapier";
 import { JSX, useRef } from "react";
 import * as THREE from "three";
 import { useEditToolStore } from "../client/inventory/edit-tool/store/useEditTool.store";
 import { Entity } from "./Entity";
-import { useFrame } from "@react-three/fiber";
 import { useEntityStore } from "./entity.store";
+import EntityManager from "./EntityManager";
 
 export function EntityComponent<T extends Entity>(
   EntityClass: new () => T,
@@ -16,24 +17,21 @@ export function EntityComponent<T extends Entity>(
   useMoveTool = true,
 ) {
   return ({ model, ...props }: { model?: T } & Partial<T>) => {
-    // Create instance
-    const instance = useRef<T>(new EntityClass());
+    const entityManager = EntityManager.getInstance();
 
-    // Fusion of props and model
+    // Create instance -> extends EntityManager
+    const instance = useRef<T>(entityManager.createEntity(EntityClass) as T);
+
     const object = instance.current;
     Object.assign(object, props);
 
+    // DEBUG logs
+    const allEntityByName = entityManager.getAllByName(object.name);
+    const allEntity = entityManager.getAll();
+    console.log("EntityComponent by Name", object.name, allEntityByName);
+    console.log("ALL EntityComponent", object.name, allEntity);
+
     console.log("EntityComponent", object.name);
-    // console.log(EntitySingleton.getAllInstances());
-
-    // const singletonUpdatedInstance = EntitySingleton.getInstanceByName<T>(object.name);
-    // // Delete instance if EntitySingleton is removed
-    // if (singletonUpdatedInstance) {
-    //   console.log("EntityComponent", object.name, "removed");
-    //   return;
-    // }
-
-    // console.log("EntityComponent", object.name);
 
     //TODO: TO CONSOLE.LOG
     // useEffect(() => {
@@ -69,7 +67,8 @@ export function EntityComponent<T extends Entity>(
       const delta = now - lastUpdateTimeRef.current;
 
       if (delta >= 10000) {
-        if (bodyRef.current && visualRef.current) { // For each registered entities(PlacementManager) :
+        if (bodyRef.current && visualRef.current) {
+          // For each registered entities(PlacementManager) :
           // Get all values
           const pos = bodyRef.current.translation();
           const rot = bodyRef.current.rotation();
@@ -90,28 +89,28 @@ export function EntityComponent<T extends Entity>(
 
     return (
       <>
-      {/* Create the global entity */}
-      <RigidBody
-        ref={bodyRef}
-        onPointerDown={(e: PointerEvent) => {
-          if (useMoveTool) {
-            e.stopPropagation();
-            if (!bodyRef.current) return;
-            setSelectedGroup(bodyRef.current);
-            setSelectedVisual(visualRef.current);
-            setPosition(object.position);
-          }
-        }}
-        {...object}
-      >
-        {visualRef ? (
-          <group ref={visualRef}>
-            {RenderMesh(object, bodyRef, visualRef)}
-          </group>
-        ) : (
-          RenderMesh(object, bodyRef)
-        )}
-      </RigidBody>
+        {/* Create the global entity */}
+        <RigidBody
+          ref={bodyRef}
+          onPointerDown={(e: PointerEvent) => {
+            if (useMoveTool) {
+              e.stopPropagation();
+              if (!bodyRef.current) return;
+              setSelectedGroup(bodyRef.current);
+              setSelectedVisual(visualRef.current);
+              setPosition(object.position);
+            }
+          }}
+          {...object}
+        >
+          {visualRef ? (
+            <group ref={visualRef}>
+              {RenderMesh(object, bodyRef, visualRef)}
+            </group>
+          ) : (
+            RenderMesh(object, bodyRef)
+          )}
+        </RigidBody>
       </>
     );
   };

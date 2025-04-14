@@ -3,7 +3,8 @@ import { RigidBody } from "@react-three/rapier";
 import { useMemo } from "react";
 import { modelPath } from "src/constants/default";
 import { Entity } from "../Entity";
-import EntitySingleton from "../EntitySingleton";
+import EntityManager from "../EntityManager";
+import { EntityComponent } from "../EntityComponent";
 
 export class Stairs extends Entity {
   constructor(path: string = modelPath + "Stairs.glb") {
@@ -17,20 +18,11 @@ export class Stairs extends Entity {
   }
 }
 
-export const StairsComponent = ({
-  model,
-  ...props
-}: { model?: Stairs } & Partial<Stairs>) => {
-  // Fusion of props and model
-  const instance = model || EntitySingleton.getInstance(Stairs);
-  const object = useMemo(() => ({ ...instance, ...props }), [model, props]);
-
+export const StairsComponent = EntityComponent(Stairs, (object) => {
   return (
-    <RigidBody {...object}>
-      <group>
-        {/* Model */}
-        <ModelLoader path={object.path} />
-      </group>
-    </RigidBody>
+    <group>
+      {/* Model */}
+      <ModelLoader path={object.path} />
+    </group>
   );
-};
+});

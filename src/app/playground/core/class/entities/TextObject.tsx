@@ -1,9 +1,8 @@
 import { Text3D } from "@react-three/drei";
-import { RigidBody, RigidBodyOptions } from "@react-three/rapier";
-import { useMemo } from "react";
+import { RigidBodyOptions } from "@react-three/rapier";
 import { defaultFont } from "src/constants/default";
 import { Entity } from "../Entity";
-import EntitySingleton from "../EntitySingleton";
+import { EntityComponent } from "../EntityComponent";
 
 // Basic Type for Text3D
 interface TextProps {
@@ -27,16 +26,10 @@ export class TextObject extends Entity {
   }
 }
 
-export const TextObjectComponent = ({
-  model,
-  ...props
-}: { model?: TextObject } & Partial<TextObject>) => {
-  // Fusion of props and model
-  const instance = model || EntitySingleton.getInstance(TextObject);
-  const object = useMemo(() => ({ ...instance, ...props }), [model, props]);
+export const TextObjectComponent = EntityComponent(TextObject, (object) => {
+  
 
   return (
-    <RigidBody {...object}>
       <Text3D
         font={object.TextProps.font || defaultFont}
         position={object.position}
@@ -46,6 +39,5 @@ export const TextObjectComponent = ({
         {object.TextProps.text}
         <meshNormalMaterial attach="material" />
       </Text3D>
-    </RigidBody>
   );
-};
+});

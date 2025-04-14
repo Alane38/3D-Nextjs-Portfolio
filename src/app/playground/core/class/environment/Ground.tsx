@@ -1,12 +1,9 @@
 import { Box } from "@react-three/drei";
-import { RigidBody } from "@react-three/rapier";
-import { useMemo } from "react";
 import { Entity } from "../Entity";
-import EntitySingleton from "../EntitySingleton";
+import { EntityComponent } from "../EntityComponent";
 
 export class Ground extends Entity {
   color: string;
-  args: [number, number, number];
   depth: number;
   constructor() {
     super("Ground");
@@ -15,35 +12,27 @@ export class Ground extends Entity {
     this.colliders = "cuboid";
     this.scale = 500;
     this.depth = 0.1;
-    this.args = [this.scale, this.depth, this.scale];
     this.color = "black";
   }
 
   renderComponent() {
-    return <GroundComponent model={this} />;
+    return <GroundComponent model={this}/>;
   }
 }
-export const GroundComponent = ({
-  model,
-  ...props
-}: { model?: Ground } & Partial<Ground>) => {
-  // Fusion of props and model
-  const instance = model || EntitySingleton.getInstance(Ground);
-  const object = useMemo(() => ({ ...instance, ...props }), [model, props]);
-
+export const GroundComponent = EntityComponent(Ground, (object) => {
   return (
     // Body
-    <RigidBody
-      type={object.type}
-      position={object.position}
-      rotation={object.rotation}
-      name={object.name}
-      colliders={object.colliders}
-    >
+    <>
       {/* Ground Mesh */}
-      <Box args={object.args}>
+      <Box
+        args={[
+          typeof object.scale === "number" ? object.scale : 1,
+          typeof object.depth === "number" ? object.depth : 0.1,
+          typeof object.scale === "number" ? object.scale : 1,
+        ]}
+      >
         <meshStandardMaterial attach="material" color={object.color} />
       </Box>
-    </RigidBody>
+    </>
   );
-};
+});

@@ -870,6 +870,7 @@ const Galaad: ForwardRefRenderFunction<customRigidBody, GalaadProps> = (
       }
     };
   }, [autoBalance]);
+
   // //
   useEffect(() => {
     if (!defaultPlayer) return; // Only active for default player
@@ -924,17 +925,21 @@ const Galaad: ForwardRefRenderFunction<customRigidBody, GalaadProps> = (
   useFrame((state, delta) => {
     if (delta > 1) delta %= 1;
     if (!defaultPlayer) return; // Only active for default player
+    if (!characterRef.current) return;
 
     // // Character current position/velocity
     if (characterRef.current) {
       currentPos.copy(characterRef.current.translation() as THREE.Vector3);
       currentVel.copy(characterRef.current.linvel() as THREE.Vector3);
       // Assign userDate properties
-      (characterRef.current.userData as CharacterState).canJump = canJump;
-      (characterRef.current.userData as CharacterState).slopeAngle = slopeAngle;
-      (characterRef.current.userData as CharacterState).characterRotated =
-        characterRotated;
-      (characterRef.current.userData as CharacterState).inMotion = inMotion;
+      if (characterRef.current.userData) {
+        (characterRef.current.userData as CharacterState).canJump = canJump;
+        (characterRef.current.userData as CharacterState).slopeAngle =
+          slopeAngle;
+        (characterRef.current.userData as CharacterState).characterRotated =
+          characterRotated;
+        (characterRef.current.userData as CharacterState).inMotion = inMotion;
+      }
     }
 
     // // Camera movement
@@ -1084,10 +1089,17 @@ const Galaad: ForwardRefRenderFunction<customRigidBody, GalaadProps> = (
     // Character Flip
     // Check if the character is flipped based on its rotation
 
-    const rotation = characterRef.current.rotation();
-    const isFlipped = rotation.x > 0.5 || rotation.x < -0.5;
-    if (isFlipped) {
-      characterRef.current.rotation().x = 0;
+    if (!characterRef.current) {
+      console.warn("characterRef.current is undefined");
+      return;
+    }
+
+    const rotation = characterRef.current?.rotation?.();
+    if (rotation) {
+      const isFlipped = rotation.x > 0.5 || rotation.x < -0.5;
+      if (isFlipped) {
+        rotation.x = 0;
+      }
     }
 
     // Shape Ray Detection (not used)
@@ -1214,14 +1226,16 @@ const Galaad: ForwardRefRenderFunction<customRigidBody, GalaadProps> = (
 
     // Calculate slope angle
     if (slopeRayHit) {
-      actualSlopeNormal = slopeRayHit.collider.castRayAndGetNormal(
+      const rayNormal = slopeRayHit.collider.castRayAndGetNormal(
         slopeRayCast,
         slopeRayLength,
         false,
-      )?.normal as THREE.Vector3;
-
-      actualSlopeNormalVec?.copy(actualSlopeNormal);
-      actualSlopeAngle = actualSlopeNormalVec?.angleTo(floorNormal);
+      );
+      
+      if (rayNormal?.normal) {
+        actualSlopeNormal = rayNormal.normal as THREE.Vector3;
+        actualSlopeNormalVec?.copy(actualSlopeNormal);
+      }
     }
 
     if (

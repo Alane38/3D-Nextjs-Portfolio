@@ -1,22 +1,21 @@
+import { Box, Sphere } from "@react-three/drei";
 import {
-  RigidBody,
-  useSphericalJoint,
-  usePrismaticJoint,
   RapierRigidBody,
+  RigidBody,
   RigidBodyTypeString,
+  usePrismaticJoint,
+  useSphericalJoint,
 } from "@react-three/rapier";
 import {
-  forwardRef,
   createRef,
-  useRef,
+  forwardRef,
   ReactNode,
   RefObject,
-  useMemo,
+  useRef
 } from "react";
-import { Sphere, Box } from "@react-three/drei";
 import { Mesh } from "three";
 import { Entity } from "../Entity";
-import EntitySingleton from "../EntitySingleton";
+import { EntityComponent } from "../EntityComponent";
 
 // === ENTITY: Rope ===
 export class Rope extends Entity {
@@ -80,15 +79,10 @@ const RopeJoint = ({
   return null;
 };
 
-const RopeComponent = ({
-  model,
-  ...props
-}: { model?: Rope } & Partial<Rope>) => {
-  const instance = model || EntitySingleton.getInstance(Rope);
-  const entity = useMemo(() => ({ ...instance, ...props }), [model, props]);
-
+const RopeComponent = EntityComponent(Rope, (object, rigidBodyRef) => {
+  
   const refs = useRef(
-    Array.from({ length: entity.length }).map(() =>
+    Array.from({ length: object.length }).map(() =>
       createRef<RapierRigidBody>(),
     ) as RefObject<RapierRigidBody>[],
   );
@@ -112,7 +106,7 @@ const RopeComponent = ({
       )}
     </group>
   );
-};
+});
 
 const PrismaticExampleComponent = ({
   model,

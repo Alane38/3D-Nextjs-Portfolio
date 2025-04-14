@@ -1,14 +1,13 @@
-import { Diamond, KillBrick, RestaurantSign } from "./class";
+import { Diamond, KillBrick } from "./class";
 import { Entity } from "./class/Entity";
 
 export const ENTITY_TYPES: Record<string, new () => Entity> = {
-  KillBrick,
   Diamond,
+  KillBrick,
   // Add more entity types here
 };
 
 export class PlacementManager {
-  // TODO: TO fix (work but not correctly)
   // Save registered entities to a JSON file
   static save(entities: Entity[]): string {
     console.log("Saving entities:", entities);
@@ -29,8 +28,9 @@ export class PlacementManager {
         return null;
       }
       const entity = new EntityClass();
-      entity.position.fromArray(entry.position || [0, 0, 0]);
-      entity.rotation.fromArray(entry.rotation || [0, 0, 0]);
+      entity.entityId = entry.entityId;
+      entity.position.fromArray(entry.position?.toArray() || [0, 0, 0]);
+      entity.rotation.fromArray(entry.rotation?.toArray() || [0, 0, 0]);
       entity.scale = entry.scale || 1;
       entity.type = entry.type || "fixed";
       entity.path = entry.path;

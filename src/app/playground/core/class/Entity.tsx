@@ -14,9 +14,11 @@ import { Euler, Vector3 } from "three";
 export class Entity {
   rigidBodyRef?: React.RefObject<RapierRigidBody | null> = createRef();
   name: string;
+  entityId: string = Entity.name + Math.random();
   path: string = "";
   position: Vector3 = new Vector3(0, 0, 0);
   rotation: Euler = new Euler(0, 0, 0);
+  args: [number, number, number] = [1, 1, 1];
   mass: number = 1;
   type: RigidBodyOptions["type"] = "fixed";
   colliders: RigidBodyOptions["colliders"] = "hull";
@@ -25,9 +27,12 @@ export class Entity {
   ccd: boolean = false;
   canSleep: boolean = true;
   lockTranslations: boolean = false;
+  lockRotations: boolean = false;
   enabledRotations: [boolean, boolean, boolean] = [true, true, true];
-
+  
   onCollisionEnter?: CollisionEnterHandler;
+  setEnabledRotations?: (x: boolean, y: boolean, z: boolean) => void;
+  setLinvel?:  (vel: Vector3, wakeup: boolean) => void;
 
   constructor(name: string) {
     this.name = name;
@@ -54,9 +59,12 @@ export class Entity {
   }
 
   // Entity.ts
+
+  // Convert an Entity Object to a JSON object
   toSerializable() {
     return {
       name: this.name,
+      entityId: this.entityId,
       type: this.type,
       path: this.path,
       position: this.position.toArray(),
@@ -67,8 +75,10 @@ export class Entity {
     };
   }
 
+  // Convert a JSON object to an Entity Object
   public static fromSerialized(data: any): Entity {
     const entity = new Entity(data.name);
+    entity.entityId = data.entityId;
     entity.path = data.path;
     entity.type = data.type;
     entity.position.fromArray(data.position);

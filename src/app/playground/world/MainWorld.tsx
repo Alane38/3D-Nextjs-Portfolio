@@ -12,15 +12,14 @@ import {
   ObjectComponent,
   RestaurantSignComponent,
   SpinnerComponent,
-  StairsComponent,
+  StairsComponent
 } from "../core/class";
 import { KinematicMovingPlatformComponent } from "../core/class/entities/platform/dynamic/KineticMovingPlatform";
 import { FPPushtoMoveComponent } from "../core/class/entities/platform/floating/FPPushtoMove";
-import { EditTool } from "../core/client/inventory/edit-tool/EditTool";
 import { useEntityStore } from "../core/class/entity.store";
+import { EditTool } from "../core/client/inventory/edit-tool/EditTool";
 
 export function MainWorld() {
-  /* Leva Settings */
   // Leva Const initialization
   const rotateSpeed = useControls("RotateSpeed", {
     speed: { value: 1, step: 0.3 },
@@ -43,7 +42,7 @@ export function MainWorld() {
 
   // useEffect(() => {
   //   setTimeout(() => {
-  //     EntitySingleton.removeInstanceByEntityName("Diamond2");
+  //     EntityManager.removeInstanceByEntityName("Diamond2");
   //     console.log("Diamond2 removed");
   //   }, 10000)
   // }, [])
@@ -72,7 +71,7 @@ export function MainWorld() {
         defaultPlayer
       />
       {/* Ground */}
-      <GroundComponent /> {/* Default Ground  */}
+      {/* <GroundComponent /> */}
       {/* Entity Importations */}
       <group>
         {/* <TextObjectComponent
@@ -81,9 +80,9 @@ export function MainWorld() {
         /> */}
 
         <DiamondComponent position={new Vector3(18, 2, 10)} />
-        <DiamondComponent position={new Vector3(16, 2, 10)} name="Diamond1" />
-        <DiamondComponent position={new Vector3(14, 2, 10)} name="Diamond2" />
-        <DiamondComponent position={new Vector3(10, 2, 10)} name="Diamond3" />
+        <DiamondComponent position={new Vector3(16, 2, 10)} entityId="Diamond1" />
+        <DiamondComponent position={new Vector3(14, 2, 10)} entityId="Diamond2" />
+        <DiamondComponent position={new Vector3(10, 2, 10)} entityId="Diamond3" />
         <ObjectComponent position={new Vector3(0, 0.5, 0)} />
       </group>
       <group>
@@ -95,7 +94,7 @@ export function MainWorld() {
         />
         <KillBrickComponent
           position={new Vector3(15, 1, 10)}
-          name="KillBrick1"
+          entityId="KillBrick1"
         />
         <KillBrickComponent position={new Vector3(15, 1, 10)} />
         <RestaurantSignComponent

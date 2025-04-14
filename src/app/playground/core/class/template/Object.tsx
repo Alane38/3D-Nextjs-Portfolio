@@ -1,9 +1,7 @@
 import { ModelLoader } from "@/app/playground/core/class/rendering/ModelLoader";
-import { RigidBody } from "@react-three/rapier";
-import { useMemo } from "react";
 import { modelPath } from "src/constants/default";
 import { Entity } from "../Entity";
-import EntitySingleton from "../EntitySingleton";
+import { EntityComponent } from "../EntityComponent";
 
 export class Object extends Entity {
   constructor() {
@@ -18,18 +16,11 @@ export class Object extends Entity {
   }
 }
 
-export const ObjectComponent = ({
-  model,
-  ...props
-}: { model?: Object } & Partial<Object>) => {
-  // Fusion of props and model
-  const instance = model || EntitySingleton.getInstance(Object);
-  const object = useMemo(() => ({ ...instance, ...props }), [model, props]);
-
+export const ObjectComponent = EntityComponent(Object, (object) => {
   return (
-    <RigidBody {...object}>
+    <>
       {/* Model */}
       <ModelLoader path={object.path} />
-    </RigidBody>
+    </>
   );
-};
+});
