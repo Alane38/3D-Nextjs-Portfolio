@@ -37,7 +37,6 @@ const _impulse = new THREE.Vector3();
 
 // VEHICLE COMPONENT
 export const Vehicle = (props: RigidBodyProps, defaultPlayer?: boolean) => {
-  const { player, updatePlayer } = usePlayerSelection();
   const { rapier, world } = useRapier();
 
   const bodyRef = useRef<RapierRigidBody>(null!);
@@ -64,11 +63,7 @@ export const Vehicle = (props: RigidBodyProps, defaultPlayer?: boolean) => {
 
   const [, getKeyboardControls] = useKeyboardControls();
 
-  // Initialize default player
-  defaultPlayer && updatePlayer(EnumPlayerOption.Car);
-
   useBeforePhysicsStep(() => {
-    if (player !== EnumPlayerOption.Car) return null;
     const controls = getKeyboardControls() as VehicleControls;
     const { forward, backward, leftward, rightward, jump_brake } = controls;
 
@@ -183,8 +178,6 @@ export const Vehicle = (props: RigidBodyProps, defaultPlayer?: boolean) => {
 
   // Update Vehicle
   useFrame((state, delta) => {
-    if (player !== EnumPlayerOption.Car) return null;
-
     // Body position
     const bodyPosition = _bodyPosition.copy(bodyRef.current.translation());
     groupRef.current.position.copy(bodyPosition);

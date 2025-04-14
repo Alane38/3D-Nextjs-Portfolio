@@ -1,15 +1,14 @@
 import { Box, Sphere } from "@react-three/drei";
-import { createRef, forwardRef, ReactNode, RefObject, useRef } from "react";
-import {
-  RigidBody,
-  RapierRigidBody,
-  RigidBodyTypeString,
-  useSphericalJoint,
-  Vector3Tuple,
-  usePrismaticJoint,
-} from "@react-three/rapier";
 import { useFrame } from "@react-three/fiber";
-import { Demo } from "../../App";
+import {
+    RapierRigidBody,
+    RigidBody,
+    RigidBodyTypeString,
+    usePrismaticJoint,
+    useSphericalJoint,
+    Vector3Tuple,
+} from "@react-three/rapier";
+import { createRef, forwardRef, ReactNode, RefObject, useRef } from "react";
 import { Mesh, Quaternion } from "three";
 import { useResetOrbitControls } from "../../hooks/use-reset-orbit-controls";
 
@@ -107,7 +106,7 @@ const PrismaticExample = () => {
   );
 };
 
-export const Joints: Demo = () => {
+export const Joints = () => {
   useResetOrbitControls();
 
   return (

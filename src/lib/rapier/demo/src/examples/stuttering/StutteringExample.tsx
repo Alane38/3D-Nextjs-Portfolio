@@ -1,12 +1,10 @@
-import { Box, Html, Sphere, Torus, useCamera } from "@react-three/drei";
+import { Torus } from "@react-three/drei";
 import { useFrame, useThree } from "@react-three/fiber";
-import { RigidBody, RapierRigidBody, vec3 } from "@react-three/rapier";
-import { useControls } from "leva";
-import React, { useEffect, useRef } from "react";
+import { RapierRigidBody, RigidBody, vec3 } from "@react-three/rapier";
+import { useRef } from "react";
 import { Mesh } from "three";
-import { Demo } from "../../App";
 
-export const StutteringExample: Demo = () => {
+export const StutteringExample = () => {
   const body = useRef<RapierRigidBody>(null);
   const bodyModel = useRef<Mesh>(null);
   const model = useRef<Mesh>(null);

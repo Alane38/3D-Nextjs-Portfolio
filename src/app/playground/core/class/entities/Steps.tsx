@@ -18,8 +18,8 @@ export const StepsComponent = EntityComponent(Steps, (object, rigidBodyRef) => {
 
   return (
     <>
-      {[5, 6, 7, 8].map((z, index) => (
-          <mesh receiveShadow>
+      {[5, 6, 7, 8].map((_, i) => (
+          <mesh key={i} receiveShadow>
             <boxGeometry args={[4, 0.2, 0.2]} />
             <meshStandardMaterial color={"lightpink"} />
           </mesh>

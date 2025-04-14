@@ -11,8 +11,6 @@ import {
 import { forwardRef, useRef } from "react";
 import { Vector3 } from "three";
 
-const COLORS_ARR = ["#335C67", "#FFF3B0", "#E09F3E", "#9E2A2B", "#540B0E"];
-
 interface BallSpringProps extends RigidBodyOptions {
   jointNum: number;
   total: number;
@@ -22,15 +20,15 @@ interface BoxRigidBodyProps extends RigidBodyOptions {
   color: string;
 }
 
-const BoxRigidBody = ({ color, ...props }: BoxRigidBodyProps) => {
-  return (
-    <RigidBody {...props} ccd canSleep={false}>
-      <Box castShadow receiveShadow>
-        <meshStandardMaterial color={color} />
-      </Box>
-    </RigidBody>
-  );
-};
+// const BoxRigidBody = ({ color, ...props }: BoxRigidBodyProps) => {
+//   return (
+//     <RigidBody {...props} ccd canSleep={false}>
+//       <Box castShadow receiveShadow>
+//         <meshStandardMaterial color={color} />
+//       </Box>
+//     </RigidBody>
+//   );
+// };
 
 export const BallSpring = forwardRef<RapierRigidBody, BallSpringProps>(
   (props, floorRef) => {

@@ -1,4 +1,4 @@
-import { Diamond, KillBrick, NeonDoor } from "./class";
+import { Diamond, KillBrick } from "./class";
 import { Entity } from "./class/Entity";
 
 export const ENTITY_TYPES: Record<string, new () => Entity> = {

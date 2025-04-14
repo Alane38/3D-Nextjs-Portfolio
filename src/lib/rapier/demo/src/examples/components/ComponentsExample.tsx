@@ -4,7 +4,6 @@ import { Box, Clone, Sphere, useGLTF } from "@react-three/drei";
 import { ThreeElements } from "@react-three/fiber";
 import { RigidBody, TrimeshCollider } from "@react-three/rapier";
 import { Mesh } from "three";
-import { Demo } from "../../App";
 import { useResetOrbitControls } from "../../hooks/use-reset-orbit-controls";
 
 type GroupProps = ThreeElements["group"];
@@ -90,7 +89,7 @@ const CompoundShape = () => {
   );
 };
 
-export const ComponentsExample: Demo = () => {
+export const ComponentsExample = () => {
   useResetOrbitControls();
 
   return (

@@ -1,14 +1,13 @@
 import { Box, Sphere } from "@react-three/drei";
 import { ThreeElements } from "@react-three/fiber";
 import {
-  RigidBody,
-  RapierRigidBody,
-  RigidBodyProps,
-  ContactForceHandler,
+    ContactForceHandler,
+    RapierRigidBody,
+    RigidBody,
+    RigidBodyProps,
 } from "@react-three/rapier";
 import { useCallback, useRef, useState } from "react";
 import { Color } from "three";
-import { Demo } from "../../App";
 import { useResetOrbitControls } from "../../hooks/use-reset-orbit-controls";
 
 type MeshPhysicalMaterialProps = ThreeElements["meshPhysicalMaterial"];
@@ -53,7 +52,7 @@ const Floor = ({ color }: FloorProps) => {
 };
 
 const startColor = new Color(0xffffff);
-export const ContactForceEventsExample: Demo = () => {
+export const ContactForceEventsExample = () => {
   const [floorColor, setFloorColor] = useState(0x000000);
 
   const handleContactForce = useCallback<ContactForceHandler>(

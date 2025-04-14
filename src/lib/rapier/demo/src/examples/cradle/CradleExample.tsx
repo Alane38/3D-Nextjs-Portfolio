@@ -1,14 +1,13 @@
 import { Cylinder, Sphere } from "@react-three/drei";
 import {
-  BallCollider,
-  CylinderCollider,
-  RapierRigidBody,
-  RigidBody,
-  RigidBodyOptions,
-  useSphericalJoint,
+    BallCollider,
+    CylinderCollider,
+    RapierRigidBody,
+    RigidBody,
+    RigidBodyOptions,
+    useSphericalJoint,
 } from "@react-three/rapier";
 import { useRef } from "react";
-import { Demo } from "../../App";
 import { useResetOrbitControls } from "../../hooks/use-reset-orbit-controls";
 
 const Rod = (props: RigidBodyOptions) => {
@@ -44,7 +43,7 @@ const Rod = (props: RigidBodyOptions) => {
   );
 };
 
-export const CradleExample: Demo = () => {
+export const CradleExample = () => {
   useResetOrbitControls();
 
   return (

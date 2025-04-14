@@ -1,10 +1,9 @@
 import { Box, Sphere, useTexture } from "@react-three/drei";
 import { RigidBody } from "@react-three/rapier";
 import { RepeatWrapping } from "three";
-import { Demo } from "../../App";
 import { useResetOrbitControls } from "../../hooks/use-reset-orbit-controls";
 
-export const Damping: Demo = () => {
+export const Damping = () => {
   const floor = useTexture(new URL("./white.png", import.meta.url).toString());
   const ramp = useTexture(new URL("./red.png", import.meta.url).toString());
   const ball = useTexture(new URL("./green.png", import.meta.url).toString());

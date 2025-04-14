@@ -1,9 +1,6 @@
 import { ModelLoader } from "@/app/playground/core/class/rendering/ModelLoader";
-import { RigidBody } from "@react-three/rapier";
-import { useMemo } from "react";
 import { modelPath } from "src/constants/default";
 import { Entity } from "../Entity";
-import EntityManager from "../EntityManager";
 import { EntityComponent } from "../EntityComponent";
 
 export class Stairs extends Entity {

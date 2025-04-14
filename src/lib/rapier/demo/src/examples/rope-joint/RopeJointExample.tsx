@@ -1,14 +1,13 @@
-import { Sphere, Box } from "@react-three/drei";
+import { Box, Sphere } from "@react-three/drei";
+import { Vector3 } from "@react-three/fiber";
 import {
-  BallCollider,
-  RapierRigidBody,
-  RigidBody,
-  RigidBodyOptions,
-  useRopeJoint,
+    BallCollider,
+    RapierRigidBody,
+    RigidBody,
+    RigidBodyOptions,
+    useRopeJoint,
 } from "@react-three/rapier";
 import { useRef } from "react";
-import { Demo } from "../../App";
-import { Vector3 } from "@react-three/fiber";
 import { useResetOrbitControls } from "../../hooks/use-reset-orbit-controls";
 
 const WALL_COLORS = ["#50514F", "#CBD4C2", "#FFFCFF", "#247BA0", "#C3B299"];
@@ -106,7 +105,7 @@ const RopeJoint = ({
   );
 };
 
-export const RopeJointExample: Demo = () => {
+export const RopeJointExample = () => {
   useResetOrbitControls(40, [0, 0.25, 0.75]);
 
   return (

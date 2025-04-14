@@ -12,7 +12,7 @@ export const ModelLoader = ({
 }) => {
   // Preload the model to improve loading performance
   useGLTF.preload(path);
-
+  
   if (path.endsWith(".gltf")) {
     // Load .gltf files using useGLTF for better integration with Drei
     const { scene } = useGLTF(path);

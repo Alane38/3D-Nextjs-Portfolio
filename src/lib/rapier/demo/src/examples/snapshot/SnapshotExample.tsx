@@ -1,14 +1,13 @@
 import { Box, Sphere, useTexture } from "@react-three/drei";
 import { RigidBody, useRapier } from "@react-three/rapier";
 import { RepeatWrapping } from "three";
-import { Demo } from "../../App";
 
 import React, { useRef } from "react";
 
 import { useControls, button } from "leva";
 import { useResetOrbitControls } from "../../hooks/use-reset-orbit-controls";
 
-export const SnapshotExample: Demo = () => {
+export const SnapshotExample = () => {
   const floor = useTexture(
     new URL("../damping/white.png", import.meta.url).toString(),
   );

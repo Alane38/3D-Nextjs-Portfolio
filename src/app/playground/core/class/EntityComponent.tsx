@@ -53,7 +53,7 @@ export function EntityComponent<T extends Entity>(
 
     const lastUpdateTimeRef = useRef<number>(0);
 
-    const { entities, updateEntity } = useEntityStore();
+    const { updateEntity } = useEntityStore();
 
     useEffect(() => {
       const id = setInterval(() => {

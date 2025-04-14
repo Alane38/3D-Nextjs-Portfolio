@@ -1,9 +1,8 @@
 import { Box, Sphere, Torus } from "@react-three/drei";
 import { MeshCollider, RigidBody } from "@react-three/rapier";
-import { Demo } from "../../App";
 import { useResetOrbitControls } from "../../hooks/use-reset-orbit-controls";
 
-export const MeshColliderTest: Demo = () => {
+export const MeshColliderTest = () => {
   useResetOrbitControls(30);
 
   return (

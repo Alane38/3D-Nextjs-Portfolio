@@ -1,19 +1,17 @@
-import { Box, Html, Sphere } from "@react-three/drei";
-import { useFrame } from "@react-three/fiber";
+import { Html, Sphere } from "@react-three/drei";
 import {
-  InstancedRigidBodies,
-  interactionGroups,
-  RigidBody,
+    InstancedRigidBodies,
+    interactionGroups,
+    RapierRigidBody,
+    RigidBody,
 } from "@react-three/rapier";
-import { RapierRigidBody } from "@react-three/rapier";
-import { createRef, useEffect, useRef } from "react";
-import { Demo } from "../../App";
 import { Attractor } from "@react-three/rapier-addons";
+import { useRef } from "react";
 import { useResetOrbitControls } from "../../hooks/use-reset-orbit-controls";
 
 const BALLS = 100;
 
-export const AttractorExample: Demo = () => {
+export const AttractorExample = () => {
   const api = useRef<RapierRigidBody[]>(null);
 
   useResetOrbitControls(40);

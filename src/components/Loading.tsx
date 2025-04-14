@@ -10,7 +10,7 @@ export const Loading = ({
 }) => {
   const productionMode = useProdEnv();
 
-  const [showSkip, setShowSkip] = useState(false);
+  const [showSkip] = useState(false);
 
   // useEffect(() => {
   //   const timer = setTimeout(() => {

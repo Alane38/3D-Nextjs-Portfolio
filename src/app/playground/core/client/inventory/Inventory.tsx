@@ -1,3 +1,4 @@
+import Image from "next/image";
 import { useEntityStore } from "../../class/entity.store";
 import { PlacementManager } from "../../PlacementManager";
 import { MoveToolStats } from "./edit-tool/move/MoveToolStats";
@@ -147,9 +148,11 @@ export const Inventory = () => {
               >
                 <div className="absolute inset-0 flex items-center justify-center">
                   {item && item.image && (
-                    <img
+                    <Image
                       src={item.image}
                       alt={item.name}
+                      width={32}
+                      height={32}
                       className="h-8 w-8 object-contain"
                     />
                   )}

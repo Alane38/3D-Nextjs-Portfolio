@@ -12,12 +12,10 @@ import {
 } from "@react-three/rapier";
 import { useControls } from "leva";
 import { RefObject, useRef, useState } from "react";
-import { EnumPlayerOption } from "src/constants/playerSelection";
 import { spawn, wheels } from "src/constants/vehicle";
 import * as THREE from "three";
-import { useVehicleController } from "./use-vehicle-controller";
-import { VehicleControls } from "../types/VehicleControls";
 import { VehicleProps } from "../types/VehicleProps";
+import { useVehicleController } from "./use-vehicle-controller";
 
 const cameraOffset = new THREE.Vector3(7, 3, 0);
 const cameraTargetOffset = new THREE.Vector3(0, 1.5, 0);

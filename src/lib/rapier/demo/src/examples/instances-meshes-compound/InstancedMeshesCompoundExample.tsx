@@ -1,18 +1,17 @@
 import { ThreeEvent } from "@react-three/fiber";
 import {
-  BallCollider,
-  CuboidCollider,
-  InstancedRigidBodies,
+    BallCollider,
+    CuboidCollider,
+    InstancedRigidBodies,
+    RapierRigidBody,
 } from "@react-three/rapier";
 import { useEffect, useRef } from "react";
-import { useSuzanne } from "../all-shapes/AllShapesExample";
-import { Demo } from "../../App";
-import { RapierRigidBody } from "@react-three/rapier";
 import { useResetOrbitControls } from "../../hooks/use-reset-orbit-controls";
+import { useSuzanne } from "../all-shapes/AllShapesExample";
 
 const COUNT = 300;
 
-export const InstancedMeshesCompound: Demo = () => {
+export const InstancedMeshesCompound = () => {
   const {
     nodes: { Suzanne },
   } = useSuzanne();

@@ -11,10 +11,9 @@ export function GameCanvas({ children }: { children: ReactNode }) {
   const debugState = useDebugState();
   const shadowCameraRef = React.useRef<Camera>(null);
 
-  const { intensity, mipmapBlur, luminanceSmoothing, luminanceThreshold } =
+  const { intensity, luminanceSmoothing, luminanceThreshold } =
     useControls({
       intensity: { value: 0.15, min: 0, max: 1.5, step: 0.01 },
-      mipmapBlur: { value: 0, min: 0, max: 1.5, step: 0.01 },
       luminanceSmoothing: { value: 0, min: 0, max: 1.5, step: 0.01 },
       luminanceThreshold: { value: 1.14, min: 0, max: 1.5, step: 0.01 },
     });
