@@ -1,6 +1,6 @@
 import { useFrame } from "@react-three/fiber";
 import { RapierRigidBody, RigidBody } from "@react-three/rapier";
-import { JSX, useRef } from "react";
+import { JSX, useEffect, useRef } from "react";
 import * as THREE from "three";
 import { useEditToolStore } from "../client/inventory/edit-tool/store/useEditTool.store";
 import { Entity } from "./Entity";
@@ -28,10 +28,10 @@ export function EntityComponent<T extends Entity>(
     // DEBUG logs
     const allEntityByName = entityManager.getAllByName(object.name);
     const allEntity = entityManager.getAll();
-    console.log("EntityComponent by Name", object.name, allEntityByName);
-    console.log("ALL EntityComponent", object.name, allEntity);
+    // console.log("EntityComponent by Name", object.name, allEntityByName);
+    // console.log("ALL EntityComponent", object.name, allEntity);
 
-    console.log("EntityComponent", object.name);
+    // console.log("EntityComponent", object.name);
 
     //TODO: TO CONSOLE.LOG
     // useEffect(() => {
@@ -40,52 +40,52 @@ export function EntityComponent<T extends Entity>(
     //   }
     // }, [model]);
 
-    // useEffect(() => {
-    //   if (model) {
-    //     instance.current = model;
-    //   }
-    // }, [model]);
-
     const bodyRef = useRef<RapierRigidBody>(null);
     const visualRef = useRef<THREE.Group>(null);
+    const pendingUpdate = useRef<T | null>(null);
+
 
     const { setPosition, setSelectedGroup, setSelectedVisual } =
       useEditToolStore();
 
     const lastUpdateTimeRef = useRef<number>(0);
 
-    const { entities, setEntities } = useEntityStore((state) => state);
+    const { updateEntity } = useEntityStore();
+
+    useEffect(() => {
+      const id = setInterval(() => {
+        if (pendingUpdate.current) {
+          updateEntity(pendingUpdate.current);
+          pendingUpdate.current = null;
+        }
+      }, 500); // Can adjust frequency
+    
+      return () => clearInterval(id);
+    }, []);
 
     // Update entity values
     useFrame(() => {
       const now = performance.now();
-      if (!lastUpdateTimeRef.current) {
-        lastUpdateTimeRef.current = now;
-        return;
-      }
-
-      const delta = now - lastUpdateTimeRef.current;
-
-      if (delta >= 10000) {
+      if (now - lastUpdateTimeRef.current >= 5000) {
         if (bodyRef.current && visualRef.current) {
-          // For each registered entities(PlacementManager) :
-          // Get all values
           const pos = bodyRef.current.translation();
           const rot = bodyRef.current.rotation();
           const scale = visualRef.current.scale;
-          object.position = new THREE.Vector3(pos.x, pos.y, pos.z);
-          object.rotation = new THREE.Euler(rot.x, rot.y, rot.z);
-          object.scale = [scale.x, scale.y, scale.z];
-
-          // Save it in the store(use to save the world)
-          setEntities(
-            entities.map((e) => (e.name === object.name ? object : e)),
-          );
+    
+          pendingUpdate.current = {
+            ...object,
+            position: new THREE.Vector3(pos.x, pos.y, pos.z),
+            rotation: new THREE.Euler(rot.x, rot.y, rot.z),
+            scale: [scale.x, scale.y, scale.z],
+          };
         }
-
+    
         lastUpdateTimeRef.current = now;
       }
     });
+    
+    
+    
 
     return (
       <>

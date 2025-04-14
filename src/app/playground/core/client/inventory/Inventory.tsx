@@ -50,11 +50,15 @@ export const Inventory = () => {
   useEffect(() => {
     setTimeout(() => {
       // Check if all RigidBodies are mounted
-      const allMounted = entities.every(entity => entity.rigidBodyRef?.current !== null); // False
+      const allMounted = entities.every(entity => {console.log(entity.entityId); return entity.entityId;}); // False
       // Return a boolean
       setAllRigidBodiesMounted(allMounted);
-    }, 10000);
+    }, 15000);
   }, []);
+
+  useEffect(() => {
+    console.log("CALL TO BE SAVED:", entities);
+  }, [entities]);
 
   const handleSave = () => {
     // Check if all RigidBodies are mounted; if not you can't save the world.
@@ -65,8 +69,8 @@ export const Inventory = () => {
 
     // Synchronize all entities
 
-    // Update the store with all entities
-    setEntities([...entities]);
+    // Update the store with all entities (forcing => bad!)
+    // setEntities([...entities]);
     // Save the world, create a file and download it
     const json = PlacementManager.save(entities);
     const blob = new Blob([json], { type: "application/json" });
@@ -118,10 +122,10 @@ export const Inventory = () => {
 
         <button
           onClick={() => {
-            if (!allRigidBodiesMounted) {
-              console.warn("⚠️ Some RigidBody are not mounted yet. Cannot save.");
-              return;
-            }
+            // if (!allRigidBodiesMounted) {
+            //   console.warn("⚠️ Some RigidBody are not mounted yet. Cannot save.");
+            //   return;
+            // }
             // Synchroniser les entités avant de les sauvegarder
             const json = PlacementManager.save(entities);
             console.log(json);

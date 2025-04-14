@@ -4,15 +4,15 @@ import { Entity } from "./Entity";
 // Type of Zustand Store
 interface EntityStoreState {
   entities: Entity[];
-  tempEntities: Entity[];
   setEntities: (entities: Entity[]) => void;
+updateEntity: (entity: Entity) => void;
   reset: () => void;
 }
 
 // Zustand Store
 export const useEntityStore = create<EntityStoreState>((set) => ({
   entities: [],
-  tempEntities: [],
   setEntities: (entities: Entity[]) => set({ entities }),
+  updateEntity: (entity: Entity) => set((state) => ({ entities: state.entities.map((e) => (e.entityId === entity.entityId ? entity : e)) })),
   reset: () => set({ entities: [] }),
 }));
