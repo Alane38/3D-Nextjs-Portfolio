@@ -6,6 +6,7 @@ import { Euler, Vector3 } from "three";
 import { Character } from "../core/character/Character";
 import {
   DiamondComponent,
+  GroundComponent,
   KillBrickComponent,
   NeonDoorComponent,
   ObjectComponent,
@@ -70,7 +71,7 @@ export function MainWorld() {
         defaultPlayer
       />
       {/* Ground */}
-      {/* <GroundComponent /> */}
+      <GroundComponent />
       {/* Entity Importations */}
       <group>
         {/* <TextObjectComponent

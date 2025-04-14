@@ -22,7 +22,7 @@ export class PlacementManager {
   // Load a json file and return an array of entities
   static load(json: string): Entity[] {
     const data = JSON.parse(json);
-    return data.map((entry: any) => {
+    return data.map((entry: Entity) => {
       const EntityClass = ENTITY_TYPES[entry.name];
       if (!EntityClass) {
         console.warn(`Unknown entity type: ${entry.name}`);
@@ -30,8 +30,8 @@ export class PlacementManager {
       }
       const entity = new EntityClass();
       entity.entityId = entry.entityId;
-      entity.position.fromArray(entry.position || [0, 0, 0]);
-      entity.rotation.fromArray(entry.rotation || [0, 0, 0]);
+      entity.position = entry.position;
+      entity.rotation = entry.rotation;
       entity.scale = entry.scale || 1;
       entity.type = entry.type || "fixed";
       entity.path = entry.path;

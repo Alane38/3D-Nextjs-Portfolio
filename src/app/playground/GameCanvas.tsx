@@ -50,7 +50,7 @@ export function GameCanvas({ children }: { children: ReactNode }) {
           followCamera
           sectionColor={"blue"}
           cellColor={"gray"}
-          position={[0, 0.055, 0]}
+          position={[0, 0.28, 0]}
         />
         <Physics gravity={[0, -15, 0]} debug={debugState}>
           {children}

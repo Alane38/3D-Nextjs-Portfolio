@@ -1,14 +1,14 @@
 import { KeyboardControls, OrbitControls } from "@react-three/drei";
 import { RigidBody } from "@react-three/rapier";
 import {
-  Vector2
+  Vector2,
+  Vector3
 } from "three";
 import { RacingVehicle, racingVehicleControls } from "../core/character/vehicles/racing-car/RacingVehicle";
-import { Ground, GroundComponent } from "../core/class";
+import { GroundComponent } from "../core/class";
 import { PrismGeometryComponent } from "../core/class/entities/mesh/PrismGeometry";
 
 export const TestWorld = () => {
-  const ground = new Ground();
   // prims
   const A = new Vector2(9, 1);
   const B = new Vector2(0, -4);
@@ -17,7 +17,7 @@ export const TestWorld = () => {
     <>
       <OrbitControls />
 
-      <GroundComponent model={ground} />
+      <GroundComponent position={new Vector3(0, 0, 0)} />
 
       {/* <CharacterController /> */}
 

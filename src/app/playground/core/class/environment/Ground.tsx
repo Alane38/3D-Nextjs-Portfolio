@@ -1,6 +1,7 @@
-import { Box } from "@react-three/drei";
+import { Euler } from "three";
 import { Entity } from "../Entity";
 import { EntityComponent } from "../EntityComponent";
+import { Box } from "@react-three/drei";
 
 export class Ground extends Entity {
   color: string;
@@ -10,8 +11,8 @@ export class Ground extends Entity {
     // Modify the default settings(Entity) :
     this.type = "fixed";
     this.colliders = "cuboid";
-    this.scale = 500;
-    this.depth = 0.1;
+    this.scale = 50;
+    this.depth = 0.01;
     this.color = "black";
   }
 
