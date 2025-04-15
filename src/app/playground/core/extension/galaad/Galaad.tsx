@@ -195,10 +195,12 @@ const Galaad: ForwardRefRenderFunction<customRigidBody, GalaadProps> = (
   }, [characterRef]);
 
   // // Move and Camera mode
-  // const setMoveToPoint = useGame((state) => state.setMoveToPoint);
+  const setMoveToPoint = useGame((state) => state.setMoveToPoint);
   const modeSet = new Set(camMode?.split(" ") || []);
 
-  // let functionKeyDown: boolean = false;
+  // Point to Move Props
+  let functionKeyDown: boolean = false;
+  // Controller Mode
   const isModePointToMove = modeSet.has("PointToMove");
   const isModeOnlyCamera = modeSet.has("OnlyCamera");
   const isModeControlCamera = modeSet.has("ControlCamera");
@@ -223,7 +225,7 @@ const Galaad: ForwardRefRenderFunction<customRigidBody, GalaadProps> = (
   const camBasedMoveCrossVecOnY = Vector3Factory();
 
   const vectorY = useMemo(() => new THREE.Vector3(0, 1, 0), []);
-  // const vectorZ = useMemo(() => new THREE.Vector3(0, 0, 1), []);
+  const vectorZ = useMemo(() => new THREE.Vector3(0, 0, 1), []);
 
   // Initialization
   const idle = useGame((state) => state.idle);
@@ -465,19 +467,21 @@ const Galaad: ForwardRefRenderFunction<customRigidBody, GalaadProps> = (
   const slopeRayCast = new rapier.Ray(slopeRayorigin, slopeRayDir);
   let slopeRayHit: RayColliderHit | null = null;
 
-  // Point to Move
-  // let isBodyHitWall = false;
-  const isPointMoving = false;
-  // const crossVector: THREE.Vector3 = useMemo(() => new THREE.Vector3(), []);
-  // const pointToPoint: THREE.Vector3 = useMemo(() => new THREE.Vector3(), []);
-  // const getMoveToPoint = useGame((state) => state.getMoveToPoint);
+  /** Point to Move Mode */
+  // Need to be let instead of const !
+  let isBodyHitWall = false;
+  let isPointMoving = false;
+  // Point to Move consts initializations
+  const crossVector: THREE.Vector3 = useMemo(() => new THREE.Vector3(), []);
+  const pointToPoint: THREE.Vector3 = useMemo(() => new THREE.Vector3(), []);
+  const getMoveToPoint = useGame((state) => state.getMoveToPoint);
   const bodySensorRef = useRef<Collider>(null!);
-  // const handleOnIntersectionEnter = () => {
-  //   isBodyHitWall = true;
-  // };
-  // const handleOnIntersectionExit = () => {
-  //   isBodyHitWall = false;
-  // };
+  const handleOnIntersectionEnter = () => {
+    isBodyHitWall = true;
+  };
+  const handleOnIntersectionExit = () => {
+    isBodyHitWall = false;
+  };
 
   // //  Move Character
   let characterRotated: boolean = true;
@@ -746,44 +750,44 @@ const Galaad: ForwardRefRenderFunction<customRigidBody, GalaadProps> = (
   };
 
   /** Point-to-move function */
-  // const pointToMove = (
-  //   delta: number,
-  //   slopeAngle: number,
-  //   movingObjectVelocity: THREE.Vector3,
-  //   functionKeyDown: boolean,
-  // ) => {
-  //   const moveToPoint = getMoveToPoint().moveToPoint;
-  //   if (moveToPoint) {
-  //     pointToPoint.set(
-  //       moveToPoint.x - currentPos.x,
-  //       0,
-  //       moveToPoint.z - currentPos.z,
-  //     );
-  //     crossVector.crossVectors(pointToPoint, vectorZ);
-  //     // Rotate character to moving direction
-  //     modelEuler.y =
-  //       (crossVector.y > 0 ? -1 : 1) * pointToPoint.angleTo(vectorZ);
-  //     // If mode is also set to Control Camera. Keep the camera on the back of character.
-  //     if (isModeControlCamera)
-  //       pivot.rotation.y = THREE.MathUtils.lerp(
-  //         pivot.rotation.y,
-  //         modelEuler.y,
-  //         controlCamRotMult * delta * 3,
-  //       );
-  //     // Once character close to the target point (distance<0.3),
-  //     // Or character close to the wall (bodySensor intersects)
-  //     // stop moving
-  //     if (characterRef.current) {
-  //       if (pointToPoint.length() > 0.3 && !isBodyHitWall && !functionKeyDown) {
-  //         moveCharacter(delta, false, slopeAngle, movingObjectVelocity);
-  //         isPointMoving = true;
-  //       } else {
-  //         setMoveToPoint(new THREE.Vector3(0, 0, 0));
-  //         isPointMoving = false;
-  //       }
-  //     }
-  //   }
-  // };
+  const pointToMove = (
+    delta: number,
+    slopeAngle: number,
+    movingObjectVelocity: THREE.Vector3,
+    functionKeyDown: boolean,
+  ) => {
+    const moveToPoint = getMoveToPoint().moveToPoint;
+    if (moveToPoint) {
+      pointToPoint.set(
+        moveToPoint.x - currentPos.x,
+        0,
+        moveToPoint.z - currentPos.z,
+      );
+      crossVector.crossVectors(pointToPoint, vectorZ);
+      // Rotate character to moving direction
+      modelEuler.y =
+        (crossVector.y > 0 ? -1 : 1) * pointToPoint.angleTo(vectorZ);
+      // If mode is also set to Control Camera. Keep the camera on the back of character.
+      if (isModeControlCamera)
+        pivot.rotation.y = THREE.MathUtils.lerp(
+          pivot.rotation.y,
+          modelEuler.y,
+          controlCamRotMult * delta * 3,
+        );
+      // Once character close to the target point (distance<0.3),
+      // Or character close to the wall (bodySensor intersects)
+      // stop moving
+      if (characterRef.current) {
+        if (pointToPoint.length() > 0.3 && !isBodyHitWall && !functionKeyDown) {
+          moveCharacter(delta, false, slopeAngle, movingObjectVelocity);
+          isPointMoving = true;
+        } else {
+          setMoveToPoint(new THREE.Vector3(0, 0, 0));
+          isPointMoving = false;
+        }
+      }
+    }
+  };
 
   /** Stop character movement: used to stop the character movement when you stop press a key. */
   const resetAnimation = useGame((state) => state.reset);
@@ -1341,21 +1345,21 @@ const Galaad: ForwardRefRenderFunction<customRigidBody, GalaadProps> = (
     if (autoBalance && characterRef.current) autoBalanceCharacter();
 
     /** Point to move feature */
-    // if (isModePointToMove) {
-    //   functionKeyDown =
-    //     forward ||
-    //     back ||
-    //     left ||
-    //     right ||
-    //     joystickDis > 0 ||
-    //     gamepadKeys.forward ||
-    //     gamepadKeys.back ||
-    //     gamepadKeys.left ||
-    //     gamepadKeys.right ||
-    //     jump ||
-    //     button1Pressed;
-    //   pointToMove(delta, slopeAngle, movingObjectVelocity, functionKeyDown);
-    // }
+    if (isModePointToMove) {
+      functionKeyDown =
+        forward ||
+        back ||
+        left ||
+        right ||
+        joystickDis > 0 ||
+        gamepadKeys.forward ||
+        gamepadKeys.back ||
+        gamepadKeys.left ||
+        gamepadKeys.right ||
+        jump ||
+        button1Pressed;
+      pointToMove(delta, slopeAngle, movingObjectVelocity, functionKeyDown);
+    }
 
     /** Camera rotation */
     // Rotate left ?
