@@ -1,3 +1,12 @@
+import {
+  ClipboardCopyIcon,
+  ClipboardPasteIcon,
+  CopyCheckIcon,
+  EraserIcon,
+  LucideIcon,
+  Rotate3DIcon,
+  Undo2Icon
+} from "lucide-react";
 import Image from "next/image";
 import { useEntityStore } from "../../class/entity.store";
 import { PlacementManager } from "../../PlacementManager";
@@ -6,7 +15,11 @@ import { ScaleToolStats } from "./edit-tool/scale/ScaleToolStats";
 import { useEditToolStore } from "./edit-tool/store/useEditTool.store";
 
 // Inventory items
-const itemsData = [
+const itemsData: {
+  name: string;
+  description: string;
+  image: string | LucideIcon;
+}[] = [
   {
     name: "Move Tool",
     description: "Move Tool",
@@ -16,6 +29,36 @@ const itemsData = [
     name: "Scale Tool",
     description: "Scale Tool",
     image: "/assets/images/inventory/scale-tool.png",
+  },
+  {
+    name: "Rotate Tool",
+    description: "Rotate Tool",
+    image: Rotate3DIcon,
+  },
+  {
+    name: "Delete Tool",
+    description: "Delete Tool",
+    image: EraserIcon,
+  },
+  {
+    name: "Duplicate Tool",
+    description: "Duplicate Tool",
+    image: ClipboardCopyIcon,
+  },
+  {
+    name: "Copy Tool",
+    description: "Copy Tool",
+    image: CopyCheckIcon,
+  },
+  {
+    name: "Paste Tool",
+    description: "Paste Tool",
+    image: ClipboardPasteIcon,
+  },
+  {
+    name: "Undo Tool",
+    description: "Undo Tool",
+    image: Undo2Icon,
   },
   // Add more items/tools here.
 ];
@@ -135,7 +178,7 @@ export const Inventory = () => {
             const json = PlacementManager.save(entities);
             console.log(json);
 
-            // create file 
+            // create file
             // const blob = new Blob([json], { type: "application/json" });
             // const url = URL.createObjectURL(blob);
             // const a = document.createElement("a");
@@ -157,7 +200,7 @@ export const Inventory = () => {
                 className="group relative h-16 w-16 transform cursor-pointer rounded-lg border border-neutral-600 bg-gradient-to-r from-neutral-800 to-neutral-900 shadow-lg transition-all hover:scale-105"
               >
                 <div className="absolute inset-0 flex items-center justify-center">
-                  {item && item.image && (
+                  {typeof item.image === "string" ? (
                     <Image
                       src={item.image}
                       alt={item.name}
@@ -165,6 +208,11 @@ export const Inventory = () => {
                       height={32}
                       className="h-8 w-8 object-contain"
                     />
+                  ) : (
+                    (() => {
+                      const IconComponent = item.image;
+                      return <IconComponent className="h-8 w-8 text-sky-400" />;
+                    })()
                   )}
                 </div>
               </div>

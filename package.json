@@ -25,6 +25,7 @@
     "file-saver": "^2.0.5",
     "framer-motion": "12.5.0",
     "leva": "^0.10.0",
+    "lucide-react": "^0.488.0",
     "next": "15.3.0",
     "r3f-perf": "^7.2.3",
     "react": "^19.0.0",

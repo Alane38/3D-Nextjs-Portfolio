@@ -14,7 +14,7 @@ export function EntityComponent<T extends Entity>(
     rigidBodyRef: React.RefObject<RapierRigidBody | null>,
     visualRef?: React.RefObject<Group | null>,
   ) => JSX.Element,
-  useMoveTool = true,
+  useEditTool = true,
 ) {
   const WrappedEntityComponent = ({
     objectProps,
@@ -269,9 +269,9 @@ export function EntityComponent<T extends Entity>(
       <RigidBody
         ref={bodyRef}
         onPointerDown={(e: PointerEvent) => {
-          if (useMoveTool) {
+          if (useEditTool) {
             e.stopPropagation();
-            if (!bodyRef.current) return;
+            if (!bodyRef.current || !currentInstance || !visualRef.current) return;
             setSelectedEntity(currentInstance);
             setSelectedGroup(bodyRef.current);
             setSelectedVisual(visualRef.current);
