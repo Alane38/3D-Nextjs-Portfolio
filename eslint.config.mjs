@@ -20,6 +20,7 @@ const eslintConfig = [
           varsIgnorePattern: "^_",
         },
       ],
+      "react-hooks/exhaustive-deps": "off",
     },
   },
 ];

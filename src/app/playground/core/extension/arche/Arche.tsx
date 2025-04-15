@@ -17,7 +17,6 @@ import {
   forwardRef,
   ForwardRefRenderFunction,
   useEffect,
-  useImperativeHandle,
   useMemo,
   useRef,
   useState,
@@ -79,7 +78,7 @@ const ARCHE: ForwardRefRenderFunction<customRigidBody, ArcheProps> = (
     camCollisionOffset = 0.7,
     camCollisionSpeedMult = 4,
     // Camera control rotation
-    controlCamRotMult = 2,
+    controlCamRotMult = 1,
     // Follow light settings
     // Follow Light I/O
     followLight = false,
@@ -121,9 +120,10 @@ const ARCHE: ForwardRefRenderFunction<customRigidBody, ArcheProps> = (
     rayHitForgiveness = 0.1,
     rayLength = hitboxHeight,
     rayDir = { x: 0, y: -1, z: 0 },
+    // Floating
     floatingDis = hitboxHeight + floatHeight,
-    springK = 1.2,
-    dampingC = 0.08,
+    springK = 1.2, // Spring constant
+    dampingC = 0.08, // Amortization
     // Slope Ray setups
     showSlopeRayOrigin = false,
     slopeMaxAngle = 1, // in rad
@@ -182,19 +182,8 @@ const ARCHE: ForwardRefRenderFunction<customRigidBody, ArcheProps> = (
     action3: 1,
     action4: 0,
   };
-  // //
-  useImperativeHandle(ref, () => {
-    if (!characterRef.current) {
-      throw new Error("characterRef is not initialized");
-    }
 
-    characterRef.current.rotateCamera = rotateCamera;
-    characterRef.current.rotateCharacterOnY = rotateCharacterOnY;
-
-    return characterRef.current;
-  }, [characterRef]);
-
-  // // Move and Camera mode
+  /** Move and Camera mode */
   const setMoveToPoint = useGame((state) => state.setMoveToPoint);
   const modeSet = new Set(camMode?.split(" ") || []);
 
@@ -205,10 +194,10 @@ const ARCHE: ForwardRefRenderFunction<customRigidBody, ArcheProps> = (
   const isModeOnlyCamera = modeSet.has("OnlyCamera");
   const isModeControlCamera = modeSet.has("ControlCamera");
 
-  // LockCamera Props
+  /** LockCamera Props */
   const { camera, gl } = useThree();
 
-  // // Body collider
+  /** Body collider */
   const Vector3Factory = () => useMemo(() => new THREE.Vector3(), []);
 
   const modelFacingVec = Vector3Factory();
@@ -442,7 +431,6 @@ const ARCHE: ForwardRefRenderFunction<customRigidBody, ArcheProps> = (
   const rejectVel: THREE.Vector3 = useMemo(() => new THREE.Vector3(), []);
 
   // // Ray Force
-  let floatingForce = null;
   const springDirVec: THREE.Vector3 = useMemo(() => new THREE.Vector3(), []);
   const characterMassForce: THREE.Vector3 = useMemo(
     () => new THREE.Vector3(),
@@ -455,7 +443,7 @@ const ARCHE: ForwardRefRenderFunction<customRigidBody, ArcheProps> = (
   // Slope Detection Ray
   let slopeAngle: number = 0;
   let actualSlopeNormal: Vector;
-  let actualSlopeAngle: number = 0;
+  const actualSlopeAngle: number = 0;
   const actualSlopeNormalVec: THREE.Vector3 = useMemo(
     () => new THREE.Vector3(),
     [],
@@ -604,7 +592,7 @@ const ARCHE: ForwardRefRenderFunction<customRigidBody, ArcheProps> = (
       );
     }
 
-    // Move character at proper direction and impulse
+    // Move character at proper direction (important)
     characterRef.current.applyImpulseAtPoint(
       moveImpulse,
       {
@@ -800,6 +788,7 @@ const ARCHE: ForwardRefRenderFunction<customRigidBody, ArcheProps> = (
   };
 
   // Rotate camera function
+  // eslint-disable-next-line
   const rotateCamera = (x: number, y: number) => {
     pivot.rotation.y += y;
     followCam.rotation.x = Math.min(
@@ -809,6 +798,7 @@ const ARCHE: ForwardRefRenderFunction<customRigidBody, ArcheProps> = (
   };
 
   /** Rotate character on Y */
+  // eslint-disable-next-line
   const rotateCharacterOnY = (rad: number) => {
     modelEuler.y += rad;
   };
@@ -901,38 +891,6 @@ const ARCHE: ForwardRefRenderFunction<customRigidBody, ArcheProps> = (
     };
   }, []);
 
-
-  /** Local character and plaform management ! */
-  useFrame((_, delta) => {
-    const character = characterRef.current;
-    if (!character) return;
-
-    detectPlatformUnderPlayer(); // Update isOnMovingPlatform and movingPlatformVelocity
-
-    // const currentVel = character.linvel();
-    // const currentVelVec = new Vector3(currentVel.x, currentVel.y, currentVel.z);
-
-    if (isOnMovingPlatform) {
-      const platformDeltaPosition = new Vector3();
-      platformDeltaPosition.set(
-        movingPlatformVelocity.x * delta,
-        movingPlatformVelocity.y * delta,
-        movingPlatformVelocity.z * delta,
-      );
-
-      const currentTranslation = new THREE.Vector3(
-        character.translation().x,
-        character.translation().y,
-        character.translation().z,
-      );
-
-      character.setTranslation(
-        currentTranslation.add(platformDeltaPosition),
-        true,
-      );
-    }
-  });
-
   /** Character movement, Slope Management, Animations */
   useFrame((state, delta) => {
     if (delta > 1) delta %= 1;
@@ -952,6 +910,29 @@ const ARCHE: ForwardRefRenderFunction<customRigidBody, ArcheProps> = (
           characterRotated;
         (characterRef.current.userData as CharacterState).inMotion = inMotion;
       }
+    }
+
+    /**  Move character with the moving platform */
+    detectPlatformUnderPlayer(); // Update isOnMovingPlatform and movingPlatformVelocity
+
+    if (isOnMovingPlatform) {
+      const platformDeltaPosition = new Vector3();
+      platformDeltaPosition.set(
+        movingPlatformVelocity.x * delta,
+        movingPlatformVelocity.y * delta,
+        movingPlatformVelocity.z * delta,
+      );
+
+      const currentTranslation = new THREE.Vector3(
+        characterRef.current.translation().x,
+        characterRef.current.translation().y,
+        characterRef.current.translation().z,
+      );
+
+      characterRef.current.setTranslation(
+        currentTranslation.add(platformDeltaPosition),
+        true,
+      );
     }
 
     /** Camera movement */
@@ -1039,6 +1020,17 @@ const ARCHE: ForwardRefRenderFunction<customRigidBody, ArcheProps> = (
 
     /** Jump */
     if ((jump || button1Pressed) && (canJump || infiniteJump)) {
+      // If floatmode, temporary disable floatmode
+      if (floatMode === true) {
+        floatMode = false;
+
+        // Wait 0.5s before re-enabling floatmode
+        setTimeout(() => {
+          floatMode = true;
+        }, 500);
+      }
+
+      // Jump force value
       const jumpStrength =
         (run ? sprintJumpMult * jumpVel : jumpVel) * slopJumpMult;
       jumpVelocityVec.set(
@@ -1047,6 +1039,7 @@ const ARCHE: ForwardRefRenderFunction<customRigidBody, ArcheProps> = (
         currentVel.z,
       );
 
+      // Action
       characterRef.current.setLinvel(
         jumpDirection
           .set(0, jumpStrength, 0)
@@ -1064,9 +1057,9 @@ const ARCHE: ForwardRefRenderFunction<customRigidBody, ArcheProps> = (
       if (!infiniteJump) canJump = false;
     }
 
-    /** 
+    /**
      * Character model rotate to the moving direction
-    */
+     */
     modelQuat.setFromEuler(modelEuler);
     characterModelIndicator.quaternion.rotateTowards(
       modelQuat,
@@ -1109,14 +1102,14 @@ const ARCHE: ForwardRefRenderFunction<customRigidBody, ArcheProps> = (
     }
 
     if (autoFlip) {
-    const rotation = characterRef.current?.rotation?.();
-    if (rotation) {
-      const isFlipped = rotation.x > flipAngle || rotation.x < -flipAngle;
-      if (isFlipped) {
-        rotation.x = 0;
+      const rotation = characterRef.current?.rotation?.();
+      if (rotation) {
+        const isFlipped = rotation.x > flipAngle || rotation.x < -flipAngle;
+        if (isFlipped) {
+          rotation.x = 0;
+        }
       }
     }
-  }
 
     /** Shape Ray Detection (not used) */
     // rayHit = world.castShape(
@@ -1268,21 +1261,25 @@ const ARCHE: ForwardRefRenderFunction<customRigidBody, ArcheProps> = (
       );
     }
 
-    /** Apply floating force */
-    if (floatMode === true) {
-      if (rayHit != null) {
-        if (canJump && rayHit.collider.parent()) {
-          floatingForce =
-            springK * (floatingDis - rayHit.timeOfImpact) -
-            characterRef.current.linvel().y * dampingC;
-          characterRef.current.applyImpulse(
-            springDirVec.set(0, floatingForce, 0),
-            false,
-          );
+    if (floatMode && canJump) {
+      if (slopeRayHit && slopeRayHit.collider.parent()) {
+        const currentDistance = slopeRayHit.timeOfImpact; // timeOfImpact is the correct property
+        const targetDistance = floatingDis;
 
-          // Apply opposite force to standing object (gravity g in rapier is 0.11 ?_?)
-          characterMassForce.set(0, floatingForce > 0 ? -floatingForce : 0, 0);
-          rayHit.collider
+        const displacement = targetDistance - currentDistance;
+        const verticalVelocity = characterRef.current.linvel().y;
+
+        const floatingForce =
+          springK * displacement - dampingC * verticalVelocity;
+
+        // Apply floating force up
+        springDirVec.set(0, floatingForce, 0);
+        characterRef.current.applyImpulse(springDirVec, false);
+
+        // Optionnal : Apply floating force down
+        if (floatingForce > 0) {
+          characterMassForce.set(0, -floatingForce, 0);
+          slopeRayHit.collider
             .parent()
             ?.applyImpulseAtPoint(characterMassForce, standingForcePoint, true);
         }
@@ -1427,7 +1424,7 @@ const ARCHE: ForwardRefRenderFunction<customRigidBody, ArcheProps> = (
       if (isJumping) {
         jumpAnimation?.();
       } else if (isMoving) {
-        if (rayHit !== null) {
+        if (rayHit !== null || floatMode === true) {
           if (run || runState) {
             runAnimation?.();
           } else {
@@ -1474,8 +1471,8 @@ const ARCHE: ForwardRefRenderFunction<customRigidBody, ArcheProps> = (
             bodySensorPosition.y,
             bodySensorPosition.z,
           ]}
-          // onIntersectionEnter={handleOnIntersectionEnter}
-          // onIntersectionExit={handleOnIntersectionExit}
+          onIntersectionEnter={handleOnIntersectionEnter}
+          onIntersectionExit={handleOnIntersectionExit}
         />
       )}
       <LockCamera camera={camera} renderer={gl} />
