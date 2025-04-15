@@ -139,6 +139,11 @@ export function EntityComponent<T extends Entity>(
      * undefined
      */
 
+    // Save all events handlers
+    const originalHandlers = {
+      onCollisionEnter: currentInstance.onCollisionEnter,
+    };
+
     // Merge props
     Object.assign(currentInstance, props, objectProps);
     /**
@@ -182,6 +187,11 @@ export function EntityComponent<T extends Entity>(
         "springed": false
     }
          */
+
+    // Assign handlers back
+    if (originalHandlers.onCollisionEnter) {
+      currentInstance.onCollisionEnter = originalHandlers.onCollisionEnter;
+    }
 
     // Update instance (make it reactive to get current datas for example the position)
     useEffect(() => {
