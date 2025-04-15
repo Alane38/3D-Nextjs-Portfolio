@@ -26,9 +26,7 @@ import { Vector3 } from "three";
 import { useFollowCam } from "./hooks/useFollowCam";
 import { useGame } from "./store/useGame";
 import { useJoystick } from "./store/useJoystick";
-import { CharacterState } from "./types/CharacterState";
-import { customRigidBody } from "./types/customRigidBody";
-import { ArcheProps } from "./types/ArcheProps";
+import { ArcheProps, CharacterState, customRigidBody } from "./types/Arche";
 import { getObjectDirection } from "./utils/getObjectDirection";
 import { InsideKeyboardControls } from "./utils/insideKeyboardControls";
 import { LockCamera } from "./utils/LockCamera";
@@ -120,10 +118,11 @@ const ARCHE: ForwardRefRenderFunction<customRigidBody, ArcheProps> = (
     rayHitForgiveness = 0.1,
     rayLength = hitboxHeight,
     rayDir = { x: 0, y: -1, z: 0 },
-    // Floating
+    /** Floating Values */
     floatingDis = hitboxHeight + floatHeight,
-    springK = 1.2, // Spring constant
-    dampingC = 0.08, // Amortization
+    // Default values for a floatHeight of 1.
+    springK = 5,
+    dampingC = 1,
     // Slope Ray setups
     showSlopeRayOrigin = false,
     slopeMaxAngle = 1, // in rad
@@ -142,7 +141,6 @@ const ARCHE: ForwardRefRenderFunction<customRigidBody, ArcheProps> = (
     animated = false,
     // Mode setups
     camMode = null,
-    camListenerTarget = "domElement",
     // Controller setups
     controllerKeys = {
       forward: 12,
@@ -393,7 +391,6 @@ const ARCHE: ForwardRefRenderFunction<customRigidBody, ArcheProps> = (
     camInitDir,
     camCollisionOffset,
     camCollisionSpeedMult,
-    camListenerTarget,
   };
 
   // // Load camera pivot and character move
@@ -846,11 +843,24 @@ const ARCHE: ForwardRefRenderFunction<customRigidBody, ArcheProps> = (
       },
     );
 
+    /** Handlers */
+    if (!defaultPlayer) return; // Only active for default player
+    // Initialize character facing direction
+    modelEuler.y = characterInitDir;
+
+    window.addEventListener("visibilitychange", sleepCharacter);
+    window.addEventListener("gamepadconnected", gamepadConnect);
+    window.addEventListener("gamepaddisconnected", gamepadDisconnect);
+
     return () => {
       unSubscribeAction1?.();
       unSubscribeAction2?.();
       unSubscribeAction3?.();
       unSubscribeAction4?.();
+
+      window.removeEventListener("visibilitychange", sleepCharacter);
+      window.removeEventListener("gamepadconnected", gamepadConnect);
+      window.removeEventListener("gamepaddisconnected", gamepadDisconnect);
     };
   }, []);
 
@@ -874,25 +884,33 @@ const ARCHE: ForwardRefRenderFunction<customRigidBody, ArcheProps> = (
     };
   }, [autoBalance]);
 
-  /** Initialize */
-  useEffect(() => {
-    if (!defaultPlayer) return; // Only active for default player
-    // Initialize character facing direction
-    modelEuler.y = characterInitDir;
-
-    window.addEventListener("visibilitychange", sleepCharacter);
-    window.addEventListener("gamepadconnected", gamepadConnect);
-    window.addEventListener("gamepaddisconnected", gamepadDisconnect);
-
-    return () => {
-      window.removeEventListener("visibilitychange", sleepCharacter);
-      window.removeEventListener("gamepadconnected", gamepadConnect);
-      window.removeEventListener("gamepaddisconnected", gamepadDisconnect);
-    };
-  }, []);
-
   /** Character movement, Slope Management, Animations */
   useFrame((state, delta) => {
+    const character = characterRef.current;
+    if (!character) return;
+    /**  Move character with the moving platform */
+    detectPlatformUnderPlayer(); // Update isOnMovingPlatform and movingPlatformVelocity
+
+    if (isOnMovingPlatform) {
+      const platformDeltaPosition = new Vector3();
+      platformDeltaPosition.set(
+        movingPlatformVelocity.x * delta,
+        movingPlatformVelocity.y * delta,
+        movingPlatformVelocity.z * delta,
+      );
+
+      const currentTranslation = new THREE.Vector3(
+        character.translation().x,
+        character.translation().y,
+        character.translation().z,
+      );
+
+      character.setTranslation(
+        currentTranslation.add(platformDeltaPosition),
+        true,
+      );
+    }
+
     if (delta > 1) delta %= 1;
     if (!defaultPlayer) return; // Only active for default player
     if (!characterRef.current) return;
@@ -910,29 +928,6 @@ const ARCHE: ForwardRefRenderFunction<customRigidBody, ArcheProps> = (
           characterRotated;
         (characterRef.current.userData as CharacterState).inMotion = inMotion;
       }
-    }
-
-    /**  Move character with the moving platform */
-    detectPlatformUnderPlayer(); // Update isOnMovingPlatform and movingPlatformVelocity
-
-    if (isOnMovingPlatform) {
-      const platformDeltaPosition = new Vector3();
-      platformDeltaPosition.set(
-        movingPlatformVelocity.x * delta,
-        movingPlatformVelocity.y * delta,
-        movingPlatformVelocity.z * delta,
-      );
-
-      const currentTranslation = new THREE.Vector3(
-        characterRef.current.translation().x,
-        characterRef.current.translation().y,
-        characterRef.current.translation().z,
-      );
-
-      characterRef.current.setTranslation(
-        currentTranslation.add(platformDeltaPosition),
-        true,
-      );
     }
 
     /** Camera movement */
@@ -1498,5 +1493,3 @@ const ARCHE: ForwardRefRenderFunction<customRigidBody, ArcheProps> = (
 };
 
 export default forwardRef(ARCHE); // Used to create a reference It's allow to access to a DOM Element.
-
-export type camListenerTargetType = "document" | "domElement";

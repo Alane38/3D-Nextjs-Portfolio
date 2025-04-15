@@ -2,8 +2,8 @@
 import { RapierRigidBody } from "@react-three/rapier";
 import { useRef } from "react";
 import { animationPrefix, characterPath } from "src/constants/default";
-import { CharacterProps } from "../extension/arche/types/CharacterProps";
 import { ArcheAnimation } from "../extension/arche/ArcheAnimation";
+import { CharacterProps } from "./Character";
 import Arche from "../extension/arche/Arche";
 
 export const Character = ({
@@ -39,7 +39,7 @@ export const Character = ({
         position={position}
         infiniteJump={true}
         animated={true}
-        floatMode={true}
+        floatMode={false}
         // Collider
         colliders="hull"
         hitboxHeight={0.4}
@@ -66,7 +66,6 @@ export const Character = ({
         camCollisionOffset={0.5}
         camCollisionSpeedMult={5}
         controlCamRotMult={1}
-        camListenerTarget="domElement"
         camFollowMult={10}
         camLerpMult={20}
         // Follow light

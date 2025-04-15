@@ -1,4 +1,3 @@
-import { camListenerTargetType } from "../ARCHE";
 
 export type UseFollowCameraProps = {
   enableFollowCam?: boolean;
@@ -14,5 +13,4 @@ export type UseFollowCameraProps = {
   camZoomSpeed?: number;
   camCollisionOffset?: number;
   camCollisionSpeedMult?: number;
-  camListenerTarget?: camListenerTargetType;
 };

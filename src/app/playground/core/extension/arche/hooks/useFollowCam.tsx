@@ -1,7 +1,7 @@
 import { useThree } from "@react-three/fiber";
 import { useCallback, useEffect, useMemo, useRef } from "react";
 import * as THREE from "three";
-import { UseFollowCameraProps } from "../types/UseFollowCameraProps";
+import { UseFollowCameraProps } from "../types/UseFollowCamera";
 
 export const useFollowCam = ({
   // enableFollowCam = false,
@@ -17,7 +17,6 @@ export const useFollowCam = ({
   camZoomSpeed = 1,
   camCollisionOffset = 0.7,
   camCollisionSpeedMult = 4,
-  camListenerTarget = "domElement",
 }: UseFollowCameraProps = {}) => {
   const { scene, camera, gl } = useThree();
   const isMouseDown = useRef(false);
@@ -50,6 +49,38 @@ export const useFollowCam = ({
     0,
     -camMaxDis,
   );
+
+  useEffect(() => {
+    pivot.rotation.y = camInitDir.y;
+    followCam.rotation.x = camInitDir.x;
+    pivot.add(followCam);
+    scene.add(pivot);
+
+    const target =
+      document || gl.domElement
+    target.addEventListener("mousedown", () => (isMouseDown.current = true));
+    target.addEventListener("mouseup", () => (isMouseDown.current = false));
+    target.addEventListener("mousemove", onMouseMove as EventListener);
+    target.addEventListener("wheel", onMouseWheel as EventListener);
+    target.addEventListener("touchmove", onTouchMove as EventListener, {
+      passive: false,
+    });
+
+    return () => {
+      target.removeEventListener(
+        "mousedown",
+        () => (isMouseDown.current = true),
+      );
+      target.removeEventListener(
+        "mouseup",
+        () => (isMouseDown.current = false),
+      );
+      target.removeEventListener("mousemove", onMouseMove as EventListener);
+      target.removeEventListener("wheel", onMouseWheel as EventListener);
+      target.removeEventListener("touchmove", onTouchMove as EventListener);
+      scene.remove(pivot);
+    };
+  }, []);
 
   const onMouseMove = useCallback((e: MouseEvent) => {
     if (document.pointerLockElement || isMouseDown.current) {
@@ -175,37 +206,7 @@ export const useFollowCam = ({
     ); // delta * 2 for rapier ray setup
   };
 
-  useEffect(() => {
-    pivot.rotation.y = camInitDir.y;
-    followCam.rotation.x = camInitDir.x;
-    pivot.add(followCam);
-    scene.add(pivot);
 
-    const target =
-      camListenerTarget === "domElement" ? gl.domElement : document;
-    target.addEventListener("mousedown", () => (isMouseDown.current = true));
-    target.addEventListener("mouseup", () => (isMouseDown.current = false));
-    target.addEventListener("mousemove", onMouseMove as EventListener);
-    target.addEventListener("wheel", onMouseWheel as EventListener);
-    target.addEventListener("touchmove", onTouchMove as EventListener, {
-      passive: false,
-    });
-
-    return () => {
-      target.removeEventListener(
-        "mousedown",
-        () => (isMouseDown.current = true),
-      );
-      target.removeEventListener(
-        "mouseup",
-        () => (isMouseDown.current = false),
-      );
-      target.removeEventListener("mousemove", onMouseMove as EventListener);
-      target.removeEventListener("wheel", onMouseWheel as EventListener);
-      target.removeEventListener("touchmove", onTouchMove as EventListener);
-      scene.remove(pivot);
-    };
-  }, []);
 
   return { pivot, followCam, cameraCollisionDetect, joystickCamMove };
 };

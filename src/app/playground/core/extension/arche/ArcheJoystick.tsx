@@ -10,7 +10,7 @@ import React, {
 } from "react";
 import * as THREE from "three";
 import { useJoystick } from "./store/useJoystick";
-import { ArcheJoystickProps } from "./types/ArcheJoystickProps";
+import { ArcheJoystickProps } from "./types/ArcheJoystick";
 
 const JoystickComponents = (props: ArcheJoystickProps) => {
   /**

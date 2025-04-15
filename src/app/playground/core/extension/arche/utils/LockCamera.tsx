@@ -1,5 +1,5 @@
 import { useEffect, useRef } from "react";
-import { LockCameraProps } from "../types/LockCameraProps";
+import { LockCameraProps } from "../types/LockCamera";
 import { PointerLockControls } from "three/examples/jsm/Addons.js";
 
 export const useLockCamera = ({ camera, renderer }: LockCameraProps) => {

@@ -1,58 +1,65 @@
-import { RigidBodyProps } from "@react-three/rapier";
+import { RapierRigidBody, RigidBodyProps } from "@react-three/rapier";
 import { ReactNode } from "react";
-import { camListenerTargetType } from "../Arche";
+import * as THREE from "three";
+import { AnimationSet } from "./AnimationSet";
 
 export interface ArcheProps extends RigidBodyProps {
   children?: ReactNode;
 
+  /** Player Selection */
   defaultPlayer?: boolean;
-  // Colliders settings
+  /** Colliders settings */
   hitboxHeight?: number;
   hitboxWidth?: number;
   hitboxLenght?: number;
   hitboxRadius?: number;
 
+  /** Floatting settings */
   floatMode?: boolean;
   floatHeight?: number;
+  /** Floatings Values */
+  floatingDis?: number;
+  springK?: number;
+  dampingC?: number;
 
-  // Character initial
+  /** Character initial */
   characterInitDir?: number;
 
-  // Control I/O
+  /** Keyboards Control on/off */
   enableControl?: boolean;
 
-  // Camera I/O
+  /** Cameera on/off */
   enableFollowCam?: boolean;
   enableFollowCamPos?: { x: number; y: number; z: number } | null;
   enableFollowCamTarget?: { x: number; y: number; z: number } | null;
 
-  // Follow camera settings
-  // Camera distance/limit
+  /**Follow camera settings */
+  // - Camera distance/limit
   camInitDis?: number;
   camMinDis?: number;
   camMaxDis?: number;
   camLowLimit?: number;
   camUpLimit?: number;
-  // Camera direction
+  // - Camera direction
   camInitDir?: { x: number; y: number };
-  // Camera target a position ?
+  // - Camera target a position ?
   camTargetPos?: { x: number; y: number; z: number };
-  // Camera speed
+  // - Camera speed
   camMoveSpeed?: number;
   camZoomSpeed?: number;
-  // Camera collision
+  // - Camera collision
   camCollision?: boolean;
   camCollisionOffset?: number;
   camCollisionSpeedMult?: number;
-  // Camera fixed rotation
+  // - Camera fixed rotation
   controlCamRotMult?: number;
-  // Follow light settings
-  // Follow Light I/O
+  /** Follow light */
+  // - on/off
   followLight?: boolean;
-  // Follow light position
+  // - position
   followLightPos?: { x: number; y: number; z: number };
 
-  // Controls settings
+  /** Values Initializaion */
   maxVelLim?: number;
   // Turn vel/speed
   turnVelMultiplier?: number;
@@ -87,10 +94,7 @@ export interface ArcheProps extends RigidBodyProps {
   rayHitForgiveness?: number;
   rayLength?: number;
   rayDir?: { x: number; y: number; z: number };
-  floatingDis?: number;
-  springK?: number;
-  dampingC?: number;
-  // Slope Ray setups
+  /** Slope Ray setups */
   showSlopeRayOrigin?: boolean;
   slopeMaxAngle?: number;
   slopeRayOriginOffest?: number;
@@ -98,23 +102,22 @@ export interface ArcheProps extends RigidBodyProps {
   slopeRayDir?: { x: number; y: number; z: number };
   slopeUpExtraForce?: number;
   slopeDownExtraForce?: number;
-  // Head Ray setups
+  /** Head Ray setups */
   showHeadRayOrigin?: boolean;
   headRayOriginOffest?: number;
   headRayLength?: number;
   headRayDir?: { x: number; y: number; z: number };
-  // AutoBalance Force etups
+  /** AutoBalance setups */
   autoBalance?: boolean;
   autoBalanceSpringK?: number;
   autoBalanceDampingC?: number;
   autoBalanceSpringOnY?: number;
   autoBalanceDampingOnY?: number;
-  // Animation I/O
+  /** Animation I/O */
   animated?: boolean;
-  // Camera mode
+  /** Camera mode */
   camMode?: string | null;
-  camListenerTarget: camListenerTargetType;
-  // Controller settings
+  /** Controller settings */
   controllerKeys?: {
     forward?: number;
     back?: number;
@@ -126,12 +129,42 @@ export interface ArcheProps extends RigidBodyProps {
     action3?: number;
     action4?: number;
   };
-  // Point-to-move setups
+  /** Point-to-move setups */
   bodySensorSize?: Array<number>;
   bodySensorPosition?: { x: number; y: number; z: number };
 
-  // Additionnal Props
+  /** Additionnal Props */
   infiniteJump?: boolean;
 
   props?: RigidBodyProps;
 }
+
+// Used to check the character state.
+export interface CharacterState {
+  canJump: boolean;
+  inMotion: boolean;
+  slopeAngle: number | null;
+  characterRotated: boolean;
+  excludeRay?: boolean;
+}
+
+// RapierObject<RapierRigidBody> or <RapierRigidBody>
+export interface customRigidBody extends RapierRigidBody {
+  rotateCamera?: (x: number, y: number) => void;
+  rotateCharacterOnY?: (rad: number) => void;
+}
+
+export type State = {
+  moveToPoint: THREE.Vector3;
+  curAnimation: string;
+  animationSet: AnimationSet;
+  initializeAnimationSet: (animationSet: AnimationSet) => void;
+  reset: () => void;
+  setMoveToPoint: (point: THREE.Vector3) => void;
+  getMoveToPoint: () => {
+    moveToPoint: THREE.Vector3;
+  };
+  setAnimation: (animation: string, condition?: boolean) => void; // Ajout explicite de `setAnimation`
+} & {
+  [key in keyof AnimationSet]: () => void;
+};

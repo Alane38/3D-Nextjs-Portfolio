@@ -2,7 +2,7 @@ import { useAnimations, useFBX } from "@react-three/drei";
 import { Suspense, useEffect, useRef } from "react";
 import * as THREE from "three";
 import { useGame } from "./store/useGame";
-import { ArcheAnimationProps } from "./types/ArcheAnimationProps";
+import { ArcheAnimationProps } from "./types/ArcheAnimation";
 
 interface ActionType extends THREE.AnimationAction {
   _mixer: THREE.AnimationMixer;
