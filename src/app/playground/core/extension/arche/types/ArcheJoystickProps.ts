@@ -1,7 +1,7 @@
 import { ThreeElements } from "@react-three/fiber";
 import { ReactNode } from "react";
 
-export type GalaadJoystickProps = {
+export type ArcheJoystickProps = {
   // Joystick props
   children?: ReactNode;
   joystickRunSensitivity?: number;

@@ -10,9 +10,9 @@ import React, {
 } from "react";
 import * as THREE from "three";
 import { useJoystick } from "./store/useJoystick";
-import { GalaadJoystickProps } from "./types/GalaadJoystickProps";
+import { ArcheJoystickProps } from "./types/ArcheJoystickProps";
 
-const JoystickComponents = (props: GalaadJoystickProps) => {
+const JoystickComponents = (props: ArcheJoystickProps) => {
   /**
    * Preset values/components
    */
@@ -28,7 +28,7 @@ const JoystickComponents = (props: GalaadJoystickProps) => {
 
   const [windowSize, setWindowSize] = useState({ innerHeight, innerWidth });
   const joystickDiv: HTMLDivElement = document.querySelector(
-    "#galaad-joystick",
+    "#arche-joystick",
   ) as HTMLDivElement;
 
   /**
@@ -202,7 +202,7 @@ const JoystickComponents = (props: GalaadJoystickProps) => {
 const ButtonComponents = ({
   buttonNumber = 1,
   ...props
-}: GalaadJoystickProps) => {
+}: ArcheJoystickProps) => {
   /**
    * Button component geometries
    */
@@ -488,7 +488,7 @@ const ButtonComponents = ({
   );
 };
 
-export const GalaadJoystick = forwardRef<HTMLDivElement, GalaadJoystickProps>(
+export const ArcheJoystick = forwardRef<HTMLDivElement, ArcheJoystickProps>(
   (props, ref) => {
     const joystickWrapperStyle: React.CSSProperties = {
       userSelect: "none",
@@ -525,7 +525,7 @@ export const GalaadJoystick = forwardRef<HTMLDivElement, GalaadJoystickProps>(
     return (
       <div ref={ref}>
         <div
-          id="galaad-joystick"
+          id="arche-joystick"
           style={joystickWrapperStyle}
           onContextMenu={(e) => e.preventDefault()}
         >
@@ -543,7 +543,7 @@ export const GalaadJoystick = forwardRef<HTMLDivElement, GalaadJoystickProps>(
         </div>
         {props.buttonNumber !== 0 && (
           <div
-            id="galaad-button"
+            id="arche-button"
             style={buttonWrapperStyle}
             onContextMenu={(e) => e.preventDefault()}
           >
@@ -565,4 +565,4 @@ export const GalaadJoystick = forwardRef<HTMLDivElement, GalaadJoystickProps>(
   },
 );
 
-GalaadJoystick.displayName = 'GalaadJoystick';
+ArcheJoystick.displayName = 'ArcheJoystick';

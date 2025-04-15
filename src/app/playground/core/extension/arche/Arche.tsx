@@ -29,14 +29,14 @@ import { useGame } from "./store/useGame";
 import { useJoystick } from "./store/useJoystick";
 import { CharacterState } from "./types/CharacterState";
 import { customRigidBody } from "./types/customRigidBody";
-import { GalaadProps } from "./types/GalaadProps";
+import { ArcheProps } from "./types/ArcheProps";
 import { getObjectDirection } from "./utils/getObjectDirection";
 import { InsideKeyboardControls } from "./utils/insideKeyboardControls";
 import { LockCamera } from "./utils/LockCamera";
 
-const Galaad: ForwardRefRenderFunction<customRigidBody, GalaadProps> = (
+const ARCHE: ForwardRefRenderFunction<customRigidBody, ArcheProps> = (
   {
-    // TypeScript interface for Galaad component
+    // TypeScript interface for ARCHE component
     children,
 
     defaultPlayer = false,
@@ -164,7 +164,7 @@ const Galaad: ForwardRefRenderFunction<customRigidBody, GalaadProps> = (
     infiniteJump = false,
 
     ...props
-  }: GalaadProps,
+  }: ArcheProps,
   ref,
 ) => {
   // //
@@ -1500,6 +1500,6 @@ const Galaad: ForwardRefRenderFunction<customRigidBody, GalaadProps> = (
   );
 };
 
-export default forwardRef(Galaad); // Used to create a reference It's allow to access to a DOM Element.
+export default forwardRef(ARCHE); // Used to create a reference It's allow to access to a DOM Element.
 
 export type camListenerTargetType = "document" | "domElement";

@@ -1,8 +1,8 @@
 import { RigidBodyProps } from "@react-three/rapier";
 import { ReactNode } from "react";
-import { camListenerTargetType } from "../Galaad";
+import { camListenerTargetType } from "../Arche";
 
-export interface GalaadProps extends RigidBodyProps {
+export interface ArcheProps extends RigidBodyProps {
   children?: ReactNode;
 
   defaultPlayer?: boolean;

@@ -2,13 +2,13 @@ import { useAnimations, useFBX } from "@react-three/drei";
 import { Suspense, useEffect, useRef } from "react";
 import * as THREE from "three";
 import { useGame } from "./store/useGame";
-import { GalaadAnimationProps } from "./types/GalaadAnimationProps";
+import { ArcheAnimationProps } from "./types/ArcheAnimationProps";
 
 interface ActionType extends THREE.AnimationAction {
   _mixer: THREE.AnimationMixer;
 }
 
-export function GalaadAnimation(props: GalaadAnimationProps) {
+export function ArcheAnimation(props: ArcheAnimationProps) {
   // Change the character src to yours
   const group = useRef(null!);
   const fbx = useFBX(props.path);

@@ -1,4 +1,4 @@
-import { camListenerTargetType } from "../Galaad";
+import { camListenerTargetType } from "../ARCHE";
 
 export type UseFollowCameraProps = {
   enableFollowCam?: boolean;

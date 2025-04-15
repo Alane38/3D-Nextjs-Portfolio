@@ -2,9 +2,9 @@
 import { RapierRigidBody } from "@react-three/rapier";
 import { useRef } from "react";
 import { animationPrefix, characterPath } from "src/constants/default";
-import Galaad from "../extension/galaad/Galaad";
-import { GalaadAnimation } from "../extension/galaad/GalaadAnimation";
-import { CharacterProps } from "../extension/galaad/types/CharacterProps";
+import { CharacterProps } from "../extension/arche/types/CharacterProps";
+import { ArcheAnimation } from "../extension/arche/ArcheAnimation";
+import Arche from "../extension/arche/Arche";
 
 export const Character = ({
   name,
@@ -32,7 +32,7 @@ export const Character = ({
 
   return (
     <>
-      <Galaad
+      <Arche
         // Character
         name={name}
         defaultPlayer={defaultPlayer}
@@ -51,7 +51,7 @@ export const Character = ({
         enableControl={enableControl}
         enableFollowCam={enableFollowCam}
         // Direction & Camera
-        camMode="PointToMove"
+        camMode="ControlCamera"
         characterInitDir={0}
         camInitDis={-3.5}
         camMaxDis={-5}
@@ -113,7 +113,7 @@ export const Character = ({
         }}
       >
         {/* Import Model and Animation in FBX */}
-        <GalaadAnimation
+        <ArcheAnimation
           path={characterPath + path} // Must have property
           animationSet={animationSet}
           rigidBodyProps={{
@@ -121,7 +121,7 @@ export const Character = ({
             position: [0, -0.7, 0],
           }}
         />
-      </Galaad>
+      </Arche>
     </>
   );
 };
