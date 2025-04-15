@@ -79,7 +79,7 @@ const Galaad: ForwardRefRenderFunction<customRigidBody, GalaadProps> = (
     camCollisionOffset = 0.7,
     camCollisionSpeedMult = 4,
     // Camera control rotation
-    controlCamRotMult = 0.5,
+    controlCamRotMult = 2,
     // Follow light settings
     // Follow Light I/O
     followLight = false,
