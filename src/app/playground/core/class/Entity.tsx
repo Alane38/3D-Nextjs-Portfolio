@@ -6,10 +6,7 @@ import {
 import { createRef, JSX } from "react";
 import { Euler, EulerOrder, Vector3 } from "three";
 
-// export type EntityProps = JSX.IntrinsicElements["group"] & {
-//   entity: Entity;
-// };
-
+// Type for serialization
 export type EntitySerializableType = {
   name: string;
   entityId: string;
@@ -36,18 +33,21 @@ export class Entity {
   rigidBody?: RapierRigidBody;
   ccd: boolean = false;
   canSleep: boolean = true;
+  // Physics
   lockTranslations: boolean = false;
   lockRotations: boolean = false;
   enabledRotations: [boolean, boolean, boolean] = [true, true, true];
-
-  onCollisionEnter?: CollisionEnterHandler;
   setEnabledRotations?: (x: boolean, y: boolean, z: boolean) => void;
   setLinvel?: (vel: Vector3, wakeup: boolean) => void;
+
+  // Events props
+  onCollisionEnter?: CollisionEnterHandler;
 
   constructor(name: string) {
     this.name = name;
   }
 
+  // Setters
   setPosition(position: Vector3) {
     this.position.copy(position);
   }
@@ -67,8 +67,6 @@ export class Entity {
   setPath(path: string) {
     this.path = path;
   }
-
-  // Entity.ts
 
   // Convert an Entity Object to a JSON object
   toSerializable(): EntitySerializableType {
@@ -105,6 +103,6 @@ export class Entity {
   }
 
   renderComponent(): JSX.Element {
-    return <></>; // override in subclass
+    return <></>; // Override in subclass
   }
 }

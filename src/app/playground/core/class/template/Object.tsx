@@ -16,6 +16,14 @@ export class Object extends Entity {
   }
 }
 
+/**
+ * Renders the 3D model.
+ *
+ * @component
+ * @param {Object} object - An entity from the Entity parent.
+ * @param {Object} rigidBodyRef - Reference to the RapierRigidBody instance.
+ * @returns {JSX.Element}
+ */
 export const ObjectComponent = EntityComponent(Object, (object) => {
   return (
     <>

@@ -5,6 +5,14 @@ import { Entity } from "../Entity";
 import { EntityComponent } from "../EntityComponent";
 
 export class KillBrick extends Entity {
+    /**
+   * Constructs a Killbrick entity.
+   * @param {string} [path=modelPath + "NeonDoor.glb"] - Path to the .glb 3D model file.
+   */
+  /**
+   * Add custom entity Props
+   * @param {string} color - The color of the killbrick
+   */
   color: string;
   constructor() {
     super("KillBrick");
@@ -20,6 +28,14 @@ export class KillBrick extends Entity {
   }
 }
 
+/**
+ * Renders the 3D model.
+ *
+ * @component
+ * @param {KillBrick} object - An entity from the Entity parent.
+ * @param {KillBrick} rigidBodyRef - Reference to the RapierRigidBody instance.
+ * @returns {JSX.Element}
+ */
 export const KillBrickComponent = EntityComponent(
   KillBrick,
   (object, rigidBodyRef) => {

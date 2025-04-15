@@ -5,6 +5,10 @@ import { Entity } from "../Entity";
 import { EntityComponent } from "../EntityComponent";
 
 export class RestaurantSign extends Entity {
+      /**
+   * Constructs a Killbrick entity.
+   * @param {string} [path=modelPath + "NeonDoor.glb"] - Path to the .glb 3D model file.
+   */
   constructor(path: string = modelPath + "RestaurantSign.glb") {
     super("RestaurantSign");
     // Modify the default settings(Entity) :
@@ -16,6 +20,14 @@ export class RestaurantSign extends Entity {
   }
 }
 
+/**
+ * Renders the 3D model.
+ *
+ * @component
+ * @param {RestaurantSign} object - An entity from the Entity parent.
+ * @param {RestaurantSign} rigidBodyRef - Reference to the RapierRigidBody instance.
+ * @returns {JSX.Element}
+ */
 export const RestaurantSignComponent = EntityComponent(
   RestaurantSign,
   (object, rigidBodyRef) => {

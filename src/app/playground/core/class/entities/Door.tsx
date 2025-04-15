@@ -4,24 +4,40 @@ import { Entity } from "../Entity";
 import { EntityComponent } from "../EntityComponent";
 
 export class NeonDoor extends Entity {
+  /**
+   * Constructs a NeonDoor entity.
+   * @param {string} [path=modelPath + "NeonDoor.glb"] - Path to the .glb 3D model file.
+   */
   constructor(path: string = modelPath + "NeonDoor.glb") {
     super("NeonDoor");
-    // Modify the default settings(Entity) :
+
+    // Define fixed physics type and trimesh collider
     this.path = path;
     this.type = "fixed";
     this.colliders = "trimesh";
   }
 
+  /**
+   * Renders the associated React component for this entity.
+   * @returns {JSX.Element} The React component representing the neon door.
+   */
   renderComponent() {
     return <NeonDoorComponent objectProps={this} />;
   }
 }
 
+/**
+ * Renders the 3D model.
+ *
+ * @component
+ * @param {NeonDoor} object - An entity from the Entity parent.
+ * @param {NeonDoor} rigidBodyRef - Reference to the RapierRigidBody instance.
+ * @returns {JSX.Element}
+ */
 export const NeonDoorComponent = EntityComponent(NeonDoor, (object) => {
   return (
     <group>
-      {/* NeonDoor Object */}
-        <ModelLoader path={object.path} />
+      <ModelLoader path={object.path} />
     </group>
   );
 });

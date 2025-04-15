@@ -4,7 +4,6 @@ import { Entity } from "./class/Entity";
 export const ENTITY_TYPES: Record<string, new () => Entity> = {
   Diamond,
   KillBrick,
-  // NeonDoor,
   // Add more entity types here
 };
 

@@ -4,6 +4,10 @@ import { Entity } from "../Entity";
 import { EntityComponent } from "../EntityComponent";
 
 export class Stairs extends Entity {
+        /**
+   * Constructs a Killbrick entity.
+   * @param {string} [path=modelPath + "NeonDoor.glb"] - Path to the .glb 3D model file.
+   */
   constructor(path: string = modelPath + "Stairs.glb") {
     super("Stairs");
     // Modify the default settings(Entity) :
@@ -15,6 +19,14 @@ export class Stairs extends Entity {
   }
 }
 
+/**
+ * Renders the 3D model.
+ *
+ * @component
+ * @param {Stairs} object - An entity from the Entity parent.
+ * @param {Stairs} rigidBodyRef - Reference to the RapierRigidBody instance.
+ * @returns {JSX.Element}
+ */
 export const StairsComponent = EntityComponent(Stairs, (object) => {
   return (
     <group>

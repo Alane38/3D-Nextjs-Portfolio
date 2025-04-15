@@ -7,6 +7,15 @@ import { Entity } from "../Entity";
 import { EntityComponent } from "../EntityComponent";
 
 export class Spinner extends Entity {
+      /**
+   * Constructs a Killbrick entity.
+   * @param {string} [path=modelPath + "NeonDoor.glb"] - Path to the .glb 3D model file.
+   */
+  /**
+   * Add custom entity Props
+   * @param {string} color - Color of the spinner
+   * @param {string} speed - Speed of the spinner
+   */
   speed: number;
   color: string;
   constructor(path: string = modelPath + "Spinner.glb") {
@@ -21,6 +30,14 @@ export class Spinner extends Entity {
   }
 }
 
+/**
+ * Renders the 3D model.
+ *
+ * @component
+ * @param {Spinner} object - An entity from the Entity parent.
+ * @param {Spinner} rigidBodyRef - Reference to the RapierRigidBody instance.
+ * @returns {JSX.Element}
+ */
 export const SpinnerComponent = EntityComponent(Spinner, (object, rigidBodyRef) => {
   useFrame((_state, delta) => {
     if (!rigidBodyRef.current?.rotation()) return;

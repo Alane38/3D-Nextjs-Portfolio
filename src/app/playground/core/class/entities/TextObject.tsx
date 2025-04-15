@@ -12,6 +12,12 @@ interface TextProps {
 }
 
 export class TextObject extends Entity {
+      /**
+   * Add custom entity Props 
+   * @param {string} text - text
+   * @param {string} font - Font of the text
+   * @param {number} size - Size of the text
+   */
   TextProps: TextProps;
   constructor(type: RigidBodyOptions["type"] = "fixed") {
     super("Text");
@@ -26,9 +32,15 @@ export class TextObject extends Entity {
   }
 }
 
+/**
+ * Renders the 3D model.
+ *
+ * @component
+ * @param {Steps} object - An entity from the Entity parent.
+ * @param {Steps} rigidBodyRef - Reference to the RapierRigidBody instance.
+ * @returns {JSX.Element}
+ */
 export const TextObjectComponent = EntityComponent(TextObject, (object) => {
-  
-
   return (
       <Text3D
         font={object.TextProps.font || defaultFont}

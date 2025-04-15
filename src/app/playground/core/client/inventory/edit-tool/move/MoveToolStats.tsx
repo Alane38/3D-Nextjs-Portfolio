@@ -1,9 +1,18 @@
 import { useEffect } from "react";
 import { useEditToolStore } from "../store/useEditTool.store";
 
+/**
+ * Show values related to the move tool
+ *
+ * @component
+ * @param {boolean} active - Whether the move tool is active
+ * @returns {JSX.Element}
+ */
 export const MoveToolStats = ({ active }: { active: boolean }) => {
+  // Store initialization
   const { position, selectedEntity, setPosition } = useEditToolStore();
 
+  // Event listeners
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
       setPosition((prev) => {

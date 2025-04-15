@@ -5,6 +5,7 @@ import { MoveToolStats } from "./edit-tool/move/MoveToolStats";
 import { ScaleToolStats } from "./edit-tool/scale/ScaleToolStats";
 import { useEditToolStore } from "./edit-tool/store/useEditTool.store";
 
+// Inventory items
 const itemsData = [
   {
     name: "Move Tool",
@@ -19,7 +20,14 @@ const itemsData = [
   // Add more items/tools here.
 ];
 
+/**
+ * Inventory Bar
+ *
+ * @component
+ * @returns {JSX.Element}
+ */
 export const Inventory = () => {
+  // Store initialization
   const {
     // Move Tool
     moveToolEnabled,
@@ -33,6 +41,7 @@ export const Inventory = () => {
   // const [allRigidBodiesMounted, setAllRigidBodiesMounted] = useState(false);
   const { entities, setEntities } = useEntityStore();
 
+  // Click on an item
   const handleItemClick = (index: number) => {
     // Disable other tools
     setMoveToolEnabled(false);
@@ -60,6 +69,7 @@ export const Inventory = () => {
   //   console.log("CALL TO BE SAVED:", entities);
   // }, [entities]);
 
+  // Save the world
   const handleSave = () => {
     // Check if all RigidBodies are mounted; if not you can't save the world.
     // if (!allRigidBodiesMounted) {

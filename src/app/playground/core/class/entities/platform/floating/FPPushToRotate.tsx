@@ -22,6 +22,14 @@ export class FPPushtoRotate extends Entity {
   }
 }
 
+/**
+ * Renders the 3D model.
+ *
+ * @component
+ * @param {FPPushtoRotate} object - An entity from the Entity parent.
+ * @param {FPPushtoRotate} rigidBodyRef - Reference to the RapierRigidBody instance.
+ * @returns {JSX.Element}
+ */
 export const FPPushtoRotateComponent = EntityComponent(
   FPPushtoRotate,
   (object, rigidBodyRef) => {

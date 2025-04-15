@@ -1,7 +1,14 @@
 import { useFrame } from "@react-three/fiber";
 import { useEditToolStore } from "../store/useEditTool.store";
 
+/**
+ * Scale Tool
+ *
+ * @component
+ * @returns {JSX.Element}
+ */
 export const ScaleTool = () => {
+  // Store initialization
   const {
     scaleToolEnabled,
     scale,
@@ -11,6 +18,7 @@ export const ScaleTool = () => {
     scaleMode,
   } = useEditToolStore();
 
+  // Update scale
   useFrame(() => {
     if (!selectedVisual || !scaleToolEnabled) return;
     selectedVisual.scale.set(scale.x, scale.y, scale.z);

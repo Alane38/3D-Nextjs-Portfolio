@@ -20,6 +20,14 @@ export class FPMoving extends Entity {
   }
 }
 
+/**
+ * Renders the 3D model.
+ *
+ * @component
+ * @param {FPMoving} object - An entity from the Entity parent.
+ * @param {FPMoving} rigidBodyRef - Reference to the RapierRigidBody instance.
+ * @returns {JSX.Element}
+ */
 export const FPMovingComponent = EntityComponent(
   FPMoving,
   (object, rigidBodyRef) => {

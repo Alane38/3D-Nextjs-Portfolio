@@ -16,9 +16,9 @@ interface BallSpringProps extends RigidBodyOptions {
   total: number;
 }
 
-interface BoxRigidBodyProps extends RigidBodyOptions {
-  color: string;
-}
+// interface BoxRigidBodyProps extends RigidBodyOptions {
+//   color: string;
+// }
 
 // const BoxRigidBody = ({ color, ...props }: BoxRigidBodyProps) => {
 //   return (
@@ -30,6 +30,14 @@ interface BoxRigidBodyProps extends RigidBodyOptions {
 //   );
 // };
 
+/**
+ * Renders the 3D model.
+ *
+ * @component
+ * @param {BallSpring} props - Props
+ * @param {BallSpring} floorRef - Reference to the floor
+ * @returns {JSX.Element}
+ */
 export const BallSpring = forwardRef<RapierRigidBody, BallSpringProps>(
   (props, floorRef) => {
     const floor = useForwardedRef(floorRef);
@@ -76,6 +84,11 @@ export const BallSpring = forwardRef<RapierRigidBody, BallSpringProps>(
 
 BallSpring.displayName = "BallSpring";
 
+/**
+ *
+ * @component
+ * @returns {JSX.Element}
+ */
 export const SpringExample = () => {
   const floor = useRef<RapierRigidBody>(null);
 

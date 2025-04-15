@@ -1,6 +1,14 @@
 import { useEditToolStore } from "../store/useEditTool.store";
 
+/**
+ * Show values related to the scale tool
+ *
+ * @component
+ * @param {boolean} active - Whether the scale tool is active
+ * @returns {JSX.Element}
+ */
 export const ScaleToolStats = ({ active }: { active: boolean }) => {
+  // Store initialization
   const { scale, scaleMode, setScaleMode } = useEditToolStore();
 
   if (!active) return null;

@@ -25,16 +25,15 @@ export function EntityComponent<T extends Entity>(
 
     // Create a instance of the global Entity
     /**
-     * {
-    "current": {
+          {
         "rigidBodyRef": {
             "current": null
         },
         "name": "Diamond",
-        "entityId": "Entity0.0974396565537845",
+        "entityId": "Diamond3",
         "path": "/assets/3d/glb/Diamond.glb",
         "position": {
-            "x": 18,
+            "x": 10,
             "y": 2,
             "z": 10
         },
@@ -65,78 +64,77 @@ export function EntityComponent<T extends Entity>(
         ],
         "springed": false
     }
-}
-     */
+    */
     const instance = useRef<T>(entityManager.createEntity(EntityClass) as T);
     const currentInstance = instance.current;
 
     // Loaded Entity via JSON(Serialized Entity) -> {entity.renderComponent()}
-    // Props
+    // - props
     /**
-     * { }
+     { }
      */
 
-    // objectProps
+    // - objectProps
     /**
-     * {
-    "rigidBodyRef": {
-        "current": null
-    },
-    "name": "Diamond",
-    "entityId": "Entity0.7571396098054197",
-    "path": "/assets/3d/glb/Diamond.glb",
-    "position": {
-        "x": 0,
-        "y": 1.5,
-        "z": 0
-    },
-    "rotation": {
-        "isEuler": true,
-        "_x": 4.0764618347566284e-8,
-        "_y": 3.9408387664252587e-8,
-        "_z": -5.4033439056411225e-8,
-        "_order": "XYZ"
-    },
-    "args": [
-        1,
-        1,
-        1
-    ],
-    "mass": 1,
-    "type": "fixed",
-    "colliders": "hull",
-    "scale": [
-        1,
-        1,
-        1
-    ],
-    "ccd": false,
-    "canSleep": true,
-    "lockTranslations": true,
-    "lockRotations": false,
-    "enabledRotations": [
-        true,
-        true,
-        true
-    ],
-    "springed": false
-}
+          {
+        "rigidBodyRef": {
+            "current": null
+        },
+        "name": "Diamond",
+        "entityId": "Entity0.7571396098054197",
+        "path": "/assets/3d/glb/Diamond.glb",
+        "position": {
+            "x": 0,
+            "y": 1.5,
+            "z": 0
+        },
+        "rotation": {
+            "isEuler": true,
+            "_x": 4.0764618347566284e-8,
+            "_y": 3.9408387664252587e-8,
+            "_z": -5.4033439056411225e-8,
+            "_order": "XYZ"
+        },
+        "args": [
+            1,
+            1,
+            1
+        ],
+        "mass": 1,
+        "type": "fixed",
+        "colliders": "hull",
+        "scale": [
+            1,
+            1,
+            1
+        ],
+        "ccd": false,
+        "canSleep": true,
+        "lockTranslations": true,
+        "lockRotations": false,
+        "enabledRotations": [
+            true,
+            true,
+            true
+        ],
+        "springed": false
+    }
      */
 
     // World Entity -> <EntityComponent />
-    // Props
+    // - props
     /**
-     * {
-    "position": {
-        "x": 10,
-        "y": 2,
-        "z": 10
-    },
-    "entityId": "Diamond3"
-}
+        {
+        "position": {
+            "x": 10,
+            "y": 2,
+            "z": 10
+        },
+        "entityId": "Diamond3"
+    }
      */
 
-    // objectProps
+    // - objectProps
     /**
      * undefined
      */
@@ -144,7 +142,7 @@ export function EntityComponent<T extends Entity>(
     // Merge props
     Object.assign(currentInstance, props, objectProps);
     /**
-         * {
+            {
         "rigidBodyRef": {
             "current": null
         },

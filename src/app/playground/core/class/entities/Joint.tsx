@@ -38,7 +38,7 @@ export class PrismaticJointDemo extends Entity {
   }
 
   renderComponent() {
-    return <PrismaticExampleComponent objectProps={this} />;
+    return <PrismaticExampleComponent model={this} />;
   }
 }
 

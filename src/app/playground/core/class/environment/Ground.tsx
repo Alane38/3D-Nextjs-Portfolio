@@ -3,6 +3,11 @@ import { Entity } from "../Entity";
 import { EntityComponent } from "../EntityComponent";
 
 export class Ground extends Entity {
+    /**
+   * Add custom entity Props
+   * @param {string} color - Color of the ground
+   * @param {string} depth - Depth of the ground
+   */
   color: string;
   depth: number;
   constructor() {
@@ -19,6 +24,15 @@ export class Ground extends Entity {
     return <GroundComponent objectProps={this}/>;
   }
 }
+
+/**
+ * Renders the 3D model.
+ *
+ * @component
+ * @param {Ground} object - An entity from the Entity parent.
+ * @param {Ground} rigidBodyRef - Reference to the RapierRigidBody instance.
+ * @returns {JSX.Element}
+ */
 export const GroundComponent = EntityComponent(Ground, (object) => {
   return (
     // Body

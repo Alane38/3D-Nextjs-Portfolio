@@ -17,6 +17,14 @@ export class KinematicRotatingPlatformEntity extends Entity {
   }
 }
 
+/**
+ * Renders the 3D model.
+ *
+ * @component
+ * @param {KinematicRotatingPlatformEntity} object - An entity from the Entity parent.
+ * @param {KinematicRotatingPlatformEntity} rigidBodyRef - Reference to the RapierRigidBody instance.
+ * @returns {JSX.Element}
+ */
 export const KinematicRotatingPlatformComponent = EntityComponent(
   KinematicRotatingPlatformEntity,
   (object, rigidBodyRef) => {

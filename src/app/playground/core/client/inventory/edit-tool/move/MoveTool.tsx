@@ -3,7 +3,14 @@ import { useRef, useEffect } from "react";
 import { Raycaster, Plane, Vector3, Vector2 } from "three";
 import { useEditToolStore } from "../store/useEditTool.store";
 
+/**
+ * Move Tool
+ *
+ * @component
+ * @returns {JSX.Element}
+ */
 export const MoveTool = () => {
+  // Store initialization
   const {
     moveToolEnabled,
     selectedGroup,
@@ -15,13 +22,14 @@ export const MoveTool = () => {
     position,
   } = useEditToolStore((s) => s);
 
-  
+  // Initialization
   const { camera, pointer } = useThree();
   const raycaster = useRef(new Raycaster());
   const dragPlane = useRef(new Plane());
   const lastIntersection = useRef<Vector3 | null>(null);
   const pointerVec = new Vector2();
   
+  // Event listeners
   useEffect(() => {
     const handleUp = () => {
       setDragging(false);
@@ -32,6 +40,7 @@ export const MoveTool = () => {
     return () => window.removeEventListener("pointerup", handleUp);
   }, []);
   
+  // Move the entity
   useFrame(() => {
     if (!moveToolEnabled || !selectedGroup || !axis || !dragging) return;
     
