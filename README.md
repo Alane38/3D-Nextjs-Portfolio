@@ -70,51 +70,51 @@ bun dev
 ## 🏗️ Project Structure
 
 ```
-3D-Nextjs-Portfolio/
-├── public/
-│   ├── assets/
-│   │   ├── 3d/
-│   │   │   ├── blend/
-│   │   │   │   ├── Fox/
-│   │   │   │   │   └── Old/
-│   │   │   │   └── RestaurantSign/
-│   │   │   ├── fbx/
-│   │   │   └── glb/
-│   │   ├── images/
-│   │   │   ├── example/
-│   │   │   └── inventory/
-│   │   └── videos/
-│   └── fonts/
-├── src/
-│   ├── app/
-│   │   ├── playground/
-│   │   │   ├── core/
-│   │   │   │   ├── character/
-│   │   │   │   │   └── vehicles/
-│   │   │   │   ├── class/
-│   │   │   │   │   ├── entities/
-│   │   │   │   │   │   ├── mesh/
-│   │   │   │   │   │   └── platform/
-│   │   │   │   │   ├── environment/
-│   │   │   │   │   ├── rendering/
-│   │   │   │   │   ├── template/
-│   │   │   │   │   └── ui/
-│   │   │   │   ├── client/
-│   │   │   │   │   └── inventory/
-│   │   │   │   │       └── edit-tool/
-│   │   │   │   └── extension/
-│   │   │   │       └── arche/
-│   │   │   │           ├── hooks/
-│   │   │   │           ├── store/
-│   │   │   │           ├── types/
-│   │   │   │           └── utils/
-│   │   │   └── world/
-│   │   │       └── demo/
-│   ├── components/
-│   ├── constants/
-│   └── hooks/
-│       └── leva/
-└──
+3D-Nextjs-Portfolio/                 
+├── public/                         # Static public assets
+│   ├── assets/                     # Project assets
+│   │   ├── 3d/                     # 3D model files
+│   │   │   ├── blend/              # Blender source files (.blend)
+│   │   │   │   ├── Fox/            # Fox model files
+│   │   │   │   │   └── Old/        # Older version of the Fox model
+│   │   │   │   └── RestaurantSign/ # Restaurant sign model in .blend format
+│   │   │   ├── fbx/                # 3D models in FBX format
+│   │   │   └── glb/                # 3D models in GLB format
+│   │   ├── images/                 # Image assets
+│   │   │   ├── example/            # Example images
+│   │   │   └── inventory/          # Inventory-related images
+│   │   └── videos/                 # Video assets
+│   └── fonts/                      # Custom fonts
+├── src/                            # Source code
+│   ├── app/                        # Application routes and pages
+│   │   ├── playground/             # Experimental or demo playground
+│   │   │   ├── core/               # Core game logic
+│   │   │   │   ├── character/      # Character logic
+│   │   │   │   │   └── vehicles/   # Vehicles used by characters
+│   │   │   │   ├── class/          # Core classes and blueprints
+│   │   │   │   │   ├── entities/   # Game entities
+│   │   │   │   │   │   ├── mesh/   # Mesh-based entity components
+│   │   │   │   │   │   └── platform/ # Platform-specific logic
+│   │   │   │   │   ├── environment/ # Environment-related classes
+│   │   │   │   │   ├── rendering/  # Rendering logic and utilities
+│   │   │   │   │   ├── template/   # Class templates or patterns
+│   │   │   │   │   └── ui/         # UI elements in class-based structure
+│   │   │   │   ├── client/         # Client-side specific logic
+│   │   │   │   │   └── inventory/  # Inventory system
+│   │   │   │   │       └── edit-tool/ # Tools to edit inventory items
+│   │   │   │   └── extension/      # Core extensions and plugins
+│   │   │   │       └── arche/      # Arche framework-related modules
+│   │   │   │           ├── hooks/  # Custom hooks for arche
+│   │   │   │           ├── store/  # Global/local state stores
+│   │   │   │           ├── types/  # Type definitions
+│   │   │   │           └── utils/  # Utility functions
+│   │   │   └── world/              # World logic and structure
+│   │   │       └── demo/           # World demo scenes
+│   ├── components/                 # Reusable React components
+│   ├── constants/                  # Constant values and config
+│   └── hooks/                      # Custom React hooks
+│       └── leva/                   # Hooks for Leva UI controls
+
 ```
 
 ## 🛠️ Built With
