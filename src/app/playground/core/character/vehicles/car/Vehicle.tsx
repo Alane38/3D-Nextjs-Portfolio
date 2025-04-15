@@ -250,7 +250,7 @@ export const Vehicle = (props: RigidBodyProps, defaultPlayer?: boolean) => {
           {wheels.map((wheel, index) => (
             <group
               key={index}
-              ref={(ref) => ((wheelsRef.current as any)[index] = ref)}
+              ref={(ref) => ((wheelsRef.current)[index] = ref)}
               position={wheel.position}
             >
               <group rotation-z={-Math.PI / 2}>

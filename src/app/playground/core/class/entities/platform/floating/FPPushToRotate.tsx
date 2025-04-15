@@ -26,7 +26,7 @@ export const FPPushtoRotateComponent = EntityComponent(
   FPPushtoRotate,
   (object, rigidBodyRef) => {
     const { world, rapier } = useRapier();
-    const ref = useRef<any>(null);
+    const ref = rigidBodyRef;
 
     const rayLength = 0.8;
     const rayDir = { x: 0, y: -1, z: 0 };
@@ -39,10 +39,10 @@ export const FPPushtoRotateComponent = EntityComponent(
     const ray = new rapier.Ray(origin, rayDir);
 
     useEffect(() => {
-      ref.current?.lockRotations(true);
-      ref.current?.lockTranslations(true);
-      ref.current?.setEnabledRotations(false, true, false);
-      ref.current?.setEnabledTranslations(false, true, false);
+      ref.current?.lockRotations(true, false);
+      ref.current?.lockTranslations(true, false);
+      ref.current?.setEnabledRotations(false, true, false, false);
+      ref.current?.setEnabledTranslations(false, true, false, false);
     }, []);
 
     useFrame(() => {
@@ -60,7 +60,7 @@ export const FPPushtoRotateComponent = EntityComponent(
         false,
         undefined,
         undefined,
-        ref.current,
+        ref.current?.collider(0),
         ref.current,
       );
 

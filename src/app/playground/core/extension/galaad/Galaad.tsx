@@ -20,7 +20,7 @@ import {
   useImperativeHandle,
   useMemo,
   useRef,
-  useState
+  useState,
 } from "react";
 import * as THREE from "three";
 import { Vector3 } from "three";
@@ -31,7 +31,7 @@ import { CharacterState } from "./types/CharacterState";
 import { customRigidBody } from "./types/customRigidBody";
 import { GalaadProps } from "./types/GalaadProps";
 import { getObjectDirection } from "./utils/getObjectDirection";
-import { insideKeyboardControls } from "./utils/insideKeyboardControls";
+import { InsideKeyboardControls } from "./utils/insideKeyboardControls";
 import { LockCamera } from "./utils/LockCamera";
 
 const Galaad: ForwardRefRenderFunction<customRigidBody, GalaadProps> = (
@@ -192,10 +192,10 @@ const Galaad: ForwardRefRenderFunction<customRigidBody, GalaadProps> = (
   }, [characterRef]);
 
   // // Move and Camera mode
-  const setMoveToPoint = useGame((state) => state.setMoveToPoint);
+  // const setMoveToPoint = useGame((state) => state.setMoveToPoint);
   const modeSet = new Set(camMode?.split(" ") || []);
 
-  let functionKeyDown: boolean = false;
+  // let functionKeyDown: boolean = false;
   const isModePointToMove = modeSet.has("PointToMove");
   const isModeOnlyCamera = modeSet.has("OnlyCamera");
   const isModeControlCamera = modeSet.has("ControlCamera");
@@ -204,48 +204,60 @@ const Galaad: ForwardRefRenderFunction<customRigidBody, GalaadProps> = (
   const { camera, gl } = useThree();
 
   // // Body collider
-  const vector3Factory = () => useMemo(() => new THREE.Vector3(), []);
+  const Vector3Factory = () => useMemo(() => new THREE.Vector3(), []);
 
-  const modelFacingVec = vector3Factory();
-  const bodyFacingVec = vector3Factory();
-  const bodyBalanceVec = vector3Factory();
-  const bodyBalanceVecOnX = vector3Factory();
-  const bodyFacingVecOnY = vector3Factory();
-  const bodyBalanceVecOnZ = vector3Factory();
-  const crossVecOnX = vector3Factory();
-  const crossVecOnY = vector3Factory();
-  const crossVecOnZ = vector3Factory();
-  const bodyContactForce = vector3Factory();
-  const slopeRayOriginUpdatePosition = vector3Factory();
-  const camBasedMoveCrossVecOnY = vector3Factory();
+  const modelFacingVec = Vector3Factory();
+  const bodyFacingVec = Vector3Factory();
+  const bodyBalanceVec = Vector3Factory();
+  const bodyBalanceVecOnX = Vector3Factory();
+  const bodyFacingVecOnY = Vector3Factory();
+  const bodyBalanceVecOnZ = Vector3Factory();
+  const crossVecOnX = Vector3Factory();
+  const crossVecOnY = Vector3Factory();
+  const crossVecOnZ = Vector3Factory();
+  const bodyContactForce = Vector3Factory();
+  const slopeRayOriginUpdatePosition = Vector3Factory();
+  const camBasedMoveCrossVecOnY = Vector3Factory();
 
   const vectorY = useMemo(() => new THREE.Vector3(0, 1, 0), []);
-  const vectorZ = useMemo(() => new THREE.Vector3(0, 0, 1), []);
+  // const vectorZ = useMemo(() => new THREE.Vector3(0, 0, 1), []);
 
-  // Animation change functions
-  const idleAnimation = !animated ? null : useGame((state) => state.idle);
-  const walkAnimation = !animated ? null : useGame((state) => state.walk);
-  const runAnimation = !animated ? null : useGame((state) => state.run);
-  const jumpAnimation = !animated ? null : useGame((state) => state.jump);
-  const jumpIdleAnimation = !animated
-    ? null
-    : useGame((state) => state.jumpIdle);
-  const fallAnimation = !animated ? null : useGame((state) => state.fall);
-  const action1Animation = !animated ? null : useGame((state) => state.action1);
-  const action2Animation = !animated ? null : useGame((state) => state.action2);
-  const action3Animation = !animated ? null : useGame((state) => state.action3);
-  const action4Animation = !animated ? null : useGame((state) => state.action4);
+  // Initialization
+  const idle = useGame((state) => state.idle);
+  const walk = useGame((state) => state.walk);
+  const run = useGame((state) => state.run);
+  const jump = useGame((state) => state.jump);
+  const jumpIdle = useGame((state) => state.jumpIdle);
+  const fall = useGame((state) => state.fall);
+  const action1 = useGame((state) => state.action1);
+  const action2 = useGame((state) => state.action2);
+  const action3 = useGame((state) => state.action3);
+  const action4 = useGame((state) => state.action4);
+
+  // Animation
+  const idleAnimation = animated ? idle : null;
+  const walkAnimation = animated ? walk : null;
+  const runAnimation = animated ? run : null;
+  const jumpAnimation = animated ? jump : null;
+  const jumpIdleAnimation = animated ? jumpIdle : null;
+  const fallAnimation = animated ? fall : null;
+  const action1Animation = animated ? action1 : null;
+  const action2Animation = animated ? action2 : null;
+  const action3Animation = animated ? action3 : null;
+  const action4Animation = animated ? action4 : null;
 
   // World setup
   const { rapier, world } = useRapier();
 
   // Check if controls exists
-  const inKeyboardControls = insideKeyboardControls();
+  const inKeyboardControls = InsideKeyboardControls();
+  const keyboardControls = useKeyboardControls();
 
   // Keyboard controls
   const [subscribeKeys, getKeys] = inKeyboardControls
-    ? useKeyboardControls()
+    ? keyboardControls
     : [null];
+
   const presetKeys = {
     forward: false,
     back: false,
@@ -280,7 +292,7 @@ const Galaad: ForwardRefRenderFunction<customRigidBody, GalaadProps> = (
   );
   let gamepadJoystickDis: number = 0;
   let gamepadJoystickAng: number = 0;
-  const gamepadConnect = (e: any) => {
+  const gamepadConnect = (e: GamepadEvent) => {
     setControllerIndex(e.gamepad.index);
   };
   const gamepadDisconnect = () => {
@@ -443,28 +455,25 @@ const Galaad: ForwardRefRenderFunction<customRigidBody, GalaadProps> = (
     () => new THREE.Vector3(),
     [],
   );
-  const floorNormal: THREE.Vector3 = useMemo(
-    () => new THREE.Vector3(0, 1, 0),
-    [],
-  );
+
   const slopeRayOriginRef = useRef<THREE.Mesh>(null!);
   const slopeRayorigin: THREE.Vector3 = useMemo(() => new THREE.Vector3(), []);
   const slopeRayCast = new rapier.Ray(slopeRayorigin, slopeRayDir);
   let slopeRayHit: RayColliderHit | null = null;
 
   // Point to Move
-  let isBodyHitWall = false;
-  let isPointMoving = false;
-  const crossVector: THREE.Vector3 = useMemo(() => new THREE.Vector3(), []);
-  const pointToPoint: THREE.Vector3 = useMemo(() => new THREE.Vector3(), []);
-  const getMoveToPoint = useGame((state) => state.getMoveToPoint);
+  // let isBodyHitWall = false;
+  const isPointMoving = false;
+  // const crossVector: THREE.Vector3 = useMemo(() => new THREE.Vector3(), []);
+  // const pointToPoint: THREE.Vector3 = useMemo(() => new THREE.Vector3(), []);
+  // const getMoveToPoint = useGame((state) => state.getMoveToPoint);
   const bodySensorRef = useRef<Collider>(null!);
-  const handleOnIntersectionEnter = () => {
-    isBodyHitWall = true;
-  };
-  const handleOnIntersectionExit = () => {
-    isBodyHitWall = false;
-  };
+  // const handleOnIntersectionEnter = () => {
+  //   isBodyHitWall = true;
+  // };
+  // const handleOnIntersectionExit = () => {
+  //   isBodyHitWall = false;
+  // };
 
   // //  Move Character
   let characterRotated: boolean = true;
@@ -601,7 +610,7 @@ const Galaad: ForwardRefRenderFunction<customRigidBody, GalaadProps> = (
 
   // Detect Moving Platform and apply movement to character
   let isOnMovingPlatform = false;
-  let movingPlatformVelocity = new Vector3();
+  const movingPlatformVelocity = new Vector3();
 
   // Detect if the character is on a moving platform and get the platform velocity
   const detectPlatformUnderPlayer = () => {
@@ -617,8 +626,8 @@ const Galaad: ForwardRefRenderFunction<customRigidBody, GalaadProps> = (
 
     // Grille 3x3 de points sous le personnage (x et z)
     const offsets = [-widthOffset, 0, widthOffset];
-    for (let dx of offsets) {
-      for (let dz of offsets) {
+    for (const dx of offsets) {
+      for (const dz of offsets) {
         const rayOrigin = new Vector3(
           translation.x + dx,
           translation.y + 0.2, // Départ légèrement au-dessus
@@ -797,57 +806,55 @@ const Galaad: ForwardRefRenderFunction<customRigidBody, GalaadProps> = (
   };
 
   // // If inside keyboardcontrols, active subscribeKeys
-  if (inKeyboardControls) {
-    useEffect(() => {
-      if (!defaultPlayer) return; // Only active for default player
-      // Action 1 key subscribe for special animation
-      const unSubscribeAction1 = subscribeKeys?.(
-        (state) => state.action1,
-        (value) => {
-          if (value) {
-            animated && action1Animation?.();
-          }
-        },
-      );
+  useEffect(() => {
+    if (!inKeyboardControls || !defaultPlayer) return;
+    // Action 1 key subscribe for special animation
+    const unSubscribeAction1 = subscribeKeys?.(
+      (state) => state.action1,
+      (value) => {
+        if (value) {
+          if (animated) action1Animation?.();
+        }
+      },
+    );
 
-      // Action 2 key subscribe for special animation
-      const unSubscribeAction2 = subscribeKeys?.(
-        (state) => state.action2,
-        (value) => {
-          if (value) {
-            animated && action2Animation?.();
-          }
-        },
-      );
+    // Action 2 key subscribe for special animation
+    const unSubscribeAction2 = subscribeKeys?.(
+      (state) => state.action2,
+      (value) => {
+        if (value) {
+          if (animated) action2Animation?.();
+        }
+      },
+    );
 
-      // Action 3 key subscribe for special animation
-      const unSubscribeAction3 = subscribeKeys?.(
-        (state) => state.action3,
-        (value) => {
-          if (value) {
-            animated && action3Animation?.();
-          }
-        },
-      );
+    // Action 3 key subscribe for special animation
+    const unSubscribeAction3 = subscribeKeys?.(
+      (state) => state.action3,
+      (value) => {
+        if (value) {
+          if (animated) action3Animation?.();
+        }
+      },
+    );
 
-      // Trigger key subscribe for special animation
-      const unSubscribeAction4 = subscribeKeys?.(
-        (state) => state.action4,
-        (value) => {
-          if (value) {
-            animated && action4Animation?.();
-          }
-        },
-      );
+    // Trigger key subscribe for special animation
+    const unSubscribeAction4 = subscribeKeys?.(
+      (state) => state.action4,
+      (value) => {
+        if (value) {
+          if (animated) action4Animation?.();
+        }
+      },
+    );
 
-      return () => {
-        unSubscribeAction1?.();
-        unSubscribeAction2?.();
-        unSubscribeAction3?.();
-        unSubscribeAction4?.();
-      };
-    });
-  }
+    return () => {
+      unSubscribeAction1?.();
+      unSubscribeAction2?.();
+      unSubscribeAction3?.();
+      unSubscribeAction4?.();
+    };
+  }, []);
 
   // //
   useEffect(() => {
@@ -889,14 +896,14 @@ const Galaad: ForwardRefRenderFunction<customRigidBody, GalaadProps> = (
   // //
 
   // Local character and plaform management !
-  useFrame((state, delta) => {
+  useFrame((_, delta) => {
     const character = characterRef.current;
     if (!character) return;
 
     detectPlatformUnderPlayer(); // Update isOnMovingPlatform and movingPlatformVelocity
 
-    const currentVel = character.linvel();
-    const currentVelVec = new Vector3(currentVel.x, currentVel.y, currentVel.z);
+    // const currentVel = character.linvel();
+    // const currentVelVec = new Vector3(currentVel.x, currentVel.y, currentVel.z);
 
     if (isOnMovingPlatform) {
       const platformDeltaPosition = new Vector3();
@@ -965,7 +972,7 @@ const Galaad: ForwardRefRenderFunction<customRigidBody, GalaadProps> = (
     }
 
     // // Camera collision detect
-    camCollision && cameraCollisionDetect(delta);
+    if (camCollision) cameraCollisionDetect(delta);
 
     // // Getting all the useful keys from useKeyboardControls
     const { forward, back, left, right, jump, run } = inKeyboardControls
@@ -1229,7 +1236,7 @@ const Galaad: ForwardRefRenderFunction<customRigidBody, GalaadProps> = (
         slopeRayLength,
         false,
       );
-      
+
       if (rayNormal?.normal) {
         actualSlopeNormal = rayNormal.normal as THREE.Vector3;
         actualSlopeNormalVec?.copy(actualSlopeNormal);
@@ -1410,7 +1417,11 @@ const Galaad: ForwardRefRenderFunction<customRigidBody, GalaadProps> = (
         jumpAnimation?.();
       } else if (isMoving) {
         if (rayHit !== null) {
-          run || runState ? runAnimation?.() : walkAnimation?.();
+          if (run || runState) {
+            runAnimation?.();
+          } else {
+            walkAnimation?.();
+          }
         }
       } else if (!canJump) {
         jumpIdleAnimation?.();
@@ -1452,8 +1463,8 @@ const Galaad: ForwardRefRenderFunction<customRigidBody, GalaadProps> = (
             bodySensorPosition.y,
             bodySensorPosition.z,
           ]}
-          onIntersectionEnter={handleOnIntersectionEnter}
-          onIntersectionExit={handleOnIntersectionExit}
+          // onIntersectionEnter={handleOnIntersectionEnter}
+          // onIntersectionExit={handleOnIntersectionExit}
         />
       )}
       <LockCamera camera={camera} renderer={gl} />

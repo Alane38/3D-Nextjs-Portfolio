@@ -120,7 +120,7 @@ const JoystickComponents = (props: GalaadJoystickProps) => {
   );
 
   // Touch end function
-  const onTouchEnd = (e: TouchEvent) => {
+  const onTouchEnd = () => {
     // Reset animations
     api.start({
       topRotationX: 0,
@@ -564,3 +564,5 @@ export const GalaadJoystick = forwardRef<HTMLDivElement, GalaadJoystickProps>(
     );
   },
 );
+
+GalaadJoystick.displayName = 'GalaadJoystick';

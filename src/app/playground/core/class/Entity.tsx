@@ -4,11 +4,21 @@ import {
   RigidBodyOptions,
 } from "@react-three/rapier";
 import { createRef, JSX } from "react";
-import { Euler, Vector3 } from "three";
+import { Euler, EulerOrder, Vector3 } from "three";
 
 // export type EntityProps = JSX.IntrinsicElements["group"] & {
 //   entity: Entity;
 // };
+
+export type EntitySerializableType = {
+  name: string;
+  entityId: string;
+  type: RigidBodyOptions["type"];
+  path: string;
+  position: [number, number, number];
+  rotation: (number | EulerOrder | undefined)[];
+  scale: number | [number, number, number];
+};
 
 // 3D Object class, extends to create the EntityComponent.
 export class Entity {
@@ -29,10 +39,10 @@ export class Entity {
   lockTranslations: boolean = false;
   lockRotations: boolean = false;
   enabledRotations: [boolean, boolean, boolean] = [true, true, true];
-  
+
   onCollisionEnter?: CollisionEnterHandler;
   setEnabledRotations?: (x: boolean, y: boolean, z: boolean) => void;
-  setLinvel?:  (vel: Vector3, wakeup: boolean) => void;
+  setLinvel?: (vel: Vector3, wakeup: boolean) => void;
 
   constructor(name: string) {
     this.name = name;
@@ -61,7 +71,7 @@ export class Entity {
   // Entity.ts
 
   // Convert an Entity Object to a JSON object
-  toSerializable() {
+  toSerializable(): EntitySerializableType {
     return {
       name: this.name,
       entityId: this.entityId,
@@ -76,7 +86,7 @@ export class Entity {
   }
 
   // Convert a JSON object to an Entity Object
-  public static fromSerialized(data: any): Entity {
+  public static fromSerialized(data: EntitySerializableType): Entity {
     const entity = new Entity(data.name);
     entity.entityId = data.entityId;
     entity.path = data.path;
@@ -85,7 +95,9 @@ export class Entity {
 
     // Fix: ne passer que les 3 premiers éléments à Euler
     if (Array.isArray(data.rotation)) {
-      entity.rotation.fromArray(data.rotation.slice(0, 3));
+      entity.rotation.fromArray(
+        data.rotation.slice(0, 3) as [number, number, number],
+      );
     }
 
     entity.scale = data.scale;

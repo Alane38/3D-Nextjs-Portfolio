@@ -3,7 +3,7 @@
     "name": "Diamond",
     "entityId": "Entity0.7571396098054197",
     "type": "fixed",
-    "path": "Diamond",
+    "path": "/assets/3d/glb/Diamond.glb",
     "position": [
       0,
       1.5,
@@ -24,7 +24,7 @@
     "name": "KillBrick",
     "entityId": "Entity0.12389176198117624",
     "type": "dynamic",
-    "path": "KillBrick",
+    "path": "",
     "position": [
       10,
       2.5,

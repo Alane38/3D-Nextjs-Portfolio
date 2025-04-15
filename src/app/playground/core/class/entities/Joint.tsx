@@ -51,6 +51,8 @@ const ShadowElement = forwardRef<Mesh>((_, ref) => (
   </Sphere>
 ));
 
+ShadowElement.displayName = "ShadowElement";
+
 type RopeSegmentProps = {
   position: [number, number, number];
   component: ReactNode;
@@ -64,6 +66,8 @@ const RopeSegment = forwardRef<RapierRigidBody, RopeSegmentProps>(
     </RigidBody>
   ),
 );
+
+RopeSegment.displayName = "RopeSegment";
 
 const RopeJoint = ({
   a,

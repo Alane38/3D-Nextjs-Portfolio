@@ -25,7 +25,7 @@ export const useGame = create(
 
     // Fonction générique pour gérer les animations
     setAnimation: (animation: string, condition: boolean = true) => {
-      set((state) => {
+      set(() => {
         if (condition) {
           return { curAnimation: animation };
         }

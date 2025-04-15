@@ -250,7 +250,7 @@ export const RacingVehicle = ({ position, rotation }: VehicleProps) => {
         {wheels.map((wheel, index) => (
           <group
             key={index}
-            ref={(ref) => ((wheelsRef.current as any)[index] = ref)}
+            ref={(ref) => ((wheelsRef.current)[index] = ref)}
             position={wheel.position}
           >
             <group rotation-x={-Math.PI / 2}>

@@ -38,7 +38,7 @@ export const FPMovingComponent = EntityComponent(
     const movingVel = useMemo(() => new THREE.Vector3(), []);
     const ray = new rapier.Ray(origin, rayDir);
 
-    let movingDir = useRef(1);
+    const movingDir = useRef(1);
 
     useEffect(() => {
       ref.current?.setEnabledRotations(false, true, false, false);

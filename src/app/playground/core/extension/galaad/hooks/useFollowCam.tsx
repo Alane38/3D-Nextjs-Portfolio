@@ -4,9 +4,9 @@ import * as THREE from "three";
 import { UseFollowCameraProps } from "../types/UseFollowCameraProps";
 
 export const useFollowCam = ({
-  enableFollowCam = false,
-  enableFollowCamPos = null,
-  enableFollowCamTarget = null,
+  // enableFollowCam = false,
+  // enableFollowCamPos = null,
+  // enableFollowCamTarget = null,
   camInitDis = -5,
   camMaxDis = -7,
   camMinDis = -0.7,

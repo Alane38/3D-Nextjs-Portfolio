@@ -2,11 +2,9 @@
 
 import { KeyboardControls } from "@react-three/drei";
 import { Leva } from "leva";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { globalControls } from "src/constants/default";
 import { PerformanceWarning } from "../../components/PerformanceWarning";
-
-import { useLoadingAssets } from "@/hooks";
 import { useEntityStore } from "./core/class/entity.store";
 import Inventory from "./core/client/inventory/Inventory";
 import { ENTITY_TYPES, PlacementManager } from "./core/PlacementManager";
@@ -14,8 +12,6 @@ import { GameCanvas } from "./GameCanvas";
 import { MainWorld } from "./world/MainWorld";
 
 export function Game() {
-  const [visible, setVisible] = useState(true);
-  const loading = useLoadingAssets();
 
   // Store initial entities
   const { entities, setEntities } = useEntityStore();

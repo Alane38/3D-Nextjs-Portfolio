@@ -34,10 +34,13 @@ export const ScaleTool = () => {
         position={[0, 1.2, 0]}
         onClick={(e) => {
           e.stopPropagation();
-          scaleMode === "uniform"
-            ? handleUniformScale(0.1)
-            : setScale((s) => ({ ...s, y: s.y + 0.1 }));
+          if (scaleMode === "uniform") {
+            handleUniformScale(0.1);
+          } else {
+            setScale((s) => ({ ...s, z: s.z + 0.1 }));
+          }
         }}
+        
       >
         <cylinderGeometry args={[0.05, 0.05, 1]} />
         <meshBasicMaterial color="green" />
@@ -49,10 +52,13 @@ export const ScaleTool = () => {
         rotation={[0, 0, Math.PI / 2]}
         onClick={(e) => {
           e.stopPropagation();
-          scaleMode === "uniform"
-            ? handleUniformScale(0.1)
-            : setScale((s) => ({ ...s, x: s.x + 0.1 }));
+          if (scaleMode === "uniform") {
+            handleUniformScale(0.1);
+          } else {
+            setScale((s) => ({ ...s, z: s.z + 0.1 }));
+          }
         }}
+        
       >
         <cylinderGeometry args={[0.05, 0.05, 1]} />
         <meshBasicMaterial color="red" />
@@ -64,10 +70,13 @@ export const ScaleTool = () => {
         rotation={[Math.PI / 2, 0, 0]}
         onClick={(e) => {
           e.stopPropagation();
-          scaleMode === "uniform"
-            ? handleUniformScale(0.1)
-            : setScale((s) => ({ ...s, z: s.z + 0.1 }));
+          if (scaleMode === "uniform") {
+            handleUniformScale(0.1);
+          } else {
+            setScale((s) => ({ ...s, z: s.z + 0.1 }));
+          }
         }}
+        
       >
         <cylinderGeometry args={[0.05, 0.05, 1]} />
         <meshBasicMaterial color="blue" />

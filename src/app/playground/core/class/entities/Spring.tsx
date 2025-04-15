@@ -71,8 +71,10 @@ export const BallSpring = forwardRef<RapierRigidBody, BallSpringProps>(
         <BallCollider args={[0.5]} />
       </RigidBody>
     );
-  },
+  }
 );
+
+BallSpring.displayName = "BallSpring";
 
 export const SpringExample = () => {
   const floor = useRef<RapierRigidBody>(null);

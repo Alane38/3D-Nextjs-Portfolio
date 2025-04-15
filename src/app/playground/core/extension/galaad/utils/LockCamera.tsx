@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef } from "react";
 import { LockCameraProps } from "../types/LockCameraProps";
 import { PointerLockControls } from "three/examples/jsm/Addons.js";
 
@@ -65,7 +65,7 @@ export const LockCamera = ({ camera, renderer }: LockCameraProps) => {
       );
       document.removeEventListener("mousemove", handleMouseMove);
     };
-  }, [camera, renderer, handleMouseMove, handlePointerLockChange]);
+  }, [camera, renderer, handleMouseMove, handlePointerLockChange ]);
 
   return null;
 };
