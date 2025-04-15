@@ -31,99 +31,222 @@ import { getObjectDirection } from "./utils/getObjectDirection";
 import { InsideKeyboardControls } from "./utils/insideKeyboardControls";
 import { LockCamera } from "./utils/LockCamera";
 
+/**
+ * ARCHE Component
+ * 
+ * @param {React.ReactNode} children - React children rendered inside the ARCHE component.
+ * 
+ * @param {boolean} defaultPlayer - If true, marks this entity as the default player.
+ * 
+ * @param {number} hitboxHeight - Height of the collider hitbox.
+ * @param {number} hitboxWidth - Width of the collider hitbox.
+ * @param {number} hitboxLenght - Length of the collider hitbox. (Note: "Lenght" might be a typo for "Length")
+ * @param {number} hitboxRadius - Radius of the collider hitbox.
+ * 
+ * @param {boolean} floatMode - Enables floating behavior with spring physics.
+ * @param {number} floatHeight - Height above the ground to float.
+ * @param {number} floatingDis - Total floating distance (hitboxHeight + floatHeight).
+ * @param {number} springK - Spring constant used when floatMode is enabled.
+ * @param {number} dampingC - Damping constant for reducing spring oscillation.
+ * 
+ * @param {number} characterInitDir - Initial direction of the character in radians.
+ * 
+ * @param {boolean} enableControl - Enables or disables input controls.
+ * 
+ * @param {boolean} enableFollowCam - Enables or disables follow camera.
+ * @param {Vector3 | null} enableFollowCamPos - Initial position of the follow camera.
+ * @param {Vector3 | null} enableFollowCamTarget - Initial target of the follow camera.
+ * 
+ * @param {number} camInitDis - Initial distance of the camera from the target.
+ * @param {number} camMaxDis - Maximum allowed distance of the camera.
+ * @param {number} camMinDis - Minimum allowed distance of the camera.
+ * @param {number} camUpLimit - Upper vertical rotation limit (in radians).
+ * @param {number} camLowLimit - Lower vertical rotation limit (in radians).
+ * 
+ * @param {{x: number, y: number}} camInitDir - Initial rotational direction of the camera.
+ * @param {{x: number, y: number, z: number}} camTargetPos - The target position the camera follows.
+ * 
+ * @param {number} camMoveSpeed - Speed at which the camera moves.
+ * @param {number} camZoomSpeed - Speed of the camera zoom.
+ * 
+ * @param {boolean} camCollision - Enables or disables camera collision.
+ * @param {number} camCollisionOffset - Offset distance for collision checking.
+ * @param {number} camCollisionSpeedMult - Speed multiplier when adjusting camera due to collision.
+ * 
+ * @param {number} controlCamRotMult - Rotation multiplier for camera control.
+ * 
+ * @param {number} camFollowMult - Follow interpolation multiplier for camera.
+ * @param {number} camLerpMult - Lerp multiplier for smoother transitions.
+ * 
+ * @param {boolean} followLight - Enables or disables follow lighting.
+ * @param {{x: number, y: number, z: number}} followLightPos - Position of the follow light.
+ * 
+ * @param {number} maxVelLim - Maximum velocity limit of the character.
+ * 
+ * @param {number} turnVelMultiplier - Multiplier for turn velocity.
+ * @param {number} turnSpeed - Base turn speed of the character.
+ * 
+ * @param {number} sprintMult - Multiplier applied to movement velocity when sprinting.
+ * 
+ * @param {number} jumpVel - Vertical velocity applied when jumping.
+ * @param {number} jumpForceToGroundMult - Force applied to ground when jumping.
+ * @param {number} slopJumpMult - Jump multiplier when on a slope.
+ * @param {number} sprintJumpMult - Jump multiplier while sprinting.
+ * 
+ * @param {number} airDragMultiplier - Drag applied while airborne.
+ * @param {number} dragDampingC - Air damping constant while airborne.
+ * 
+ * @param {number} accDeltaTime - Time factor used in acceleration interpolation.
+ * @param {number} rejectVelMult - Multiplier to reject unwanted velocity.
+ * @param {number} moveImpulsePointY - Y-axis point of impulse application.
+ * 
+ * @param {number} fallingGravityScale - Gravity scale when falling.
+ * @param {number} fallingMaxVel - Maximum fall speed.
+ * 
+ * @param {boolean} autoFlip - Automatically flips character when changing direction.
+ * @param {number} flipAngle - Angle threshold to trigger a flip.
+ * 
+ * @param {number} wakeUpDelay - Delay before re-enabling rigidbody after sleeping.
+ * 
+ * @param {{x: number, y: number, z: number}} rayOriginOffest - Offset of the ray used for floating detection.
+ * @param {number} rayHitForgiveness - Allowed error margin before ray detects ground.
+ * @param {number} rayLength - Length of the float detection ray.
+ * @param {{x: number, y: number, z: number}} rayDir - Direction of the float detection ray.
+ * 
+ * @param {boolean} showSlopeRayOrigin - Toggles visual debug for slope ray origin.
+ * @param {number} slopeMaxAngle - Maximum slope angle the character can walk on (in radians).
+ * @param {number} slopeRayOriginOffest - Offset of the ray used for slope detection.
+ * @param {number} slopeRayLength - Length of the ray used for slope detection.
+ * @param {{x: number, y: number, z: number}} slopeRayDir - Direction of the slope detection ray.
+ * @param {number} slopeUpExtraForce - Additional force applied when going uphill.
+ * @param {number} slopeDownExtraForce - Additional force applied when going downhill.
+ * 
+ * @param {boolean} autoBalance - Enables or disables automatic balance correction.
+ * @param {number} autoBalanceSpringK - Spring constant for auto-balancing.
+ * @param {number} autoBalanceDampingC - Damping constant for auto-balancing.
+ * @param {number} autoBalanceSpringOnY - Spring value specifically for Y-axis.
+ * @param {number} autoBalanceDampingOnY - Damping value specifically for Y-axis.
+ * 
+ * @param {boolean} animated - Enables or disables character animation.
+ * 
+ * @param {string | null} camMode - Choose camera/movement Mode : "PointToMove", "OnlyCamera", "ControlCamera"(default)
+ * 
+ * @param {Object} controllerKeys - Key bindings for controller input.
+ * @param {number} controllerKeys.forward - Forward key.
+ * @param {number} controllerKeys.back - Backward key.
+ * @param {number} controllerKeys.left - Left key.
+ * @param {number} controllerKeys.right - Right key.
+ * @param {number} controllerKeys.jump - Jump key.
+ * @param {number} controllerKeys.action1 - First action button.
+ * @param {number} controllerKeys.action2 - Second action button.
+ * @param {number} controllerKeys.action3 - Third action button.
+ * @param {number} controllerKeys.action4 - Fourth action button.
+ * 
+ * @param {[number, number]} bodySensorSize - Size of the body sensor for point-to-move input.
+ * @param {{x: number, y: number, z: number}} bodySensorPosition - Position of the body sensor.
+ * 
+ * @param {boolean} infiniteJump - Enables infinite jumping if true(-> canJump is always true).
+ * 
+ * @returns {JSX.Element} The ARCHE character controller component.
+ */
 const ARCHE: ForwardRefRenderFunction<customRigidBody, ArcheProps> = (
   {
     // TypeScript interface for ARCHE component
     children,
 
+    /** Player Selection */
     defaultPlayer = false,
-    // Colliders settings
+    /** Colliders settings */
     hitboxHeight = 0.5,
     hitboxWidth = 0.3,
     hitboxLenght = 0.1,
     hitboxRadius = 0.3,
 
+    /** Floatting settings */
     floatMode = false,
     floatHeight = 0,
-
-    // Character initial setup
-    characterInitDir = 0, // Rad
-
-    // Control I/O
-    enableControl = false,
-
-    // Camera I/O
-    enableFollowCam = false,
-    enableFollowCamPos = null,
-    enableFollowCamTarget = null,
-
-    // Follow camera settings
-    // Camera distance/limit
-    camInitDis = -5,
-    camMaxDis = -7,
-    camMinDis = -0.7,
-    camUpLimit = 1.5, // Rad
-    camLowLimit = -1.3, // Rad
-    // Camera direction
-    camInitDir = { x: 0, y: 0 }, // Rad
-    // Camera target a position ?
-    camTargetPos = { x: 0, y: 0, z: 0 },
-    // Camera speed
-    camMoveSpeed = 1,
-    camZoomSpeed = 1,
-    // Camera collision
-    camCollision = true,
-    camCollisionOffset = 0.7,
-    camCollisionSpeedMult = 4,
-    // Camera control rotation
-    controlCamRotMult = 1,
-    // Follow light settings
-    // Follow Light I/O
-    followLight = false,
-    // Follow light position
-    followLightPos = { x: 20, y: 30, z: 10 },
-
-    // Controls settings
-    maxVelLim = 2.5,
-    // Turn vel/speed
-    turnVelMultiplier = 0.1,
-    turnSpeed = 4,
-    // Sprint
-    sprintMult = 2,
-    // Jump
-    jumpVel = 8,
-    jumpForceToGroundMult = 5,
-    slopJumpMult = 0.25,
-    sprintJumpMult = 1.1,
-    // Air drag
-    airDragMultiplier = 0.2,
-    dragDampingC = 0.15,
-    // acceleration --
-    accDeltaTime = 8,
-    rejectVelMult = 4,
-    moveImpulsePointY = 0.5,
-    // Camera controls
-    camFollowMult = 11,
-    camLerpMult = 25,
-    // Falling
-    fallingGravityScale = 3,
-    fallingMaxVel = -20,
-    //Flipped
-    autoFlip = true,
-    flipAngle = 0.75,
-    // Wake up
-    wakeUpDelay = 100,
-    // Floating Ray setups
-    rayOriginOffest = { x: 0, y: -hitboxWidth, z: 0 },
-    rayHitForgiveness = 0.1,
-    rayLength = hitboxHeight,
-    rayDir = { x: 0, y: -1, z: 0 },
     /** Floating Values */
     floatingDis = hitboxHeight + floatHeight,
     // Default values for a floatHeight of 1.
     springK = 5,
     dampingC = 1,
-    // Slope Ray setups
+
+    /** Keyboards Control on/off */
+    characterInitDir = 0, // Rad
+
+    // Control I/O
+    enableControl = false,
+
+    /** Cameera on/off */
+    enableFollowCam = false,
+    enableFollowCamPos = null,
+    enableFollowCamTarget = null,
+
+    /**Follow camera settings */
+    // - Camera distance/limit
+    camInitDis = -5,
+    camMaxDis = -7,
+    camMinDis = -0.7,
+    camUpLimit = 1.5, // Rad
+    camLowLimit = -1.3, // Rad
+    // - Camera direction
+    camInitDir = { x: 0, y: 0 }, // Rad
+    // - Camera target a position ?
+    camTargetPos = { x: 0, y: 0, z: 0 },
+    // - Camera speed
+    camMoveSpeed = 1,
+    camZoomSpeed = 1,
+    // - Camera collision
+    camCollision = true,
+    camCollisionOffset = 0.7,
+    camCollisionSpeedMult = 4,
+    // - Camera control rotation
+    controlCamRotMult = 1,
+
+    /** Camera controls */
+    camFollowMult = 11,
+    camLerpMult = 25,
+
+    /** Follow light */
+    // - on/off
+    followLight = false,
+    // - position
+    followLightPos = { x: 20, y: 30, z: 10 },
+
+    /** Values Initializaion */
+    maxVelLim = 2.5,
+    // - Turn vel/speed
+    turnVelMultiplier = 0.1,
+    turnSpeed = 4,
+    // - Sprint
+    sprintMult = 2,
+    // - Jump
+    jumpVel = 8,
+    jumpForceToGroundMult = 5,
+    slopJumpMult = 0.25,
+    sprintJumpMult = 1.1,
+    // - Air drag
+    airDragMultiplier = 0.2,
+    dragDampingC = 0.15,
+    // - acceleration --
+    accDeltaTime = 8,
+    rejectVelMult = 4,
+    moveImpulsePointY = 0.5,
+
+    /** Falling */
+    fallingGravityScale = 3,
+    fallingMaxVel = -20,
+    /** autoFlip */
+    autoFlip = true,
+    flipAngle = 0.75,
+    /** Wake up */
+    wakeUpDelay = 100,
+    /**  Floating Ray setups */
+    rayOriginOffest = { x: 0, y: -hitboxWidth, z: 0 },
+    rayHitForgiveness = 0.1,
+    rayLength = hitboxHeight,
+    rayDir = { x: 0, y: -1, z: 0 },
+    /** Slope Ray setups */
     showSlopeRayOrigin = false,
     slopeMaxAngle = 1, // in rad
     slopeRayOriginOffest = hitboxHeight - 0.03,
@@ -131,17 +254,17 @@ const ARCHE: ForwardRefRenderFunction<customRigidBody, ArcheProps> = (
     slopeRayDir = { x: 0, y: -1, z: 0 },
     slopeUpExtraForce = 0.05,
     slopeDownExtraForce = 0.2,
-    // AutoBalance Force setups
+    /** AutoBalance setups */
     autoBalance = true,
     autoBalanceSpringK = 0.5,
     autoBalanceDampingC = 0.2,
     autoBalanceSpringOnY = 0.1,
     autoBalanceDampingOnY = 0.01,
-    // Animation I/O
+    /** Animation on/off */
     animated = false,
-    // Mode setups
+    /** Camera mode */
     camMode = null,
-    // Controller setups
+    /** Controller settings */
     controllerKeys = {
       forward: 12,
       back: 13,
@@ -153,12 +276,11 @@ const ARCHE: ForwardRefRenderFunction<customRigidBody, ArcheProps> = (
       action3: 1,
       action4: 0,
     },
-    // Point-to-move setups
+    /** Point-to-move setups */
     bodySensorSize = [hitboxHeight / 2, hitboxWidth],
     bodySensorPosition = { x: 0, y: 0, z: hitboxWidth / 2 },
-    // Other rigibody props from parent
 
-    // custom props
+    /** Additionnal Props */
     infiniteJump = false,
 
     ...props

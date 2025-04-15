@@ -1,10 +1,10 @@
 
+import { animationPrefix, characterPath } from "@/constants/default";
 import { RapierRigidBody } from "@react-three/rapier";
 import { useRef } from "react";
-import { animationPrefix, characterPath } from "src/constants/default";
-import { ArcheAnimation } from "../extension/arche/ArcheAnimation";
-import { CharacterProps } from "./Character";
 import Arche from "../extension/arche/Arche";
+import { ArcheAnimation } from "../extension/arche/ArcheAnimation";
+import { CharacterProps } from "./character.type";
 
 export const Character = ({
   name,

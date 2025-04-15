@@ -53,6 +53,10 @@ export interface ArcheProps extends RigidBodyProps {
   camCollisionSpeedMult?: number;
   // - Camera fixed rotation
   controlCamRotMult?: number;
+  /** Camera controls */
+  camFollowMult?: number;
+  camLerpMult?: number;
+
   /** Follow light */
   // - on/off
   followLight?: boolean;
@@ -61,35 +65,33 @@ export interface ArcheProps extends RigidBodyProps {
 
   /** Values Initializaion */
   maxVelLim?: number;
-  // Turn vel/speed
+  // - Turn vel/speed
   turnVelMultiplier?: number;
   turnSpeed?: number;
-  // Sprint
+  // - Sprint
   sprintMult?: number;
-  // Jump
+  // - Jump
   jumpVel?: number;
   jumpForceToGroundMult?: number;
   slopJumpMult?: number;
   sprintJumpMult?: number;
-  // Air drag
+  // - Air drag
   airDragMultiplier?: number;
   dragDampingC?: number;
-  // acceleration --
+  // - acceleration --
   accDeltaTime?: number;
   rejectVelMult?: number;
   moveImpulsePointY?: number;
-  // Camera controls
-  camFollowMult?: number;
-  camLerpMult?: number;
-  // Falling
+
+  /** Falling */
   fallingGravityScale?: number;
   fallingMaxVel?: number;
-  // Flipped
+  /** autoFlip */
   autoFlip?: boolean;
   flipAngle?: number;
-  // Wake up
+  /** Wake up */
   wakeUpDelay?: number;
-  // Floating Ray setups
+  /**  Floating Ray setups */
   rayOriginOffest?: { x: number; y: number; z: number };
   rayHitForgiveness?: number;
   rayLength?: number;
@@ -113,7 +115,7 @@ export interface ArcheProps extends RigidBodyProps {
   autoBalanceDampingC?: number;
   autoBalanceSpringOnY?: number;
   autoBalanceDampingOnY?: number;
-  /** Animation I/O */
+  /** Animation on/off */
   animated?: boolean;
   /** Camera mode */
   camMode?: string | null;
