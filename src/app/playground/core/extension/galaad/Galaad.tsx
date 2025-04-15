@@ -111,6 +111,9 @@ const Galaad: ForwardRefRenderFunction<customRigidBody, GalaadProps> = (
     // Falling
     fallingGravityScale = 3,
     fallingMaxVel = -20,
+    //Flipped
+    autoFlip = true,
+    flipAngle = 0.75,
     // Wake up
     wakeUpDelay = 100,
     // Floating Ray setups
@@ -506,7 +509,7 @@ const Galaad: ForwardRefRenderFunction<customRigidBody, GalaadProps> = (
       movingDirection.set(0, 0, 1);
     }
 
-    /** Apply character quaternion to moving direction */
+    /** Apply character quaternion to moving into character direction */
     movingDirection.applyQuaternion(characterModelIndicator.quaternion);
 
     /** Moving object conditions */
@@ -1057,7 +1060,9 @@ const Galaad: ForwardRefRenderFunction<customRigidBody, GalaadProps> = (
       if (!infiniteJump) canJump = false;
     }
 
-    /** Rotate character on Y */
+    /** 
+     * Character model rotate to the moving direction
+    */
     modelQuat.setFromEuler(modelEuler);
     characterModelIndicator.quaternion.rotateTowards(
       modelQuat,
@@ -1099,13 +1104,15 @@ const Galaad: ForwardRefRenderFunction<customRigidBody, GalaadProps> = (
       return;
     }
 
+    if (autoFlip) {
     const rotation = characterRef.current?.rotation?.();
     if (rotation) {
-      const isFlipped = rotation.x > 0.5 || rotation.x < -0.5;
+      const isFlipped = rotation.x > flipAngle || rotation.x < -flipAngle;
       if (isFlipped) {
         rotation.x = 0;
       }
     }
+  }
 
     /** Shape Ray Detection (not used) */
     // rayHit = world.castShape(

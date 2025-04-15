@@ -77,6 +77,9 @@ export interface GalaadProps extends RigidBodyProps {
   // Falling
   fallingGravityScale?: number;
   fallingMaxVel?: number;
+  // Flipped
+  autoFlip?: boolean;
+  flipAngle?: number;
   // Wake up
   wakeUpDelay?: number;
   // Floating Ray setups
