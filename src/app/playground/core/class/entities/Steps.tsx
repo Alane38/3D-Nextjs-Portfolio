@@ -9,7 +9,7 @@ export class Steps extends Entity {
   }
 
   renderComponent() {
-    return <StepsComponent model={this} />;
+    return <StepsComponent objectProps={this} />;
   }
 }
 

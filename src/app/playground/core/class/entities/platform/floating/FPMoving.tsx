@@ -16,7 +16,7 @@ export class FPMoving extends Entity {
   }
 
   renderComponent() {
-    return <FPMovingComponent model={this} />;
+    return <FPMovingComponent objectProps={this} />;
   }
 }
 

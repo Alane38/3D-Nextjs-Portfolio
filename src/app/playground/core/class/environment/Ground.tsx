@@ -1,7 +1,6 @@
-import { Euler } from "three";
+import { Box } from "@react-three/drei";
 import { Entity } from "../Entity";
 import { EntityComponent } from "../EntityComponent";
-import { Box } from "@react-three/drei";
 
 export class Ground extends Entity {
   color: string;
@@ -17,7 +16,7 @@ export class Ground extends Entity {
   }
 
   renderComponent() {
-    return <GroundComponent model={this}/>;
+    return <GroundComponent objectProps={this}/>;
   }
 }
 export const GroundComponent = EntityComponent(Ground, (object) => {

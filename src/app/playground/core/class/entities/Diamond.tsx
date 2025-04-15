@@ -19,7 +19,7 @@ export class Diamond extends Entity {
   }
 
   renderComponent() {
-    return <DiamondComponent model={this} />;
+    return <DiamondComponent objectProps={this} />;
   }
 }
 

@@ -12,7 +12,7 @@ export class KinematicMovingPlatformEntity extends Entity {
   }
 
   renderComponent() {
-    return <KinematicMovingPlatformComponent model={this} />;
+    return <KinematicMovingPlatformComponent objectProps={this} />;
   }
 }
 

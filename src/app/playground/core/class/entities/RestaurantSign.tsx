@@ -12,7 +12,7 @@ export class RestaurantSign extends Entity {
     this.scale = 0.3;
   }
   renderComponent() {
-    return <RestaurantSignComponent model={this} />;
+    return <RestaurantSignComponent objectProps={this} />;
   }
 }
 

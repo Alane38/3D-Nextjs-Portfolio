@@ -18,7 +18,7 @@ export class FPPushtoMove extends Entity {
   }
 
   renderComponent() {
-    return <FPPushtoMoveComponent model={this} />;
+    return <FPPushtoMoveComponent objectProps={this} />;
   }
 }
 

@@ -11,7 +11,7 @@ export class Stairs extends Entity {
     this.type = "fixed";
   }
   renderComponent() {
-    return <StairsComponent model={this} />;
+    return <StairsComponent objectProps={this} />;
   }
 }
 

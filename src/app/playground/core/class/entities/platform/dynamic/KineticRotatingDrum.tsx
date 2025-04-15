@@ -14,7 +14,7 @@ export class KinematicRotatingDrumEntity extends Entity {
   }
 
   renderComponent() {
-    return <KinematicRotatingDrumComponent model={this} />;
+    return <KinematicRotatingDrumComponent objectProps={this} />;
   }
 }
 

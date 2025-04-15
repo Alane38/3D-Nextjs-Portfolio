@@ -17,7 +17,7 @@ export class Spinner extends Entity {
     this.color = "blue";
   }
   renderComponent() {
-    return <SpinnerComponent model={this} />;
+    return <SpinnerComponent objectProps={this} />;
   }
 }
 

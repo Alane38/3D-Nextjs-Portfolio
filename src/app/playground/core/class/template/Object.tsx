@@ -12,7 +12,7 @@ export class Object extends Entity {
     this.colliders = "trimesh";
   }
   renderComponent() {
-    return <ObjectComponent model={this} />;
+    return <ObjectComponent objectProps={this} />;
   }
 }
 

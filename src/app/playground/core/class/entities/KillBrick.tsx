@@ -16,7 +16,7 @@ export class KillBrick extends Entity {
   }
 
   renderComponent() {
-    return <KillBrickComponent model={this} />;
+    return <KillBrickComponent objectProps={this} />;
   }
 }
 

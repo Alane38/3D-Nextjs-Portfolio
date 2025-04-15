@@ -4,7 +4,7 @@ import type { RayColliderHit } from "@dimforge/rapier3d-compat";
 import { Text } from "@react-three/drei";
 import { useFrame } from "@react-three/fiber";
 import { CuboidCollider, useRapier } from "@react-three/rapier";
-import { useEffect, useMemo, useRef } from "react";
+import { useEffect, useMemo } from "react";
 import * as THREE from "three";
 import { Entity } from "../../../Entity";
 import { EntityComponent } from "../../../EntityComponent";
@@ -18,7 +18,7 @@ export class FPPushtoRotate extends Entity {
   }
 
   renderComponent() {
-    return <FPPushtoRotateComponent model={this} />;
+    return <FPPushtoRotateComponent objectProps={this} />;
   }
 }
 

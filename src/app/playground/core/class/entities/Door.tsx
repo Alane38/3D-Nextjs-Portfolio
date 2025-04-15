@@ -13,7 +13,7 @@ export class NeonDoor extends Entity {
   }
 
   renderComponent() {
-    return <NeonDoorComponent model={this} />;
+    return <NeonDoorComponent objectProps={this} />;
   }
 }
 

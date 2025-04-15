@@ -22,7 +22,7 @@ export class TextObject extends Entity {
     };
   }
   renderComponent() {
-    return <TextObjectComponent model={this} />;
+    return <TextObjectComponent objectProps={this} />;
   }
 }
 

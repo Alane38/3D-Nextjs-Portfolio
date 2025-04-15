@@ -26,7 +26,7 @@ export class Rope extends Entity {
   }
 
   renderComponent() {
-    return <RopeComponent model={this} />;
+    return <RopeComponent objectProps={this} />;
   }
 }
 
@@ -38,7 +38,7 @@ export class PrismaticJointDemo extends Entity {
   }
 
   renderComponent() {
-    return <PrismaticExampleComponent model={this} />;
+    return <PrismaticExampleComponent objectProps={this} />;
   }
 }
 

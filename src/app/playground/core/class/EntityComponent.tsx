@@ -10,30 +10,195 @@ import { Euler, Group, Vector3 } from "three";
 export function EntityComponent<T extends Entity>(
   EntityClass: new () => T,
   RenderMesh: (
-    object: T,
+    currentInstance: T,
     rigidBodyRef: React.RefObject<RapierRigidBody | null>,
-    visualRef?: React.RefObject<Group | null>
+    visualRef?: React.RefObject<Group | null>,
   ) => JSX.Element,
   useMoveTool = true,
 ) {
-  const WrappedEntityComponent = ({ model, ...props }: { model?: T } & Partial<T>) => {
+  const WrappedEntityComponent = ({
+    objectProps,
+    ...props
+  }: { objectProps?: T } & Partial<T>) => {
+    // import EntityManager instance and his functions.
     const entityManager = EntityManager.getInstance();
 
+    // Create a instance of the global Entity
+    /**
+     * {
+    "current": {
+        "rigidBodyRef": {
+            "current": null
+        },
+        "name": "Diamond",
+        "entityId": "Entity0.0974396565537845",
+        "path": "/assets/3d/glb/Diamond.glb",
+        "position": {
+            "x": 18,
+            "y": 2,
+            "z": 10
+        },
+        "rotation": {
+            "isEuler": true,
+            "_x": 0,
+            "_y": 0,
+            "_z": 0,
+            "_order": "XYZ"
+        },
+        "args": [
+            1,
+            1,
+            1
+        ],
+        "mass": 1,
+        "type": "dynamic",
+        "colliders": "hull",
+        "scale": 1,
+        "ccd": false,
+        "canSleep": true,
+        "lockTranslations": true,
+        "lockRotations": false,
+        "enabledRotations": [
+            true,
+            true,
+            true
+        ],
+        "springed": false
+    }
+}
+     */
     const instance = useRef<T>(entityManager.createEntity(EntityClass) as T);
-    const object = instance.current;
-    Object.assign(object, props);
+    const currentInstance = instance.current;
 
+    // Loaded Entity via JSON(Serialized Entity) -> {entity.renderComponent()}
+    // Props
+    /**
+     * { }
+     */
+
+    // objectProps
+    /**
+     * {
+    "rigidBodyRef": {
+        "current": null
+    },
+    "name": "Diamond",
+    "entityId": "Entity0.7571396098054197",
+    "path": "/assets/3d/glb/Diamond.glb",
+    "position": {
+        "x": 0,
+        "y": 1.5,
+        "z": 0
+    },
+    "rotation": {
+        "isEuler": true,
+        "_x": 4.0764618347566284e-8,
+        "_y": 3.9408387664252587e-8,
+        "_z": -5.4033439056411225e-8,
+        "_order": "XYZ"
+    },
+    "args": [
+        1,
+        1,
+        1
+    ],
+    "mass": 1,
+    "type": "fixed",
+    "colliders": "hull",
+    "scale": [
+        1,
+        1,
+        1
+    ],
+    "ccd": false,
+    "canSleep": true,
+    "lockTranslations": true,
+    "lockRotations": false,
+    "enabledRotations": [
+        true,
+        true,
+        true
+    ],
+    "springed": false
+}
+     */
+
+    // World Entity -> <EntityComponent />
+    // Props
+    /**
+     * {
+    "position": {
+        "x": 10,
+        "y": 2,
+        "z": 10
+    },
+    "entityId": "Diamond3"
+}
+     */
+
+    // objectProps
+    /**
+     * undefined
+     */
+
+    // Merge props
+    Object.assign(currentInstance, props, objectProps);
+    /**
+         * {
+        "rigidBodyRef": {
+            "current": null
+        },
+        "name": "Diamond",
+        "entityId": "Diamond3",
+        "path": "/assets/3d/glb/Diamond.glb",
+        "position": {
+            "x": 10,
+            "y": 2,
+            "z": 10
+        },
+        "rotation": {
+            "isEuler": true,
+            "_x": 0,
+            "_y": 0,
+            "_z": 0,
+            "_order": "XYZ"
+        },
+        "args": [
+            1,
+            1,
+            1
+        ],
+        "mass": 1,
+        "type": "dynamic",
+        "colliders": "hull",
+        "scale": 1,
+        "ccd": false,
+        "canSleep": true,
+        "lockTranslations": true,
+        "lockRotations": false,
+        "enabledRotations": [
+            true,
+            true,
+            true
+        ],
+        "springed": false
+    }
+         */
+
+    // Update instance (make it reactive to get current datas for example the position)
     useEffect(() => {
-      if (model) {
-        Object.assign(instance.current, model);
+      if (objectProps) {
+        Object.assign(instance.current, objectProps);
       }
-    }, [model]);
+    }, [objectProps]);
 
+    // Refs
     const bodyRef = useRef<RapierRigidBody>(null);
     const visualRef = useRef<Group>(null);
     const pendingUpdate = useRef<T | null>(null);
     const lastUpdateTimeRef = useRef<number>(0);
 
+    // Edit tool
     const {
       setPosition,
       setSelectedEntity,
@@ -41,13 +206,15 @@ export function EntityComponent<T extends Entity>(
       setSelectedVisual,
     } = useEditToolStore();
 
+    // Initialization
     const { updateEntity } = useEntityStore();
 
+    // Update the entity
     useEffect(() => {
       const id = setInterval(() => {
         if (pendingUpdate.current) {
           updateEntity((e) => {
-            if (e.entityId === object.entityId) {
+            if (e.entityId === currentInstance.entityId) {
               e.position = pendingUpdate.current!.position;
               e.rotation = pendingUpdate.current!.rotation;
               e.scale = pendingUpdate.current!.scale;
@@ -58,26 +225,34 @@ export function EntityComponent<T extends Entity>(
           pendingUpdate.current = null;
         }
       }, 5000);
-
       return () => clearInterval(id);
     }, []);
 
+    // Update the entity values
     useFrame(() => {
       const now = performance.now();
       if (now - lastUpdateTimeRef.current >= 5000) {
-        if (!bodyRef.current || !visualRef.current) return;
+        // If the bodyRef or the visualRef is not defined, return (end loop)
+        if (
+          !bodyRef.current ||
+          typeof bodyRef.current.translation !== "function" ||
+          !visualRef.current
+        )
+          return;
 
+        // Get bodyRef values
         const pos = bodyRef.current.translation();
         const rot = bodyRef.current.rotation();
         const scale = visualRef.current.scale;
 
+        // Update pendingUpdate
         pendingUpdate.current = {
-          ...object,
+          ...currentInstance,
           position: new Vector3(pos.x, pos.y, pos.z),
           rotation: new Euler(rot.x, rot.y, rot.z),
           scale: [scale.x, scale.y, scale.z],
         };
-
+        // Reset lastUpdateTime
         lastUpdateTimeRef.current = now;
       }
     });
@@ -89,22 +264,21 @@ export function EntityComponent<T extends Entity>(
           if (useMoveTool) {
             e.stopPropagation();
             if (!bodyRef.current) return;
-            setSelectedEntity(object);
+            setSelectedEntity(currentInstance);
             setSelectedGroup(bodyRef.current);
             setSelectedVisual(visualRef.current);
-            setPosition(object.position);
+            setPosition(currentInstance.position);
           }
         }}
-        {...object}
+        {...currentInstance}
       >
         <group ref={visualRef}>
-          {RenderMesh(object, bodyRef, visualRef)}
+          {RenderMesh(currentInstance, bodyRef, visualRef)}
         </group>
       </RigidBody>
     );
   };
 
-  // ✅ Set display name to fix lint error
   WrappedEntityComponent.displayName = `EntityComponent(${EntityClass.name})`;
 
   return WrappedEntityComponent;
