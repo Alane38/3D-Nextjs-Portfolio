@@ -24,9 +24,7 @@
 
 `<Arche mode="OnlyCamera">`
 
-![screenshot](example/EcctrlFixedCamera.png)
-
-Check out the [featurelog.md](/featurelog.md) for details on previous updates and features.
+![screenshot](public/assets/images/example/controlcamera.png)
 
 ## Project Link
 
