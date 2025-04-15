@@ -4,19 +4,19 @@ import { useScroll, useTransform } from "framer-motion";
 import { motion } from "framer-motion";
 import React, { useEffect, useRef, useState } from "react";
 
-type Button = {
-  label: string;
-  href: string;
-  class: string;
-};
+// type Button = {
+//   label: string;
+//   href: string;
+//   class: string;
+// };
 
-type Content = {
-  containerClass: string;
-  titleClass: string;
-  subtitleClass: string;
-  paragraphClass: string;
-  paragraph: string;
-};
+// type Content = {
+//   containerClass: string;
+//   titleClass: string;
+//   subtitleClass: string;
+//   paragraphClass: string;
+//   paragraph: string;
+// };
 
 // class HtmlSection {
 //   title: string;
