@@ -70,36 +70,51 @@ bun dev
 ## 🏗️ Project Structure
 
 ```
-3D-NEXTJS-PORTFOLIO/
-├── app/
-│   ├── components/                 # Global UI components
-│   │   ├── Player/                 # Player UI components
-│   │   ├── Utility/                # UI utilities
-│   ├── Core/                       # Core components and controllers
-│   │   ├── Element/                # Global objects
-│   │   │   ├── Environment/        # Environment 3D objects (not class)
-│   │   │   ├── Objects/            # 3D objects components (not class)
-│   │   │   ├── Player/             # Character
-│   │   │   │   ├── Vehicles/       # Character vehicles  
-│   │   ├── Managers/               # Managers
-│   │   ├── Utility/                # Element utilities
-│   ├── Resources/                  # Global resources	
-│   │   ├── Class/                  # Entity classes and components
-│   │   │   ├── Environment/        # Environment 3D objects
-│   │   │   ├── Objects/            # 3D objects
-│   │   │   ├── Test/               # Examples and tests 3D objects
-│   │   │   ├── UI/                 # 3D User interface components
-│   │   ├── Environment/            # World and environment components
-│   │   │   │   ├── Demo/           # Demos environment
-│   │   ├── Event/                  # Event handlers
-│   │   ├── Hooks/                  # React hooks
-│   │   │   ├── Leva/               # Leva hooks
-│   │   ├── Settings/               # Global settings 
-│   └── layout.tsx                  # Root layout
-├── constants/                      # Global constants and configurations
-├── packages/                       # External packages
-├── public/                         # Static assets and 3D models
-└── types/                          # TypeScript type definitions
+3D-Nextjs-Portfolio/
+├── public/
+│   ├── assets/
+│   │   ├── 3d/
+│   │   │   ├── blend/
+│   │   │   │   ├── Fox/
+│   │   │   │   │   └── Old/
+│   │   │   │   └── RestaurantSign/
+│   │   │   ├── fbx/
+│   │   │   └── glb/
+│   │   ├── images/
+│   │   │   ├── example/
+│   │   │   └── inventory/
+│   │   └── videos/
+│   └── fonts/
+├── src/
+│   ├── app/
+│   │   ├── playground/
+│   │   │   ├── core/
+│   │   │   │   ├── character/
+│   │   │   │   │   └── vehicles/
+│   │   │   │   ├── class/
+│   │   │   │   │   ├── entities/
+│   │   │   │   │   │   ├── mesh/
+│   │   │   │   │   │   └── platform/
+│   │   │   │   │   ├── environment/
+│   │   │   │   │   ├── rendering/
+│   │   │   │   │   ├── template/
+│   │   │   │   │   └── ui/
+│   │   │   │   ├── client/
+│   │   │   │   │   └── inventory/
+│   │   │   │   │       └── edit-tool/
+│   │   │   │   └── extension/
+│   │   │   │       └── arche/
+│   │   │   │           ├── hooks/
+│   │   │   │           ├── store/
+│   │   │   │           ├── types/
+│   │   │   │           └── utils/
+│   │   │   └── world/
+│   │   │       └── demo/
+│   ├── components/
+│   ├── constants/
+│   └── hooks/
+│       └── leva/
+└──
 ```
 
 ## 🛠️ Built With
@@ -119,7 +134,7 @@ bun dev
 - **Shift** - Run
 - **Space** - Jump OR Brake
 - **TAB**   - Lock Camera to Character
-- **R**     - Reset Character
+- **R**     - Reset Character(Unavailable)
 - **Click** - Interact with objects
 
 ## 🔧 Configuration
