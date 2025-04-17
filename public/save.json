@@ -1,7 +1,7 @@
 [
   {
     "name": "Diamond",
-    "entityId": "Entity0.7571396098054197",
+    "entityId": "2",
     "type": "fixed",
     "path": "/assets/3d/glb/Diamond.glb",
     "position": [
@@ -22,7 +22,7 @@
   },
   {
     "name": "KillBrick",
-    "entityId": "Entity0.12389176198117624",
+    "entityId": "3",
     "type": "dynamic",
     "path": "",
     "position": [

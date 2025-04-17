@@ -21,7 +21,7 @@ export class Ground extends Entity {
   }
 
   renderComponent() {
-    return <GroundComponent objectProps={this}/>;
+    return <GroundComponent objectProps={this} />;
   }
 }
 

@@ -1,10 +1,10 @@
 import { useSky } from "@/hooks";
 import { Sky } from "@react-three/drei";
 import { Fragment } from "react";
-import { GroundComponent } from "../core/class";
+import { Character } from "../core/character/Character";
+import { DiamondComponent, GroundComponent } from "../core/class";
 import { useEntityStore } from "../core/class/entity.store";
 import { EditTool } from "../core/client/inventory/edit-tool/EditTool";
-import { Character } from "../core/character/Character";
 
 export function FileWorld() {
   /* Leva Settings */
@@ -31,6 +31,8 @@ export function FileWorld() {
         position={[0, 20, 0]}
         defaultPlayer
       />
+
+      <DiamondComponent />
 
       <EditTool />
 

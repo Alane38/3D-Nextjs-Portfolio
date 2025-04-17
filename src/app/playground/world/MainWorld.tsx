@@ -80,9 +80,9 @@ export function MainWorld() {
         /> */}
 
         <DiamondComponent position={new Vector3(18, 2, 10)} />
-        <DiamondComponent position={new Vector3(16, 2, 10)} entityId="Diamond1" />
-        <DiamondComponent position={new Vector3(14, 2, 10)} entityId="Diamond2" />
-        <DiamondComponent position={new Vector3(10, 2, 10)} entityId="Diamond3" />
+        <DiamondComponent position={new Vector3(16, 2, 10)}  />
+        <DiamondComponent position={new Vector3(14, 2, 10)}  />
+        <DiamondComponent position={new Vector3(10, 2, 10)} />
         <ObjectComponent position={new Vector3(0, 0.5, 0)} />
       </group>
       <group>
@@ -94,7 +94,6 @@ export function MainWorld() {
         />
         <KillBrickComponent
           position={new Vector3(15, 1, 10)}
-          entityId="KillBrick1"
         />
         <KillBrickComponent position={new Vector3(15, 1, 10)} />
         <RestaurantSignComponent

@@ -9,7 +9,7 @@ import { Euler, EulerOrder, Vector3 } from "three";
 // Type for serialization
 export type EntitySerializableType = {
   name: string;
-  entityId: string;
+  entityId: number;
   type: RigidBodyOptions["type"];
   path: string;
   position: [number, number, number];
@@ -21,12 +21,14 @@ export type EntitySerializableType = {
 export class Entity {
   rigidBodyRef?: React.RefObject<RapierRigidBody | null> = createRef();
   name: string;
-  entityId: string = Entity.name + Math.random();
+  entityId: number = 1;
   path: string = "";
   position: Vector3 = new Vector3(0, 0, 0);
   rotation: Euler = new Euler(0, 0, 0);
   args: [number, number, number] = [1, 1, 1];
   mass: number = 1;
+  depth: number = 0;
+  color: string = "white";
   type: RigidBodyOptions["type"] = "fixed";
   colliders: RigidBodyOptions["colliders"] = "hull";
   scale: number | [number, number, number] = 1;

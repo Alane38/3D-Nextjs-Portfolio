@@ -4,9 +4,16 @@ import { JSX, useEffect, useRef } from "react";
 import { useEditToolStore } from "../client/inventory/edit-tool/store/useEditTool.store";
 import { Entity } from "./Entity";
 import { useEntityStore } from "./entity.store";
-import EntityManager from "./EntityManager";
 import { Euler, Group, Vector3 } from "three";
+import { EntityManager } from "./EntityManager";
 
+/**
+ *
+ * @param EntityClass - the class of the entity
+ * @param RenderMesh - render the 3D model
+ * @param useEditTool - default true, can use edit tool(move, rotate, scale...)
+ * @returns
+ */
 export function EntityComponent<T extends Entity>(
   EntityClass: new () => T,
   RenderMesh: (
@@ -16,14 +23,37 @@ export function EntityComponent<T extends Entity>(
   ) => JSX.Element,
   useEditTool = true,
 ) {
+  /**
+   *
+   * @param objectProps - the props of the entity
+   * @param props - the props of the entity
+   * @returns
+   */
   const WrappedEntityComponent = ({
     objectProps,
     ...props
   }: { objectProps?: T } & Partial<T>) => {
-    // import EntityManager instance and his functions.
-    const entityManager = EntityManager.getInstance();
+    /** Create a instance of the global Entity */
+    // Get existing entity, add to the entitiesMap if it doesn't includes it.
+    const existingEntityById = props.entityId
+      ? (EntityManager.getEntityById(props.entityId) as T)
+      : undefined;
 
-    // Create a instance of the global Entity
+    const existingEntityByName = EntityManager.getEntityByName(
+      EntityClass.name,
+    ) as T | undefined;
+
+    const instanceEntity =
+      objectProps ?? existingEntityById ?? existingEntityByName;
+
+    if (
+      instanceEntity &&
+      !EntityManager.getAllEntities().includes(instanceEntity)
+    ) {
+      EntityManager.addEntity(instanceEntity);
+    }
+
+    // Create a instance of the entity, if it doesn't exist. If it exist, use the existing instance.
     /**
           {
         "rigidBodyRef": {
@@ -65,8 +95,15 @@ export function EntityComponent<T extends Entity>(
         "springed": false
     }
     */
-    const instance = useRef<T>(entityManager.createEntity(EntityClass) as T);
+    const instance = useRef<T>(
+      instanceEntity ?? EntityManager.createEntity(EntityClass),
+    );
+
     const currentInstance = instance.current;
+
+    console.log(currentInstance, "currentInstance");
+
+    console.log("all entities", EntityManager.getAllEntities());
 
     // Loaded Entity via JSON(Serialized Entity) -> {entity.renderComponent()}
     // - props
@@ -141,11 +178,14 @@ export function EntityComponent<T extends Entity>(
 
     // Save all events handlers
     const originalHandlers = {
-      onCollisionEnter: currentInstance.onCollisionEnter,
+      onCollisionEnter: currentInstance?.onCollisionEnter,
     };
 
-    // Merge props
-    Object.assign(currentInstance, props, objectProps);
+    if (currentInstance) {
+      // Merge props
+      Object.assign(currentInstance, props, objectProps);
+    }
+
     /**
             {
         "rigidBodyRef": {
@@ -189,14 +229,15 @@ export function EntityComponent<T extends Entity>(
          */
 
     // Assign handlers back
-    if (originalHandlers.onCollisionEnter) {
+    if (currentInstance) {
       currentInstance.onCollisionEnter = originalHandlers.onCollisionEnter;
     }
 
     // Update instance (make it reactive to get current datas for example the position)
     useEffect(() => {
+      if (!currentInstance) return;
       if (objectProps) {
-        Object.assign(instance.current, objectProps);
+        Object.assign(currentInstance, objectProps);
       }
     }, [objectProps]);
 
@@ -219,6 +260,8 @@ export function EntityComponent<T extends Entity>(
 
     // Update the entity
     useEffect(() => {
+      if (!currentInstance) return;
+
       const id = setInterval(() => {
         if (pendingUpdate.current) {
           updateEntity((e) => {
@@ -238,6 +281,7 @@ export function EntityComponent<T extends Entity>(
 
     // Update the entity values
     useFrame(() => {
+      if (!currentInstance) return;
       const now = performance.now();
       if (now - lastUpdateTimeRef.current >= 5000) {
         // If the bodyRef or the visualRef is not defined, return (end loop)
@@ -265,13 +309,16 @@ export function EntityComponent<T extends Entity>(
       }
     });
 
+    if (!currentInstance) return null;
+
     return (
       <RigidBody
         ref={bodyRef}
         onPointerDown={(e: PointerEvent) => {
           if (useEditTool) {
             e.stopPropagation();
-            if (!bodyRef.current || !currentInstance || !visualRef.current) return;
+            if (!bodyRef.current || !currentInstance || !visualRef.current)
+              return;
             setSelectedEntity(currentInstance);
             setSelectedGroup(bodyRef.current);
             setSelectedVisual(visualRef.current);

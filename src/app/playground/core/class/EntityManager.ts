@@ -1,71 +1,106 @@
 import { Entity } from "./Entity";
 
-class EntityManager {
-  private static _instance: EntityManager;
-  private entityMap: Map<string, Map<string, Entity>> = new Map();
 
+/**
+ * Singleton class to manage entities
+ * 
+ * @function getInstance - Get the single instance of EntityManager
+ * @function createEntity - Create a new entity and add it to the list
+ * @function addEntity - Add an entity to the list
+ * @function getEntityByName - Get entity by class name
+ * @function getEntityById - Get entity by ID
+ * @function getAllEntities - Get all entities
+ * @function removeEntity - Remove entity
+ * 
+ */
+export class EntityManager {
+  private static instance: EntityManager;
+  private entities: Entity[] = [];
+  private static nextId = 1;
   private constructor() {}
 
-  /**
-   How to import :
-   const entityManager = EntityManager.getInstance();
-   How to use :
-   const entity = entityManager.createEntity(Diamond);
-   */
-  public static getInstance(): EntityManager {
-    if (!EntityManager._instance) {
-      EntityManager._instance = new EntityManager();
+  // Singleton pattern to get the single instance of EntityManager
+  static getInstance(): EntityManager {
+    if (!EntityManager.instance) {
+      EntityManager.instance = new EntityManager();
     }
-    return EntityManager._instance;
+    return EntityManager.instance;
   }
 
-  // Create new entity from Entity parent
-  public createEntity<T extends Entity>(EntityClass: new () => T): T {
-    const entity = new EntityClass();
-    const name = entity.name;
-    const entityId = entity.entityId;
+  // Create a new entity and add it to the list
+  static createEntity<T extends Entity>(EntityClass: new () => T): T {
+    const entityManager = EntityManager.getInstance();
 
-    if (!this.entityMap.has(name)) {
-      this.entityMap.set(name, new Map());
+    // Check if an entity of this class already exists (optional)
+    const existingEntity = this.getEntityByName(EntityClass.name);
+    if (existingEntity) {
+      return existingEntity as T;
     }
-    this.entityMap.get(name)!.set(entityId, entity);
+
+    // Create new entity and set unique ID
+    const entity = new EntityClass();
+    entity.entityId = EntityManager.nextId++;
+
+    // Add to entity collection
+    entityManager.entities.push(entity);
     return entity;
   }
 
-  // Remove a entity from Entity parent
-  public remove(name: string, entityId: string): void {
-    if (this.entityMap.has(name)) {
-      this.entityMap.get(name)!.delete(entityId);
-      if (this.entityMap.get(name)!.size === 0) {
-        this.entityMap.delete(name);
-      }
-    }
-  }
-
-  // Get a entity by Id
-  public getById<T extends Entity>(
-    name: string,
-    entityId: string,
-  ): T | undefined {
-    return this.entityMap.get(name)?.get(entityId) as T | undefined;
-  }
-
-  // Get all entities of a entity parent
-  public getAllByName<T extends Entity>(name: string): T[] {
-    return Array.from(this.entityMap.get(name)?.values() ?? []) as T[];
+  static addEntity<T extends Entity>(entity: T) {
+    EntityManager.getInstance().entities.push(entity);
   }
 
   // Get all entities
-  public getAll(): Entity[] {
-    return Array.from(
-      [...this.entityMap.values()].flatMap((map) => Array.from(map.values())),
+  static getAllEntities(): Entity[] {
+    return EntityManager.getInstance().entities;
+  }
+
+  // Get entity by class name
+  static getEntityByName(className: string): Entity | undefined {
+    return EntityManager.getInstance().entities.find(
+      (entity) => entity.constructor.name === className,
     );
   }
 
-  // Clear all entities
-  public clear(): void {
-    this.entityMap.clear();
+  // Get the first entity by name
+  static getFirstEntityByName(
+    entities: Entity[],
+    name: string,
+  ): Entity | undefined {
+    return EntityManager.getInstance().entities.find(
+      (entity) => entity.name === name,
+    );
+  }
+
+  // Get entity by id
+  static getEntityById(id: number): Entity | undefined {
+    return EntityManager.getInstance().entities.find(
+      (entity) => entity.entityId === id,
+    );
+  }
+
+  // Remove an entity
+  static removeEntity(entity: Entity): void {
+    const entityManager = EntityManager.getInstance();
+
+    const index = entityManager.entities.indexOf(entity);
+    if (index !== -1) {
+      entityManager.entities.splice(index, 1);
+    } else {
+      console.error("Entity not found in EntityManager");
+    }
+  }
+
+  // Remove an entity by id
+  static removeEntityById(id: number): void {
+    const entityManager = EntityManager.getInstance();
+
+    const index = entityManager.entities.findIndex(
+      (entity) => entity.entityId === id,
+    );
+    console.log("Removing entity", id, "from EntityManager");
+    if (index !== -1) {
+      entityManager.entities.splice(index, 1);
+    }
   }
 }
-
-export default EntityManager; // 👈 THIS is an instance, not the class
