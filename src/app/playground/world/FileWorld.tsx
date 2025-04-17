@@ -5,6 +5,7 @@ import { Character } from "../core/character/Character";
 import { DiamondComponent, GroundComponent } from "../core/class";
 import { useEntityStore } from "../core/class/entity.store";
 import { EditTool } from "../core/client/inventory/edit-tool/EditTool";
+import { Vector3 } from "three";
 
 export function FileWorld() {
   /* Leva Settings */
@@ -32,7 +33,10 @@ export function FileWorld() {
         defaultPlayer
       />
 
-      <DiamondComponent />
+      <DiamondComponent position={new Vector3(8, 5, 15)} />
+      <DiamondComponent position={new Vector3(12, 5, 10)} />
+      <DiamondComponent position={new Vector3(8, 5, 12)} />
+      <DiamondComponent position={new Vector3(10, 5, 12)} />
 
       <EditTool />
 

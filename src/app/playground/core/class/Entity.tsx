@@ -9,7 +9,6 @@ import { Euler, EulerOrder, Vector3 } from "three";
 // Type for serialization
 export type EntitySerializableType = {
   name: string;
-  entityId: number;
   type: RigidBodyOptions["type"];
   path: string;
   position: [number, number, number];
@@ -45,8 +44,9 @@ export class Entity {
   // Events props
   onCollisionEnter?: CollisionEnterHandler;
 
-  constructor(name: string) {
+  constructor(name: string, entityId?: number) {
     this.name = name;
+    this.entityId = entityId || 1;
   }
 
   // Setters
@@ -74,7 +74,6 @@ export class Entity {
   toSerializable(): EntitySerializableType {
     return {
       name: this.name,
-      entityId: this.entityId,
       type: this.type,
       path: this.path,
       position: this.position.toArray(),
@@ -88,7 +87,6 @@ export class Entity {
   // Convert a JSON object to an Entity Object
   public static fromSerialized(data: EntitySerializableType): Entity {
     const entity = new Entity(data.name);
-    entity.entityId = data.entityId;
     entity.path = data.path;
     entity.type = data.type;
     entity.position.fromArray(data.position);

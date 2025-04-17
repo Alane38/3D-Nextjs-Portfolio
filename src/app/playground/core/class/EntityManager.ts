@@ -31,12 +31,6 @@ export class EntityManager {
   static createEntity<T extends Entity>(EntityClass: new () => T): T {
     const entityManager = EntityManager.getInstance();
 
-    // Check if an entity of this class already exists (optional)
-    const existingEntity = this.getEntityByName(EntityClass.name);
-    if (existingEntity) {
-      return existingEntity as T;
-    }
-
     // Create new entity and set unique ID
     const entity = new EntityClass();
     entity.entityId = EntityManager.nextId++;
@@ -50,15 +44,30 @@ export class EntityManager {
     EntityManager.getInstance().entities.push(entity);
   }
 
+  static generateIdToEntity(entity: Entity) {
+    const entityManager = EntityManager.getInstance();
+    do {
+      entity.entityId = EntityManager.nextId++;
+    } while (
+      entityManager.entities.some(e => e.entityId === entity.entityId)
+    );
+  }
   // Get all entities
   static getAllEntities(): Entity[] {
     return EntityManager.getInstance().entities;
   }
 
-  // Get entity by class name
-  static getEntityByName(className: string): Entity | undefined {
+  // Get entity by name
+  static getEntityByName(name: string): Entity | undefined {
     return EntityManager.getInstance().entities.find(
-      (entity) => entity.constructor.name === className,
+      (entity) => entity.constructor.name === name,
+    );
+  }
+
+  // Get entity by name and id
+  static getEntityByNameAndId(name: string, id: number): Entity | undefined {
+    return EntityManager.getInstance().entities.find(
+      (entity) => entity.constructor.name === name && entity.entityId === id,
     );
   }
 

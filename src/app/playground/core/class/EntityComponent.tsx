@@ -39,12 +39,13 @@ export function EntityComponent<T extends Entity>(
       ? (EntityManager.getEntityById(props.entityId) as T)
       : undefined;
 
-    const existingEntityByName = EntityManager.getEntityByName(
-      EntityClass.name,
-    ) as T | undefined;
+    const instanceEntity = objectProps ?? existingEntityById;
 
-    const instanceEntity =
-      objectProps ?? existingEntityById ?? existingEntityByName;
+    if (instanceEntity) {
+      if (!instanceEntity.entityId) {
+        EntityManager.generateIdToEntity(instanceEntity);
+      }
+    }
 
     if (
       instanceEntity &&
@@ -100,8 +101,6 @@ export function EntityComponent<T extends Entity>(
     );
 
     const currentInstance = instance.current;
-
-    console.log(currentInstance, "currentInstance");
 
     console.log("all entities", EntityManager.getAllEntities());
 
@@ -185,7 +184,6 @@ export function EntityComponent<T extends Entity>(
       // Merge props
       Object.assign(currentInstance, props, objectProps);
     }
-
     /**
             {
         "rigidBodyRef": {
@@ -226,7 +224,7 @@ export function EntityComponent<T extends Entity>(
         ],
         "springed": false
     }
-         */
+    */
 
     // Assign handlers back
     if (currentInstance) {
