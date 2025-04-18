@@ -22,9 +22,9 @@ export class PlacementManager {
   static load(json: string): Entity[] {
     const data = JSON.parse(json);
     return data.map((entry: Entity) => {
-      const EntityClass = ENTITY_TYPES[entry.name];
+      const EntityClass = ENTITY_TYPES[entry.entityName];
       if (!EntityClass) {
-        console.warn(`Unknown entity type: ${entry.name}`);
+        console.warn(`Unknown entity type: ${entry.entityName}`);
         return null;
       }
       const entity = new EntityClass();

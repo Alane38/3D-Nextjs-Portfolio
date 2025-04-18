@@ -36,7 +36,7 @@ export class Diamond extends Entity {
    * @returns {JSX.Element} The React component representing the diamond.
    */
   renderComponent() {
-    return <DiamondComponent objectProps={this} />;
+    return <DiamondComponent objectProps={this} entityId={this.entityId} />;
   }
 }
 

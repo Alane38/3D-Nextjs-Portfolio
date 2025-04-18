@@ -3,12 +3,13 @@ import {
   RapierRigidBody,
   RigidBodyOptions,
 } from "@react-three/rapier";
-import { createRef, JSX } from "react";
+import { JSX } from "react";
 import { Euler, EulerOrder, Vector3 } from "three";
+import { EntityManager } from "./EntityManager";
 
 // Type for serialization
 export type EntitySerializableType = {
-  name: string;
+  entityName: string;
   type: RigidBodyOptions["type"];
   path: string;
   position: [number, number, number];
@@ -18,9 +19,8 @@ export type EntitySerializableType = {
 
 // 3D Object class, extends to create the EntityComponent.
 export class Entity {
-  rigidBodyRef?: React.RefObject<RapierRigidBody | null> = createRef();
-  name: string;
-  entityId: number = 1;
+  entityName: string;
+  entityId: number;
   path: string = "";
   position: Vector3 = new Vector3(0, 0, 0);
   rotation: Euler = new Euler(0, 0, 0);
@@ -44,9 +44,10 @@ export class Entity {
   // Events props
   onCollisionEnter?: CollisionEnterHandler;
 
-  constructor(name: string, entityId?: number) {
-    this.name = name;
-    this.entityId = entityId || 1;
+  constructor(name: string) {
+    this.entityName = name;
+    this.entityId = EntityManager.generateIdToEntity(this);
+    console.log("Entity created:", this.entityId);
   }
 
   // Setters
@@ -62,10 +63,10 @@ export class Entity {
     this.mass = mass;
   }
 
-  setScale(scale: number) {
-    this.scale = scale;
+  setScale(scale: number | [number, number, number]) {
+    this.scale = Array.isArray(scale) ? scale : [scale, scale, scale];
   }
-
+  
   setPath(path: string) {
     this.path = path;
   }
@@ -73,7 +74,7 @@ export class Entity {
   // Convert an Entity Object to a JSON object
   toSerializable(): EntitySerializableType {
     return {
-      name: this.name,
+      entityName: this.entityName,
       type: this.type,
       path: this.path,
       position: this.position.toArray(),
@@ -86,7 +87,7 @@ export class Entity {
 
   // Convert a JSON object to an Entity Object
   public static fromSerialized(data: EntitySerializableType): Entity {
-    const entity = new Entity(data.name);
+    const entity = new Entity(data.entityName);
     entity.path = data.path;
     entity.type = data.type;
     entity.position.fromArray(data.position);

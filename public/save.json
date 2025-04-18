@@ -1,6 +1,6 @@
 [
   {
-    "name": "Diamond",
+    "entityName": "Diamond",
     "type": "fixed",
     "path": "/assets/3d/glb/Diamond.glb",
     "position": [
@@ -20,7 +20,7 @@
     ]
   },
   {
-    "name": "KillBrick",
+    "entityName": "KillBrick",
     "type": "dynamic",
     "path": "",
     "position": [

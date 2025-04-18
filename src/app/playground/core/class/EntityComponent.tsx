@@ -1,19 +1,12 @@
 import { useFrame } from "@react-three/fiber";
 import { RapierRigidBody, RigidBody } from "@react-three/rapier";
-import { JSX, useEffect, useRef } from "react";
+import { JSX, useRef, useEffect } from "react";
+import { Group, Vector3, Euler } from "three";
 import { useEditToolStore } from "../client/inventory/edit-tool/store/useEditTool.store";
 import { Entity } from "./Entity";
 import { useEntityStore } from "./entity.store";
-import { Euler, Group, Vector3 } from "three";
 import { EntityManager } from "./EntityManager";
 
-/**
- *
- * @param EntityClass - the class of the entity
- * @param RenderMesh - render the 3D model
- * @param useEditTool - default true, can use edit tool(move, rotate, scale...)
- * @returns
- */
 export function EntityComponent<T extends Entity>(
   EntityClass: new () => T,
   RenderMesh: (
@@ -23,227 +16,16 @@ export function EntityComponent<T extends Entity>(
   ) => JSX.Element,
   useEditTool = true,
 ) {
-  /**
-   *
-   * @param objectProps - the props of the entity
-   * @param props - the props of the entity
-   * @returns
-   */
   const WrappedEntityComponent = ({
     objectProps,
     ...props
   }: { objectProps?: T } & Partial<T>) => {
-    /** Create a instance of the global Entity */
-    // Get existing entity, add to the entitiesMap if it doesn't includes it.
-    const existingEntityById = props.entityId
-      ? (EntityManager.getEntityById(props.entityId) as T)
-      : undefined;
-
-    const instanceEntity = objectProps ?? existingEntityById;
-
-    if (instanceEntity) {
-      if (!instanceEntity.entityId) {
-        EntityManager.generateIdToEntity(instanceEntity);
-      }
-    }
-
-    if (
-      instanceEntity &&
-      !EntityManager.getAllEntities().includes(instanceEntity)
-    ) {
-      EntityManager.addEntity(instanceEntity);
-    }
-
-    // Create a instance of the entity, if it doesn't exist. If it exist, use the existing instance.
-    /**
-          {
-        "rigidBodyRef": {
-            "current": null
-        },
-        "name": "Diamond",
-        "entityId": "Diamond3",
-        "path": "/assets/3d/glb/Diamond.glb",
-        "position": {
-            "x": 10,
-            "y": 2,
-            "z": 10
-        },
-        "rotation": {
-            "isEuler": true,
-            "_x": 0,
-            "_y": 0,
-            "_z": 0,
-            "_order": "XYZ"
-        },
-        "args": [
-            1,
-            1,
-            1
-        ],
-        "mass": 1,
-        "type": "dynamic",
-        "colliders": "hull",
-        "scale": 1,
-        "ccd": false,
-        "canSleep": true,
-        "lockTranslations": true,
-        "lockRotations": false,
-        "enabledRotations": [
-            true,
-            true,
-            true
-        ],
-        "springed": false
-    }
-    */
-    const instance = useRef<T>(
-      instanceEntity ?? EntityManager.createEntity(EntityClass),
-    );
-
-    const currentInstance = instance.current;
-
-    console.log("all entities", EntityManager.getAllEntities());
-
-    // Loaded Entity via JSON(Serialized Entity) -> {entity.renderComponent()}
-    // - props
-    /**
-     { }
-     */
-
-    // - objectProps
-    /**
-          {
-        "rigidBodyRef": {
-            "current": null
-        },
-        "name": "Diamond",
-        "entityId": "Entity0.7571396098054197",
-        "path": "/assets/3d/glb/Diamond.glb",
-        "position": {
-            "x": 0,
-            "y": 1.5,
-            "z": 0
-        },
-        "rotation": {
-            "isEuler": true,
-            "_x": 4.0764618347566284e-8,
-            "_y": 3.9408387664252587e-8,
-            "_z": -5.4033439056411225e-8,
-            "_order": "XYZ"
-        },
-        "args": [
-            1,
-            1,
-            1
-        ],
-        "mass": 1,
-        "type": "fixed",
-        "colliders": "hull",
-        "scale": [
-            1,
-            1,
-            1
-        ],
-        "ccd": false,
-        "canSleep": true,
-        "lockTranslations": true,
-        "lockRotations": false,
-        "enabledRotations": [
-            true,
-            true,
-            true
-        ],
-        "springed": false
-    }
-     */
-
-    // World Entity -> <EntityComponent />
-    // - props
-    /**
-        {
-        "position": {
-            "x": 10,
-            "y": 2,
-            "z": 10
-        },
-        "entityId": "Diamond3"
-    }
-     */
-
-    // - objectProps
-    /**
-     * undefined
-     */
-
-    // Save all events handlers
-    const originalHandlers = {
-      onCollisionEnter: currentInstance?.onCollisionEnter,
-    };
-
-    if (currentInstance) {
-      // Merge props
-      Object.assign(currentInstance, props, objectProps);
-    }
-    /**
-            {
-        "rigidBodyRef": {
-            "current": null
-        },
-        "name": "Diamond",
-        "entityId": "Diamond3",
-        "path": "/assets/3d/glb/Diamond.glb",
-        "position": {
-            "x": 10,
-            "y": 2,
-            "z": 10
-        },
-        "rotation": {
-            "isEuler": true,
-            "_x": 0,
-            "_y": 0,
-            "_z": 0,
-            "_order": "XYZ"
-        },
-        "args": [
-            1,
-            1,
-            1
-        ],
-        "mass": 1,
-        "type": "dynamic",
-        "colliders": "hull",
-        "scale": 1,
-        "ccd": false,
-        "canSleep": true,
-        "lockTranslations": true,
-        "lockRotations": false,
-        "enabledRotations": [
-            true,
-            true,
-            true
-        ],
-        "springed": false
-    }
-    */
-
-    // Assign handlers back
-    if (currentInstance) {
-      currentInstance.onCollisionEnter = originalHandlers.onCollisionEnter;
-    }
-
-    // Update instance (make it reactive to get current datas for example the position)
-    useEffect(() => {
-      if (!currentInstance) return;
-      if (objectProps) {
-        Object.assign(currentInstance, objectProps);
-      }
-    }, [objectProps]);
-
     // Refs
     const bodyRef = useRef<RapierRigidBody>(null);
     const visualRef = useRef<Group>(null);
     const pendingUpdate = useRef<T | null>(null);
     const lastUpdateTimeRef = useRef<number>(0);
+    const initialized = useRef<boolean>(false);
 
     // Edit tool
     const {
@@ -256,7 +38,95 @@ export function EntityComponent<T extends Entity>(
     // Initialization
     const { updateEntity } = useEntityStore();
 
-    // Update the entity
+    // Get existing entity or create a new one
+    const instanceRef = useRef<T | null>(null);
+    
+
+    if (!initialized.current) {
+      const entityId = props.entityId || objectProps?.entityId;
+      console.log(
+        "Received entityId:",
+        entityId,
+        "| from props:",
+        props.entityId,
+        "| from objectProps:",
+        objectProps?.entityId
+      );
+    }
+    
+    
+    // Only run entity resolution logic once during component lifecycle
+    if (!initialized.current) {
+      // Try to find entity by ID first
+      const entityId = props.entityId || objectProps?.entityId;
+      
+      if (entityId) {
+        const existingEntity = EntityManager.getEntityById(entityId);
+        if (existingEntity && existingEntity instanceof EntityClass) {
+          instanceRef.current = existingEntity as T;
+          console.log(`Reusing existing entity with ID: ${entityId}`);
+        }
+      }
+      
+      // If we still don't have an entity, use objectProps if provided
+      if (!instanceRef.current && objectProps) {
+        instanceRef.current = objectProps;
+      }
+      
+      // If we still don't have an entity, create a new one
+      if (!instanceRef.current) {
+        instanceRef.current = new EntityClass();
+        console.log(`Created new ${EntityClass.name} entity`);
+      }
+      
+      // Ensure the entity has an ID
+      if (!instanceRef.current.entityId) {
+        EntityManager.generateIdToEntity(instanceRef.current);
+        console.log(`Generated ID for entity: ${instanceRef.current.entityId}`);
+      }
+      
+      // Add to entity manager if not already there
+      if (!EntityManager.getEntityById(instanceRef.current.entityId)) {
+        EntityManager.addEntity(instanceRef.current);
+        console.log(`Added entity to EntityManager: ${instanceRef.current.entityId}`);
+      }
+
+      initialized.current = true;
+    }
+
+    const currentInstance = instanceRef.current;
+    
+    // Save original event handlers before overriding
+    const originalHandlersRef = useRef({
+      onCollisionEnter: currentInstance?.onCollisionEnter,
+    });
+
+    // Apply props to the instance
+    useEffect(() => {
+      if (!currentInstance) return;
+      
+      // Save original handlers
+      const originalHandlers = {
+        onCollisionEnter: currentInstance.onCollisionEnter,
+      };
+      originalHandlersRef.current = originalHandlers;
+      
+      // Apply props
+      if (objectProps) {
+        Object.assign(currentInstance, objectProps);
+      }
+      
+      if (props) {
+        Object.assign(currentInstance, props);
+      }
+      
+      // Restore handlers
+      if (originalHandlers.onCollisionEnter) {
+        currentInstance.onCollisionEnter = originalHandlers.onCollisionEnter;
+      }
+    }, [objectProps, props]);
+
+    // Update the entity periodically
     useEffect(() => {
       if (!currentInstance) return;
 
@@ -274,10 +144,11 @@ export function EntityComponent<T extends Entity>(
           pendingUpdate.current = null;
         }
       }, 5000);
+      
       return () => clearInterval(id);
     }, []);
 
-    // Update the entity values
+    // Update the entity values from physics
     useFrame(() => {
       if (!currentInstance) return;
       const now = performance.now();
@@ -302,6 +173,7 @@ export function EntityComponent<T extends Entity>(
           rotation: new Euler(rot.x, rot.y, rot.z),
           scale: [scale.x, scale.y, scale.z],
         };
+        
         // Reset lastUpdateTime
         lastUpdateTimeRef.current = now;
       }

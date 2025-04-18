@@ -7,14 +7,14 @@ import { globalControls } from "src/constants/default";
 import { PerformanceWarning } from "../../components/PerformanceWarning";
 import { useEntityStore } from "./core/class/entity.store";
 import Inventory from "./core/client/inventory/Inventory";
-import { ENTITY_TYPES, PlacementManager } from "./core/PlacementManager";
+import { PlacementManager } from "./core/PlacementManager";
 import { GameCanvas } from "./GameCanvas";
 import { FileWorld } from "./world/FileWorld";
 
 export function Game() {
 
   // Store initial entities
-  const { entities, setEntities } = useEntityStore();
+  const {setEntities } = useEntityStore();
 
   // Load the world, and load the entities.
   useEffect(() => {
@@ -26,33 +26,11 @@ export function Game() {
 
         console.log(
           "Chargement par défaut (fichier chargé)",
-          data.map((e) => e.name),
+          data.map((e) => e.entityName),
         );
         setEntities(data);
-      } catch (e) {
-        console.warn("Chargement par défaut (aucun fichier trouvé)", e);
-
-        // ENTITY_TYPES
-        // Set all entity types
-        Object.values(ENTITY_TYPES).forEach((EntityClass) => {
-          const entity = new EntityClass();
-          entity.position.set(
-            entity.position.x,
-            entity.position.y,
-            entity.position.z,
-          );
-          entity.rotation.set(
-            entity.rotation.x,
-            entity.rotation.y,
-            entity.rotation.z,
-          );
-          entity.scale = entity.scale;
-          entity.type = entity.type;
-          entity.path = entity.name;
-          entities.push(entity);
-        });
-
-        setEntities(entities);
+      } catch {
+        console.warn("Chargement par défaut (aucun fichier trouvé)");
       }
     };
 

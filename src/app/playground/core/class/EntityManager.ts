@@ -44,13 +44,15 @@ export class EntityManager {
     EntityManager.getInstance().entities.push(entity);
   }
 
-  static generateIdToEntity(entity: Entity) {
+  static generateIdToEntity(entity: Entity): number {
     const entityManager = EntityManager.getInstance();
     do {
       entity.entityId = EntityManager.nextId++;
     } while (
       entityManager.entities.some(e => e.entityId === entity.entityId)
     );
+
+    return entity.entityId;
   }
   // Get all entities
   static getAllEntities(): Entity[] {
@@ -73,11 +75,10 @@ export class EntityManager {
 
   // Get the first entity by name
   static getFirstEntityByName(
-    entities: Entity[],
     name: string,
   ): Entity | undefined {
     return EntityManager.getInstance().entities.find(
-      (entity) => entity.name === name,
+      (entity) => entity.entityName === name,
     );
   }
 
