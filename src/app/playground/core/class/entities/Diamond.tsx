@@ -11,7 +11,6 @@ export class Diamond extends Entity {
    * When enabled, it alters the physics behavior of the entity.
    */
   springed?: boolean;
-
   /**
    * Constructs a Diamond entity.
    * @param {string} [path=modelPath + "Diamond.glb"] - Path to the .glb 3D model file.
@@ -36,7 +35,7 @@ export class Diamond extends Entity {
    * @returns {JSX.Element} The React component representing the diamond.
    */
   renderComponent() {
-    return <DiamondComponent objectProps={this} entityId={this.entityId} />;
+    return <DiamondComponent entity={this} />;
   }
 }
 
@@ -44,14 +43,14 @@ export class Diamond extends Entity {
  * If `springed` is true, attaches a fixed spring to it.
  *
  * @component
- * @param {Diamond} object - An entity from the Entity parent.
+ * @param {Diamond} instance - An entity from the Entity parent.
  * @param {Diamond} rigidBodyRef - Reference to the RapierRigidBody instance.
  * @returns {JSX.Element}
  */
-export const DiamondComponent = EntityComponent(Diamond, (object) => {
+export const DiamondComponent = EntityComponent(Diamond, (instance) => {
   return (
     <>
-      {object.springed && (
+      {instance.springed && (
         <BallSpring
           type="fixed"
           position={vectorArrayToVector3([0, 5, 0])}
@@ -60,7 +59,7 @@ export const DiamondComponent = EntityComponent(Diamond, (object) => {
           total={30}
         />
       )}
-      <ModelLoader path={object.path} />
+      <ModelLoader path={instance.path} />
     </>
   );
 });

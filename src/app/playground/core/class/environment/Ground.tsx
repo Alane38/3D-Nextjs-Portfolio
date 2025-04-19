@@ -2,17 +2,24 @@ import { Box } from "@react-three/drei";
 import { Entity } from "../Entity";
 import { EntityComponent } from "../EntityComponent";
 
+/**
+ * An entity class
+ * 
+ * @extends Entity
+ */
 export class Ground extends Entity {
-    /**
-   * Add custom entity Props
-   * @param {string} color - Color of the ground
-   * @param {string} depth - Depth of the ground
-   */
+  /** Color */
   color: string;
+  
+  /** Thickness/depth */
   depth: number;
+  
+  /**
+   * Creates a new instance
+   * Initializes with default values for physics and appearance
+   */
   constructor() {
     super("Ground");
-    // Modify the default settings(Entity) :
     this.type = "fixed";
     this.colliders = "cuboid";
     this.scale = 50;
@@ -20,32 +27,34 @@ export class Ground extends Entity {
     this.color = "black";
   }
 
+  /**
+   * Renders the entity
+   * @returns {JSX.Element} 
+   */
   renderComponent() {
-    return <GroundComponent objectProps={this} />;
+    return <GroundComponent entity={this} />;
   }
 }
 
 /**
- * Renders the 3D model.
- *
+ * Component responsible for rendering the entity
+ * 
  * @component
- * @param {Ground} object - An entity from the Entity parent.
- * @param {Ground} rigidBodyRef - Reference to the RapierRigidBody instance.
- * @returns {JSX.Element}
+ * @param {EntityComponent} instance - Contains all the props of the entity
+ * @param {EntityComponent} rigidbodyRef - The reference to the RapierRigidBody
+ * @returns {JSX.Element} The rendered 3D object
  */
-export const GroundComponent = EntityComponent(Ground, (object) => {
+export const GroundComponent = EntityComponent(Ground, (instance) => {
   return (
-    // Body
     <>
-      {/* Ground Mesh */}
       <Box
         args={[
-          typeof object.scale === "number" ? object.scale : 1,
-          typeof object.depth === "number" ? object.depth : 0.1,
-          typeof object.scale === "number" ? object.scale : 1,
+          typeof instance.scale === "number" ? instance.scale : 1,
+          typeof instance.depth === "number" ? instance.depth : 0.1,
+          typeof instance.scale === "number" ? instance.scale : 1,
         ]}
       >
-        <meshStandardMaterial attach="material" color={object.color} />
+        <meshStandardMaterial attach="material" color={instance.color} />
       </Box>
     </>
   );

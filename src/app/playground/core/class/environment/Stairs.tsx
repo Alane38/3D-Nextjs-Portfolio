@@ -3,35 +3,38 @@ import { modelPath } from "src/constants/default";
 import { Entity } from "../Entity";
 import { EntityComponent } from "../EntityComponent";
 
+/**
+ * An entity class
+ *
+ * @extends Entity
+ */
 export class Stairs extends Entity {
-        /**
-   * Constructs a Killbrick entity.
-   * @param {string} [path=modelPath + "NeonDoor.glb"] - Path to the .glb 3D model file.
+  /**
+   * Creates a new instance
+   * Initializes with default values for physics and appearance
    */
   constructor(path: string = modelPath + "Stairs.glb") {
     super("Stairs");
-    // Modify the default settings(Entity) :
     this.path = path;
     this.type = "fixed";
   }
   renderComponent() {
-    return <StairsComponent objectProps={this} />;
+    return <StairsComponent entity={this} />;
   }
 }
 
 /**
- * Renders the 3D model.
+ * Component responsible for rendering the entity
  *
  * @component
- * @param {Stairs} object - An entity from the Entity parent.
- * @param {Stairs} rigidBodyRef - Reference to the RapierRigidBody instance.
- * @returns {JSX.Element}
+ * @param   {Stairs} instance - The instance that contains the properties of the entity
+ * @returns {JSX.Element} The rendered 3D object
  */
-export const StairsComponent = EntityComponent(Stairs, (object) => {
+export const StairsComponent = EntityComponent(Stairs, (instance) => {
   return (
     <group>
       {/* Model */}
-      <ModelLoader path={object.path} />
+      <ModelLoader path={instance.path} />
     </group>
   );
 });

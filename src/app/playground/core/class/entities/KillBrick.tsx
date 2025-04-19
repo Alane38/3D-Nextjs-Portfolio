@@ -1,18 +1,16 @@
 import { Box, Text } from "@react-three/drei";
-import { useState } from "react";
+import { useState, RefObject } from "react";
 import { Euler, Vector3 } from "three";
 import { Entity } from "../Entity";
 import { EntityComponent } from "../EntityComponent";
+import { RapierRigidBody } from "@react-three/rapier";
+
+type KillBrickProps = {
+  instance: Entity;
+  rigidBodyRef: RefObject<RapierRigidBody | null>;
+};
 
 export class KillBrick extends Entity {
-    /**
-   * Constructs a Killbrick entity.
-   * @param {string} [path=modelPath + "NeonDoor.glb"] - Path to the .glb 3D model file.
-   */
-  /**
-   * Add custom entity Props
-   * @param {string} color - The color of the killbrick
-   */
   color: string;
   constructor() {
     super("KillBrick");
@@ -24,42 +22,40 @@ export class KillBrick extends Entity {
   }
 
   renderComponent() {
-    return <KillBrickComponent objectProps={this} />;
+    return <KillBrickComponent entity={this} />;
   }
 }
 
-/**
- * Renders the 3D model.
- *
- * @component
- * @param {KillBrick} object - An entity from the Entity parent.
- * @param {KillBrick} rigidBodyRef - Reference to the RapierRigidBody instance.
- * @returns {JSX.Element}
- */
+// Composant stable contenant vos hooks
+const KillBrickRenderer   = ({ instance, rigidBodyRef }: KillBrickProps) => {
+  const [color, setColor] = useState(instance.color);
+  
+  // Assigner onCollisionEnter à l'instance
+  instance.onCollisionEnter = ({ other }) => {
+    if (other.rigidBodyObject?.name === "Player") {
+      setColor("green");
+    }
+  };
+
+  return (
+    <>
+      <Box scale={instance.scale}>
+        <meshStandardMaterial attach="material" color={color} />
+      </Box>
+
+      <group ref={rigidBodyRef} position={[0, 1.5, 0]}>
+        <Text scale={0.5} color="red" maxWidth={10} textAlign="center">
+          Touch me to kill!
+        </Text>
+      </group>
+    </>
+  );
+};
+
+// Utilisez ce composant stable dans EntityComponent
 export const KillBrickComponent = EntityComponent(
   KillBrick,
-  (object, rigidBodyRef) => {
-    const [color, setColor] = useState(object.color);
-
-    // Add a function to the object
-    object.onCollisionEnter = ({ other }) => {
-      if (other.rigidBodyObject?.name === "Player") {
-        setColor("green"); // React state update
-      }
-    };
-
-    return (
-      <>
-        <Box scale={object.scale}>
-          <meshStandardMaterial attach="material" color={color} />
-        </Box>
-
-        <group ref={rigidBodyRef} position={[0, 1.5, 0]}>
-          <Text scale={0.5} color="red" maxWidth={10} textAlign="center">
-            Touch me to kill!
-          </Text>
-        </group>
-      </>
-    );
+  (instance, rigidBodyRef) => {
+    return <KillBrickRenderer  instance={instance} rigidBodyRef={rigidBodyRef} />;
   },
 );

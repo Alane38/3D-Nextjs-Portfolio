@@ -1,17 +1,17 @@
 import { Box, Sphere } from "@react-three/drei";
 import {
-  RapierRigidBody,
-  RigidBody,
-  RigidBodyTypeString,
-  usePrismaticJoint,
-  useSphericalJoint,
+    RapierRigidBody,
+    RigidBody,
+    RigidBodyTypeString,
+    usePrismaticJoint,
+    useSphericalJoint,
 } from "@react-three/rapier";
 import {
-  createRef,
-  forwardRef,
-  ReactNode,
-  RefObject,
-  useRef
+    createRef,
+    forwardRef,
+    ReactNode,
+    RefObject,
+    useRef
 } from "react";
 import { Mesh } from "three";
 import { Entity } from "../Entity";
@@ -26,7 +26,7 @@ export class Rope extends Entity {
   }
 
   renderComponent() {
-    return <RopeComponent objectProps={this} />;
+    return <RopeComponent entity={this} />;
   }
 }
 
@@ -83,10 +83,10 @@ const RopeJoint = ({
   return null;
 };
 
-const RopeComponent = EntityComponent(Rope, (object, rigidBodyRef) => {
+const RopeComponent = EntityComponent(Rope, (instance, rigidBodyRef) => {
   
   const refs = useRef(
-    Array.from({ length: object.length }).map(() =>
+    Array.from({ length: instance.length }).map(() =>
       createRef<RapierRigidBody>(),
     ) as RefObject<RapierRigidBody>[],
   );

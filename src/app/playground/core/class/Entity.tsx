@@ -5,7 +5,6 @@ import {
 } from "@react-three/rapier";
 import { JSX } from "react";
 import { Euler, EulerOrder, Vector3 } from "three";
-import { EntityManager } from "./EntityManager";
 
 // Type for serialization
 export type EntitySerializableType = {
@@ -20,7 +19,7 @@ export type EntitySerializableType = {
 // 3D Object class, extends to create the EntityComponent.
 export class Entity {
   entityName: string;
-  entityId: number;
+  entityId: number | undefined = undefined;
   path: string = "";
   position: Vector3 = new Vector3(0, 0, 0);
   rotation: Euler = new Euler(0, 0, 0);
@@ -46,8 +45,6 @@ export class Entity {
 
   constructor(name: string) {
     this.entityName = name;
-    this.entityId = EntityManager.generateIdToEntity(this);
-    console.log("Entity created:", this.entityId);
   }
 
   // Setters
@@ -66,7 +63,7 @@ export class Entity {
   setScale(scale: number | [number, number, number]) {
     this.scale = Array.isArray(scale) ? scale : [scale, scale, scale];
   }
-  
+
   setPath(path: string) {
     this.path = path;
   }

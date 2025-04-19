@@ -22,7 +22,7 @@ export class NeonDoor extends Entity {
    * @returns {JSX.Element} The React component representing the neon door.
    */
   renderComponent() {
-    return <NeonDoorComponent objectProps={this} />;
+    return <NeonDoorComponent entity={this} />;
   }
 }
 
@@ -30,14 +30,14 @@ export class NeonDoor extends Entity {
  * Renders the 3D model.
  *
  * @component
- * @param {NeonDoor} object - An entity from the Entity parent.
+ * @param {NeonDoor} instance - An entity from the Entity parent.
  * @param {NeonDoor} rigidBodyRef - Reference to the RapierRigidBody instance.
  * @returns {JSX.Element}
  */
-export const NeonDoorComponent = EntityComponent(NeonDoor, (object) => {
+export const NeonDoorComponent = EntityComponent(NeonDoor, (instance) => {
   return (
     <group>
-      <ModelLoader path={object.path} />
+      <ModelLoader path={instance.path} />
     </group>
   );
 });

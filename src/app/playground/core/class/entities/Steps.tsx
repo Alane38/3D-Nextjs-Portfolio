@@ -9,7 +9,7 @@ export class Steps extends Entity {
   }
 
   renderComponent() {
-    return <StepsComponent objectProps={this} />;
+    return <StepsComponent entity={this} />;
   }
 }
 
@@ -17,11 +17,11 @@ export class Steps extends Entity {
  * Renders the 3D model.
  *
  * @component
- * @param {Steps} object - An entity from the Entity parent.
+ * @param {Steps} instance - An entity from the Entity parent.
  * @param {Steps} rigidBodyRef - Reference to the RapierRigidBody instance.
  * @returns {JSX.Element}
  */
-export const StepsComponent = EntityComponent(Steps, (object, rigidBodyRef) => {
+export const StepsComponent = EntityComponent(Steps, (instance, rigidBodyRef) => {
   return (
     <>
       {[5, 6, 7, 8].map((_, i) => (

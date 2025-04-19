@@ -28,7 +28,7 @@ export class TextObject extends Entity {
     };
   }
   renderComponent() {
-    return <TextObjectComponent objectProps={this} />;
+    return <TextObjectComponent entity={this} />;
   }
 }
 
@@ -36,19 +36,19 @@ export class TextObject extends Entity {
  * Renders the 3D model.
  *
  * @component
- * @param {Steps} object - An entity from the Entity parent.
+ * @param {Steps} instance - An entity from the Entity parent.
  * @param {Steps} rigidBodyRef - Reference to the RapierRigidBody instance.
  * @returns {JSX.Element}
  */
-export const TextObjectComponent = EntityComponent(TextObject, (object) => {
+export const TextObjectComponent = EntityComponent(TextObject, (instance) => {
   return (
       <Text3D
-        font={object.TextProps.font || defaultFont}
-        position={object.position}
-        size={object.TextProps.size}
+        font={instance.TextProps.font || defaultFont}
+        position={instance.position}
+        size={instance.TextProps.size}
         bevelEnabled
       >
-        {object.TextProps.text}
+        {instance.TextProps.text}
         <meshNormalMaterial attach="material" />
       </Text3D>
   );

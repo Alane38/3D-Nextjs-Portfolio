@@ -14,7 +14,7 @@ export class KinematicRotatingDrumEntity extends Entity {
   }
 
   renderComponent() {
-    return <KinematicRotatingDrumComponent objectProps={this} />;
+    return <KinematicRotatingDrumComponent entity={this} />;
   }
 }
 
@@ -22,13 +22,13 @@ export class KinematicRotatingDrumEntity extends Entity {
  * Renders the 3D model.
  *
  * @component
- * @param {KinematicRotatingDrumEntity} object - An entity from the Entity parent.
+ * @param {KinematicRotatingDrumEntity} instance - An entity from the Entity parent.
  * @param {KinematicRotatingDrumEntity} rigidBodyRef - Reference to the RapierRigidBody instance.
  * @returns {JSX.Element}
  */
 export const KinematicRotatingDrumComponent = EntityComponent(
   KinematicRotatingDrumEntity,
-  (object, rigidBodyRef) => {
+  (instance, rigidBodyRef) => {
     const ref = rigidBodyRef;
     const xAxis = useMemo(() => new THREE.Vector3(1, 0, 0), []);
     const quaternion = useMemo(() => new THREE.Quaternion(), []);
@@ -47,7 +47,7 @@ export const KinematicRotatingDrumComponent = EntityComponent(
           color="black"
           maxWidth={10}
           textAlign="center"
-          position={[object.position.x, 2.5, object.position.z]}
+          position={[instance.position.x, 2.5, instance.position.z]}
         >
           Kinematic Rotating Drum
         </Text>

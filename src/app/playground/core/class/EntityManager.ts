@@ -1,9 +1,8 @@
 import { Entity } from "./Entity";
 
-
 /**
  * Singleton class to manage entities
- * 
+ *
  * @function getInstance - Get the single instance of EntityManager
  * @function createEntity - Create a new entity and add it to the list
  * @function addEntity - Add an entity to the list
@@ -11,7 +10,7 @@ import { Entity } from "./Entity";
  * @function getEntityById - Get entity by ID
  * @function getAllEntities - Get all entities
  * @function removeEntity - Remove entity
- * 
+ *
  */
 export class EntityManager {
   private static instance: EntityManager;
@@ -19,6 +18,18 @@ export class EntityManager {
   private static nextId = 1;
   private constructor() {}
 
+  /** Internal functions */
+  private static addEntity<InstanceType extends Entity>(entity: InstanceType) {
+    const existingEntity = EntityManager.getInstance().entities.find(
+      (e) => e.entityId === entity.entityId,
+    );
+    if (existingEntity) {
+      return;
+    }
+    EntityManager.getInstance().entities.push(entity);
+  }
+
+  /** Entity Manager */
   // Singleton pattern to get the single instance of EntityManager
   static getInstance(): EntityManager {
     if (!EntityManager.instance) {
@@ -27,33 +38,38 @@ export class EntityManager {
     return EntityManager.instance;
   }
 
-  // Create a new entity and add it to the list
-  static createEntity<T extends Entity>(EntityClass: new () => T): T {
-    const entityManager = EntityManager.getInstance();
-
-    // Create new entity and set unique ID
-    const entity = new EntityClass();
-    entity.entityId = EntityManager.nextId++;
-
-    // Add to entity collection
-    entityManager.entities.push(entity);
-    return entity;
-  }
-
-  static addEntity<T extends Entity>(entity: T) {
-    EntityManager.getInstance().entities.push(entity);
-  }
-
+  // Generate an ID and add the entity to the list
   static generateIdToEntity(entity: Entity): number {
+    // Si l'entité a déjà un ID, le retourner simplement
+    if (entity.entityId !== undefined) {
+      // Vérifiez si l'entité existe déjà dans le gestionnaire
+      const existingEntity = EntityManager.getInstance().entities.find(
+        (e) => e.entityId === entity.entityId,
+      );
+
+      // Si elle n'existe pas, l'ajouter
+      if (!existingEntity) {
+        EntityManager.addEntity(entity);
+      }
+
+      return entity.entityId;
+    }
+
+    // Si l'entité n'a pas d'ID, générer un nouvel ID unique
     const entityManager = EntityManager.getInstance();
     do {
       entity.entityId = EntityManager.nextId++;
     } while (
-      entityManager.entities.some(e => e.entityId === entity.entityId)
+      entityManager.entities.some((e) => e.entityId === entity.entityId)
     );
+
+    // Ajouter l'entité à la liste
+    EntityManager.addEntity(entity);
 
     return entity.entityId;
   }
+  
+  /** Management functions */
   // Get all entities
   static getAllEntities(): Entity[] {
     return EntityManager.getInstance().entities;
@@ -74,9 +90,7 @@ export class EntityManager {
   }
 
   // Get the first entity by name
-  static getFirstEntityByName(
-    name: string,
-  ): Entity | undefined {
+  static getFirstEntityByName(name: string): Entity | undefined {
     return EntityManager.getInstance().entities.find(
       (entity) => entity.entityName === name,
     );

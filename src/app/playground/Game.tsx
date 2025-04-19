@@ -12,9 +12,8 @@ import { GameCanvas } from "./GameCanvas";
 import { FileWorld } from "./world/FileWorld";
 
 export function Game() {
-
   // Store initial entities
-  const {setEntities } = useEntityStore();
+  const setEntities  = useEntityStore((state) => state.setEntities);
 
   // Load the world, and load the entities.
   useEffect(() => {

@@ -2,7 +2,12 @@ import { useSky } from "@/hooks";
 import { Sky } from "@react-three/drei";
 import { Fragment } from "react";
 import { Character } from "../core/character/Character";
-import { DiamondComponent, GroundComponent } from "../core/class";
+import {
+  Diamond,
+  DiamondComponent,
+  Ground,
+  GroundComponent,
+} from "../core/class";
 import { useEntityStore } from "../core/class/entity.store";
 import { EditTool } from "../core/client/inventory/edit-tool/EditTool";
 import { Vector3 } from "three";
@@ -10,7 +15,7 @@ import { Vector3 } from "three";
 export function FileWorld() {
   /* Leva Settings */
   const sky = useSky();
-  const { entities } = useEntityStore();
+  const entities = useEntityStore((state) => state.entities);
 
   return (
     <>
@@ -25,7 +30,8 @@ export function FileWorld() {
         inclination={0}
         sunPosition={sky.sunPosition}
       />
-      <GroundComponent /> 
+      <GroundComponent entity={new Ground()} />
+
       <Character
         name="Player"
         path="FoxPam.fbx"
@@ -33,10 +39,14 @@ export function FileWorld() {
         defaultPlayer
       />
 
-      <DiamondComponent position={new Vector3(8, 5, 15)} />
-      <DiamondComponent position={new Vector3(12, 5, 10)} />
-      <DiamondComponent position={new Vector3(8, 5, 12)} />
-      <DiamondComponent position={new Vector3(10, 5, 12)} />
+      <DiamondComponent
+        position={new Vector3(8, 5, 15)}
+        entity={new Diamond()}
+      />
+      <DiamondComponent
+        position={new Vector3(12, 5, 10)}
+        entity={new Diamond()}
+      />
 
       <EditTool />
 

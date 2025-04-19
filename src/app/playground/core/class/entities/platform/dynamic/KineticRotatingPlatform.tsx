@@ -13,7 +13,7 @@ export class KinematicRotatingPlatformEntity extends Entity {
   }
 
   renderComponent() {
-    return <KinematicRotatingPlatformComponent objectProps={this} />;
+    return <KinematicRotatingPlatformComponent entity={this} />;
   }
 }
 
@@ -21,13 +21,13 @@ export class KinematicRotatingPlatformEntity extends Entity {
  * Renders the 3D model.
  *
  * @component
- * @param {KinematicRotatingPlatformEntity} object - An entity from the Entity parent.
+ * @param {KinematicRotatingPlatformEntity} instance - An entity from the Entity parent.
  * @param {KinematicRotatingPlatformEntity} rigidBodyRef - Reference to the RapierRigidBody instance.
  * @returns {JSX.Element}
  */
 export const KinematicRotatingPlatformComponent = EntityComponent(
   KinematicRotatingPlatformEntity,
-  (object, rigidBodyRef) => {
+  (instance, rigidBodyRef) => {
     const ref = rigidBodyRef;
     const yAxis = useMemo(() => new THREE.Vector3(0, 1, 0), []);
     const quaternion = useMemo(() => new THREE.Quaternion(), []);

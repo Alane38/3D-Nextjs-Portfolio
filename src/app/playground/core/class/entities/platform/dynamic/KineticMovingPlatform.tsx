@@ -12,7 +12,7 @@ export class KinematicMovingPlatformEntity extends Entity {
   }
 
   renderComponent() {
-    return <KinematicMovingPlatformComponent objectProps={this} />;
+    return <KinematicMovingPlatformComponent entity={this} />;
   }
 }
 
@@ -20,19 +20,19 @@ export class KinematicMovingPlatformEntity extends Entity {
  * Renders the 3D model.
  *
  * @component
- * @param {KinematicMovingPlatformEntity} object - An entity from the Entity parent.
+ * @param {KinematicMovingPlatformEntity} instance - An entity from the Entity parent.
  * @param {KinematicMovingPlatformEntity} rigidBodyRef - Reference to the RapierRigidBody instance.
  * @returns {JSX.Element}
  */
 export const KinematicMovingPlatformComponent = EntityComponent(
   KinematicMovingPlatformEntity,
-  (object, rigidBodyRef) => {
+  (instance, rigidBodyRef) => {
     useFrame((state) => {
       const time = state.clock.elapsedTime;
       rigidBodyRef.current?.setNextKinematicTranslation({
-        x: 5 * Math.sin(time / 2) + object.position.x,
-        y: object.position.y,
-        z: object.position.z,
+        x: 5 * Math.sin(time / 2) + instance.position.x,
+        y: instance.position.y,
+        z: instance.position.z,
       });
     });
 

@@ -18,7 +18,7 @@ export class FPPushtoMove extends Entity {
   }
 
   renderComponent() {
-    return <FPPushtoMoveComponent objectProps={this} />;
+    return <FPPushtoMoveComponent entity={this} />;
   }
 }
 
@@ -26,13 +26,13 @@ export class FPPushtoMove extends Entity {
  * Renders the 3D model.
  *
  * @component
- * @param {FPPushtoMove} object - An entity from the Entity parent.
+ * @param {FPPushtoMove} instance - An entity from the Entity parent.
  * @param {FPPushtoMove} rigidBodyRef - Reference to the RapierRigidBody instance.
  * @returns {JSX.Element}
  */
 export const FPPushtoMoveComponent = EntityComponent(
   FPPushtoMove,
-  (object, rigidBodyRef) => {
+  (instance, rigidBodyRef) => {
     const { world, rapier } = useRapier();
     const ref = rigidBodyRef;
 

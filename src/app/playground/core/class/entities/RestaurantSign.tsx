@@ -16,7 +16,7 @@ export class RestaurantSign extends Entity {
     this.scale = 0.3;
   }
   renderComponent() {
-    return <RestaurantSignComponent objectProps={this} />;
+    return <RestaurantSignComponent entity={this} />;
   }
 }
 
@@ -24,13 +24,13 @@ export class RestaurantSign extends Entity {
  * Renders the 3D model.
  *
  * @component
- * @param {RestaurantSign} object - An entity from the Entity parent.
+ * @param {RestaurantSign} instance - An entity from the Entity parent.
  * @param {RestaurantSign} rigidBodyRef - Reference to the RapierRigidBody instance.
  * @returns {JSX.Element}
  */
 export const RestaurantSignComponent = EntityComponent(
   RestaurantSign,
-  (object, rigidBodyRef) => {
+  (instance, rigidBodyRef) => {
     const videoTexture = useVideoTexture(
       "/assets/videos/newalfox-compressed.webm",
     );
@@ -38,7 +38,7 @@ export const RestaurantSignComponent = EntityComponent(
     return (
       <group>
         {/* Model */}
-        <ModelLoader path={object.path} />
+        <ModelLoader path={instance.path} />
         <mesh position={[-1.14, 7.3, -0.2]}>
           <boxGeometry args={[0.5, 0.4, 0.21]} />
           <meshStandardMaterial color="black" />
