@@ -17,7 +17,12 @@ import { Mesh } from "three";
 import { Entity } from "../Entity";
 import { EntityComponent } from "../EntityComponent";
 
-// === ENTITY: Rope ===
+/**
+ * An entity class
+ * 
+ * @class
+ * @extends Entity
+ */
 export class Rope extends Entity {
   constructor(public length = 40) {
     super("Rope");
@@ -30,7 +35,12 @@ export class Rope extends Entity {
   }
 }
 
-// === ENTITY: PrismaticJointDemo ===
+/**
+ * An entity class
+ * 
+ * @class
+ * @extends Entity
+ */
 export class PrismaticJointDemo extends Entity {
   constructor() {
     super("PrismaticJointDemo");
@@ -44,6 +54,13 @@ export class PrismaticJointDemo extends Entity {
 
 // === COMPONENTS ===
 
+/**
+ * 
+ * @component
+ * @param  {ShadowElement} _ - 
+ * @param  {ShadowElement} ref - Reference to the RapierRigidBody instance
+ * @returns {JSX.Element}
+ */
 const ShadowElement = forwardRef<Mesh>((_, ref) => (
   
   <Sphere castShadow ref={ref} args={[0.5]}>
@@ -83,7 +100,23 @@ const RopeJoint = ({
   return null;
 };
 
-const RopeComponent = EntityComponent(Rope, (instance, rigidBodyRef) => {
+/**
+ * Component responsible for rendering the entity
+ *
+ * @component
+ * @param  {RopeComponent} entity - Contains all the default props of the entity
+ * @returns {JSX.Element} The rendered 3D object
+ */
+const RopeComponent = EntityComponent(Rope, (instance) => {
+    /** 
+   * Renders the 3D model
+   * 
+   * @function
+   * @param {EntityComponent} EntityTemplate - A default entity class
+   * @param {Ground} instance - An entity from the Entity parent
+   * @param {RapierRigidBody} rigidBodyRef - Reference to the RapierRigidBody instance
+   * @param {THREE.Group} visualRef - Reference to the THREE.Group instance
+   */
   
   const refs = useRef(
     Array.from({ length: instance.length }).map(() =>

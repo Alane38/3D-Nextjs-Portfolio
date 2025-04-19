@@ -16,20 +16,6 @@ interface BallSpringProps extends RigidBodyOptions {
   total: number;
 }
 
-// interface BoxRigidBodyProps extends RigidBodyOptions {
-//   color: string;
-// }
-
-// const BoxRigidBody = ({ color, ...props }: BoxRigidBodyProps) => {
-//   return (
-//     <RigidBody {...props} ccd canSleep={false}>
-//       <Box castShadow receiveShadow>
-//         <meshStandardMaterial color={color} />
-//       </Box>
-//     </RigidBody>
-//   );
-// };
-
 /**
  * Renders the 3D model.
  *

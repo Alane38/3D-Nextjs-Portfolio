@@ -4,21 +4,27 @@ import { defaultFont } from "src/constants/default";
 import { Entity } from "../Entity";
 import { EntityComponent } from "../EntityComponent";
 
-// Basic Type for Text3D
-interface TextProps {
-  text: string;
-  font?: string;
-  size?: number;
-}
-
+/**
+ * An entity class
+ * 
+ * @class
+ * @extends Entity
+ */
 export class TextObject extends Entity {
-      /**
-   * Add custom entity Props 
-   * @param {string} text - text
-   * @param {string} font - Font of the text
-   * @param {number} size - Size of the text
+  /** Text properties */
+  TextProps: {
+    /** The text to display */
+    text: string;
+    /** Font of the text */
+    font?: string;
+    /** Size of the text */
+    size?: number;
+  };
+
+  /**
+   * Creates a new instance
+   * Initializes with default values for text rendering
    */
-  TextProps: TextProps;
   constructor(type: RigidBodyOptions["type"] = "fixed") {
     super("Text");
     this.type = type;
@@ -27,29 +33,37 @@ export class TextObject extends Entity {
       size: 1,
     };
   }
+
   renderComponent() {
     return <TextObjectComponent entity={this} />;
   }
 }
 
 /**
- * Renders the 3D model.
+ * Component responsible for rendering the entity
  *
  * @component
- * @param {Steps} instance - An entity from the Entity parent.
- * @param {Steps} rigidBodyRef - Reference to the RapierRigidBody instance.
- * @returns {JSX.Element}
+ * @param  {TextObjectComponent} entity - Contains all the default props of the entity
+ * @returns {JSX.Element} The rendered 3D object
  */
 export const TextObjectComponent = EntityComponent(TextObject, (instance) => {
+  /** 
+   * Renders the 3D model
+   * 
+   * @function
+   * @param {EntityComponent} EntityTemplate - A default entity class
+   * @param {TextObject} instance - An entity from the Entity parent
+   * @param {RapierRigidBody} rigidBodyRef - Reference to the RapierRigidBody instance
+   */
   return (
-      <Text3D
-        font={instance.TextProps.font || defaultFont}
-        position={instance.position}
-        size={instance.TextProps.size}
-        bevelEnabled
-      >
-        {instance.TextProps.text}
-        <meshNormalMaterial attach="material" />
-      </Text3D>
+    <Text3D
+      font={instance.TextProps.font || defaultFont}
+      position={instance.position}
+      size={instance.TextProps.size}
+      bevelEnabled
+    >
+      {instance.TextProps.text}
+      <meshNormalMaterial attach="material" />
+    </Text3D>
   );
 });

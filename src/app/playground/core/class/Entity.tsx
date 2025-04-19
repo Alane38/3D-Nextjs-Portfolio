@@ -6,7 +6,9 @@ import {
 import { JSX } from "react";
 import { Euler, EulerOrder, Vector3 } from "three";
 
-// Type for serialization
+/**
+ * Type used for serializing an Entity instance.
+ */
 export type EntitySerializableType = {
   entityName: string;
   type: RigidBodyOptions["type"];
@@ -16,7 +18,10 @@ export type EntitySerializableType = {
   scale: number | [number, number, number];
 };
 
-// 3D Object class, extends to create the EntityComponent.
+/**
+ * Base 3D entity class with physics and transformation properties.
+ * Extend this class to create interactive components.
+ */
 export class Entity {
   entityName: string;
   entityId: number | undefined = undefined;
@@ -33,42 +38,65 @@ export class Entity {
   rigidBody?: RapierRigidBody;
   ccd: boolean = false;
   canSleep: boolean = true;
-  // Physics
+
+  // Physics constraints
   lockTranslations: boolean = false;
   lockRotations: boolean = false;
   enabledRotations: [boolean, boolean, boolean] = [true, true, true];
   setEnabledRotations?: (x: boolean, y: boolean, z: boolean) => void;
   setLinvel?: (vel: Vector3, wakeup: boolean) => void;
 
-  // Events props
+  // Event hooks
   onCollisionEnter?: CollisionEnterHandler;
 
   constructor(name: string) {
     this.entityName = name;
   }
 
-  // Setters
+  /**
+   * Set the entity's position.
+   * @param position - A THREE.Vector3 instance
+   */
   setPosition(position: Vector3) {
     this.position.copy(position);
   }
 
+  /**
+   * Set the entity's rotation.
+   * @param rotation - A THREE.Euler instance
+   */
   setRotation(rotation: Euler) {
     this.rotation.copy(rotation);
   }
 
+  /**
+   * Set the entity's mass.
+   * @param mass - A number representing the entity's mass
+   */
   setMass(mass: number) {
     this.mass = mass;
   }
 
+  /**
+   * Set the entity's scale.
+   * Accepts a number (uniform scale) or a tuple for non-uniform scaling.
+   * @param scale - Uniform or non-uniform scale
+   */
   setScale(scale: number | [number, number, number]) {
     this.scale = Array.isArray(scale) ? scale : [scale, scale, scale];
   }
 
+  /**
+   * Set the entity's model or resource path.
+   * @param path - URL or relative path to a 3D model
+   */
   setPath(path: string) {
     this.path = path;
   }
 
-  // Convert an Entity Object to a JSON object
+  /**
+   * Serialize the entity to a plain object for storage or transmission.
+   */
   toSerializable(): EntitySerializableType {
     return {
       entityName: this.entityName,
@@ -82,14 +110,17 @@ export class Entity {
     };
   }
 
-  // Convert a JSON object to an Entity Object
+  /**
+   * Create an Entity instance from a serialized object.
+   * @param data - Serialized entity data
+   */
   public static fromSerialized(data: EntitySerializableType): Entity {
     const entity = new Entity(data.entityName);
     entity.path = data.path;
     entity.type = data.type;
     entity.position.fromArray(data.position);
 
-    // Fix: ne passer que les 3 premiers éléments à Euler
+    // Only use the first 3 elements for the Euler rotation
     if (Array.isArray(data.rotation)) {
       entity.rotation.fromArray(
         data.rotation.slice(0, 3) as [number, number, number],
@@ -100,7 +131,11 @@ export class Entity {
     return entity;
   }
 
+  /**
+   * Render the entity's visual component.
+   * Should be overridden by subclasses.
+   */
   renderComponent(): JSX.Element {
-    return <></>; // Override in subclass
+    return <></>;
   }
 }

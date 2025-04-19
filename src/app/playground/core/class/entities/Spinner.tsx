@@ -6,18 +6,23 @@ import { Quaternion, Vector3 } from "three";
 import { Entity } from "../Entity";
 import { EntityComponent } from "../EntityComponent";
 
+/**
+ * An entity class
+ * 
+ * @class
+ * @extends Entity
+ */
 export class Spinner extends Entity {
-      /**
-   * Constructs a Killbrick entity.
-   * @param {string} [path=modelPath + "NeonDoor.glb"] - Path to the .glb 3D model file.
-   */
-  /**
-   * Add custom entity Props
-   * @param {string} color - Color of the spinner
-   * @param {string} speed - Speed of the spinner
-   */
+  /** Rotation speed */
   speed: number;
+
+  /** Color */
   color: string;
+
+  /**
+   * Creates a new instance
+   * Initializes with rotation and path settings
+   */
   constructor(path: string = modelPath + "Spinner.glb") {
     super("Spinner");
     this.path = path;
@@ -25,20 +30,28 @@ export class Spinner extends Entity {
     this.speed = 5;
     this.color = "blue";
   }
+
   renderComponent() {
     return <SpinnerComponent entity={this} />;
   }
 }
 
 /**
- * Renders the 3D model.
+ * Component responsible for rendering the entity
  *
  * @component
- * @param {Spinner} instance - An entity from the Entity parent.
- * @param {Spinner} rigidBodyRef - Reference to the RapierRigidBody instance.
- * @returns {JSX.Element}
+ * @param  {SpinnerComponent} entity - Contains all the default props of the entity
+ * @returns {JSX.Element} The rendered 3D object
  */
 export const SpinnerComponent = EntityComponent(Spinner, (instance, rigidBodyRef) => {
+  /** 
+   * Renders the 3D model and handles spinning
+   * 
+   * @function
+   * @param {EntityComponent} EntityTemplate - A default entity class
+   * @param {Spinner} instance - An entity from the Entity parent
+   * @param {RapierRigidBody} rigidBodyRef - Reference to the RapierRigidBody instance
+   */
   useFrame((_state, delta) => {
     if (!rigidBodyRef.current?.rotation()) return;
 

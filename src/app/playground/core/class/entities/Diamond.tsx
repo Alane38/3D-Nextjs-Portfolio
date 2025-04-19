@@ -5,49 +5,53 @@ import { EntityComponent } from "../EntityComponent";
 import { ModelLoader } from "../rendering/ModelLoader";
 import { BallSpring } from "./Spring";
 
+/**
+ * An entity class
+ *
+ * @class
+ * @extends Entity
+ */
 export class Diamond extends Entity {
-  /**
-   * Indicates whether the diamond is spring-attached.
-   * When enabled, it alters the physics behavior of the entity.
-   */
+  /** Whether the diamond is spring-attached */
   springed?: boolean;
+
   /**
-   * Constructs a Diamond entity.
-   * @param {string} [path=modelPath + "Diamond.glb"] - Path to the .glb 3D model file.
+   * Creates a new instance
+   * Initializes with default values for physics and appearance
    */
   constructor(path: string = modelPath + "Diamond.glb") {
     super("Diamond");
     this.path = path;
     this.type = "dynamic";
     this.springed = false;
-
-    // Lock translations if not springed
     this.lockTranslations = !this.springed;
-
-    // Enable specific rotation axes depending on spring state
     this.enabledRotations = this.springed
-      ? [true, false, true] // Y-axis rotation locked
-      : [true, true, true]; // All rotations enabled
+      ? [true, false, true]
+      : [true, true, true];
   }
 
-  /**
-   * Renders the associated React component for this entity.
-   * @returns {JSX.Element} The React component representing the diamond.
-   */
   renderComponent() {
     return <DiamondComponent entity={this} />;
   }
 }
 
 /**
- * If `springed` is true, attaches a fixed spring to it.
+ * Component responsible for rendering the entity
  *
  * @component
- * @param {Diamond} instance - An entity from the Entity parent.
- * @param {Diamond} rigidBodyRef - Reference to the RapierRigidBody instance.
- * @returns {JSX.Element}
+ * @param  {DiamondComponent} entity - Contains all the default props of the entity
+ * @returns {JSX.Element} The rendered 3D object
  */
 export const DiamondComponent = EntityComponent(Diamond, (instance) => {
+  /**
+   * Renders the 3D model
+   *
+   * @function
+   * @param {EntityComponent} EntityTemplate - A default entity class
+   * @param {Ground} instance - An entity from the Entity parent
+   * @param {RapierRigidBody} rigidBodyRef - Reference to the RapierRigidBody instance
+   * @param {THREE.Group} visualRef - Reference to the THREE.Group instance
+   */
   return (
     <>
       {instance.springed && (

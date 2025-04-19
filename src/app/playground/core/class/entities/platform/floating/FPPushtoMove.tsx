@@ -8,8 +8,17 @@ import { Vector3 } from "three";
 import { Entity } from "../../../Entity";
 import { EntityComponent } from "../../../EntityComponent";
 
-// Floating Platform : Push to move
+/**
+ * An entity class
+ * 
+ * @class
+ * @extends Entity
+ */
 export class FPPushtoMove extends Entity {
+    /**
+   * Creates a new instance
+   * Initializes with default values for physics and appearance
+   */
   constructor() {
     super("FPPushtoMove");
     this.type = "dynamic";
@@ -23,16 +32,24 @@ export class FPPushtoMove extends Entity {
 }
 
 /**
- * Renders the 3D model.
+ * Component responsible for rendering the entity
  *
  * @component
- * @param {FPPushtoMove} instance - An entity from the Entity parent.
- * @param {FPPushtoMove} rigidBodyRef - Reference to the RapierRigidBody instance.
- * @returns {JSX.Element}
+ * @param  {FPPushtoMoveComponent} entity - Contains all the default props of the entity
+ * @returns {JSX.Element} The rendered 3D object
  */
 export const FPPushtoMoveComponent = EntityComponent(
   FPPushtoMove,
   (instance, rigidBodyRef) => {
+      /** 
+   * Renders the 3D model
+   * 
+   * @function
+   * @param {EntityComponent} EntityTemplate - A default entity class
+   * @param {Ground} instance - An entity from the Entity parent
+   * @param {RapierRigidBody} rigidBodyRef - Reference to the RapierRigidBody instance
+   * @param {THREE.Group} visualRef - Reference to the THREE.Group instance
+   */
     const { world, rapier } = useRapier();
     const ref = rigidBodyRef;
 

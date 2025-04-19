@@ -6,7 +6,17 @@ import * as THREE from "three";
 import { Entity } from "../../../Entity";
 import { EntityComponent } from "../../../EntityComponent";
 
+/**
+ * An entity class
+ * 
+ * @class
+ * @extends Entity
+ */
 export class KinematicRotatingDrumEntity extends Entity {
+    /**
+   * Creates a new instance
+   * Initializes with default values for physics and appearance
+   */
   constructor() {
     super("KinematicRotatingDrum");
     this.type = "kinematicPosition";
@@ -19,16 +29,24 @@ export class KinematicRotatingDrumEntity extends Entity {
 }
 
 /**
- * Renders the 3D model.
+ * Component responsible for rendering the entity
  *
  * @component
- * @param {KinematicRotatingDrumEntity} instance - An entity from the Entity parent.
- * @param {KinematicRotatingDrumEntity} rigidBodyRef - Reference to the RapierRigidBody instance.
- * @returns {JSX.Element}
+ * @param  {KinematicRotatingDrumComponent} entity - Contains all the default props of the entity
+ * @returns {JSX.Element} The rendered 3D object
  */
 export const KinematicRotatingDrumComponent = EntityComponent(
   KinematicRotatingDrumEntity,
   (instance, rigidBodyRef) => {
+      /** 
+   * Renders the 3D model
+   * 
+   * @function
+   * @param {EntityComponent} EntityTemplate - A default entity class
+   * @param {Ground} instance - An entity from the Entity parent
+   * @param {RapierRigidBody} rigidBodyRef - Reference to the RapierRigidBody instance
+   * @param {THREE.Group} visualRef - Reference to the THREE.Group instance
+   */
     const ref = rigidBodyRef;
     const xAxis = useMemo(() => new THREE.Vector3(1, 0, 0), []);
     const quaternion = useMemo(() => new THREE.Quaternion(), []);

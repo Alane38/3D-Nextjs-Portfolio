@@ -7,6 +7,14 @@ import { Entity } from "./Entity";
 import { useEntityStore } from "./entity.store";
 import { EntityManager } from "./EntityManager";
 
+/**
+ * Higher-order component to render and manage a 3D entity with physics support.
+ *
+ * @param EntityTemplate - Constructor of the Entity subclass to instantiate.
+ * @param onRender - Function that renders the JSX content based on the entity and refs.
+ * @param useEditTool - Whether to enable edit interactions (default: true).
+ * @returns A memoized React component bound to the entity instance.
+ */
 export function EntityComponent<InstanceType extends Entity>(
   EntityTemplate: new () => InstanceType,
   onRender: (
@@ -16,6 +24,14 @@ export function EntityComponent<InstanceType extends Entity>(
   ) => JSX.Element,
   useEditTool = true,
 ) {
+  /**
+   * Memoized React component bound to the entity instance.
+   * 
+   * @component
+   * @param  {InstanceType} entity - Contains all the default props of the entity
+   * @param  {Partial<InstanceType>} props - Additional props
+   * @returns {JSX.Element} The rendered 3D object
+   */
   const WrappedEntityComponent = React.memo(
     ({
       entity,

@@ -11,6 +11,7 @@ export class Object extends Entity {
     this.type = "fixed";
     this.colliders = "trimesh";
   }
+
   renderComponent() {
     return <ObjectComponent entity={this} />;
   }

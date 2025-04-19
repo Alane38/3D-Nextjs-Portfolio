@@ -9,7 +9,17 @@ import * as THREE from "three";
 import { Entity } from "../../../Entity";
 import { EntityComponent } from "../../../EntityComponent";
 
+/**
+ * An entity class
+ * 
+ * @class
+ * @extends Entity
+ */
 export class FPPushtoRotate extends Entity {
+    /**
+   * Creates a new instance
+   * Initializes with default values for physics and appearance
+   */
   constructor() {
     super("FPPushtoRotate");
     this.type = "dynamic";
@@ -23,16 +33,24 @@ export class FPPushtoRotate extends Entity {
 }
 
 /**
- * Renders the 3D model.
+ * Component responsible for rendering the entity
  *
  * @component
- * @param {FPPushtoRotate} instance - An entity from the Entity parent.
- * @param {FPPushtoRotate} rigidBodyRef - Reference to the RapierRigidBody instance.
- * @returns {JSX.Element}
+ * @param  {FPPushtoRotateComponent} entity - Contains all the default props of the entity
+ * @returns {JSX.Element} The rendered 3D object
  */
 export const FPPushtoRotateComponent = EntityComponent(
   FPPushtoRotate,
   (instance, rigidBodyRef) => {
+    /**
+     * Renders the 3D model
+     *
+     * @function
+     * @param {EntityComponent} EntityTemplate - A default entity class
+     * @param {Ground} instance - An entity from the Entity parent
+     * @param {RapierRigidBody} rigidBodyRef - Reference to the RapierRigidBody instance
+     * @param {THREE.Group} visualRef - Reference to the THREE.Group instance
+     */
     const { world, rapier } = useRapier();
     const ref = rigidBodyRef;
 

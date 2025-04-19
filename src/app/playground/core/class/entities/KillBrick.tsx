@@ -5,13 +5,20 @@ import { Entity } from "../Entity";
 import { EntityComponent } from "../EntityComponent";
 import { RapierRigidBody } from "@react-three/rapier";
 
-type KillBrickProps = {
-  instance: Entity;
-  rigidBodyRef: RefObject<RapierRigidBody | null>;
-};
-
+/**
+ * An entity class
+ *
+ * @class
+ * @extends Entity
+ */
 export class KillBrick extends Entity {
+  /** Color */
   color: string;
+
+  /**
+   * Creates a new instance
+   * Initializes with default values for physics and appearance
+   */
   constructor() {
     super("KillBrick");
     this.type = "dynamic";
@@ -26,11 +33,21 @@ export class KillBrick extends Entity {
   }
 }
 
-// Composant stable contenant vos hooks
-const KillBrickRenderer   = ({ instance, rigidBodyRef }: KillBrickProps) => {
+/**
+ * KillBrick renderer 
+ *
+ * @component
+ * @param {KillBrickRenderer} instance - An entity from the Entity parent
+ */
+const KillBrickRenderer = ({
+  instance,
+  rigidBodyRef,
+}: {
+  instance: Entity;
+  rigidBodyRef: RefObject<RapierRigidBody | null>;
+}) => {
   const [color, setColor] = useState(instance.color);
-  
-  // Assigner onCollisionEnter à l'instance
+
   instance.onCollisionEnter = ({ other }) => {
     if (other.rigidBodyObject?.name === "Player") {
       setColor("green");
@@ -52,10 +69,27 @@ const KillBrickRenderer   = ({ instance, rigidBodyRef }: KillBrickProps) => {
   );
 };
 
-// Utilisez ce composant stable dans EntityComponent
+/**
+ * Component responsible for rendering the entity
+ *
+ * @component
+ * @param  {KillBrickComponent} entity - Contains all the default props of the entity
+ * @returns {JSX.Element} The rendered 3D object
+ */
 export const KillBrickComponent = EntityComponent(
   KillBrick,
   (instance, rigidBodyRef) => {
-    return <KillBrickRenderer  instance={instance} rigidBodyRef={rigidBodyRef} />;
+    /**
+     * Renders the 3D model
+     *
+     * @function
+     * @param {EntityComponent} EntityTemplate - A default entity class
+     * @param {Ground} instance - An entity from the Entity parent
+     * @param {RapierRigidBody} rigidBodyRef - Reference to the RapierRigidBody instance
+     * @param {THREE.Group} visualRef - Reference to the THREE.Group instance
+     */
+    return (
+      <KillBrickRenderer instance={instance} rigidBodyRef={rigidBodyRef} />
+    );
   },
 );

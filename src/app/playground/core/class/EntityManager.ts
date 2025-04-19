@@ -40,14 +40,14 @@ export class EntityManager {
 
   // Generate an ID and add the entity to the list
   static generateIdToEntity(entity: Entity): number {
-    // Si l'entité a déjà un ID, le retourner simplement
+    // If entity has an ID, use it
     if (entity.entityId !== undefined) {
-      // Vérifiez si l'entité existe déjà dans le gestionnaire
+      // Check if the entity is in the list
       const existingEntity = EntityManager.getInstance().entities.find(
         (e) => e.entityId === entity.entityId,
       );
 
-      // Si elle n'existe pas, l'ajouter
+      // If entity doesn't exist in EntityManager, add it
       if (!existingEntity) {
         EntityManager.addEntity(entity);
       }
@@ -55,7 +55,7 @@ export class EntityManager {
       return entity.entityId;
     }
 
-    // Si l'entité n'a pas d'ID, générer un nouvel ID unique
+    // Generate an ID if the entity don't have.
     const entityManager = EntityManager.getInstance();
     do {
       entity.entityId = EntityManager.nextId++;
@@ -63,12 +63,12 @@ export class EntityManager {
       entityManager.entities.some((e) => e.entityId === entity.entityId)
     );
 
-    // Ajouter l'entité à la liste
+    // Add the entity to the list
     EntityManager.addEntity(entity);
 
     return entity.entityId;
   }
-  
+
   /** Management functions */
   // Get all entities
   static getAllEntities(): Entity[] {

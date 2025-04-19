@@ -4,40 +4,52 @@ import { modelPath } from "src/constants/default";
 import { Entity } from "../Entity";
 import { EntityComponent } from "../EntityComponent";
 
+/**
+ * An entity class
+ * 
+ * @class
+ * @extends Entity
+ */
 export class RestaurantSign extends Entity {
-      /**
-   * Constructs a Killbrick entity.
-   * @param {string} [path=modelPath + "NeonDoor.glb"] - Path to the .glb 3D model file.
+  /**
+   * Creates a new instance
+   * Initializes with default 3D model and scale
    */
   constructor(path: string = modelPath + "RestaurantSign.glb") {
     super("RestaurantSign");
-    // Modify the default settings(Entity) :
     this.path = path;
     this.scale = 0.3;
   }
+
   renderComponent() {
     return <RestaurantSignComponent entity={this} />;
   }
 }
 
 /**
- * Renders the 3D model.
+ * Component responsible for rendering the entity
  *
  * @component
- * @param {RestaurantSign} instance - An entity from the Entity parent.
- * @param {RestaurantSign} rigidBodyRef - Reference to the RapierRigidBody instance.
- * @returns {JSX.Element}
+ * @param  {RestaurantSignComponent} entity - Contains all the default props of the entity
+ * @returns {JSX.Element} The rendered 3D object
  */
 export const RestaurantSignComponent = EntityComponent(
   RestaurantSign,
-  (instance, rigidBodyRef) => {
+  (instance) => {
+    /** 
+     * Renders the 3D model
+     * 
+     * @function
+     * @param {EntityComponent} EntityTemplate - A default entity class
+     * @param {RestaurantSign} instance - An entity from the Entity parent
+     * @param {RapierRigidBody} rigidBodyRef - Reference to the RapierRigidBody instance
+     */
     const videoTexture = useVideoTexture(
       "/assets/videos/newalfox-compressed.webm",
     );
 
     return (
       <group>
-        {/* Model */}
         <ModelLoader path={instance.path} />
         <mesh position={[-1.14, 7.3, -0.2]}>
           <boxGeometry args={[0.5, 0.4, 0.21]} />
