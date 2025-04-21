@@ -9,11 +9,11 @@ import { useEntityStore } from "./core/class/entity.store";
 import Inventory from "./core/client/inventory/Inventory";
 import { PlacementManager } from "./core/PlacementManager";
 import { GameCanvas } from "./GameCanvas";
-import { FileWorld } from "./world/FileWorld";
+import { MainWorld } from "./world/MainWorld";
 
 export function Game() {
   // Store initial entities
-  const setEntities  = useEntityStore((state) => state.setEntities);
+  const setEntities = useEntityStore((state) => state.setEntities);
 
   // Load the world, and load the entities.
   useEffect(() => {
@@ -54,8 +54,8 @@ export function Game() {
       <KeyboardControls map={globalControls}>
         <GameCanvas>
           {/* Put the world scene here */}
-          {/* <MainWorld /> */}
-          <FileWorld />
+          <MainWorld />
+          {/* <FileWorld /> */}
           {/* <TestWorld /> */}
           {/* <JumpGame /> */}
         </GameCanvas>

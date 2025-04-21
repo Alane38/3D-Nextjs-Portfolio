@@ -1,10 +1,11 @@
 import { Box } from "@react-three/drei";
 import { useFrame } from "@react-three/fiber";
-import { quat } from "@react-three/rapier";
+import { quat, RapierRigidBody } from "@react-three/rapier";
 import { modelPath } from "src/constants/default";
 import { Quaternion, Vector3 } from "three";
 import { Entity } from "../Entity";
 import { EntityComponent } from "../EntityComponent";
+import { RefObject } from "react";
 
 /**
  * An entity class
@@ -36,22 +37,7 @@ export class Spinner extends Entity {
   }
 }
 
-/**
- * Component responsible for rendering the entity
- *
- * @component
- * @param  {SpinnerComponent} entity - Contains all the default props of the entity
- * @returns {JSX.Element} The rendered 3D object
- */
-export const SpinnerComponent = EntityComponent(Spinner, (instance, rigidBodyRef) => {
-  /** 
-   * Renders the 3D model and handles spinning
-   * 
-   * @function
-   * @param {EntityComponent} EntityTemplate - A default entity class
-   * @param {Spinner} instance - An entity from the Entity parent
-   * @param {RapierRigidBody} rigidBodyRef - Reference to the RapierRigidBody instance
-   */
+const SpinnerRenderer = ({ instance, rigidBodyRef }: { instance: Spinner; rigidBodyRef: RefObject<RapierRigidBody | null> }) => {
   useFrame((_state, delta) => {
     if (!rigidBodyRef.current?.rotation()) return;
 
@@ -70,4 +56,16 @@ export const SpinnerComponent = EntityComponent(Spinner, (instance, rigidBodyRef
       <meshStandardMaterial color={instance.color} />
     </group>
   );
+};
+
+/**
+ * Component responsible for rendering the entity
+ *
+ * @component
+ * @param  {SpinnerComponent} entity - Contains all the default props of the entity
+ * @returns {JSX.Element} The rendered 3D object
+ */
+export const SpinnerComponent = EntityComponent(Spinner, (instance, rigidBodyRef) => {
+  return <SpinnerRenderer instance={instance} rigidBodyRef={rigidBodyRef} />;
 });
+

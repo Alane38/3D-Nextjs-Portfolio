@@ -1,8 +1,8 @@
 import type { RayColliderHit } from "@dimforge/rapier3d-compat";
 import { Text } from "@react-three/drei";
 import { useFrame } from "@react-three/fiber";
-import { CuboidCollider, useRapier } from "@react-three/rapier";
-import { useEffect, useMemo } from "react";
+import { CuboidCollider, RapierRigidBody, useRapier } from "@react-three/rapier";
+import { RefObject, useEffect, useMemo } from "react";
 import * as THREE from "three";
 import { Vector3 } from "three";
 import { Entity } from "../../../Entity";
@@ -31,26 +31,14 @@ export class FPPushtoMove extends Entity {
   }
 }
 
-/**
- * Component responsible for rendering the entity
- *
- * @component
- * @param  {FPPushtoMoveComponent} entity - Contains all the default props of the entity
- * @returns {JSX.Element} The rendered 3D object
- */
-export const FPPushtoMoveComponent = EntityComponent(
-  FPPushtoMove,
-  (instance, rigidBodyRef) => {
-      /** 
-   * Renders the 3D model
-   * 
-   * @function
-   * @param {EntityComponent} EntityTemplate - A default entity class
-   * @param {Ground} instance - An entity from the Entity parent
-   * @param {RapierRigidBody} rigidBodyRef - Reference to the RapierRigidBody instance
-   * @param {THREE.Group} visualRef - Reference to the THREE.Group instance
-   */
-    const { world, rapier } = useRapier();
+const FPPushtoMoveRenderer = ({
+  instance,
+  rigidBodyRef,
+}: {
+  instance: Entity;
+  rigidBodyRef: RefObject<RapierRigidBody | null>;
+}) => {
+  const { world, rapier } = useRapier();
     const ref = rigidBodyRef;
 
     const rayLength = 0.8;
@@ -111,6 +99,32 @@ export const FPPushtoMoveComponent = EntityComponent(
           <meshStandardMaterial color="lightsteelblue" />
         </mesh>
       </>
+    );
+
+}
+
+/**
+ * Component responsible for rendering the entity
+ *
+ * @component
+ * @param  {FPPushtoMoveComponent} entity - Contains all the default props of the entity
+ * @returns {JSX.Element} The rendered 3D object
+ */
+export const FPPushtoMoveComponent = EntityComponent(
+  FPPushtoMove,
+  (instance, rigidBodyRef) => {
+      /** 
+   * Renders the 3D model
+   * 
+   * @function
+   * @param {EntityComponent} EntityTemplate - A default entity class
+   * @param {Ground} instance - An entity from the Entity parent
+   * @param {RapierRigidBody} rigidBodyRef - Reference to the RapierRigidBody instance
+   * @param {THREE.Group} visualRef - Reference to the THREE.Group instance
+   */
+
+    return (
+      <FPPushtoMoveRenderer instance={instance} rigidBodyRef={rigidBodyRef} />
     );
   },
 );

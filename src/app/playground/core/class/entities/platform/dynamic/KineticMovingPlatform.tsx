@@ -3,6 +3,8 @@ import { useFrame } from "@react-three/fiber";
 import { Vector3 } from "three";
 import { Entity } from "../../../Entity";
 import { EntityComponent } from "../../../EntityComponent";
+import { RapierRigidBody } from "@react-three/rapier";
+import { RefObject } from "react";
 
 /**
  * An entity class
@@ -26,6 +28,41 @@ export class KinematicMovingPlatformEntity extends Entity {
   }
 }
 
+const KinematicMovingPlatformRenderer = ({
+  instance,
+  rigidBodyRef,
+}: {
+  instance: Entity;
+  rigidBodyRef: RefObject<RapierRigidBody | null>;
+}) => {
+  useFrame((state) => {
+    const time = state.clock.elapsedTime;
+    rigidBodyRef.current?.setNextKinematicTranslation({
+      x: 5 * Math.sin(time / 2) + instance.position.x,
+      y: instance.position.y,
+      z: instance.position.z,
+    });
+  });
+
+  return (
+    <>
+      <Text
+        scale={0.5}
+        color="black"
+        maxWidth={10}
+        textAlign="center"
+        position={[0, 2.5, 0]}
+      >
+        Kinematic Moving Platform
+      </Text>
+      <mesh receiveShadow>
+        <boxGeometry args={[5, 0.2, 5]} />
+        <meshStandardMaterial color="white" />
+      </mesh>
+    </>
+  );
+}
+
 /**
  * Component responsible for rendering the entity
  *
@@ -45,31 +82,9 @@ export const KinematicMovingPlatformComponent = EntityComponent(
    * @param {RapierRigidBody} rigidBodyRef - Reference to the RapierRigidBody instance
    * @param {THREE.Group} visualRef - Reference to the THREE.Group instance
    */
-    useFrame((state) => {
-      const time = state.clock.elapsedTime;
-      rigidBodyRef.current?.setNextKinematicTranslation({
-        x: 5 * Math.sin(time / 2) + instance.position.x,
-        y: instance.position.y,
-        z: instance.position.z,
-      });
-    });
 
     return (
-      <>
-        <Text
-          scale={0.5}
-          color="black"
-          maxWidth={10}
-          textAlign="center"
-          position={[0, 2.5, 0]}
-        >
-          Kinematic Moving Platform
-        </Text>
-        <mesh receiveShadow>
-          <boxGeometry args={[5, 0.2, 5]} />
-          <meshStandardMaterial color="white" />
-        </mesh>
-      </>
+      <KinematicMovingPlatformRenderer instance={instance} rigidBodyRef={rigidBodyRef} />
     );
   },
 );
