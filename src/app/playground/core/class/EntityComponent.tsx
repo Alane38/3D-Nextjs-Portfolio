@@ -7,14 +7,6 @@ import { Entity } from "./Entity";
 import { useEntityStore } from "./entity.store";
 import { EntityManager } from "./EntityManager";
 
-/**
- * Higher-order component to render and manage a 3D entity with physics support.
- *
- * @param EntityTemplate - Constructor of the Entity subclass to instantiate.
- * @param onRender - Function that renders the JSX content based on the entity and refs.
- * @param useEditTool - Whether to enable edit interactions (default: true).
- * @returns A memoized React component bound to the entity instance.
- */
 export function EntityComponent<InstanceType extends Entity>(
   EntityTemplate: new () => InstanceType,
   onRender: (
@@ -24,26 +16,16 @@ export function EntityComponent<InstanceType extends Entity>(
   ) => JSX.Element,
   useEditTool = true,
 ) {
-  /**
-   * Memoized React component bound to the entity instance.
-   *
-   * @component
-   * @param  {InstanceType} entity - Contains all the default props of the entity
-   * @param  {Partial<InstanceType>} props - Additional props
-   * @returns {JSX.Element} The rendered 3D object
-   */
   const WrappedEntityComponent = React.memo(
     ({
       entity,
       ...props
     }: { entity?: InstanceType } & Partial<InstanceType>) => {
-      // Refs
       const bodyRef = useRef<RapierRigidBody>(null);
       const visualRef = useRef<Group>(null);
       const pendingUpdate = useRef<InstanceType | null>(null);
       const lastUpdateTimeRef = useRef<number>(0);
 
-      // Edit tool
       const {
         setPosition,
         setSelectedEntity,
@@ -51,19 +33,12 @@ export function EntityComponent<InstanceType extends Entity>(
         setSelectedVisual,
       } = useEditToolStore();
 
-      // Initialization
       const { updateEntity } = useEntityStore();
-
       const instanceRef = useRef<InstanceType | null>(
         entity ?? new EntityTemplate(),
       );
 
       const currentInstance = instanceRef.current;
-
-            // Save original event handlers before overriding
-      const originalHandlersRef = useRef({
-        onCollisionEnter: currentInstance?.onCollisionEnter,
-      });
 
       useEffect(() => {
         if (!currentInstance) return;
@@ -74,97 +49,81 @@ export function EntityComponent<InstanceType extends Entity>(
           );
         }
 
-        // Save original handlers
-        const originalHandlers = {
-          onCollisionEnter: currentInstance.onCollisionEnter,
-        };
-        originalHandlersRef.current = originalHandlers;
-
         if (props) {
           Object.assign(currentInstance, props);
         }
-
-        // Restore handlers
-        if (originalHandlers.onCollisionEnter) {
-          currentInstance.onCollisionEnter = originalHandlers.onCollisionEnter;
-        }
       }, []);
 
-      // Update the entity periodically
-      useEffect(() => {
-        if (!currentInstance) return;
+      const UpdateEntity = () => {
+        useEffect(() => {
+          if (!currentInstance) return;
 
-        const id = setInterval(() => {
-          if (pendingUpdate.current) {
-            updateEntity((e) => {
-              if (e.entityId === currentInstance.entityId) {
-                e.position = pendingUpdate.current!.position;
-                e.rotation = pendingUpdate.current!.rotation;
-                e.scale = pendingUpdate.current!.scale;
-              }
-              return e;
-            });
+          const id = setInterval(() => {
+            if (pendingUpdate.current) {
+              updateEntity((e) => {
+                if (e.entityId === currentInstance.entityId) {
+                  e.position = pendingUpdate.current!.position;
+                  e.rotation = pendingUpdate.current!.rotation;
+                  e.scale = pendingUpdate.current!.scale;
+                }
+                return e;
+              });
 
-            pendingUpdate.current = null;
+              pendingUpdate.current = null;
+            }
+          }, 5000);
+
+          return () => clearInterval(id);
+        }, []);
+
+        useFrame(() => {
+          if (!currentInstance) return;
+          const now = performance.now();
+          if (now - lastUpdateTimeRef.current >= 5000) {
+            if (!bodyRef.current || typeof bodyRef.current.translation !== "function" || !visualRef.current) return;
+
+            const pos = bodyRef.current.translation();
+            const rot = bodyRef.current.rotation();
+            const scale = visualRef.current.scale;
+
+            pendingUpdate.current = {
+              ...currentInstance,
+              position: new Vector3(pos.x, pos.y, pos.z),
+              rotation: new Euler(rot.x, rot.y, rot.z),
+              scale: [scale.x, scale.y, scale.z],
+            };
+
+            lastUpdateTimeRef.current = now;
           }
-        }, 5000);
+        });
 
-        return () => clearInterval(id);
-      }, []);
-
-      // Update the entity values from physics
-      useFrame(() => {
-        if (!currentInstance) return;
-        const now = performance.now();
-        if (now - lastUpdateTimeRef.current >= 5000) {
-          // If the bodyRef or the visualRef is not defined, return (end loop)
-          if (
-            !bodyRef.current ||
-            typeof bodyRef.current.translation !== "function" ||
-            !visualRef.current
-          )
-            return;
-
-          // Get bodyRef values
-          const pos = bodyRef.current.translation();
-          const rot = bodyRef.current.rotation();
-          const scale = visualRef.current.scale;
-
-          // Update pendingUpdate
-          pendingUpdate.current = {
-            ...currentInstance,
-            position: new Vector3(pos.x, pos.y, pos.z),
-            rotation: new Euler(rot.x, rot.y, rot.z),
-            scale: [scale.x, scale.y, scale.z],
-          };
-
-          // Reset lastUpdateTime
-          lastUpdateTimeRef.current = now;
-        }
-      });
+        return null; 
+      };
 
       if (!currentInstance) return null;
 
       return (
-        <RigidBody
-          ref={bodyRef}
-          onPointerDown={(e: PointerEvent) => {
-            if (useEditTool) {
-              e.stopPropagation();
-              if (!bodyRef.current || !currentInstance || !visualRef.current)
-                return;
-              setSelectedEntity(currentInstance);
-              setSelectedGroup(bodyRef.current);
-              setSelectedVisual(visualRef.current);
-              setPosition(currentInstance.position);
-            }
-          }}
-          {...currentInstance}
-        >
-          <group ref={visualRef}>
-            {onRender(currentInstance, bodyRef, visualRef)}
-          </group>
-        </RigidBody>
+        <>
+          <UpdateEntity />
+          <RigidBody
+            ref={bodyRef}
+            onPointerDown={(e: PointerEvent) => {
+              if (useEditTool) {
+                e.stopPropagation();
+                if (!bodyRef.current || !currentInstance || !visualRef.current) return;
+                setSelectedEntity(currentInstance);
+                setSelectedGroup(bodyRef.current);
+                setSelectedVisual(visualRef.current);
+                setPosition(currentInstance.position);
+              }
+            }}
+            {...currentInstance}
+          >
+            <group ref={visualRef}>
+              {onRender(currentInstance, bodyRef, visualRef)}
+            </group>
+          </RigidBody>
+        </>
       );
     },
   );
