@@ -80,8 +80,6 @@ export const SpringExample = () => {
 
   return (
     <>
-      <RigidBody ref={floor} position={[0, 5, 0]} type="fixed" />
-
       <group>
         <BallSpring
           ref={floor}
