@@ -50,18 +50,28 @@ export const MoveToolStats = ({ active }: { active: boolean }) => {
 
   return (
     <>
-      <div className="fixed top-4 left-1/2 z-50 flex -translate-x-1/2 flex-col gap-2 font-mono text-xl text-white">
-        <p>
-          selected: {selectedEntity?.entityId}
-        </p>
-        <p>
-          Position: ({position.x.toFixed(2)}, {position.y.toFixed(2)},{" "}
-          {position.z.toFixed(2)})
-        </p>
-        <p>
-          new Vector3({position.x.toFixed(2)}, {position.y.toFixed(2)},{" "}
-          {position.z.toFixed(2)})
-        </p>
+      <div className="fixed bottom-4 z-50 flex flex-col gap-2 font-mono text-xl text-white">
+        <div className="flex flex-col items-start justify-center gap-4 px-4">
+          <div className="bg-primary flex gap-2 rounded-lg p-2 text-sm font-bold uppercase">
+            <p>selected</p>
+            <p className="text-orange-400">{selectedEntity?.entityId}</p>
+          </div>
+          <div className="bg-primary flex gap-2 rounded-lg p-2 text-sm font-bold uppercase">
+            <p>Position</p>
+            <p>
+              {" "}
+              ({position.x.toFixed(2)}, {position.y.toFixed(2)},{" "}
+              {position.z.toFixed(2)})
+            </p>
+          </div>
+          <div className="bg-primary flex gap-2 rounded-lg p-2 text-sm font-bold uppercase">
+            <p>new Vector3</p>
+            <p>
+              ({position.x.toFixed(2)}, {position.y.toFixed(2)},{" "}
+              {position.z.toFixed(2)})
+            </p>
+          </div>
+        </div>
       </div>
     </>
   );

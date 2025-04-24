@@ -26,7 +26,7 @@ export function EntityComponent<InstanceType extends Entity>(
 ) {
   /**
    * Memoized React component bound to the entity instance.
-   * 
+   *
    * @component
    * @param  {InstanceType} entity - Contains all the default props of the entity
    * @param  {Partial<InstanceType>} props - Additional props
@@ -54,32 +54,25 @@ export function EntityComponent<InstanceType extends Entity>(
       // Initialization
       const { updateEntity } = useEntityStore();
 
-      const instanceRef = useRef<InstanceType | null>(null);
-
-      useEffect(() => {
-        if (!instanceRef.current) {
-          instanceRef.current = entity ?? new EntityTemplate();
-
-          if (!instanceRef.current.entityId) {
-            instanceRef.current.entityId = EntityManager.generateIdToEntity(
-              instanceRef.current,
-            );
-          }
-        }
-      }, []); 
+      const instanceRef = useRef<InstanceType | null>(
+        entity ?? new EntityTemplate(),
+      );
 
       const currentInstance = instanceRef.current;
 
-      // Save original event handlers before overriding
+            // Save original event handlers before overriding
       const originalHandlersRef = useRef({
         onCollisionEnter: currentInstance?.onCollisionEnter,
       });
 
-      // Props
-      const stableProps = useRef(props);
-      // Apply props to the instance
       useEffect(() => {
         if (!currentInstance) return;
+
+        if (!currentInstance.entityId) {
+          currentInstance.entityId = EntityManager.generateIdToEntity(
+            currentInstance,
+          );
+        }
 
         // Save original handlers
         const originalHandlers = {
@@ -87,8 +80,8 @@ export function EntityComponent<InstanceType extends Entity>(
         };
         originalHandlersRef.current = originalHandlers;
 
-        if (stableProps) {
-          Object.assign(currentInstance, stableProps);
+        if (props) {
+          Object.assign(currentInstance, props);
         }
 
         // Restore handlers

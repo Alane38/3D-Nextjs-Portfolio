@@ -37,23 +37,9 @@ export function MainWorld() {
   // Store initialization
   const { entities } = useEntityStore();
 
-  /* INITIALIZATION */
-
-  // Ground Class
-  // const ground = new Ground();
-
-  /* Example of class integration.
-  const pathGround = new Ground();
-  pathGround.color = "white";
-  pathGround.scale = [5, (ground.scale as number) / 1.2, 1];
-  pathGround.position.set(0, ground.position.y + 0.01, 0); */
-
-  // useEffect(() => {
-  //   setTimeout(() => {
-  //     EntityManager.removeInstanceByEntityName("Diamond2");
-  //     console.log("Diamond2 removed");
-  //   }, 10000)
-  // }, [])
+  console.log("ENTITIESSS IMPORTED", entities?.map((entity, i) => (
+    <Fragment key={i}>{entity.renderComponent()}</Fragment>
+  )))
 
   return (
     <>
@@ -91,7 +77,7 @@ export function MainWorld() {
         <DiamondComponent position={new Vector3(16, 2, 10)} entity={new Diamond()} />
         <DiamondComponent position={new Vector3(14, 2, 10)} entity={new Diamond()} />
         <DiamondComponent position={new Vector3(10, 2, 10)} entity={new Diamond()} />
-        <ObjectComponent position={new Vector3(0, 1, 0)} entity={new Object()} />
+        <ObjectComponent position={new Vector3(0, 0.5, 0)} entity={new Object()} />
       </group>
       <group>
         {/* Entity Importations */}
