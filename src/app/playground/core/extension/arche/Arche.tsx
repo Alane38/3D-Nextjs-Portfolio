@@ -898,6 +898,7 @@ const ARCHE: ForwardRefRenderFunction<customRigidBody, ArcheProps> = (
 
   /** Stop character movement: used to stop the character movement when you stop press a key. */
   const resetAnimation = useGame((state) => state.reset);
+  // TODO: null pointer passed to rust
   const characterStopMove = () => {
     setTimeout(() => {
       characterRef.current.setLinvel({ x: 0, y: currentVel.y, z: 0 }, true);

@@ -1,5 +1,6 @@
-import { useProdEnv } from "@/hooks";
-import { useState } from "react";
+import { useEffect } from "react";
+import { Button } from "./ui/button";
+import { motion } from "framer-motion";
 
 export const Loading = ({
   progress,
@@ -8,40 +9,35 @@ export const Loading = ({
   progress: number;
   onSkip: () => void;
 }) => {
-  const productionMode = useProdEnv();
 
-  const [showSkip] = useState(false);
+  // Skip after 10 seconds
+  useEffect(() => {
+    const timer = setTimeout(() => {
+        onSkip();
+    }, 10000);
 
-  // useEffect(() => {
-  //   const timer = setTimeout(() => {
-  //     productionMode ? setShowSkip(true) : onSkip();
-  //   }, 2000);
-
-  //   return () => clearTimeout(timer);
-  // }, []);
+    return () => clearTimeout(timer);
+  }, []);
 
   return (
-    <div className="bg-opacity-80 fixed inset-0 z-50 flex items-center justify-center bg-black">
-      <div className="animate-gradient-x relative flex h-72 w-72 items-center justify-center rounded-full bg-gradient-to-r from-neutral-900 via-neutral-800 to-neutral-900 shadow-2xl">
-        <div className="absolute h-full w-full rounded-full bg-gray-800 opacity-60 blur-md" />
-        <div className="relative z-10 flex items-center justify-center">
-          {/* Loading spinner */}
-          <div className="animate-spin-slow h-32 w-32 animate-spin rounded-full border-8 border-t-8 border-neutral-600 border-t-transparent transition-all duration-300 ease-out"></div>
-          <div className="animate-fade-in absolute text-3xl font-bold text-white">
-            <p>{progress}%</p>
-          </div>
-        </div>
-      </div>
+    <div className="bg-popover-foreground absolute z-50 flex h-full w-full">
+      <div className="flex w-full flex-col items-center justify-end">
+      {/* Loading bar animation (if shown), works with progress value */}
+        <motion.div
+          className="bg-primary absolute bottom-0 left-0 z-60 h-2 max-w-full"
+          initial={{ width: 0 }}
+          animate={{ width: `${progress * 100}%` }}
+          transition={{ ease: "easeOut", duration: 0.2 }}
+        />
 
-      {/* Skip button (if shown) */}
-      {showSkip && productionMode && (
-        <button
+        {/* Skip button */}
+        <Button
           onClick={onSkip}
-          className="absolute bottom-10 rounded-lg bg-white px-6 py-3 font-semibold text-black shadow-lg transition-all duration-300 hover:bg-gray-300"
+          className="absolute bottom-0 h-12 w-full cursor-pointer rounded-none bg-black/50 px-6 py-3 font-semibold text-white transition-all duration-300 hover:bg-black/80"
         >
-          Skip
-        </button>
-      )}
+          (skip)
+        </Button>
+      </div>
     </div>
   );
 };
