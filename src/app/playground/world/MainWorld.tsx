@@ -64,6 +64,7 @@ export function MainWorld() {
         position={[0, 20, 0]}
         defaultPlayer
       />
+      {/* TODO: collider of the entity appears desappears and appears during loading the game.*/}
       {/* Ground */}
       <GroundComponent entity={new Ground()}/>
       {/* Entity Importations */}
@@ -100,7 +101,7 @@ export function MainWorld() {
       </group>
       <group>
         {/* Platforms Events Examples */}
-        <FPPushtoMoveComponent position={new Vector3(15, 5, 15)} entity={new FPPushtoMove()} />
+        <FPPushtoMoveComponent position={new Vector3(30, 20, 0)} entity={new FPPushtoMove()} />
         <KinematicMovingPlatformComponent position={new Vector3(20, 5, 20)} entity={new KinematicMovingPlatformEntity()}/>
       </group>
       {/* OTHERS */}

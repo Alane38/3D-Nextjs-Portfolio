@@ -1,6 +1,5 @@
 import { useForwardedRef } from "@/lib/rapier/react-three-rapier/src/hooks/use-forwarded-ref";
 import { vectorArrayToVector3 } from "@/lib/rapier/react-three-rapier/src/utils/utils";
-import { Box } from "@react-three/drei";
 import {
   BallCollider,
   RapierRigidBody,

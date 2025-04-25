@@ -9,7 +9,7 @@ import { useEntityStore } from "./core/class/entity.store";
 import Inventory from "./core/client/inventory/Inventory";
 import { PlacementManager } from "./core/PlacementManager";
 import { GameCanvas } from "./GameCanvas";
-import { MainWorld } from "./world/MainWorld";
+import { FileWorld } from "./world/FileWorld";
 
 export function Game() {
   // Store initial entities
@@ -54,8 +54,8 @@ export function Game() {
       <KeyboardControls map={globalControls}>
         <GameCanvas>
           {/* Put the world scene here */}
-          <MainWorld />
-          {/* <FileWorld /> */}
+          {/* <MainWorld /> */}
+          <FileWorld />
           {/* <TestWorld /> */}
           {/* <JumpGame /> */}
         </GameCanvas>

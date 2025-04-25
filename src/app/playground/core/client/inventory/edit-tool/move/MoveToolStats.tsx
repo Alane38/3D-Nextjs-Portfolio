@@ -48,6 +48,8 @@ export const MoveToolStats = ({ active }: { active: boolean }) => {
 
   if (!active) return null;
 
+  // TODO: position.x is undefined 
+
   return (
     <>
       <div className="fixed bottom-4 z-50 flex flex-col gap-2 font-mono text-xl text-white">

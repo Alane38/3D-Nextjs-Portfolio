@@ -102,6 +102,7 @@ export class Entity {
       entityName: this.entityName,
       type: this.type,
       path: this.path,
+      // TODO: this.position.toArray() is not a function
       position: this.position.toArray(),
       rotation: this.rotation.toArray().slice(0, 3),
       scale: Array.isArray(this.scale)
