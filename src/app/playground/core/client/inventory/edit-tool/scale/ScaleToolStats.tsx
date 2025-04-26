@@ -24,13 +24,13 @@ export const ScaleToolStats = ({ active }: { active: boolean }) => {
               onClick={() =>
                 setScaleMode(scaleMode === "free" ? "uniform" : "free")
               }
-              className="uppercase"
+              className="uppercase bg-popover-foreground"
             >
               Mode {scaleMode}
             </Button>
           </div>
 
-          <div className="bg-primary flex gap-2 rounded-lg p-2 text-sm font-bold uppercase">
+          <div className="bg-popover-foreground flex gap-2 rounded-lg p-2 text-sm font-bold uppercase">
             <p>Scale</p>
             <p>
               {scale.x.toFixed(2)} x {scale.y.toFixed(2)} x{" "}

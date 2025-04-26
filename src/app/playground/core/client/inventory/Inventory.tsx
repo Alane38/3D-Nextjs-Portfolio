@@ -136,7 +136,7 @@ return (
               <DropdownMenuTrigger asChild>
                 <Button
                   variant="default"
-                  className="h-11 w-12 rounded-lg hover:scale-105"
+                  className="bg-popover-foreground h-11 w-12 rounded-lg hover:scale-105"
                 >
                   <Globe />
                 </Button>
@@ -146,7 +146,7 @@ return (
                   <Button
                     variant="default"
                     onClick={handleSave}
-                    className="h9 w-36 cursor-pointer text-center"
+                    className="bg-popover-foreground h9 w-36 cursor-pointer text-center"
                   >
                     💾 Snapshot
                   </Button>
@@ -173,7 +173,7 @@ return (
                   />
                   <Label
                     htmlFor="file-input"
-                    className="bg-primary text-primary-foreground hover:bg-primary/90 focus-visible:border-ring focus-visible:ring-ring/50 aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive inline-flex h-9 w-36 shrink-0 cursor-pointer items-center justify-center gap-2 rounded-md text-center text-sm font-medium whitespace-nowrap shadow-xs transition-all outline-none focus-visible:ring-[3px] disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4"
+                    className="bg-popover-foreground text-primary-foreground hover:bg-popover-foreground/90 focus-visible:border-ring focus-visible:ring-ring/50 aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive inline-flex h-9 w-36 shrink-0 cursor-pointer items-center justify-center gap-2 rounded-md text-center text-sm font-medium whitespace-nowrap shadow-xs transition-all outline-none focus-visible:ring-[3px] disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4"
                   >
                     📂 Load world
                   </Label>
@@ -181,7 +181,7 @@ return (
                 <DropdownMenuItem>
                   <Button
                     variant="default"
-                    className="h9 w-36 cursor-pointer text-center"
+                    className="bg-popover-foreground h9 w-36 cursor-pointer text-center"
                     onClick={() => {
                       // if (!allRigidBodiesMounted) {
                       //   console.warn("⚠️ Some RigidBody are not mounted yet. Cannot save.");
@@ -213,7 +213,7 @@ return (
                 <div
                   key={index}
                   onClick={() => handleItemClick(index)}
-                  className="group bg-primary hover:bg-primary/90 relative h-11 w-12 transform cursor-pointer rounded-lg p-1 transition duration-300 ease-in-out hover:scale-105"
+                  className="group bg-popover-foreground hover:bg-popover-foreground/90 relative h-11 w-12 transform cursor-pointer rounded-lg p-1 transition duration-300 ease-in-out hover:scale-105"
                 >
                   <div className="absolute inset-0 flex items-center justify-center">
                     {typeof item.image === "string" ? (
