@@ -228,7 +228,7 @@ return (
                       (() => {
                         const IconComponent = item.image;
                         return (
-                          <IconComponent className="h-6 w-6 text-sky-400" />
+                          <IconComponent className="h-6 w-6 text-white" />
                         );
                       })()
                     )}
