@@ -6,6 +6,7 @@ import { useEditToolStore } from "../client/inventory/edit-tool/store/useEditToo
 import { Entity } from "./Entity";
 import { useEntityStore } from "./entity.store";
 import { EntityManager } from "./EntityManager";
+import { useWorldRigidBody } from "@/hooks/useWorldRigidBody";
 
 export function EntityComponent<InstanceType extends Entity>(
   EntityTemplate: new () => InstanceType,
@@ -18,13 +19,15 @@ export function EntityComponent<InstanceType extends Entity>(
 ) {
   const WrappedEntityComponent = React.memo(
     ({
-      entity,
+      entity, 
       ...props
     }: { entity?: InstanceType } & Partial<InstanceType>) => {
       const bodyRef = useRef<RapierRigidBody>(null);
       const visualRef = useRef<Group>(null);
       const pendingUpdate = useRef<InstanceType | null>(null);
       const lastUpdateTimeRef = useRef<number>(0);
+      
+      const rigidBody = useWorldRigidBody(bodyRef);
 
       const {
         setPosition,
@@ -76,14 +79,15 @@ export function EntityComponent<InstanceType extends Entity>(
           return () => clearInterval(id);
         }, []);
 
+
         useFrame(() => {
-          if (!currentInstance) return;
+          if (!currentInstance || !rigidBody) return;
           const now = performance.now();
           if (now - lastUpdateTimeRef.current >= 5000) {
-            if (!bodyRef.current || typeof bodyRef.current.translation !== "function" || !visualRef.current) return;
+            if (!rigidBody || typeof rigidBody.translation !== "function" || !visualRef.current) return;
 
-            const pos = bodyRef.current.translation();
-            const rot = bodyRef.current.rotation();
+            const pos = rigidBody.translation();
+            const rot = rigidBody.rotation();
             const scale = visualRef.current.scale;
 
             pendingUpdate.current = {
@@ -110,9 +114,9 @@ export function EntityComponent<InstanceType extends Entity>(
             onPointerDown={(e: PointerEvent) => {
               if (useEditTool) {
                 e.stopPropagation();
-                if (!bodyRef.current || !currentInstance || !visualRef.current) return;
+                if (!rigidBody || !currentInstance || !visualRef.current) return;
                 setSelectedEntity(currentInstance);
-                setSelectedGroup(bodyRef.current);
+                setSelectedGroup(rigidBody);
                 setSelectedVisual(visualRef.current);
                 setPosition(currentInstance.position);
               }

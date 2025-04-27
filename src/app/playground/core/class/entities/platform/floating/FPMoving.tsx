@@ -1,3 +1,4 @@
+import { useWorldRigidBody } from "@/hooks/useWorldRigidBody";
 import type { RayColliderHit } from "@dimforge/rapier3d-compat";
 import { Text } from "@react-three/drei";
 import { useFrame } from "@react-three/fiber";
@@ -9,12 +10,12 @@ import { EntityComponent } from "../../../EntityComponent";
 
 /**
  * An entity class
- * 
+ *
  * @class
  * @extends Entity
  */
 export class FPMoving extends Entity {
-    /**
+  /**
    * Creates a new instance
    * Initializes with default values for physics and appearance
    */
@@ -40,17 +41,16 @@ export class FPMoving extends Entity {
 export const FPMovingComponent = EntityComponent(
   FPMoving,
   (instance, rigidBodyRef) => {
-      /** 
-   * Renders the 3D model
-   * 
-   * @function
-   * @param {EntityComponent} EntityTemplate - A default entity class
-   * @param {Ground} instance - An entity from the Entity parent
-   * @param {RapierRigidBody} rigidBodyRef - Reference to the RapierRigidBody instance
-   * @param {THREE.Group} visualRef - Reference to the THREE.Group instance
-   */
+    /**
+     * Renders the 3D model
+     *
+     * @function
+     * @param {EntityComponent} EntityTemplate - A default entity class
+     * @param {Ground} instance - An entity from the Entity parent
+     * @param {RapierRigidBody} rigidBodyRef - Reference to the RapierRigidBody instance
+     * @param {THREE.Group} visualRef - Reference to the THREE.Group instance
+     */
     const { world, rapier } = useRapier();
-    const ref = rigidBodyRef;
 
     const rayLength = 0.8;
     const rayDir = { x: 0, y: -1, z: 0 };
@@ -66,41 +66,44 @@ export const FPMovingComponent = EntityComponent(
 
     const movingDir = useRef(1);
 
+    const rigidBody = useWorldRigidBody(rigidBodyRef);
+
     useEffect(() => {
-      ref.current?.setEnabledRotations(false, true, false, false);
-      ref.current?.setEnabledTranslations(true, true, false, false);
+      if (!rigidBody) return;
+      rigidBody.setEnabledRotations(false, true, false, false);
+      rigidBody.setEnabledTranslations(true, true, false, false);
     }, []);
 
     useFrame(() => {
-      if (!ref.current) return;
+      if (!rigidBody) return;
 
       // Update movement direction
-      const x = ref.current.translation().x;
+      const x = rigidBody.translation().x;
       if (x > 10) movingDir.current = -1;
       if (x < -5) movingDir.current = 1;
 
-      ref.current.setLinvel(
-        movingVel.set(movingDir.current * moveSpeed, ref.current.linvel().y, 0),
+      rigidBody.setLinvel(
+        movingVel.set(movingDir.current * moveSpeed, rigidBody.linvel().y, 0),
         false,
       );
 
       // Apply floating force
-      origin.set(x, ref.current.translation().y, ref.current.translation().z);
+      origin.set(x, rigidBody.translation().y, rigidBody.translation().z);
       const hit: RayColliderHit | null = world.castRay(
         ray,
         rayLength,
         false,
         undefined,
         undefined,
-        ref.current?.collider(0),
-        ref.current,
+        rigidBody?.collider(0),
+        rigidBody,
       );
 
       if (hit?.collider?.parent()) {
         const force =
           springK * (floatingDis - hit.timeOfImpact) -
-          ref.current.linvel().y * dampingC;
-        ref.current.applyImpulse(impulseVec.set(0, force, 0), true);
+          rigidBody.linvel().y * dampingC;
+          rigidBody.applyImpulse(impulseVec.set(0, force, 0), true);
       }
     });
 

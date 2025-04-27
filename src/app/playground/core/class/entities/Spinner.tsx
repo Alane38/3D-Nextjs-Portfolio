@@ -1,11 +1,12 @@
 import { Box } from "@react-three/drei";
 import { useFrame } from "@react-three/fiber";
-import { quat, RapierRigidBody } from "@react-three/rapier";
+import { quat, RapierRigidBody, useRapier } from "@react-three/rapier";
 import { modelPath } from "src/constants/default";
 import { Quaternion, Vector3 } from "three";
 import { Entity } from "../Entity";
 import { EntityComponent } from "../EntityComponent";
 import { RefObject } from "react";
+import { useWorldRigidBody } from "@/hooks/useWorldRigidBody";
 
 /**
  * An entity class
@@ -38,16 +39,17 @@ export class Spinner extends Entity {
 }
 
 const SpinnerRenderer = ({ instance, rigidBodyRef }: { instance: Spinner; rigidBodyRef: RefObject<RapierRigidBody | null> }) => {
+  const rigidBody = useWorldRigidBody(rigidBodyRef);
   useFrame((_state, delta) => {
-    if (!rigidBodyRef.current?.rotation()) return;
-
-    const curRotation = quat(rigidBodyRef.current.rotation());
+    if (!rigidBody) return;
+    
+    const curRotation = quat(rigidBody.rotation());
     const incrementRotation = new Quaternion().setFromAxisAngle(
       new Vector3(0, 1, 0),
       delta * instance.speed,
     );
     curRotation.multiply(incrementRotation);
-    rigidBodyRef.current.setNextKinematicRotation(curRotation);
+    rigidBody.setNextKinematicRotation(curRotation);
   });
 
   return (

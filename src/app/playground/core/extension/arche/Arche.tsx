@@ -30,89 +30,91 @@ import { ArcheProps, CharacterState, customRigidBody } from "./types/Arche";
 import { getObjectDirection } from "./utils/getObjectDirection";
 import { InsideKeyboardControls } from "./utils/insideKeyboardControls";
 import { LockCamera } from "./utils/LockCamera";
+import { useWorldRigidBody } from "@/hooks/useWorldRigidBody";
 
 /**
- * ARCHE Component
- * 
+ * ARCHE - Advanced React Character Handling Engine
+ *
+ *
  * @param {React.ReactNode} children - React children rendered inside the ARCHE component.
- * 
+ *
  * @param {boolean} defaultPlayer - If true, marks this entity as the default player.
- * 
+ *
  * @param {number} hitboxHeight - Height of the collider hitbox.
  * @param {number} hitboxWidth - Width of the collider hitbox.
  * @param {number} hitboxLenght - Length of the collider hitbox. (Note: "Lenght" might be a typo for "Length")
  * @param {number} hitboxRadius - Radius of the collider hitbox.
- * 
+ *
  * @param {boolean} floatMode - Enables floating behavior with spring physics.
  * @param {number} floatHeight - Height above the ground to float.
  * @param {number} floatingDis - Total floating distance (hitboxHeight + floatHeight).
  * @param {number} springK - Spring constant used when floatMode is enabled.
  * @param {number} dampingC - Damping constant for reducing spring oscillation.
- * 
+ *
  * @param {number} characterInitDir - Initial direction of the character in radians.
- * 
+ *
  * @param {boolean} enableControl - Enables or disables input controls.
- * 
+ *
  * @param {boolean} enableFollowCam - Enables or disables follow camera.
  * @param {Vector3 | null} enableFollowCamPos - Initial position of the follow camera.
  * @param {Vector3 | null} enableFollowCamTarget - Initial target of the follow camera.
- * 
+ *
  * @param {number} camInitDis - Initial distance of the camera from the target.
  * @param {number} camMaxDis - Maximum allowed distance of the camera.
  * @param {number} camMinDis - Minimum allowed distance of the camera.
  * @param {number} camUpLimit - Upper vertical rotation limit (in radians).
  * @param {number} camLowLimit - Lower vertical rotation limit (in radians).
- * 
+ *
  * @param {{x: number, y: number}} camInitDir - Initial rotational direction of the camera.
  * @param {{x: number, y: number, z: number}} camTargetPos - The target position the camera follows.
- * 
+ *
  * @param {number} camMoveSpeed - Speed at which the camera moves.
  * @param {number} camZoomSpeed - Speed of the camera zoom.
- * 
+ *
  * @param {boolean} camCollision - Enables or disables camera collision.
  * @param {number} camCollisionOffset - Offset distance for collision checking.
  * @param {number} camCollisionSpeedMult - Speed multiplier when adjusting camera due to collision.
- * 
+ *
  * @param {number} controlCamRotMult - Rotation multiplier for camera control.
- * 
+ *
  * @param {number} camFollowMult - Follow interpolation multiplier for camera.
  * @param {number} camLerpMult - Lerp multiplier for smoother transitions.
- * 
+ *
  * @param {boolean} followLight - Enables or disables follow lighting.
  * @param {{x: number, y: number, z: number}} followLightPos - Position of the follow light.
- * 
+ *
  * @param {number} maxVelLim - Maximum velocity limit of the character.
- * 
+ *
  * @param {number} turnVelMultiplier - Multiplier for turn velocity.
  * @param {number} turnSpeed - Base turn speed of the character.
- * 
+ *
  * @param {number} sprintMult - Multiplier applied to movement velocity when sprinting.
- * 
+ *
  * @param {number} jumpVel - Vertical velocity applied when jumping.
  * @param {number} jumpForceToGroundMult - Force applied to ground when jumping.
  * @param {number} slopJumpMult - Jump multiplier when on a slope.
  * @param {number} sprintJumpMult - Jump multiplier while sprinting.
- * 
+ *
  * @param {number} airDragMultiplier - Drag applied while airborne.
  * @param {number} dragDampingC - Air damping constant while airborne.
- * 
+ *
  * @param {number} accDeltaTime - Time factor used in acceleration interpolation.
  * @param {number} rejectVelMult - Multiplier to reject unwanted velocity.
  * @param {number} moveImpulsePointY - Y-axis point of impulse application.
- * 
+ *
  * @param {number} fallingGravityScale - Gravity scale when falling.
  * @param {number} fallingMaxVel - Maximum fall speed.
- * 
+ *
  * @param {boolean} autoFlip - Automatically flips character when changing direction.
  * @param {number} flipAngle - Angle threshold to trigger a flip.
- * 
+ *
  * @param {number} wakeUpDelay - Delay before re-enabling rigidbody after sleeping.
- * 
+ *
  * @param {{x: number, y: number, z: number}} rayOriginOffest - Offset of the ray used for floating detection.
  * @param {number} rayHitForgiveness - Allowed error margin before ray detects ground.
  * @param {number} rayLength - Length of the float detection ray.
  * @param {{x: number, y: number, z: number}} rayDir - Direction of the float detection ray.
- * 
+ *
  * @param {boolean} showSlopeRayOrigin - Toggles visual debug for slope ray origin.
  * @param {number} slopeMaxAngle - Maximum slope angle the character can walk on (in radians).
  * @param {number} slopeRayOriginOffest - Offset of the ray used for slope detection.
@@ -120,17 +122,17 @@ import { LockCamera } from "./utils/LockCamera";
  * @param {{x: number, y: number, z: number}} slopeRayDir - Direction of the slope detection ray.
  * @param {number} slopeUpExtraForce - Additional force applied when going uphill.
  * @param {number} slopeDownExtraForce - Additional force applied when going downhill.
- * 
+ *
  * @param {boolean} autoBalance - Enables or disables automatic balance correction.
  * @param {number} autoBalanceSpringK - Spring constant for auto-balancing.
  * @param {number} autoBalanceDampingC - Damping constant for auto-balancing.
  * @param {number} autoBalanceSpringOnY - Spring value specifically for Y-axis.
  * @param {number} autoBalanceDampingOnY - Damping value specifically for Y-axis.
- * 
+ *
  * @param {boolean} animated - Enables or disables character animation.
- * 
+ *
  * @param {string | null} camMode - Choose camera/movement Mode : "PointToMove", "OnlyCamera", "ControlCamera"(default)
- * 
+ *
  * @param {Object} controllerKeys - Key bindings for controller input.
  * @param {number} controllerKeys.forward - Forward key.
  * @param {number} controllerKeys.back - Backward key.
@@ -141,12 +143,12 @@ import { LockCamera } from "./utils/LockCamera";
  * @param {number} controllerKeys.action2 - Second action button.
  * @param {number} controllerKeys.action3 - Third action button.
  * @param {number} controllerKeys.action4 - Fourth action button.
- * 
+ *
  * @param {[number, number]} bodySensorSize - Size of the body sensor for point-to-move input.
  * @param {{x: number, y: number, z: number}} bodySensorPosition - Position of the body sensor.
- * 
+ *
  * @param {boolean} infiniteJump - Enables infinite jumping if true(-> canJump is always true).
- * 
+ *
  * @returns {JSX.Element} The ARCHE character controller component.
  */
 const ARCHE: ForwardRefRenderFunction<customRigidBody, ArcheProps> = (
@@ -287,8 +289,11 @@ const ARCHE: ForwardRefRenderFunction<customRigidBody, ArcheProps> = (
   }: ArcheProps,
   ref,
 ) => {
+  // World setup
+  const { rapier, world } = useRapier();
+
   // //
-  const characterRef = useRef<customRigidBody>(null!);
+  const characterRef = useRef<customRigidBody>(null);
   const characterModelRef = useRef<THREE.Group>(null!);
   const characterModelIndicator = useMemo(() => new THREE.Object3D(), []);
   const defaultControllerKeys = {
@@ -302,6 +307,8 @@ const ARCHE: ForwardRefRenderFunction<customRigidBody, ArcheProps> = (
     action3: 1,
     action4: 0,
   };
+
+  const characterRigidBody = useWorldRigidBody(characterRef)
 
   /** Move and Camera mode */
   const setMoveToPoint = useGame((state) => state.setMoveToPoint);
@@ -359,9 +366,6 @@ const ARCHE: ForwardRefRenderFunction<customRigidBody, ArcheProps> = (
   const action2Animation = animated ? action2 : null;
   const action3Animation = animated ? action3 : null;
   const action4Animation = animated ? action4 : null;
-
-  // World setup
-  const { rapier, world } = useRapier();
 
   // Check if controls exists
   const inKeyboardControls = InsideKeyboardControls();
@@ -667,60 +671,64 @@ const ARCHE: ForwardRefRenderFunction<customRigidBody, ArcheProps> = (
         accDeltaTime,
     );
 
-    // Wanted to move force function: F = ma
-    const moveForceNeeded = moveAccNeeded.multiplyScalar(
-      characterRef.current.mass(),
-    );
-
-    // Check if character complete turned to the wanted direction
-    characterRotated =
-      Math.sin(characterModelIndicator.rotation.y).toFixed(3) ==
-      Math.sin(modelEuler.y).toFixed(3);
-
-    // If character hasn't complete turning, change the impulse quaternion follow characterModelIndicator quaternion
-    if (!characterRotated) {
-      moveImpulse.set(
-        moveForceNeeded.x *
-          turnVelMultiplier *
-          (canJump ? 1 : airDragMultiplier), // if it's in the air, give it less control
-        slopeAngle === null || slopeAngle == 0 // if it's on a slope, apply extra up/down force to the body
-          ? 0
-          : movingDirection.y *
-              turnVelMultiplier *
-              (movingDirection.y > 0 // check it is on slope up or slope down
-                ? slopeUpExtraForce
-                : slopeDownExtraForce) *
-              (run ? sprintMult : 1),
-        moveForceNeeded.z *
-          turnVelMultiplier *
-          (canJump ? 1 : airDragMultiplier), // if it's in the air, give it less control
+    let moveForceNeeded;
+    if (characterRigidBody) {
+      moveForceNeeded = moveAccNeeded.multiplyScalar(
+        characterRigidBody.mass(),
       );
-    }
-    // If character complete turning, change the impulse quaternion default
-    else {
-      moveImpulse.set(
-        moveForceNeeded.x * (canJump ? 1 : airDragMultiplier),
-        slopeAngle === null || slopeAngle == 0 // if it's on a slope, apply extra up/down force to the body
-          ? 0
-          : movingDirection.y *
-              (movingDirection.y > 0 // check it is on slope up or slope down
-                ? slopeUpExtraForce
-                : slopeDownExtraForce) *
-              (run ? sprintMult : 1),
-        moveForceNeeded.z * (canJump ? 1 : airDragMultiplier),
-      );
-    }
 
-    // Move character at proper direction (important)
-    characterRef.current.applyImpulseAtPoint(
-      moveImpulse,
-      {
-        x: currentPos.x,
-        y: currentPos.y + moveImpulsePointY,
-        z: currentPos.z,
-      },
-      true,
-    );
+      // Check if character complete turned to the wanted direction
+      characterRotated =
+        Math.sin(characterModelIndicator.rotation.y).toFixed(3) ==
+        Math.sin(modelEuler.y).toFixed(3);
+
+      // If character hasn't complete turning, change the impulse quaternion follow characterModelIndicator quaternion
+      if (!characterRotated) {
+        moveImpulse.set(
+          moveForceNeeded.x *
+            turnVelMultiplier *
+            (canJump ? 1 : airDragMultiplier), // if it's in the air, give it less control
+          slopeAngle === null || slopeAngle == 0 // if it's on a slope, apply extra up/down force to the body
+            ? 0
+            : movingDirection.y *
+                turnVelMultiplier *
+                (movingDirection.y > 0 // check it is on slope up or slope down
+                  ? slopeUpExtraForce
+                  : slopeDownExtraForce) *
+                (run ? sprintMult : 1),
+          moveForceNeeded.z *
+            turnVelMultiplier *
+            (canJump ? 1 : airDragMultiplier), // if it's in the air, give it less control
+        );
+      }
+      // If character complete turning, change the impulse quaternion default
+      else {
+        moveImpulse.set(
+          moveForceNeeded.x * (canJump ? 1 : airDragMultiplier),
+          slopeAngle === null || slopeAngle == 0 // if it's on a slope, apply extra up/down force to the body
+            ? 0
+            : movingDirection.y *
+                (movingDirection.y > 0 // check it is on slope up or slope down
+                  ? slopeUpExtraForce
+                  : slopeDownExtraForce) *
+                (run ? sprintMult : 1),
+          moveForceNeeded.z * (canJump ? 1 : airDragMultiplier),
+        );
+      }
+
+      if (characterRigidBody) {
+        // Move character at proper direction (important)
+        characterRigidBody.applyImpulseAtPoint(
+          moveImpulse,
+          {
+            x: currentPos.x,
+            y: currentPos.y + moveImpulsePointY,
+            z: currentPos.z,
+          },
+          true,
+        );
+      }
+    }
   };
 
   // Detect Moving Platform and apply movement to character
@@ -729,14 +737,13 @@ const ARCHE: ForwardRefRenderFunction<customRigidBody, ArcheProps> = (
 
   // Detect if the character is on a moving platform and get the platform velocity
   const detectPlatformUnderPlayer = () => {
-    const character = characterRef.current;
-    if (!character) return;
+    if (!characterRigidBody) return;
 
     isOnMovingPlatform = false;
     movingPlatformVelocity.set(0, 0, 0);
 
     const rayDirection = new Vector3(0, -1, 0); // Raycast vers le bas
-    const translation = character.translation();
+    const translation = characterRigidBody.translation();
     const widthOffset = 0.3; // Écart pour créer une grille sous le personnage
 
     // Grille 3x3 de points sous le personnage (x et z)
@@ -759,7 +766,7 @@ const ARCHE: ForwardRefRenderFunction<customRigidBody, ArcheProps> = (
 
         if (raycastResult && raycastResult.collider) {
           const otherBody = raycastResult.collider.parent();
-          if (!otherBody || otherBody === character) continue;
+          if (!otherBody || otherBody === characterRigidBody) continue;
 
           const normal = raycastResult.collider.castRayAndGetNormal(
             ray,
@@ -784,13 +791,14 @@ const ARCHE: ForwardRefRenderFunction<customRigidBody, ArcheProps> = (
 
   /** Character Auto Balance function */
   const autoBalanceCharacter = () => {
+    if (!characterRigidBody) return;
     // Match body component to character model rotation on Y
     bodyFacingVec
       .set(0, 0, 1)
-      .applyQuaternion(quat(characterRef.current.rotation()));
+      .applyQuaternion(quat(characterRigidBody.rotation()));
     bodyBalanceVec
       .set(0, 1, 0)
-      .applyQuaternion(quat(characterRef.current.rotation()));
+      .applyQuaternion(quat(characterRigidBody.rotation()));
 
     bodyBalanceVecOnX.set(0, bodyBalanceVec.y, bodyBalanceVec.z);
     bodyFacingVecOnY.set(bodyFacingVec.x, 0, bodyFacingVec.z);
@@ -828,29 +836,31 @@ const ARCHE: ForwardRefRenderFunction<customRigidBody, ArcheProps> = (
       (crossVecOnX.x < 0 ? 1 : -1) *
         autoBalanceSpringK *
         bodyBalanceVecOnX.angleTo(vectorY) -
-        characterRef.current.angvel().x * autoBalanceDampingC,
+        characterRigidBody.angvel().x * autoBalanceDampingC,
       (crossVecOnY.y < 0 ? 1 : -1) *
         autoBalanceSpringOnY *
         modelFacingVec.angleTo(bodyFacingVecOnY) -
-        characterRef.current.angvel().y * autoBalanceDampingOnY,
+        characterRigidBody.angvel().y * autoBalanceDampingOnY,
       (crossVecOnZ.z < 0 ? 1 : -1) *
         autoBalanceSpringK *
         bodyBalanceVecOnZ.angleTo(vectorY) -
-        characterRef.current.angvel().z * autoBalanceDampingC,
+        characterRigidBody.angvel().z * autoBalanceDampingC,
     );
 
     // Apply balance torque impulse
-    characterRef.current.applyTorqueImpulse(dragAngForce, true);
+    characterRigidBody.applyTorqueImpulse(dragAngForce, true);
   };
 
   /** Character sleep function */
   const sleepCharacter = () => {
-    if (characterRef.current) {
+    if (characterRigidBody) {
       if (document.visibilityState === "hidden") {
-        characterRef.current.sleep();
+        characterRigidBody.sleep();
       } else {
         setTimeout(() => {
-          characterRef.current.wakeUp();
+          if (characterRigidBody) {
+            characterRigidBody.wakeUp();
+          }
         }, wakeUpDelay);
       }
     }
@@ -884,7 +894,7 @@ const ARCHE: ForwardRefRenderFunction<customRigidBody, ArcheProps> = (
       // Once character close to the target point (distance<0.3),
       // Or character close to the wall (bodySensor intersects)
       // stop moving
-      if (characterRef.current) {
+      if (characterRigidBody) {
         if (pointToPoint.length() > 0.3 && !isBodyHitWall && !functionKeyDown) {
           moveCharacter(delta, false, slopeAngle, movingObjectVelocity);
           isPointMoving = true;
@@ -901,8 +911,15 @@ const ARCHE: ForwardRefRenderFunction<customRigidBody, ArcheProps> = (
   // TODO: null pointer passed to rust
   const characterStopMove = () => {
     setTimeout(() => {
-      characterRef.current.setLinvel({ x: 0, y: currentVel.y, z: 0 }, true);
-      characterRef.current.setAngvel({ x: 0, y: 0, z: 0 }, true);
+      if (characterRigidBody) {
+        characterRigidBody.setLinvel(
+          { x: 0, y: currentVel.y, z: 0 },
+          true,
+        );
+      }
+      if (characterRigidBody) {
+        characterRigidBody.setAngvel({ x: 0, y: 0, z: 0 }, true);
+      }
     }, 200);
     resetAnimation();
   };
@@ -990,8 +1007,9 @@ const ARCHE: ForwardRefRenderFunction<customRigidBody, ArcheProps> = (
   /** Auto balance & Reset Rotations */
   useEffect(() => {
     if (!defaultPlayer) return; // Only active for default player
+    if (!characterRigidBody) return;
     // Lock character rotations at Y axis
-    characterRef.current.setEnabledRotations(
+    characterRigidBody.setEnabledRotations(
       autoBalance ? true : false,
       autoBalance ? true : false,
       autoBalance ? true : false,
@@ -1000,17 +1018,19 @@ const ARCHE: ForwardRefRenderFunction<customRigidBody, ArcheProps> = (
 
     // Reset character quaternion
     return () => {
-      if (characterRef.current && characterModelRef.current) {
+      if (characterRigidBody && characterModelRef.current) {
         characterModelRef.current.quaternion.set(0, 0, 0, 1);
-        characterRef.current.setRotation({ x: 0, y: 0, z: 0, w: 1 }, false);
+        characterRigidBody.setRotation(
+          { x: 0, y: 0, z: 0, w: 1 },
+          false,
+        );
       }
     };
   }, [autoBalance]);
 
   /** Character movement, Slope Management, Animations */
   useFrame((state, delta) => {
-    const character = characterRef.current;
-    if (!character) return;
+    if (!characterRigidBody) return;
     /**  Move character with the moving platform */
     detectPlatformUnderPlayer(); // Update isOnMovingPlatform and movingPlatformVelocity
 
@@ -1023,12 +1043,12 @@ const ARCHE: ForwardRefRenderFunction<customRigidBody, ArcheProps> = (
       );
 
       const currentTranslation = new THREE.Vector3(
-        character.translation().x,
-        character.translation().y,
-        character.translation().z,
+        characterRigidBody.translation().x,
+        characterRigidBody.translation().y,
+        characterRigidBody.translation().z,
       );
 
-      character.setTranslation(
+      characterRigidBody.setTranslation(
         currentTranslation.add(platformDeltaPosition),
         true,
       );
@@ -1036,20 +1056,25 @@ const ARCHE: ForwardRefRenderFunction<customRigidBody, ArcheProps> = (
 
     if (delta > 1) delta %= 1;
     if (!defaultPlayer) return; // Only active for default player
-    if (!characterRef.current) return;
+    if (!characterRigidBody) return;
 
     // // Character current position/velocity
-    if (characterRef.current) {
-      currentPos.copy(characterRef.current.translation() as THREE.Vector3);
-      currentVel.copy(characterRef.current.linvel() as THREE.Vector3);
+    if (characterRigidBody) {
+      currentPos.copy(
+        characterRigidBody.translation() as THREE.Vector3,
+      );
+      currentVel.copy(characterRigidBody.linvel() as THREE.Vector3);
       // Assign userDate properties
-      if (characterRef.current.userData) {
-        (characterRef.current.userData as CharacterState).canJump = canJump;
-        (characterRef.current.userData as CharacterState).slopeAngle =
+      if (characterRigidBody.userData) {
+        (characterRigidBody.userData as CharacterState).canJump =
+          canJump;
+        (characterRigidBody.userData as CharacterState).slopeAngle =
           slopeAngle;
-        (characterRef.current.userData as CharacterState).characterRotated =
-          characterRotated;
-        (characterRef.current.userData as CharacterState).inMotion = inMotion;
+        (
+          characterRigidBody.userData as CharacterState
+        ).characterRotated = characterRotated;
+        (characterRigidBody.userData as CharacterState).inMotion =
+          inMotion;
       }
     }
 
@@ -1158,7 +1183,7 @@ const ARCHE: ForwardRefRenderFunction<customRigidBody, ArcheProps> = (
       );
 
       // Action
-      characterRef.current.setLinvel(
+      characterRigidBody.setLinvel(
         jumpDirection
           .set(0, jumpStrength, 0)
           .projectOnVector(actualSlopeNormalVec)
@@ -1202,7 +1227,7 @@ const ARCHE: ForwardRefRenderFunction<customRigidBody, ArcheProps> = (
       QueryFilterFlags.EXCLUDE_SENSORS,
       undefined,
       undefined,
-      characterRef.current,
+      characterRigidBody,
       // this exclude any collider with CharacterState: excluseRay
       ((collider: Collider) =>
         collider.parent()?.userData &&
@@ -1214,13 +1239,13 @@ const ARCHE: ForwardRefRenderFunction<customRigidBody, ArcheProps> = (
     /** Character Flip */
     // Check if the character is flipped based on its rotation
 
-    if (!characterRef.current) {
-      console.warn("characterRef.current is undefined");
+    if (!characterRigidBody) {
+      console.warn("characterRigidBody is undefined");
       return;
     }
 
     if (autoFlip) {
-      const rotation = characterRef.current?.rotation?.();
+      const rotation = characterRigidBody?.rotation?.();
       if (rotation) {
         const isFlipped = rotation.x > flipAngle || rotation.x < -flipAngle;
         if (isFlipped) {
@@ -1239,7 +1264,7 @@ const ARCHE: ForwardRefRenderFunction<customRigidBody, ArcheProps> = (
     //   true,
     //   null,
     //   null,
-    //   characterRef.current
+    //   characterRigidBody
     // );
 
     if (rayHit && rayHit.timeOfImpact < floatingDis + rayHitForgiveness) {
@@ -1264,7 +1289,7 @@ const ARCHE: ForwardRefRenderFunction<customRigidBody, ArcheProps> = (
         bodyMass = parent.mass();
       if (!bodyMass) return;
 
-      massRatio = characterRef.current.mass() / bodyMass;
+      massRatio = characterRigidBody.mass() / bodyMass;
 
       if (bodyType === 0 || bodyType === 2) {
         inMotion = true;
@@ -1342,7 +1367,7 @@ const ARCHE: ForwardRefRenderFunction<customRigidBody, ArcheProps> = (
       QueryFilterFlags.EXCLUDE_SENSORS,
       undefined,
       undefined,
-      characterRef.current,
+      characterRigidBody,
       // this exclude any collider with userData
       ((collider: Collider) =>
         collider.parent()?.userData &&
@@ -1385,14 +1410,14 @@ const ARCHE: ForwardRefRenderFunction<customRigidBody, ArcheProps> = (
         const targetDistance = floatingDis;
 
         const displacement = targetDistance - currentDistance;
-        const verticalVelocity = characterRef.current.linvel().y;
+        const verticalVelocity = characterRigidBody.linvel().y;
 
         const floatingForce =
           springK * displacement - dampingC * verticalVelocity;
 
         // Apply floating force up
         springDirVec.set(0, floatingForce, 0);
-        characterRef.current.applyImpulse(springDirVec, false);
+        characterRigidBody.applyImpulse(springDirVec, false);
 
         // Optionnal : Apply floating force down
         if (floatingForce > 0) {
@@ -1431,7 +1456,7 @@ const ARCHE: ForwardRefRenderFunction<customRigidBody, ArcheProps> = (
         0,
         velocityDiffZ * dragDampingC,
       );
-      characterRef.current.applyImpulse(dragForce, isMovingObject);
+      characterRigidBody.applyImpulse(dragForce, isMovingObject);
     }
 
     /** Detect character falling state */
@@ -1439,25 +1464,25 @@ const ARCHE: ForwardRefRenderFunction<customRigidBody, ArcheProps> = (
 
     /** Setup max falling speed && extra falling gravity */
     // Remove gravity if falling speed higher than fallingMaxVel (negetive number so use "<")
-    if (!characterRef.current) return;
+    if (!characterRigidBody) return;
 
-    const currentGravity = characterRef.current.gravityScale();
+    const currentGravity = characterRigidBody.gravityScale();
 
     if (currentVel.y < fallingMaxVel) {
       if (currentGravity !== 0) {
-        characterRef.current.setGravityScale(0, true);
+        characterRigidBody.setGravityScale(0, true);
       }
     } else {
       const targetGravity = isFalling
         ? fallingGravityScale
         : initialGravityScale;
       if (currentGravity !== targetGravity) {
-        characterRef.current.setGravityScale(targetGravity, true);
+        characterRigidBody.setGravityScale(targetGravity, true);
       }
     }
 
     /** Apply auto balance force to the character */
-    if (autoBalance && characterRef.current) autoBalanceCharacter();
+    if (autoBalance && characterRigidBody) autoBalanceCharacter();
 
     /** Point to move feature */
     if (isModePointToMove) {
@@ -1615,4 +1640,5 @@ const ARCHE: ForwardRefRenderFunction<customRigidBody, ArcheProps> = (
   );
 };
 
-export default forwardRef(ARCHE); // Used to create a reference It's allow to access to a DOM Element.
+export default forwardRef(ARCHE); // Used to create a reference. It allows access to a DOM Element.
+  

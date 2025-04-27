@@ -3,8 +3,9 @@ import { useFrame } from "@react-three/fiber";
 import { Vector3 } from "three";
 import { Entity } from "../../../Entity";
 import { EntityComponent } from "../../../EntityComponent";
-import { RapierRigidBody } from "@react-three/rapier";
+import { RapierRigidBody, useRapier } from "@react-three/rapier";
 import { RefObject } from "react";
+import { useWorldRigidBody } from "@/hooks/useWorldRigidBody";
 
 /**
  * An entity class
@@ -35,9 +36,13 @@ const KinematicMovingPlatformRenderer = ({
   instance: Entity;
   rigidBodyRef: RefObject<RapierRigidBody | null>;
 }) => {
+  const rigidBody = useWorldRigidBody(rigidBodyRef);
+
   useFrame((state) => {
+    if (!rigidBody) return;
+
     const time = state.clock.elapsedTime;
-    rigidBodyRef.current?.setNextKinematicTranslation({
+    rigidBody.setNextKinematicTranslation({
       x: 5 * Math.sin(time / 2) + instance.position.x,
       y: instance.position.y,
       z: instance.position.z,

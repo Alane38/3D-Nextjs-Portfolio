@@ -1,3 +1,4 @@
+import { useWorldRigidBody } from "@/hooks/useWorldRigidBody";
 import { Text } from "@react-three/drei";
 import { useFrame } from "@react-three/fiber";
 import { useMemo } from "react";
@@ -46,13 +47,16 @@ export const KinematicRotatingPlatformComponent = EntityComponent(
    * @param {RapierRigidBody} rigidBodyRef - Reference to the RapierRigidBody instance
    * @param {THREE.Group} visualRef - Reference to the THREE.Group instance
    */
-    const ref = rigidBodyRef;
     const yAxis = useMemo(() => new THREE.Vector3(0, 1, 0), []);
     const quaternion = useMemo(() => new THREE.Quaternion(), []);
 
+    const rigidBody = useWorldRigidBody(rigidBodyRef);
+    
     useFrame((state) => {
+      if (!rigidBody) return;
+  
       const time = state.clock.elapsedTime;
-      ref.current?.setNextKinematicRotation(
+      rigidBody.setNextKinematicRotation(
         quaternion.setFromAxisAngle(yAxis, time * 0.5),
       );
     });

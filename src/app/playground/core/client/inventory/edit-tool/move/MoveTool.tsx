@@ -22,6 +22,8 @@ export const MoveTool = () => {
     position,
   } = useEditToolStore((s) => s);
 
+  
+
   // Initialization
   const { camera, pointer } = useThree();
   const raycaster = useRef(new Raycaster());

@@ -8,15 +8,16 @@ import { useEffect, useMemo } from "react";
 import * as THREE from "three";
 import { Entity } from "../../../Entity";
 import { EntityComponent } from "../../../EntityComponent";
+import { useWorldRigidBody } from "@/hooks/useWorldRigidBody";
 
 /**
  * An entity class
- * 
+ *
  * @class
  * @extends Entity
  */
 export class FPPushtoRotate extends Entity {
-    /**
+  /**
    * Creates a new instance
    * Initializes with default values for physics and appearance
    */
@@ -52,7 +53,8 @@ export const FPPushtoRotateComponent = EntityComponent(
      * @param {THREE.Group} visualRef - Reference to the THREE.Group instance
      */
     const { world, rapier } = useRapier();
-    const ref = rigidBodyRef;
+
+    const rigidBody = useWorldRigidBody(rigidBodyRef);
 
     const rayLength = 0.8;
     const rayDir = { x: 0, y: -1, z: 0 };
@@ -65,19 +67,20 @@ export const FPPushtoRotateComponent = EntityComponent(
     const ray = new rapier.Ray(origin, rayDir);
 
     useEffect(() => {
-      ref.current?.lockRotations(true, false);
-      ref.current?.lockTranslations(true, false);
-      ref.current?.setEnabledRotations(false, true, false, false);
-      ref.current?.setEnabledTranslations(false, true, false, false);
+      if (!rigidBody) return;
+      rigidBody.lockRotations(true, false);
+      rigidBody.lockTranslations(true, false);
+      rigidBody.setEnabledRotations(false, true, false, false);
+      rigidBody.setEnabledTranslations(false, true, false, false);
     }, []);
 
     useFrame(() => {
-      if (!ref.current) return;
+      if (!rigidBody) return;
 
       origin.set(
-        ref.current.translation().x,
-        ref.current.translation().y,
-        ref.current.translation().z,
+        rigidBody.translation().x,
+        rigidBody.translation().y,
+        rigidBody.translation().z,
       );
 
       const hit: RayColliderHit | null = world.castRay(
@@ -86,15 +89,15 @@ export const FPPushtoRotateComponent = EntityComponent(
         false,
         undefined,
         undefined,
-        ref.current?.collider(0),
-        ref.current,
+        rigidBody.collider(0),
+        rigidBody,
       );
 
       if (hit?.collider?.parent()) {
         const force =
           springK * (floatingDis - hit.timeOfImpact) -
-          ref.current.linvel().y * dampingC;
-        ref.current.applyImpulse(impulseVec.set(0, force, 0), true);
+          rigidBody.linvel().y * dampingC;
+          rigidBody.applyImpulse(impulseVec.set(0, force, 0), true);
       }
     });
 

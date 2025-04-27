@@ -1,3 +1,4 @@
+import { useWorldRigidBody } from "@/hooks/useWorldRigidBody";
 import type { RayColliderHit } from "@dimforge/rapier3d-compat";
 import { Text } from "@react-three/drei";
 import { useFrame } from "@react-three/fiber";
@@ -43,7 +44,8 @@ const FPPushtoMoveRenderer = ({
   rigidBodyRef: RefObject<RapierRigidBody | null>;
 }) => {
   const { world, rapier } = useRapier();
-  const ref = rigidBodyRef;
+
+  const rigidBody = useWorldRigidBody(rigidBodyRef);
 
   const rayLength = 0.8;
   const rayDir = { x: 0, y: -1, z: 0 };
@@ -56,16 +58,17 @@ const FPPushtoMoveRenderer = ({
   const ray = new rapier.Ray(origin, rayDir);
 
   useEffect(() => {
-    ref.current?.lockRotations(true, true);
+    if (!rigidBody) return;
+    rigidBody.lockRotations(true, true);
   }, []);
 
   useFrame(() => {
-    if (!ref.current) return;
+    if (!rigidBody) return;
 
     origin.set(
-      ref.current.translation().x,
-      ref.current.translation().y,
-      ref.current.translation().z,
+      rigidBody.translation().x,
+      rigidBody.translation().y,
+      rigidBody.translation().z,
     );
 
     const hit: RayColliderHit | null = world.castRay(
@@ -74,15 +77,15 @@ const FPPushtoMoveRenderer = ({
       false,
       undefined,
       undefined,
-      ref.current?.collider(0),
-      ref.current,
+      rigidBody.collider(0),
+      rigidBody,
     );
 
     if (hit?.collider?.parent()) {
       const force =
         springK * (floatingDis - hit.timeOfImpact) -
-        ref.current.linvel().y * dampingC;
-      ref.current.applyImpulse(impulseVec.set(0, force, 0), true);
+        rigidBody.linvel().y * dampingC;
+      rigidBody.applyImpulse(impulseVec.set(0, force, 0), true);
     }
   });
 

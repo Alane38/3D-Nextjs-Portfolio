@@ -5,15 +5,16 @@ import { useMemo } from "react";
 import * as THREE from "three";
 import { Entity } from "../../../Entity";
 import { EntityComponent } from "../../../EntityComponent";
+import { useWorldRigidBody } from "@/hooks/useWorldRigidBody";
 
 /**
  * An entity class
- * 
+ *
  * @class
  * @extends Entity
  */
 export class KinematicRotatingDrumEntity extends Entity {
-    /**
+  /**
    * Creates a new instance
    * Initializes with default values for physics and appearance
    */
@@ -38,22 +39,25 @@ export class KinematicRotatingDrumEntity extends Entity {
 export const KinematicRotatingDrumComponent = EntityComponent(
   KinematicRotatingDrumEntity,
   (instance, rigidBodyRef) => {
-      /** 
-   * Renders the 3D model
-   * 
-   * @function
-   * @param {EntityComponent} EntityTemplate - A default entity class
-   * @param {Ground} instance - An entity from the Entity parent
-   * @param {RapierRigidBody} rigidBodyRef - Reference to the RapierRigidBody instance
-   * @param {THREE.Group} visualRef - Reference to the THREE.Group instance
-   */
-    const ref = rigidBodyRef;
+    /**
+     * Renders the 3D model
+     *
+     * @function
+     * @param {EntityComponent} EntityTemplate - A default entity class
+     * @param {Ground} instance - An entity from the Entity parent
+     * @param {RapierRigidBody} rigidBodyRef - Reference to the RapierRigidBody instance
+     * @param {THREE.Group} visualRef - Reference to the THREE.Group instance
+     */
     const xAxis = useMemo(() => new THREE.Vector3(1, 0, 0), []);
     const quaternion = useMemo(() => new THREE.Quaternion(), []);
 
+    const rigidBody = useWorldRigidBody(rigidBodyRef);
+
     useFrame((state) => {
+      if (!rigidBody) return;
+
       const time = state.clock.elapsedTime;
-      ref.current?.setNextKinematicRotation(
+      rigidBody.setNextKinematicRotation(
         quaternion.setFromAxisAngle(xAxis, time * 0.5),
       );
     });
@@ -69,13 +73,13 @@ export const KinematicRotatingDrumComponent = EntityComponent(
         >
           Kinematic Rotating Drum
         </Text>
-          <group rotation={[0, 0, Math.PI / 2]}>
-            <CylinderCollider args={[5, 1]} />
-            <mesh receiveShadow>
-              <cylinderGeometry args={[1, 1, 10]} />
-              <meshStandardMaterial color="white" />
-            </mesh>
-          </group>
+        <group rotation={[0, 0, Math.PI / 2]}>
+          <CylinderCollider args={[5, 1]} />
+          <mesh receiveShadow>
+            <cylinderGeometry args={[1, 1, 10]} />
+            <meshStandardMaterial color="white" />
+          </mesh>
+        </group>
       </>
     );
   },

@@ -6,12 +6,12 @@ An immersive 3D portfolio experience built with Next.js, Three.js, React Three R
 This project showcases interactive 3D elements, physics-based interactions, and a modern UI design.
 
 ## ✨ Features
-
 - **Interactive 3D Environment**
 
-  - Character controller with physics
+  - Character controller with physics(ARCHE)
   - Dynamic platforms and obstacles
   - Responsive 3D objects and animations
+  - Custom entity manager for 3D objects
   - Physics-based interactions using Rapier
 
 - **Modern UI Components**
