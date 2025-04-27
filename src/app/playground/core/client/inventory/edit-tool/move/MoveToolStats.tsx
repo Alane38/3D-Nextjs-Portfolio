@@ -48,7 +48,7 @@ export const MoveToolStats = ({ active }: { active: boolean }) => {
 
   if (!active) return null;
 
-  // TODO: position.x is undefined 
+  // NOTE: position.x is undefined, this errors is caused by the imported entities is not initialized !
 
   return (
     <>

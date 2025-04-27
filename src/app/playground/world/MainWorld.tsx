@@ -37,10 +37,6 @@ export function MainWorld() {
   // Store initialization
   const { entities } = useEntityStore();
 
-  console.log("ENTITIESSS IMPORTED", entities?.map((entity, i) => (
-    <Fragment key={i}>{entity.renderComponent()}</Fragment>
-  )))
-
   return (
     <>
       {/* Load Entities */}
@@ -64,7 +60,6 @@ export function MainWorld() {
         position={[0, 20, 0]}
         defaultPlayer
       />
-      {/* TODO: collider of the entity appears desappears and appears during loading the game.*/}
       {/* Ground */}
       <GroundComponent entity={new Ground()}/>
       {/* Entity Importations */}
@@ -75,9 +70,7 @@ export function MainWorld() {
         /> */}
 
         <DiamondComponent position={new Vector3(18, 2, 10)} entity={new Diamond()} />
-        <DiamondComponent position={new Vector3(16, 2, 10)} entity={new Diamond()} />
         <DiamondComponent position={new Vector3(14, 2, 10)} entity={new Diamond()} />
-        <DiamondComponent position={new Vector3(10, 2, 10)} entity={new Diamond()} />
         <ObjectComponent position={new Vector3(0, 0.5, 0)} entity={new Object()} />
       </group>
       <group>
@@ -89,10 +82,9 @@ export function MainWorld() {
           entity={new Spinner()}
         />
         <KillBrickComponent
-          position={new Vector3(15, 1, 10)}
+          position={new Vector3(15, 1, 15)}
           entity={new KillBrick()}
         />
-        <KillBrickComponent position={new Vector3(15, 1, 10)} entity={new KillBrick()} />
         <RestaurantSignComponent
           position={new Vector3(6, 0.5, 6)}
           rotation={new Euler(0, Math.PI / 4, 0)}

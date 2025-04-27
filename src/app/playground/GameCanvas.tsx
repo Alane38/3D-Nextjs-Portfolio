@@ -50,7 +50,7 @@ export function GameCanvas({ children }: { children: ReactNode }) {
           {/* Performance Monitor */}
           <Perf position="top-left" minimal />
 
-          {/* Debug Grid */}
+          {/* debugGrid */}
           <Grid
             infiniteGrid
             fadeDistance={100}

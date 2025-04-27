@@ -1,7 +1,7 @@
 [
   {
     "entityName": "Diamond",
-    "type": "fixed",
+    "type": "dynamic",
     "path": "/assets/3d/glb/Diamond.glb",
     "position": [
       0,

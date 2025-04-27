@@ -1,6 +1,7 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { Button } from "./ui/button";
 import { motion } from "framer-motion";
+import Image from "next/image";
 
 export const Loading = ({
   progress,
@@ -9,24 +10,55 @@ export const Loading = ({
   progress: number;
   onSkip: () => void;
 }) => {
+  const [visualProgress, setVisualProgress] = useState(0);
 
-  // Skip after 10 seconds
+  // Smooth visual progress
+  useEffect(() => {
+    let raf: number;
+
+    const updateProgress = () => {
+      setVisualProgress((prev) => {
+        const target = progress;
+        const speed = 1; // Fill speed in %
+
+        if (prev < target) {
+          const next = Math.min(prev + speed, target);
+          return next;
+        }
+        return prev;
+      });
+
+      raf = requestAnimationFrame(updateProgress);
+    };
+
+    raf = requestAnimationFrame(updateProgress);
+
+    return () => cancelAnimationFrame(raf);
+  }, [progress]);
+
+  // Skip after 10 seconds(IMPORTANT)
   useEffect(() => {
     const timer = setTimeout(() => {
-        onSkip();
-    }, 10000);
+      onSkip();
+    }, 8000);
 
     return () => clearTimeout(timer);
   }, []);
 
   return (
     <div className="bg-popover-foreground absolute z-50 flex h-full w-full">
+      <Image
+        src="/assets/images/3dfolio_loading.png"
+        alt="loading"
+        fill
+        className="w-full h-full absolute object-cover"
+      />
       <div className="flex w-full flex-col items-center justify-end">
-      {/* Loading bar animation (if shown), works with progress value */}
+        {/* Loading bar animation (smooth visual progress) */}
         <motion.div
           className="bg-primary absolute bottom-0 left-0 z-60 h-2 max-w-full"
           initial={{ width: 0 }}
-          animate={{ width: `${progress * 100}%` }}
+          animate={{ width: `${visualProgress}%` }}
           transition={{ ease: "easeOut", duration: 0.2 }}
         />
 
