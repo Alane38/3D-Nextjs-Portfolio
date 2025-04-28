@@ -19,14 +19,14 @@ export function EntityComponent<InstanceType extends Entity>(
 ) {
   const WrappedEntityComponent = React.memo(
     ({
-      entity, 
+      entity,
       ...props
     }: { entity?: InstanceType } & Partial<InstanceType>) => {
       const bodyRef = useRef<RapierRigidBody>(null);
       const visualRef = useRef<Group>(null);
       const pendingUpdate = useRef<InstanceType | null>(null);
       const lastUpdateTimeRef = useRef<number>(0);
-      
+
       const rigidBody = useWorldRigidBody(bodyRef);
 
       const {
@@ -47,9 +47,8 @@ export function EntityComponent<InstanceType extends Entity>(
         if (!currentInstance) return;
 
         if (!currentInstance.entityId) {
-          currentInstance.entityId = EntityManager.generateIdToEntity(
-            currentInstance,
-          );
+          currentInstance.entityId =
+            EntityManager.generateIdToEntity(currentInstance);
         }
 
         if (props) {
@@ -57,64 +56,65 @@ export function EntityComponent<InstanceType extends Entity>(
         }
       }, []);
 
-      const UpdateEntity = () => {
-        useEffect(() => {
-          if (!currentInstance) return;
+      useEffect(() => {
+        if (!currentInstance) return;
 
-          const id = setInterval(() => {
-            if (pendingUpdate.current) {
-              updateEntity((e) => {
-                if (e.entityId === currentInstance.entityId) {
-                  e.position = pendingUpdate.current!.position;
-                  e.rotation = pendingUpdate.current!.rotation;
-                  e.scale = pendingUpdate.current!.scale;
-                }
-                return e;
-              });
-
-              pendingUpdate.current = null;
+        const updateData = setInterval(() => {
+          updateEntity((e: Entity) => {
+            if (
+              e.entityId === currentInstance.entityId &&
+              pendingUpdate.current
+            ) {
+              e.position = pendingUpdate.current.position;
+              e.rotation = pendingUpdate.current.rotation;
+              e.scale = pendingUpdate.current.scale;
             }
-          }, 5000);
+            return e;
+          });
 
-          return () => clearInterval(id);
-        }, []);
+          pendingUpdate.current = null;
+        }, 5000);
 
+        return () => clearInterval(updateData);
+      }, []);
 
-        useFrame(() => {
-          if (!currentInstance || !rigidBody) return;
-          const now = performance.now();
-          if (now - lastUpdateTimeRef.current >= 5000) {
-            if (!rigidBody || typeof rigidBody.translation !== "function" || !visualRef.current) return;
+      useFrame(() => {
+        if (!currentInstance || !rigidBody) return;
+        const now = performance.now();
+        if (now - lastUpdateTimeRef.current >= 5000) {
+          if (
+            !rigidBody ||
+            typeof rigidBody.translation !== "function" ||
+            !visualRef.current
+          )
+            return;
 
-            const pos = rigidBody.translation();
-            const rot = rigidBody.rotation();
-            const scale = visualRef.current.scale;
+          const pos = rigidBody.translation();
+          const rot = rigidBody.rotation();
+          const scale = visualRef.current.scale;
 
-            pendingUpdate.current = {
-              ...currentInstance,
-              position: new Vector3(pos.x, pos.y, pos.z),
-              rotation: new Euler(rot.x, rot.y, rot.z),
-              scale: [scale.x, scale.y, scale.z],
-            };
+          pendingUpdate.current = {
+            ...currentInstance,
+            position: new Vector3(pos.x, pos.y, pos.z),
+            rotation: new Euler(rot.x, rot.y, rot.z),
+            scale: [scale.x, scale.y, scale.z],
+          };
 
-            lastUpdateTimeRef.current = now;
-          }
-        });
-
-        return null; 
-      };
+          lastUpdateTimeRef.current = now;
+        }
+      });
 
       if (!currentInstance) return null;
 
       return (
         <>
-          <UpdateEntity />
           <RigidBody
             ref={bodyRef}
             onPointerDown={(e: PointerEvent) => {
               if (useEditTool) {
                 e.stopPropagation();
-                if (!rigidBody || !currentInstance || !visualRef.current) return;
+                if (!rigidBody || !currentInstance || !visualRef.current)
+                  return;
                 setSelectedEntity(currentInstance);
                 setSelectedGroup(rigidBody);
                 setSelectedVisual(visualRef.current);
