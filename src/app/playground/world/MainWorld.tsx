@@ -93,7 +93,7 @@ export function MainWorld() {
       </group>
       <group>
         {/* Platforms Events Examples */}
-        <FPPushtoMoveComponent position={new Vector3(30, 20, 0)} entity={new FPPushtoMove()} />
+        <FPPushtoMoveComponent position={new Vector3(30, 5, 0)} entity={new FPPushtoMove()} />
         <KinematicMovingPlatformComponent position={new Vector3(20, 5, 20)} entity={new KinematicMovingPlatformEntity()}/>
       </group>
       {/* OTHERS */}

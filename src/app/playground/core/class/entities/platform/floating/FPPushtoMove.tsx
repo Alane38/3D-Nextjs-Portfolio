@@ -7,7 +7,7 @@ import {
   RapierRigidBody,
   useRapier,
 } from "@react-three/rapier";
-import { RefObject, useEffect, useMemo } from "react";
+import { RefObject, useMemo } from "react";
 import * as THREE from "three";
 import { Vector3 } from "three";
 import { Entity } from "../../../Entity";
@@ -29,6 +29,8 @@ export class FPPushtoMove extends Entity {
     this.type = "dynamic";
     this.colliders = false;
     this.position = new Vector3(0, 5, -10);
+    this.lockRotations = true;
+    this.enabledRotations = [false, false, false];
   }
 
   renderComponent() {
@@ -51,16 +53,11 @@ const FPPushtoMoveRenderer = ({
   const rayDir = { x: 0, y: -1, z: 0 };
   const floatingDis = 0.8;
   const springK = 2.5;
-  const dampingC = 0.25;
+  const dampingC = 0.15;
 
   const origin = useMemo(() => new THREE.Vector3(), []);
   const impulseVec = useMemo(() => new THREE.Vector3(), []);
   const ray = new rapier.Ray(origin, rayDir);
-
-  useEffect(() => {
-    if (!rigidBody) return;
-    rigidBody.lockRotations(true, true);
-  }, []);
 
   useFrame(() => {
     if (!rigidBody) return;

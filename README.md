@@ -1,17 +1,17 @@
 # Newalfox Interactive TriDfolio - Next.js & Three.js
 
-![Portfolio Banner](https://via.placeholder.com/1200x300)
+![Portfolio Banner](/assets/images/3dfolio_loading.png)
 
 An immersive 3D portfolio experience built with Next.js, Three.js, React Three Rapier, and React Three Fiber.
 This project showcases interactive 3D elements, physics-based interactions, and a modern UI design.
 
 ## ✨ Features
+
 - **Interactive 3D Environment**
 
-  - Character controller with physics(ARCHE)
+  - Advanced Character Controller(ARCHE)
   - Dynamic platforms and obstacles
   - Responsive 3D objects and animations
-  - Custom entity manager for 3D objects
   - Physics-based interactions using Rapier
 
 - **Modern UI Components**
@@ -25,6 +25,7 @@ This project showcases interactive 3D elements, physics-based interactions, and 
 - **Technical Highlights**
   - Component-based architecture
   - Entity system for 3D objects
+  - Custom entity manager for 3D objects
   - Physics engine integration
   - Modular and reusable components
   - TypeScript for type safety
@@ -70,7 +71,7 @@ bun dev
 ## 🏗️ Project Structure
 
 ```
-3D-Nextjs-Portfolio/                 
+3D-Nextjs-Portfolio/
 ├── public/                         # Static public assets
 │   ├── assets/                     # Project assets
 │   │   ├── 3d/                     # 3D model files
@@ -129,12 +130,12 @@ bun dev
 
 ## 🎮 Controls
 
-- **ZQSD**  - Move Character
+- **ZQSD** - Move Character
 - **Mouse** - Move Character
 - **Shift** - Run
 - **Space** - Jump OR Brake
-- **TAB**   - Lock Camera to Character
-- **R**     - Reset Character(Unavailable)
+- **TAB** - Lock Camera to Character
+- **R** - Reset Character(Unavailable)
 - **Click** - Interact with objects
 
 ## 🔧 Configuration
@@ -166,12 +167,14 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 - Next.js team
 - All contributors and supporters
 
-## 🌟 THANKS TO 
+## 🌟 THANKS TO
 
-- Isaac Mason: [https://github.com/isaac-mason](https://github.com/isaac-mason)
-- Poimandres: [https://github.com/pmndrs](https://github.com/pmndrs)
-- Erdong Chen: [https://github.com/ErdongChen-Andrew](https://github.com/ErdongChen-Andrew)
+- [Isaac-Mason](https://github.com/isaac-mason)
+- [Poimandres](https://github.com/pmndrs)
+- [ErdongChen-Andrew](https://github.com/ErdongChen-Andrew)
 
 ## 📧 Contact
 
-Project Link: [https://github.com/Alane38/3d-nextjs-portfolio](https://github.com/Alane38/3d-nextjs-portfolio)
+**Project Link** - [TriDPortfolio on GitHub](https://github.com/Alane38/3d-nextjs-portfolio)
+
+**Developpers** - [Alane38](https://github.com/Alane38) and [Pamacea](https://github.com/Pamacea)
