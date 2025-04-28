@@ -48,8 +48,6 @@ export const MoveToolStats = ({ active }: { active: boolean }) => {
 
   if (!active) return null;
 
-  // NOTE: position.x is undefined, this errors is caused by the imported entities is not initialized !
-
   return (
     <>
       <div className="fixed bottom-4 z-50 flex flex-col gap-2 font-mono text-xl text-white">

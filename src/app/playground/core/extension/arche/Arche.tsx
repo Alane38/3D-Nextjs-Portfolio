@@ -308,7 +308,7 @@ const ARCHE: ForwardRefRenderFunction<customRigidBody, ArcheProps> = (
     action4: 0,
   };
 
-  const characterRigidBody = useWorldRigidBody(characterRef)
+  const characterRigidBody = useWorldRigidBody(characterRef);
 
   /** Move and Camera mode */
   const setMoveToPoint = useGame((state) => state.setMoveToPoint);
@@ -673,9 +673,7 @@ const ARCHE: ForwardRefRenderFunction<customRigidBody, ArcheProps> = (
 
     let moveForceNeeded;
     if (characterRigidBody) {
-      moveForceNeeded = moveAccNeeded.multiplyScalar(
-        characterRigidBody.mass(),
-      );
+      moveForceNeeded = moveAccNeeded.multiplyScalar(characterRigidBody.mass());
 
       // Check if character complete turned to the wanted direction
       characterRotated =
@@ -908,19 +906,12 @@ const ARCHE: ForwardRefRenderFunction<customRigidBody, ArcheProps> = (
 
   /** Stop character movement: used to stop the character movement when you stop press a key. */
   const resetAnimation = useGame((state) => state.reset);
-  // TODO: null pointer passed to rust
+  // TODO: null pointer passed to rust(Maybe it's good)
   const characterStopMove = () => {
-    setTimeout(() => {
-      if (characterRigidBody) {
-        characterRigidBody.setLinvel(
-          { x: 0, y: currentVel.y, z: 0 },
-          true,
-        );
-      }
-      if (characterRigidBody) {
-        characterRigidBody.setAngvel({ x: 0, y: 0, z: 0 }, true);
-      }
-    }, 200);
+    if (!characterRigidBody) return;
+    // Reset character velocity
+    characterRigidBody.setLinvel({ x: 0, y: currentVel.y, z: 0 }, true);
+    characterRigidBody.setAngvel({ x: 0, y: 0, z: 0 }, true);
     resetAnimation();
   };
 
@@ -1020,10 +1011,7 @@ const ARCHE: ForwardRefRenderFunction<customRigidBody, ArcheProps> = (
     return () => {
       if (characterRigidBody && characterModelRef.current) {
         characterModelRef.current.quaternion.set(0, 0, 0, 1);
-        characterRigidBody.setRotation(
-          { x: 0, y: 0, z: 0, w: 1 },
-          false,
-        );
+        characterRigidBody.setRotation({ x: 0, y: 0, z: 0, w: 1 }, false);
       }
     };
   }, [autoBalance]);
@@ -1060,21 +1048,15 @@ const ARCHE: ForwardRefRenderFunction<customRigidBody, ArcheProps> = (
 
     // // Character current position/velocity
     if (characterRigidBody) {
-      currentPos.copy(
-        characterRigidBody.translation() as THREE.Vector3,
-      );
+      currentPos.copy(characterRigidBody.translation() as THREE.Vector3);
       currentVel.copy(characterRigidBody.linvel() as THREE.Vector3);
       // Assign userDate properties
       if (characterRigidBody.userData) {
-        (characterRigidBody.userData as CharacterState).canJump =
-          canJump;
-        (characterRigidBody.userData as CharacterState).slopeAngle =
-          slopeAngle;
-        (
-          characterRigidBody.userData as CharacterState
-        ).characterRotated = characterRotated;
-        (characterRigidBody.userData as CharacterState).inMotion =
-          inMotion;
+        (characterRigidBody.userData as CharacterState).canJump = canJump;
+        (characterRigidBody.userData as CharacterState).slopeAngle = slopeAngle;
+        (characterRigidBody.userData as CharacterState).characterRotated =
+          characterRotated;
+        (characterRigidBody.userData as CharacterState).inMotion = inMotion;
       }
     }
 
@@ -1641,4 +1623,3 @@ const ARCHE: ForwardRefRenderFunction<customRigidBody, ArcheProps> = (
 };
 
 export default forwardRef(ARCHE); // Used to create a reference. It allows access to a DOM Element.
-  

@@ -24,7 +24,7 @@ export class Ground extends Entity {
     this.type = "fixed";
     this.colliders = "cuboid";
     this.scale = 50;
-    this.depth = 0.01;
+    this.depth = 0.02;
     this.color = "black";
   }
 
@@ -55,7 +55,7 @@ export const GroundComponent = EntityComponent(Ground, (instance) => {
       <Box
         args={[
           typeof instance.scale === "number" ? instance.scale : 1,
-          typeof instance.depth === "number" ? instance.depth : 0.1,
+          typeof instance.depth === "number" ? instance.depth : 0.02,
           typeof instance.scale === "number" ? instance.scale : 1,
         ]}
       >

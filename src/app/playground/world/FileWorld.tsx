@@ -35,7 +35,7 @@ export function FileWorld() {
       <Character
         name="Player"
         path="FoxPam.fbx"
-        position={[0, 20, 0]}
+        position={[0, 10, 0]}
         defaultPlayer
       />
 

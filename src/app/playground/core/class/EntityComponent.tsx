@@ -122,6 +122,7 @@ export function EntityComponent<InstanceType extends Entity>(
               }
             }}
             {...currentInstance}
+            ccd
           >
             <group ref={visualRef}>
               {onRender(currentInstance, bodyRef, visualRef)}

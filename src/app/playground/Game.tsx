@@ -11,7 +11,7 @@ import { useEntityStore } from "./core/class/entity.store";
 import Inventory from "./core/client/inventory/Inventory";
 import { PlacementManager } from "./core/PlacementManager";
 import { GameCanvas } from "./GameCanvas";
-import { MainWorld } from "./world/MainWorld";
+import { FileWorld } from "./world/FileWorld";
 
 export function Game() {
   const loading = useLoadingAssets();
@@ -68,7 +68,8 @@ export function Game() {
       <Inventory />
       <KeyboardControls map={globalControls}>
         <GameCanvas>
-          <MainWorld />
+          {/* <MainWorld /> */}
+          <FileWorld />  
         </GameCanvas>
       </KeyboardControls>
     </>

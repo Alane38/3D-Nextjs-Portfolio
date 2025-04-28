@@ -71,7 +71,7 @@ export function MainWorld() {
 
         <DiamondComponent position={new Vector3(18, 2, 10)} entity={new Diamond()} />
         <DiamondComponent position={new Vector3(14, 2, 10)} entity={new Diamond()} />
-        <ObjectComponent position={new Vector3(0, 0.5, 0)} entity={new Object()} />
+        <ObjectComponent position={new Vector3(0, 0.75, 0)} entity={new Object()} />
       </group>
       <group>
         {/* Entity Importations */}
@@ -86,7 +86,7 @@ export function MainWorld() {
           entity={new KillBrick()}
         />
         <RestaurantSignComponent
-          position={new Vector3(6, 0.5, 6)}
+          position={new Vector3(6, 0.75, 6)}
           rotation={new Euler(0, Math.PI / 4, 0)}
           entity={new RestaurantSign()}
         />
