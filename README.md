@@ -1,6 +1,6 @@
 # Newalfox Interactive TriDfolio - Next.js & Three.js
 
-![Portfolio Banner](/assets/images/3dfolio_loading.png)
+![Portfolio Banner](https://i.imgur.com/dsK1fjy.png)
 
 An immersive 3D portfolio experience built with Next.js, Three.js, React Three Rapier, and React Three Fiber.
 This project showcases interactive 3D elements, physics-based interactions, and a modern UI design.
@@ -175,6 +175,6 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 ## 📧 Contact
 
-**Project Link** - [TriDPortfolio on GitHub](https://github.com/Alane38/3d-nextjs-portfolio)
+**Project Link** - [triDFolio](https://github.com/Alane38/3d-nextjs-portfolio)
 
 **Developpers** - [Alane38](https://github.com/Alane38) and [Pamacea](https://github.com/Pamacea)
