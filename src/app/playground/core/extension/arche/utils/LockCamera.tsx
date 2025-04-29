@@ -31,21 +31,26 @@ export const useLockCamera = ({ camera, renderer }: LockCameraProps) => {
     renderer.domElement.requestPointerLock();
   };
 
-  return { handleMouseMove, handlePointerLockChange, enablePointerLock };
+  return { 
+    handleMouseMove, 
+    handlePointerLockChange, 
+    enablePointerLock,
+    controls 
+  };
 };
 
 export const LockCamera = ({ camera, renderer }: LockCameraProps) => {
-  const { handleMouseMove, handlePointerLockChange, enablePointerLock } =
+  const { handleMouseMove, handlePointerLockChange, enablePointerLock, controls } =
     useLockCamera({ camera, renderer });
 
   useEffect(() => {
     if (!renderer?.domElement || !camera) return;
 
-    const controls = new PointerLockControls(camera, renderer.domElement);
+    controls.current = new PointerLockControls(camera, renderer.domElement);
 
     const togglePointerLock = (event: KeyboardEvent) => {
       if (event.key === "Tab") {
-        if (controls.isLocked) {
+        if (controls.current && controls.current.isLocked) {
           document.exitPointerLock();
         } else {
           enablePointerLock();
@@ -53,19 +58,23 @@ export const LockCamera = ({ camera, renderer }: LockCameraProps) => {
       }
     };
 
+    // Fonction pour verrouiller la caméra au clic
+    const handleClick = () => {
+      enablePointerLock();
+    };
+
     document.addEventListener("keydown", togglePointerLock);
     document.addEventListener("pointerlockchange", handlePointerLockChange);
     document.addEventListener("mousemove", handleMouseMove);
+    renderer.domElement.addEventListener("click", handleClick);
 
     return () => {
       document.removeEventListener("keydown", togglePointerLock);
-      document.removeEventListener(
-        "pointerlockchange",
-        handlePointerLockChange,
-      );
+      document.removeEventListener("pointerlockchange", handlePointerLockChange);
       document.removeEventListener("mousemove", handleMouseMove);
+      renderer.domElement.removeEventListener("click", handleClick);
     };
-  }, [camera, renderer, handleMouseMove, handlePointerLockChange ]);
+  }, [camera, renderer, handleMouseMove, handlePointerLockChange, enablePointerLock]);
 
   return null;
 };

@@ -1,6 +1,6 @@
 import { Box } from "@react-three/drei";
 import { useFrame } from "@react-three/fiber";
-import { quat, RapierRigidBody, useRapier } from "@react-three/rapier";
+import { quat, RapierRigidBody } from "@react-three/rapier";
 import { modelPath } from "src/constants/default";
 import { Quaternion, Vector3 } from "three";
 import { Entity } from "../Entity";

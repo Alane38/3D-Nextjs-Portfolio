@@ -51,7 +51,7 @@ export const Character = ({
         enableControl={enableControl}
         enableFollowCam={enableFollowCam}
         // Direction & Camera
-        camMode="ControlCamera"
+        camMode="ThirdCamera"
         characterInitDir={0}
         camInitDis={-3.5}
         camMaxDis={-5}

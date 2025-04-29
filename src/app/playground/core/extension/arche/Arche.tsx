@@ -292,7 +292,7 @@ const ARCHE: ForwardRefRenderFunction<customRigidBody, ArcheProps> = (
   // World setup
   const { rapier, world } = useRapier();
 
-  // //
+  // Character setup
   const characterRef = useRef<customRigidBody>(null);
   const characterModelRef = useRef<THREE.Group>(null!);
   const characterModelIndicator = useMemo(() => new THREE.Object3D(), []);
@@ -319,9 +319,11 @@ const ARCHE: ForwardRefRenderFunction<customRigidBody, ArcheProps> = (
   // Controller Mode
   const isModePointToMove = modeSet.has("PointToMove");
   const isModeOnlyCamera = modeSet.has("OnlyCamera");
-  const isModeControlCamera = modeSet.has("ControlCamera");
 
-  /** LockCamera Props */
+  const isModeControlCamera = modeSet.has("ControlCamera");
+  const isModeThirdCamera = modeSet.has("ThirdCamera"); // Default
+
+  /** LockCamera */
   const { camera, gl } = useThree();
 
   /** Body collider */
@@ -883,7 +885,7 @@ const ARCHE: ForwardRefRenderFunction<customRigidBody, ArcheProps> = (
       modelEuler.y =
         (crossVector.y > 0 ? -1 : 1) * pointToPoint.angleTo(vectorZ);
       // If mode is also set to Control Camera. Keep the camera on the back of character.
-      if (isModeControlCamera)
+      if (isModeControlCamera || isModeThirdCamera)
         pivot.rotation.y = THREE.MathUtils.lerp(
           pivot.rotation.y,
           modelEuler.y,
@@ -906,16 +908,15 @@ const ARCHE: ForwardRefRenderFunction<customRigidBody, ArcheProps> = (
 
   /** Stop character movement: used to stop the character movement when you stop press a key. */
   const resetAnimation = useGame((state) => state.reset);
-  // TODO: null pointer passed to rust(Maybe it's good)
   const characterStopMove = () => {
     if (!characterRigidBody) return;
     // Reset character velocity
     characterRigidBody.setLinvel({ x: 0, y: currentVel.y, z: 0 }, true);
-    characterRigidBody.setAngvel({ x: 0, y: 0, z: 0 }, true);
+    characterRigidBody.setAngvel({ x: 0, y: 0, z: 0 }, false);
     resetAnimation();
   };
 
-  // Rotate camera function
+  /** Rotate camera function */
   // eslint-disable-next-line
   const rotateCamera = (x: number, y: number) => {
     pivot.rotation.y += y;
@@ -1185,11 +1186,34 @@ const ARCHE: ForwardRefRenderFunction<customRigidBody, ArcheProps> = (
     /**
      * Character model rotate to the moving direction
      */
-    modelQuat.setFromEuler(modelEuler);
-    characterModelIndicator.quaternion.rotateTowards(
-      modelQuat,
-      delta * turnSpeed,
-    );
+    // Determine if the character should rotate based on the input keys and joystick
+    const shouldRotate =
+      forward ||
+      back ||
+      left ||
+      right ||
+      gamepadKeys.forward ||
+      gamepadKeys.back ||
+      gamepadKeys.left ||
+      gamepadKeys.right ||
+      joystickDis > 0 ||
+      isPointMoving;
+
+    if (shouldRotate) {
+      // Get the quaternion from the Euler angles, need to be set to the model
+      modelQuat.setFromEuler(modelEuler);
+      // Calculate the angle difference between the current quaternion and the target quaternion
+      const angleDifference =
+        characterModelIndicator.quaternion.angleTo(modelQuat);
+      // Determine the effective turn speed based on the angle difference
+      const effectiveTurnSpeed = Math.min(angleDifference, delta * turnSpeed);
+
+      // Rotate towards the target quaternion with the effective turn speed
+      characterModelIndicator.quaternion.rotateTowards(
+        modelQuat,
+        effectiveTurnSpeed * (isModeThirdCamera ? 0.5 : 1), // If is mode ThirdCamera set to 0.5 to smooth the rotation.
+      );
+    }
 
     /** Auto Balance Management */
     if (!autoBalance) {
@@ -1220,13 +1244,7 @@ const ARCHE: ForwardRefRenderFunction<customRigidBody, ArcheProps> = (
 
     /** Character Flip */
     // Check if the character is flipped based on its rotation
-
-    if (!characterRigidBody) {
-      console.warn("characterRigidBody is undefined");
-      return;
-    }
-
-    if (autoFlip) {
+    if (autoFlip && characterRigidBody) {
       const rotation = characterRigidBody?.rotation?.();
       if (rotation) {
         const isFlipped = rotation.x > flipAngle || rotation.x < -flipAngle;
@@ -1235,19 +1253,6 @@ const ARCHE: ForwardRefRenderFunction<customRigidBody, ArcheProps> = (
         }
       }
     }
-
-    /** Shape Ray Detection (not used) */
-    // rayHit = world.castShape(
-    //   currentPos,
-    //   { w: 0, x: 0, y: 0, z: 0 },
-    //   {x:0,y:-1,z:0},
-    //   shape,
-    //   rayLength,
-    //   true,
-    //   null,
-    //   null,
-    //   characterRigidBody
-    // );
 
     if (rayHit && rayHit.timeOfImpact < floatingDis + rayHitForgiveness) {
       if (slopeRayHit && actualSlopeAngle < slopeMaxAngle) {
@@ -1504,8 +1509,11 @@ const ARCHE: ForwardRefRenderFunction<customRigidBody, ArcheProps> = (
           gamepadJoystickAng > (5 * Math.PI) / 3));
 
     // Apply Camera Rotation
-    if (isModeControlCamera) {
-      const rotationSpeed = delta * controlCamRotMult * (run ? sprintMult : 1);
+    if (isModeControlCamera || isModeThirdCamera) {
+      const rotationSpeed =
+        delta *
+        controlCamRotMult *
+        (isModeControlCamera ? (run ? sprintMult : 1) : 1);
       if (isRotatingLeft) {
         pivot.rotation.y += rotationSpeed;
       } else if (isRotatingRight) {
