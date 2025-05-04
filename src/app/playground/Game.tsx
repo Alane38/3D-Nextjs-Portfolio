@@ -12,8 +12,6 @@ import Inventory from "./core/client/inventory/Inventory";
 import { PlacementManager } from "./core/PlacementManager";
 import { GameCanvas } from "./GameCanvas";
 import { FileWorld } from "./world/FileWorld";
-import { LockCamera, useLockCamera } from "./core/extension/arche/utils/LockCamera";
-import { useThree } from "@react-three/fiber";
 
 export function Game() {
   const loading = useLoadingAssets();

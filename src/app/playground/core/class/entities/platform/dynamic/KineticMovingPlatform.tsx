@@ -3,7 +3,7 @@ import { useFrame } from "@react-three/fiber";
 import { Vector3 } from "three";
 import { Entity } from "../../../Entity";
 import { EntityComponent } from "../../../EntityComponent";
-import { RapierRigidBody, useRapier } from "@react-three/rapier";
+import { RapierRigidBody } from "@react-three/rapier";
 import { RefObject } from "react";
 import { useWorldRigidBody } from "@/hooks/useWorldRigidBody";
 
