@@ -1,17 +1,16 @@
 import { Box, Sphere } from "@react-three/drei";
 import {
-  BallCollider,
-  RapierRigidBody,
-  RigidBody,
-  RigidBodyOptions,
-  useSpringJoint,
+    BallCollider,
+    RapierRigidBody,
+    RigidBody,
+    RigidBodyOptions,
+    useSpringJoint,
 } from "@react-three/rapier";
-import { forwardRef, useMemo, useRef } from "react";
-import { Demo } from "../../App";
 import { useForwardedRef } from "@react-three/rapier/src/hooks/use-forwarded-ref";
 import { vectorArrayToVector3 } from "@react-three/rapier/src/utils/utils";
-import { useResetOrbitControls } from "../../hooks/use-reset-orbit-controls";
+import { forwardRef, useMemo, useRef } from "react";
 import { Vector3 } from "three";
+import { useResetOrbitControls } from "../../hooks/use-reset-orbit-controls";
 
 const COLORS_ARR = ["#335C67", "#FFF3B0", "#E09F3E", "#9E2A2B", "#540B0E"];
 
@@ -78,7 +77,7 @@ const BallSpring = forwardRef<RapierRigidBody, BallSpringProps>(
   },
 );
 
-export const SpringExample: Demo = () => {
+export const SpringExample = () => {
   const floor = useRef<RapierRigidBody>(null);
 
   const vectorArr = useMemo(() => {

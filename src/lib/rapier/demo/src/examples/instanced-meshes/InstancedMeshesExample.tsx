@@ -1,14 +1,13 @@
 import {
-  InstancedRigidBodies,
-  InstancedRigidBodyProps,
-  RapierRigidBody,
+    InstancedRigidBodies,
+    InstancedRigidBodyProps,
+    RapierRigidBody,
 } from "@react-three/rapier";
+import { button, useControls } from "leva";
 import { useEffect, useRef, useState } from "react";
 import { Color, InstancedMesh } from "three";
-import { useSuzanne } from "../all-shapes/AllShapesExample";
-import { Demo } from "../../App";
-import { button, useControls } from "leva";
 import { useResetOrbitControls } from "../../hooks/use-reset-orbit-controls";
+import { useSuzanne } from "../all-shapes/AllShapesExample";
 
 const MAX_COUNT = 2000;
 
@@ -23,7 +22,7 @@ const createBody = (): InstancedRigidBodyProps => ({
   scale: [0.5 + Math.random(), 0.5 + Math.random(), 0.5 + Math.random()],
 });
 
-export const InstancedMeshes: Demo = () => {
+export const InstancedMeshes = () => {
   const {
     nodes: { Suzanne },
   } = useSuzanne();

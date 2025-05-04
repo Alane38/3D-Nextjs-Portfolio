@@ -1,7 +1,6 @@
 import { useGLTF } from "@react-three/drei";
-import { useFrame, useLoader } from "@react-three/fiber";
-import { ReactNode, useEffect, useRef } from "react";
-import { AnimationMixer, LoopRepeat } from "three";
+import { useLoader } from "@react-three/fiber";
+import { ReactNode } from "react";
 import { DRACOLoader, GLTFLoader } from "three/examples/jsm/Addons.js";
 
 export const ModelLoader = ({
@@ -14,18 +13,23 @@ export const ModelLoader = ({
   // Preload the model to improve loading performance
   useGLTF.preload(path);
 
-  if (path.endsWith(".gltf")) {
-    // Load .gltf files using useGLTF for better integration with Drei
-    const { scene } = useGLTF(path);
-    return <primitive object={scene}>{children}</primitive>;
-  } else if (path.endsWith(".glb")) {
-    // Load .glb files using GLTFLoader with DRACOLoader for optimization
-    const gltf = useLoader(GLTFLoader, path, (loader) => {
-      const dracoLoader = new DRACOLoader();
-      dracoLoader.setDecoderPath("three/examples/jsm/libs/draco/");
-      loader.setDRACOLoader(dracoLoader);
-    });
+  const isGLTF = path.endsWith(".gltf");
+  const isGLB = path.endsWith(".glb");
 
-    return <primitive  object={gltf.scene.clone()}>{children}</primitive>;
+  // Load both hooks unconditionally (safe because Drei/Three.js won't break if path is nonsense for one of them)
+  const gltfFromGLTF = useGLTF(path); // will only be valid if isGLTF
+  const gltfFromGLB = useLoader(GLTFLoader, path, (loader) => {
+    const dracoLoader = new DRACOLoader();
+    dracoLoader.setDecoderPath("three/examples/jsm/libs/draco/");
+    loader.setDRACOLoader(dracoLoader);
+  });
+
+  // Then conditionally render
+  if (isGLTF) {
+    return <primitive object={gltfFromGLTF.scene}>{children}</primitive>;
+  } else if (isGLB) {
+    return <primitive object={gltfFromGLB.scene.clone()}>{children}</primitive>;
+  } else {
+    return null; // or an error fallback
   }
 };

@@ -1,10 +1,10 @@
 
+import { animationPrefix, characterPath } from "@/constants/default";
 import { RapierRigidBody } from "@react-three/rapier";
 import { useRef } from "react";
-import { animationPrefix, characterPath } from "src/constants/default";
-import Galaad from "../extension/galaad/Galaad";
-import { GalaadAnimation } from "../extension/galaad/GalaadAnimation";
-import { CharacterProps } from "../extension/galaad/types/CharacterProps";
+import Arche from "../extension/arche/Arche";
+import { ArcheAnimation } from "../extension/arche/ArcheAnimation";
+import { CharacterProps } from "./character.type";
 
 export const Character = ({
   name,
@@ -32,7 +32,7 @@ export const Character = ({
 
   return (
     <>
-      <Galaad
+      <Arche
         // Character
         name={name}
         defaultPlayer={defaultPlayer}
@@ -46,12 +46,12 @@ export const Character = ({
         hitboxWidth={0.05}
         hitboxLenght={0.8}
         hitboxRadius={0.3}
-        floatHeight={0}
+        floatHeight={1}
         // Control & Camera
         enableControl={enableControl}
         enableFollowCam={enableFollowCam}
         // Direction & Camera
-        camMode="ControlCamera"
+        camMode="ThirdCamera"
         characterInitDir={0}
         camInitDis={-3.5}
         camMaxDis={-5}
@@ -65,8 +65,7 @@ export const Character = ({
         camCollision={true}
         camCollisionOffset={0.5}
         camCollisionSpeedMult={5}
-        controlCamRotMult={0.5}
-        camListenerTarget="domElement"
+        controlCamRotMult={1}
         camFollowMult={10}
         camLerpMult={20}
         // Follow light
@@ -92,8 +91,8 @@ export const Character = ({
         rayHitForgiveness={1}
         rayLength={0.35}
         rayDir={{ x: 0, y: -1, z: 0 }}
-        springK={1.5}
-        dampingC={0}
+        springK={5}
+        dampingC={1}
         slopeMaxAngle={0.7}
         slopeRayOriginOffest={0.2}
         slopeRayLength={2}
@@ -113,7 +112,7 @@ export const Character = ({
         }}
       >
         {/* Import Model and Animation in FBX */}
-        <GalaadAnimation
+        <ArcheAnimation
           path={characterPath + path} // Must have property
           animationSet={animationSet}
           rigidBodyProps={{
@@ -121,7 +120,7 @@ export const Character = ({
             position: [0, -0.7, 0],
           }}
         />
-      </Galaad>
+      </Arche>
     </>
   );
 };

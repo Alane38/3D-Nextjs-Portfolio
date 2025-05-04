@@ -1,12 +1,23 @@
 import { Text } from "@react-three/drei";
 import { useFrame } from "@react-three/fiber";
-import { CylinderCollider, RigidBody } from "@react-three/rapier";
-import { useMemo, useRef } from "react";
+import { CylinderCollider } from "@react-three/rapier";
+import { useMemo } from "react";
 import * as THREE from "three";
 import { Entity } from "../../../Entity";
-import EntitySingleton from "../../../EntitySingleton";
+import { EntityComponent } from "../../../EntityComponent";
+import { useWorldRigidBody } from "@/hooks/useWorldRigidBody";
 
+/**
+ * An entity class
+ *
+ * @class
+ * @extends Entity
+ */
 export class KinematicRotatingDrumEntity extends Entity {
+  /**
+   * Creates a new instance
+   * Initializes with default values for physics and appearance
+   */
   constructor() {
     super("KinematicRotatingDrum");
     this.type = "kinematicPosition";
@@ -14,34 +25,54 @@ export class KinematicRotatingDrumEntity extends Entity {
   }
 
   renderComponent() {
-    return <KinematicRotatingDrumComponent model={this} />;
+    return <KinematicRotatingDrumComponent entity={this} />;
   }
 }
 
-export const KinematicRotatingDrumComponent = ({
-  model,
-  ...props
-}: { model?: KinematicRotatingDrumEntity } & Partial<KinematicRotatingDrumEntity>) => {
-  const instance = model || EntitySingleton.getInstance(KinematicRotatingDrumEntity);
-  const object = useMemo(() => ({ ...instance, ...props }), [model, props]);
+/**
+ * Component responsible for rendering the entity
+ *
+ * @component
+ * @param  {KinematicRotatingDrumComponent} entity - Contains all the default props of the entity
+ * @returns {JSX.Element} The rendered 3D object
+ */
+export const KinematicRotatingDrumComponent = EntityComponent(
+  KinematicRotatingDrumEntity,
+  (instance, rigidBodyRef) => {
+    /**
+     * Renders the 3D model
+     *
+     * @function
+     * @param {EntityComponent} EntityTemplate - A default entity class
+     * @param {Ground} instance - An entity from the Entity parent
+     * @param {RapierRigidBody} rigidBodyRef - Reference to the RapierRigidBody instance
+     * @param {THREE.Group} visualRef - Reference to the THREE.Group instance
+     */
+    const xAxis = useMemo(() => new THREE.Vector3(1, 0, 0), []);
+    const quaternion = useMemo(() => new THREE.Quaternion(), []);
 
-  const ref = useRef<any>(null);
-  const xAxis = useMemo(() => new THREE.Vector3(1, 0, 0), []);
-  const quaternion = useMemo(() => new THREE.Quaternion(), []);
+    const rigidBody = useWorldRigidBody(rigidBodyRef);
 
-  useFrame((state) => {
-    const time = state.clock.elapsedTime;
-    ref.current?.setNextKinematicRotation(
-      quaternion.setFromAxisAngle(xAxis, time * 0.5),
-    );
-  });
+    useFrame((state) => {
+      if (!rigidBody) return;
 
-  return (
-    <>
-      <Text scale={0.5} color="black" maxWidth={10} textAlign="center" position={[object.position.x, 2.5, object.position.z]}>
-        Kinematic Rotating Drum
-      </Text>
-      <RigidBody ref={ref} {...object}>
+      const time = state.clock.elapsedTime;
+      rigidBody.setNextKinematicRotation(
+        quaternion.setFromAxisAngle(xAxis, time * 0.5),
+      );
+    });
+
+    return (
+      <>
+        <Text
+          scale={0.5}
+          color="black"
+          maxWidth={10}
+          textAlign="center"
+          position={[instance.position.x, 2.5, instance.position.z]}
+        >
+          Kinematic Rotating Drum
+        </Text>
         <group rotation={[0, 0, Math.PI / 2]}>
           <CylinderCollider args={[5, 1]} />
           <mesh receiveShadow>
@@ -49,7 +80,7 @@ export const KinematicRotatingDrumComponent = ({
             <meshStandardMaterial color="white" />
           </mesh>
         </group>
-      </RigidBody>
-    </>
-  );
-};
+      </>
+    );
+  },
+);

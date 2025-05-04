@@ -4,68 +4,68 @@ import { useScroll, useTransform } from "framer-motion";
 import { motion } from "framer-motion";
 import React, { useEffect, useRef, useState } from "react";
 
-type Button = {
-  label: string;
-  href: string;
-  class: string;
-};
+// type Button = {
+//   label: string;
+//   href: string;
+//   class: string;
+// };
 
-type Content = {
-  containerClass: string;
-  titleClass: string;
-  subtitleClass: string;
-  paragraphClass: string;
-  paragraph: string;
-};
+// type Content = {
+//   containerClass: string;
+//   titleClass: string;
+//   subtitleClass: string;
+//   paragraphClass: string;
+//   paragraph: string;
+// };
 
-class HtmlSection {
-  title: string;
-  description: string;
-  buttons: Button[];
-  position: [number, number, number];
-  rotation: [number, number, number];
-  scale: number;
-  content: Content;
+// class HtmlSection {
+//   title: string;
+//   description: string;
+//   buttons: Button[];
+//   position: [number, number, number];
+//   rotation: [number, number, number];
+//   scale: number;
+//   content: Content;
 
-  constructor(
-    title: string,
-    description: string,
-    buttons: Button[],
-    position: [number, number, number],
-    rotation: [number, number, number],
-    scale: number,
-    content: Content,
-  ) {
-    this.title = title;
-    this.description = description;
-    this.buttons = buttons;
-    this.position = position;
-    this.rotation = rotation;
-    this.scale = scale;
-    this.content = content;
-  }
+//   constructor(
+//     title: string,
+//     description: string,
+//     buttons: Button[],
+//     position: [number, number, number],
+//     rotation: [number, number, number],
+//     scale: number,
+//     content: Content,
+//   ) {
+//     this.title = title;
+//     this.description = description;
+//     this.buttons = buttons;
+//     this.position = position;
+//     this.rotation = rotation;
+//     this.scale = scale;
+//     this.content = content;
+//   }
 
-  render() {
-    return (
-      <div className={this.content.containerClass}>
-        <h1 className={this.content.titleClass}>{this.title}</h1>
-        <h3 className={this.content.subtitleClass}>{this.description}</h3>
-        <p className={this.content.paragraphClass}>{this.content.paragraph}</p>
-        <div className="flex space-x-4">
-          {this.buttons.map((button, index) => (
-            <button
-              key={index}
-              onClick={() => (window.location.href = button.href)}
-              className={button.class}
-            >
-              {button.label}
-            </button>
-          ))}
-        </div>
-      </div>
-    );
-  }
-}
+//   render() {
+//     return (
+//       <div className={this.content.containerClass}>
+//         <h1 className={this.content.titleClass}>{this.title}</h1>
+//         <h3 className={this.content.subtitleClass}>{this.description}</h3>
+//         <p className={this.content.paragraphClass}>{this.content.paragraph}</p>
+//         <div className="flex space-x-4">
+//           {this.buttons.map((button, index) => (
+//             <button
+//               key={index}
+//               onClick={() => (window.location.href = button.href)}
+//               className={button.class}
+//             >
+//               {button.label}
+//             </button>
+//           ))}
+//         </div>
+//       </div>
+//     );
+//   }
+// }
 
 export const ParallaxSlider: React.FC = () => {
   const sliderRef = useRef<HTMLDivElement | null>(null);
@@ -338,7 +338,7 @@ export const SectionWelcome: React.FC = () => (
 export const SectionInstallation: React.FC = () => (
   <div className="rounded-xl bg-gradient-to-r from-yellow-400 via-red-500 to-purple-600 p-8 text-white shadow-2xl backdrop-blur-2xl select-none">
     <h1 className="animate-fade-in mb-6 text-4xl font-bold text-white drop-shadow-xl">
-      Installation interactive : "Lumières du futur"
+      Installation interactive : &quot;Lumières du futur&quot;
     </h1>
     <p className="animate-fade-in text-md mb-6 opacity-90">
       Une expérience immersive où l’art rencontre la technologie. Explorez une
@@ -386,13 +386,13 @@ export const SectionProjects: React.FC = () => (
           <td className="p-3">Lumières Interactives</td>
           <td className="p-3">Janvier 2024</td>
           <td className="p-3">
-            Installation d'art numérique avec des effets lumineux interactifs.
+            Installation d&apos;art numérique avec des effets lumineux interactifs.
           </td>
         </tr>
         <tr>
           <td className="p-3">Art Numérique</td>
           <td className="p-3">Décembre 2023</td>
-          <td className="p-3">Une collection d'œuvres générées par IA.</td>
+          <td className="p-3">Une collection d&apos;œuvres générées par IA.</td>
         </tr>
       </tbody>
     </table>

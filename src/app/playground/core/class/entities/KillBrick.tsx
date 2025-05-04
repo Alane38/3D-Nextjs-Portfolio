@@ -1,76 +1,95 @@
 import { Box, Text } from "@react-three/drei";
-import { useFrame } from "@react-three/fiber";
-import { RapierRigidBody, RigidBody } from "@react-three/rapier";
-import { useMemo, useRef, useState } from "react";
+import { useState, RefObject } from "react";
 import { Euler, Vector3 } from "three";
 import { Entity } from "../Entity";
-import * as THREE from "three";
-import EntitySingleton from "../EntitySingleton";
+import { EntityComponent } from "../EntityComponent";
+import { RapierRigidBody } from "@react-three/rapier";
 
+/**
+ * An entity class
+ *
+ * @class
+ * @extends Entity
+ */
 export class KillBrick extends Entity {
+  /** Color */
   color: string;
+
+  /**
+   * Creates a new instance
+   * Initializes with default values for physics and appearance
+   */
   constructor() {
     super("KillBrick");
     this.type = "dynamic";
     this.scale = [1, 1, 1];
-    this.rotation = new Euler(0, 0, 0);
     this.color = "red";
     this.position = new Vector3(0, 0.5, 0);
+    this.rotation = new Euler(0, Math.PI, 0);
   }
 
   renderComponent() {
-    return <KillBrickComponent model={this} />;
+    return <KillBrickComponent entity={this} />;
   }
 }
 
-export const KillBrickComponent = ({
-  model,
-  ...props
-}: { model?: KillBrick } & Partial<KillBrick>) => {
-  // Fusion of props and model
-  const instance = model || EntitySingleton.getInstance(KillBrick);
-  const object = useMemo(() => ({ ...instance, ...props }), [model, props]);
+/**
+ * KillBrick renderer 
+ *
+ * @component
+ * @param {KillBrickRenderer} instance - An entity from the Entity parent
+ */
+const KillBrickRenderer = ({
+  instance,
+  rigidBodyRef,
+}: {
+  instance: Entity;
+  rigidBodyRef: RefObject<RapierRigidBody | null>;
+}) => {
+  const [color, setColor] = useState(instance.color);
 
-  const [color, setColor] = useState(object.color);
-
-  const rbRef = useRef<RapierRigidBody>(null);
-  const textRef = useRef<THREE.Mesh>(null);
-
-  useFrame(() => {
-    // Link the text element to Box's rigid body, copying all movements.
-    if (rbRef.current && textRef.current) {
-      textRef.current.position.copy(
-        new THREE.Vector3(
-          rbRef.current.translation().x,
-          rbRef.current.translation().y + Math.PI / 2,
-          rbRef.current.translation().z,
-        ),
-      );
-      textRef.current.rotation.set(0, rbRef.current.rotation().y + Math.PI, 0);
+  instance.onCollisionEnter = ({ other }) => {
+    if (other.rigidBodyObject?.name === "Player") {
+      setColor("green");
     }
-  });
+  };
 
   return (
     <>
-      <RigidBody
-        {...object}
-        ref={rbRef}
-        onCollisionEnter={({ other }) => {
-          if (other.rigidBodyObject?.name === "Player") {
-            setColor("green");
-          }
-        }}
-      >
-        <Box scale={object.scale}>
-          <meshStandardMaterial attach="material" color={color} />
-        </Box>
-      </RigidBody>
+      <Box scale={instance.scale}>
+        <meshStandardMaterial attach="material" color={color} />
+      </Box>
 
-      <mesh ref={textRef}>
+      <group ref={rigidBodyRef} position={[0, 1.5, 0]}>
         <Text scale={0.5} color="red" maxWidth={10} textAlign="center">
           Touch me to kill!
         </Text>
-      </mesh>
+      </group>
     </>
   );
 };
+
+/**
+ * Component responsible for rendering the entity
+ *
+ * @component
+ * @param  {KillBrickComponent} entity - Contains all the default props of the entity
+ * @returns {JSX.Element} The rendered 3D object
+ */
+export const KillBrickComponent = EntityComponent(
+  KillBrick,
+  (instance, rigidBodyRef) => {
+    /**
+     * Renders the 3D model
+     *
+     * @function
+     * @param {EntityComponent} EntityTemplate - A default entity class
+     * @param {Ground} instance - An entity from the Entity parent
+     * @param {RapierRigidBody} rigidBodyRef - Reference to the RapierRigidBody instance
+     * @param {THREE.Group} visualRef - Reference to the THREE.Group instance
+     */
+    return (
+      <KillBrickRenderer instance={instance} rigidBodyRef={rigidBodyRef} />
+    );
+  },
+);

@@ -12,10 +12,6 @@ export const PerformanceWarning = () => {
     return () => clearTimeout(timer);
   }, []);
 
-  const handleClose = () => {
-    setIsClosed(true);
-  };
-
   // If WebGPU is available or if the warning is closed, do not show the notification
   if (WebGPU.isAvailable() || isClosed) return null;
 

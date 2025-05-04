@@ -17,6 +17,15 @@ interface PrismProps {
   materialProps?: MeshStandardMaterialParameters;
 }
 
+/**
+ * Renders the 3D model.
+ *
+ * @component
+ * @param {PrismProps} vertices - vertices
+ * @param {PrismProps} height - height of the prism
+ * @param {PrismProps} materialProps - material properties
+ * @returns {JSX.Element}
+ */
 export const PrismGeometryComponent = ({
   vertices,
   height,

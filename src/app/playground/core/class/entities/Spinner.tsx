@@ -1,15 +1,30 @@
 import { Box } from "@react-three/drei";
 import { useFrame } from "@react-three/fiber";
-import { quat, RapierRigidBody, RigidBody } from "@react-three/rapier";
-import { useMemo, useRef } from "react";
+import { quat, RapierRigidBody } from "@react-three/rapier";
 import { modelPath } from "src/constants/default";
 import { Quaternion, Vector3 } from "three";
 import { Entity } from "../Entity";
-import EntitySingleton from "../EntitySingleton";
+import { EntityComponent } from "../EntityComponent";
+import { RefObject } from "react";
+import { useWorldRigidBody } from "@/hooks/useWorldRigidBody";
 
+/**
+ * An entity class
+ * 
+ * @class
+ * @extends Entity
+ */
 export class Spinner extends Entity {
+  /** Rotation speed */
   speed: number;
+
+  /** Color */
   color: string;
+
+  /**
+   * Creates a new instance
+   * Initializes with rotation and path settings
+   */
   constructor(path: string = modelPath + "Spinner.glb") {
     super("Spinner");
     this.path = path;
@@ -17,39 +32,42 @@ export class Spinner extends Entity {
     this.speed = 5;
     this.color = "blue";
   }
+
   renderComponent() {
-    return <SpinnerComponent model={this} />;
+    return <SpinnerComponent entity={this} />;
   }
 }
 
-export const SpinnerComponent = ({
-  model,
-  ...props
-}: { model?: Spinner } & Partial<Spinner>) => {
-  // Fusion of props and model
-  const instance = model || EntitySingleton.getInstance(Spinner);
-  const object = useMemo(() => ({ ...instance, ...props }), [model, props]);
-
-  const kicker = useRef<RapierRigidBody>(null);
-
+const SpinnerRenderer = ({ instance, rigidBodyRef }: { instance: Spinner; rigidBodyRef: RefObject<RapierRigidBody | null> }) => {
+  const rigidBody = useWorldRigidBody(rigidBodyRef);
   useFrame((_state, delta) => {
-    if (!kicker.current?.rotation()) return;
-
-    const curRotation = quat(kicker.current.rotation());
+    if (!rigidBody) return;
+    
+    const curRotation = quat(rigidBody.rotation());
     const incrementRotation = new Quaternion().setFromAxisAngle(
       new Vector3(0, 1, 0),
-      delta * object.speed,
+      delta * instance.speed,
     );
     curRotation.multiply(incrementRotation);
-    kicker.current.setNextKinematicRotation(curRotation);
+    rigidBody.setNextKinematicRotation(curRotation);
   });
 
   return (
-    <RigidBody ref={kicker} {...object}>
-      <group>
-        <Box args={[1, 0.5, 5]} />
-        <meshStandardMaterial color={object.color} />
-      </group>
-    </RigidBody>
+    <group>
+      <Box args={[1, 0.5, 5]} />
+      <meshStandardMaterial color={instance.color} />
+    </group>
   );
 };
+
+/**
+ * Component responsible for rendering the entity
+ *
+ * @component
+ * @param  {SpinnerComponent} entity - Contains all the default props of the entity
+ * @returns {JSX.Element} The rendered 3D object
+ */
+export const SpinnerComponent = EntityComponent(Spinner, (instance, rigidBodyRef) => {
+  return <SpinnerRenderer instance={instance} rigidBodyRef={rigidBodyRef} />;
+});
+

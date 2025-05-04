@@ -1,9 +1,7 @@
 import { ModelLoader } from "@/app/playground/core/class/rendering/ModelLoader";
-import { RigidBody } from "@react-three/rapier";
-import { useMemo } from "react";
 import { modelPath } from "src/constants/default";
 import { Entity } from "../Entity";
-import EntitySingleton from "../EntitySingleton";
+import { EntityComponent } from "../EntityComponent";
 
 export class Object extends Entity {
   constructor() {
@@ -13,23 +11,25 @@ export class Object extends Entity {
     this.type = "fixed";
     this.colliders = "trimesh";
   }
+
   renderComponent() {
-    return <ObjectComponent model={this} />;
+    return <ObjectComponent entity={this} />;
   }
 }
 
-export const ObjectComponent = ({
-  model,
-  ...props
-}: { model?: Object } & Partial<Object>) => {
-  // Fusion of props and model
-  const instance = model || EntitySingleton.getInstance(Object);
-  const object = useMemo(() => ({ ...instance, ...props }), [model, props]);
-
+/**
+ * Renders the 3D model.
+ *
+ * @component
+ * @param {Object} instance - An entity from the Entity parent.
+ * @param {Object} rigidBodyRef - Reference to the RapierRigidBody instance.
+ * @returns {JSX.Element}
+ */
+export const ObjectComponent = EntityComponent(Object, (instance) => {
   return (
-    <RigidBody {...object}>
+    <>
       {/* Model */}
-      <ModelLoader path={object.path} />
-    </RigidBody>
+      <ModelLoader path={instance.path} />
+    </>
   );
-};
+});

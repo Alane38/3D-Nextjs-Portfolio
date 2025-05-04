@@ -218,7 +218,6 @@ export const useUpdateColliderOptions = (
   props: ColliderProps,
   states: ColliderStateMap,
 ) => {
-  // TODO: Improve this, split each prop into its own effect
   const mutablePropsAsFlatArray = useMemo(
     () =>
       mutableColliderOptionKeys.flatMap((key) => {

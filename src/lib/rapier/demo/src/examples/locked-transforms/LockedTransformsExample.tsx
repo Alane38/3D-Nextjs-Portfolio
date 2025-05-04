@@ -1,9 +1,8 @@
 import { Html, Torus } from "@react-three/drei";
 import { RigidBody } from "@react-three/rapier";
-import { Demo } from "../../App";
 import { useResetOrbitControls } from "../../hooks/use-reset-orbit-controls";
 
-export const LockedTransformsExample: Demo = () => {
+export const LockedTransformsExample = () => {
   useResetOrbitControls(30);
 
   return (

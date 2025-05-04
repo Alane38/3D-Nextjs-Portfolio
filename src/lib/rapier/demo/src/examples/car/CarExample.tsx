@@ -1,13 +1,12 @@
 import { Box, Cylinder } from "@react-three/drei";
 import { useFrame } from "@react-three/fiber";
 import {
-  RapierRigidBody,
-  RigidBody,
-  useRevoluteJoint,
-  Vector3Tuple,
+    RapierRigidBody,
+    RigidBody,
+    useRevoluteJoint,
+    Vector3Tuple,
 } from "@react-three/rapier";
 import { createRef, RefObject, useRef } from "react";
-import { Demo } from "../../App";
 import { useResetOrbitControls } from "../../hooks/use-reset-orbit-controls";
 
 const WheelJoint = ({
@@ -38,7 +37,7 @@ const WheelJoint = ({
   return null;
 };
 
-export const Car: Demo = () => {
+export const Car = () => {
   const bodyRef = useRef<RapierRigidBody>(null!);
   const wheelPositions: [number, number, number][] = [
     [-3, 0, 2],

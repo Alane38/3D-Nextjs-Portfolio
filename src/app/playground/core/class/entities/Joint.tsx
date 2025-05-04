@@ -1,24 +1,28 @@
+import { Box, Sphere } from "@react-three/drei";
 import {
-  RigidBody,
-  useSphericalJoint,
-  usePrismaticJoint,
-  RapierRigidBody,
-  RigidBodyTypeString,
+    RapierRigidBody,
+    RigidBody,
+    RigidBodyTypeString,
+    usePrismaticJoint,
+    useSphericalJoint,
 } from "@react-three/rapier";
 import {
-  forwardRef,
-  createRef,
-  useRef,
-  ReactNode,
-  RefObject,
-  useMemo,
+    createRef,
+    forwardRef,
+    ReactNode,
+    RefObject,
+    useRef
 } from "react";
-import { Sphere, Box } from "@react-three/drei";
 import { Mesh } from "three";
 import { Entity } from "../Entity";
-import EntitySingleton from "../EntitySingleton";
+import { EntityComponent } from "../EntityComponent";
 
-// === ENTITY: Rope ===
+/**
+ * An entity class
+ * 
+ * @class
+ * @extends Entity
+ */
 export class Rope extends Entity {
   constructor(public length = 40) {
     super("Rope");
@@ -27,11 +31,16 @@ export class Rope extends Entity {
   }
 
   renderComponent() {
-    return <RopeComponent model={this} />;
+    return <RopeComponent entity={this} />;
   }
 }
 
-// === ENTITY: PrismaticJointDemo ===
+/**
+ * An entity class
+ * 
+ * @class
+ * @extends Entity
+ */
 export class PrismaticJointDemo extends Entity {
   constructor() {
     super("PrismaticJointDemo");
@@ -45,12 +54,21 @@ export class PrismaticJointDemo extends Entity {
 
 // === COMPONENTS ===
 
+/**
+ * 
+ * @component
+ * @param  {ShadowElement} _ - 
+ * @param  {ShadowElement} ref - Reference to the RapierRigidBody instance
+ * @returns {JSX.Element}
+ */
 const ShadowElement = forwardRef<Mesh>((_, ref) => (
   
   <Sphere castShadow ref={ref} args={[0.5]}>
     <meshPhysicalMaterial />
   </Sphere>
 ));
+
+ShadowElement.displayName = "ShadowElement";
 
 type RopeSegmentProps = {
   position: [number, number, number];
@@ -66,6 +84,8 @@ const RopeSegment = forwardRef<RapierRigidBody, RopeSegmentProps>(
   ),
 );
 
+RopeSegment.displayName = "RopeSegment";
+
 const RopeJoint = ({
   a,
   b,
@@ -80,15 +100,26 @@ const RopeJoint = ({
   return null;
 };
 
-const RopeComponent = ({
-  model,
-  ...props
-}: { model?: Rope } & Partial<Rope>) => {
-  const instance = model || EntitySingleton.getInstance(Rope);
-  const entity = useMemo(() => ({ ...instance, ...props }), [model, props]);
-
+/**
+ * Component responsible for rendering the entity
+ *
+ * @component
+ * @param  {RopeComponent} entity - Contains all the default props of the entity
+ * @returns {JSX.Element} The rendered 3D object
+ */
+const RopeComponent = EntityComponent(Rope, (instance) => {
+    /** 
+   * Renders the 3D model
+   * 
+   * @function
+   * @param {EntityComponent} EntityTemplate - A default entity class
+   * @param {Ground} instance - An entity from the Entity parent
+   * @param {RapierRigidBody} rigidBodyRef - Reference to the RapierRigidBody instance
+   * @param {THREE.Group} visualRef - Reference to the THREE.Group instance
+   */
+  
   const refs = useRef(
-    Array.from({ length: entity.length }).map(() =>
+    Array.from({ length: instance.length }).map(() =>
       createRef<RapierRigidBody>(),
     ) as RefObject<RapierRigidBody>[],
   );
@@ -112,7 +143,7 @@ const RopeComponent = ({
       )}
     </group>
   );
-};
+});
 
 const PrismaticExampleComponent = ({
   model,

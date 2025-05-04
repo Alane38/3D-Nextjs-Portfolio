@@ -1,12 +1,11 @@
 import { Box } from "@react-three/drei";
 import { useFrame } from "@react-three/fiber";
 import { RapierRigidBody, RigidBody, euler, quat } from "@react-three/rapier";
-import { Demo } from "../../App";
-import { useRef, useState } from "react";
 import { useControls } from "leva";
+import { useRef, useState } from "react";
 import { useResetOrbitControls } from "../../hooks/use-reset-orbit-controls";
 
-export const ImmutablePropsExample: Demo = () => {
+export const ImmutablePropsExample = () => {
   const [canSleep, setCanSleep] = useState(true);
   const rb = useRef<RapierRigidBody>(null);
 

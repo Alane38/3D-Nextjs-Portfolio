@@ -1,9 +1,8 @@
 import { Box, Sphere, Torus } from "@react-three/drei";
 import { useFrame } from "@react-three/fiber";
-import { RigidBody, RapierRigidBody } from "@react-three/rapier";
-import { useEffect, useRef } from "react";
+import { RapierRigidBody, RigidBody } from "@react-three/rapier";
+import { useRef } from "react";
 import { Euler, Quaternion } from "three";
-import { Demo } from "../../App";
 import { useResetOrbitControls } from "../../hooks/use-reset-orbit-controls";
 
 const Ball = () => {
@@ -30,7 +29,7 @@ const Ball = () => {
   );
 };
 
-export const Kinematics: Demo = () => {
+export const Kinematics = () => {
   const torus = useRef<RapierRigidBody>(null);
   const platform = useRef<RapierRigidBody>(null);
 

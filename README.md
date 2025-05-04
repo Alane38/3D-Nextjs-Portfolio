@@ -1,6 +1,6 @@
 # Newalfox Interactive TriDfolio - Next.js & Three.js
 
-![Portfolio Banner](https://via.placeholder.com/1200x300)
+![Portfolio Banner](https://i.imgur.com/dsK1fjy.png)
 
 An immersive 3D portfolio experience built with Next.js, Three.js, React Three Rapier, and React Three Fiber.
 This project showcases interactive 3D elements, physics-based interactions, and a modern UI design.
@@ -9,7 +9,7 @@ This project showcases interactive 3D elements, physics-based interactions, and 
 
 - **Interactive 3D Environment**
 
-  - Character controller with physics
+  - Advanced Character Controller(ARCHE)
   - Dynamic platforms and obstacles
   - Responsive 3D objects and animations
   - Physics-based interactions using Rapier
@@ -25,6 +25,7 @@ This project showcases interactive 3D elements, physics-based interactions, and 
 - **Technical Highlights**
   - Component-based architecture
   - Entity system for 3D objects
+  - Custom entity manager for 3D objects
   - Physics engine integration
   - Modular and reusable components
   - TypeScript for type safety
@@ -70,36 +71,51 @@ bun dev
 ## 🏗️ Project Structure
 
 ```
-3D-NEXTJS-PORTFOLIO/
-├── app/
-│   ├── components/                 # Global UI components
-│   │   ├── Player/                 # Player UI components
-│   │   ├── Utility/                # UI utilities
-│   ├── Core/                       # Core components and controllers
-│   │   ├── Element/                # Global objects
-│   │   │   ├── Environment/        # Environment 3D objects (not class)
-│   │   │   ├── Objects/            # 3D objects components (not class)
-│   │   │   ├── Player/             # Character
-│   │   │   │   ├── Vehicles/       # Character vehicles  
-│   │   ├── Managers/               # Managers
-│   │   ├── Utility/                # Element utilities
-│   ├── Resources/                  # Global resources	
-│   │   ├── Class/                  # Entity classes and components
-│   │   │   ├── Environment/        # Environment 3D objects
-│   │   │   ├── Objects/            # 3D objects
-│   │   │   ├── Test/               # Examples and tests 3D objects
-│   │   │   ├── UI/                 # 3D User interface components
-│   │   ├── Environment/            # World and environment components
-│   │   │   │   ├── Demo/           # Demos environment
-│   │   ├── Event/                  # Event handlers
-│   │   ├── Hooks/                  # React hooks
-│   │   │   ├── Leva/               # Leva hooks
-│   │   ├── Settings/               # Global settings 
-│   └── layout.tsx                  # Root layout
-├── constants/                      # Global constants and configurations
-├── packages/                       # External packages
-├── public/                         # Static assets and 3D models
-└── types/                          # TypeScript type definitions
+3D-Nextjs-Portfolio/
+├── public/                         # Static public assets
+│   ├── assets/                     # Project assets
+│   │   ├── 3d/                     # 3D model files
+│   │   │   ├── blend/              # Blender source files (.blend)
+│   │   │   │   ├── Fox/            # Fox model files
+│   │   │   │   │   └── Old/        # Older version of the Fox model
+│   │   │   │   └── RestaurantSign/ # Restaurant sign model in .blend format
+│   │   │   ├── fbx/                # 3D models in FBX format
+│   │   │   └── glb/                # 3D models in GLB format
+│   │   ├── images/                 # Image assets
+│   │   │   ├── example/            # Example images
+│   │   │   └── inventory/          # Inventory-related images
+│   │   └── videos/                 # Video assets
+│   └── fonts/                      # Custom fonts
+├── src/                            # Source code
+│   ├── app/                        # Application routes and pages
+│   │   ├── playground/             # Experimental or demo playground
+│   │   │   ├── core/               # Core game logic
+│   │   │   │   ├── character/      # Character logic
+│   │   │   │   │   └── vehicles/   # Vehicles used by characters
+│   │   │   │   ├── class/          # Core classes and blueprints
+│   │   │   │   │   ├── entities/   # Game entities
+│   │   │   │   │   │   ├── mesh/   # Mesh-based entity components
+│   │   │   │   │   │   └── platform/ # Platform-specific logic
+│   │   │   │   │   ├── environment/ # Environment-related classes
+│   │   │   │   │   ├── rendering/  # Rendering logic and utilities
+│   │   │   │   │   ├── template/   # Class templates or patterns
+│   │   │   │   │   └── ui/         # UI elements in class-based structure
+│   │   │   │   ├── client/         # Client-side specific logic
+│   │   │   │   │   └── inventory/  # Inventory system
+│   │   │   │   │       └── edit-tool/ # Tools to edit inventory items
+│   │   │   │   └── extension/      # Core extensions and plugins
+│   │   │   │       └── arche/      # Arche framework-related modules
+│   │   │   │           ├── hooks/  # Custom hooks for arche
+│   │   │   │           ├── store/  # Global/local state stores
+│   │   │   │           ├── types/  # Type definitions
+│   │   │   │           └── utils/  # Utility functions
+│   │   │   └── world/              # World logic and structure
+│   │   │       └── demo/           # World demo scenes
+│   ├── components/                 # Reusable React components
+│   ├── constants/                  # Constant values and config
+│   └── hooks/                      # Custom React hooks
+│       └── leva/                   # Hooks for Leva UI controls
+
 ```
 
 ## 🛠️ Built With
@@ -114,12 +130,12 @@ bun dev
 
 ## 🎮 Controls
 
-- **ZQSD**  - Move Character
+- **ZQSD** - Move Character
 - **Mouse** - Move Character
 - **Shift** - Run
 - **Space** - Jump OR Brake
-- **TAB**   - Lock Camera to Character
-- **R**     - Reset Character
+- **TAB** - Lock Camera to Character
+- **R** - Reset Character(Unavailable)
 - **Click** - Interact with objects
 
 ## 🔧 Configuration
@@ -151,12 +167,14 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 - Next.js team
 - All contributors and supporters
 
-## 🌟 THANKS TO 
+## 🌟 THANKS TO
 
-- Isaac Mason: [https://github.com/isaac-mason](https://github.com/isaac-mason)
-- Poimandres: [https://github.com/pmndrs](https://github.com/pmndrs)
-- Erdong Chen: [https://github.com/ErdongChen-Andrew](https://github.com/ErdongChen-Andrew)
+- [Isaac-Mason](https://github.com/isaac-mason)
+- [Poimandres](https://github.com/pmndrs)
+- [ErdongChen-Andrew](https://github.com/ErdongChen-Andrew)
 
 ## 📧 Contact
 
-Project Link: [https://github.com/Alane38/3d-nextjs-portfolio](https://github.com/Alane38/3d-nextjs-portfolio)
+**Project Link** - [triDFolio](https://github.com/Alane38/3d-nextjs-portfolio)
+
+**Developpers** - [Alane38](https://github.com/Alane38) and [Pamacea](https://github.com/Pamacea)

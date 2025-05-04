@@ -1,49 +1,66 @@
 import { Box } from "@react-three/drei";
-import { RigidBody } from "@react-three/rapier";
-import { useMemo } from "react";
 import { Entity } from "../Entity";
-import EntitySingleton from "../EntitySingleton";
+import { EntityComponent } from "../EntityComponent";
 
+/**
+ * An entity class
+ * 
+ * @class
+ * @extends Entity
+ */
 export class Ground extends Entity {
+  /** Color */
   color: string;
-  args: [number, number, number];
+  
+  /** Thickness/depth */
   depth: number;
+  
+  /**
+   * Creates a new instance
+   * Initializes with default values for physics and appearance
+   */
   constructor() {
     super("Ground");
-    // Modify the default settings(Entity) :
     this.type = "fixed";
     this.colliders = "cuboid";
-    this.scale = 500;
-    this.depth = 0.1;
-    this.args = [this.scale, this.depth, this.scale];
+    this.scale = 50;
+    this.depth = 0.02;
     this.color = "black";
   }
 
   renderComponent() {
-    return <GroundComponent model={this} />;
+    return <GroundComponent entity={this} />;
   }
 }
-export const GroundComponent = ({
-  model,
-  ...props
-}: { model?: Ground } & Partial<Ground>) => {
-  // Fusion of props and model
-  const instance = model || EntitySingleton.getInstance(Ground);
-  const object = useMemo(() => ({ ...instance, ...props }), [model, props]);
 
+/**
+ * Component responsible for rendering the entity
+ *
+ * @component
+ * @param  {GroundComponent} entity - Contains all the default props of the entity
+ * @returns {JSX.Element} The rendered 3D object
+ */
+export const GroundComponent = EntityComponent(Ground, (instance) => {
+  /** 
+   * Renders the 3D model
+   * 
+   * @function
+   * @param {EntityComponent} EntityTemplate - A default entity class
+   * @param {Ground} instance - An entity from the Entity parent
+   * @param {RapierRigidBody} rigidBodyRef - Reference to the RapierRigidBody instance
+   * @param {THREE.Group} visualRef - Reference to the THREE.Group instance
+   */
   return (
-    // Body
-    <RigidBody
-      type={object.type}
-      position={object.position}
-      rotation={object.rotation}
-      name={object.name}
-      colliders={object.colliders}
-    >
-      {/* Ground Mesh */}
-      <Box args={object.args}>
-        <meshStandardMaterial attach="material" color={object.color} />
+    <>
+      <Box
+        args={[
+          typeof instance.scale === "number" ? instance.scale : 1,
+          typeof instance.depth === "number" ? instance.depth : 0.02,
+          typeof instance.scale === "number" ? instance.scale : 1,
+        ]}
+      >
+        <meshStandardMaterial attach="material" color={instance.color} />
       </Box>
-    </RigidBody>
+    </>
   );
-};
+});

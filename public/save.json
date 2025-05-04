@@ -1,0 +1,42 @@
+[
+  {
+    "entityName": "Diamond",
+    "type": "dynamic",
+    "path": "/assets/3d/glb/Diamond.glb",
+    "position": [
+      5,
+      1.5,
+      0
+    ],
+    "rotation": [
+      0.46945181488990784,
+      0.11821052432060242,
+      -0.5619106888771057
+    ],
+    "scale": [
+      1,
+      1,
+      1
+    ]
+  },
+  {
+    "entityName": "KillBrick",
+    "type": "dynamic",
+    "path": "",
+    "position": [
+      10,
+      2.5,
+      4
+    ],
+    "rotation": [
+      -0.4203973412513733,
+      0.6892281174659729,
+      -0.5881372690200806
+    ],
+    "scale": [
+      1,
+      1,
+      1
+    ]
+  }
+]

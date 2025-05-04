@@ -10,7 +10,6 @@ import {
 } from "@react-three/rapier";
 
 import { Mesh } from "three";
-import { Demo } from "../../App";
 import { useResetOrbitControls } from "../../hooks/use-reset-orbit-controls";
 
 export const useSuzanne = () => {
@@ -59,7 +58,7 @@ const OffsetTorus = () => {
   );
 };
 
-export const AllShapesExample: Demo = () => {
+export const AllShapesExample = () => {
   const { nodes } = useSuzanne();
   useResetOrbitControls();
 

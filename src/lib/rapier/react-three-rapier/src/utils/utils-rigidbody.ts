@@ -172,7 +172,7 @@ export const useUpdateRigidBodyOptions = (
   states: RigidBodyStateMap,
   updateTranslations: boolean = true,
 ) => {
-  // TODO: Improve this, split each prop into its own effect
+  // Improve this, split each prop into its own effect
   const mutablePropsAsFlatArray = useMemo(
     () =>
       mutableRigidBodyOptionKeys.flatMap((key) => {

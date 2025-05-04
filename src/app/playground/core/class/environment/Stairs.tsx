@@ -1,36 +1,50 @@
 import { ModelLoader } from "@/app/playground/core/class/rendering/ModelLoader";
-import { RigidBody } from "@react-three/rapier";
-import { useMemo } from "react";
 import { modelPath } from "src/constants/default";
 import { Entity } from "../Entity";
-import EntitySingleton from "../EntitySingleton";
+import { EntityComponent } from "../EntityComponent";
 
+/**
+ * An entity class
+ *
+ * @class
+ * @extends Entity
+ */
 export class Stairs extends Entity {
+  /**
+   * Creates a new instance
+   * Initializes with default values for physics and appearance
+   */
   constructor(path: string = modelPath + "Stairs.glb") {
     super("Stairs");
-    // Modify the default settings(Entity) :
     this.path = path;
     this.type = "fixed";
   }
   renderComponent() {
-    return <StairsComponent model={this} />;
+    return <StairsComponent entity={this} />;
   }
 }
 
-export const StairsComponent = ({
-  model,
-  ...props
-}: { model?: Stairs } & Partial<Stairs>) => {
-  // Fusion of props and model
-  const instance = model || EntitySingleton.getInstance(Stairs);
-  const object = useMemo(() => ({ ...instance, ...props }), [model, props]);
-
+/**
+ * Component responsible for rendering the entity
+ *
+ * @component
+ * @param  {StairsComponent} entity - Contains all the default props of the entity
+ * @returns {JSX.Element} The rendered 3D object
+ */
+export const StairsComponent = EntityComponent(Stairs, (instance) => {
+  /** 
+   * Renders the 3D model
+   * 
+   * @function
+   * @param {EntityComponent} EntityTemplate - A default entity class
+   * @param {Stairs} instance - An entity from the Entity parent
+   * @param {RapierRigidBody} rigidBodyRef - Reference to the RapierRigidBody instance
+   * @param {THREE.Group} visualRef - Reference to the THREE.Group instance
+   */
   return (
-    <RigidBody {...object}>
-      <group>
-        {/* Model */}
-        <ModelLoader path={object.path} />
-      </group>
-    </RigidBody>
+    <group>
+      {/* Model */}
+      <ModelLoader path={instance.path} />
+    </group>
   );
-};
+});

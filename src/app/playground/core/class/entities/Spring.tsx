@@ -1,6 +1,5 @@
 import { useForwardedRef } from "@/lib/rapier/react-three-rapier/src/hooks/use-forwarded-ref";
 import { vectorArrayToVector3 } from "@/lib/rapier/react-three-rapier/src/utils/utils";
-import { Box } from "@react-three/drei";
 import {
   BallCollider,
   RapierRigidBody,
@@ -11,27 +10,19 @@ import {
 import { forwardRef, useRef } from "react";
 import { Vector3 } from "three";
 
-const COLORS_ARR = ["#335C67", "#FFF3B0", "#E09F3E", "#9E2A2B", "#540B0E"];
-
 interface BallSpringProps extends RigidBodyOptions {
   jointNum: number;
   total: number;
 }
 
-interface BoxRigidBodyProps extends RigidBodyOptions {
-  color: string;
-}
-
-const BoxRigidBody = ({ color, ...props }: BoxRigidBodyProps) => {
-  return (
-    <RigidBody {...props} ccd canSleep={false}>
-      <Box castShadow receiveShadow>
-        <meshStandardMaterial color={color} />
-      </Box>
-    </RigidBody>
-  );
-};
-
+/**
+ * Renders the 3D model.
+ *
+ * @component
+ * @param {BallSpring} props - Props
+ * @param {BallSpring} floorRef - Reference to the floor
+ * @returns {JSX.Element}
+ */
 export const BallSpring = forwardRef<RapierRigidBody, BallSpringProps>(
   (props, floorRef) => {
     const floor = useForwardedRef(floorRef);
@@ -73,16 +64,21 @@ export const BallSpring = forwardRef<RapierRigidBody, BallSpringProps>(
         <BallCollider args={[0.5]} />
       </RigidBody>
     );
-  },
+  }
 );
 
+BallSpring.displayName = "BallSpring";
+
+/**
+ *
+ * @component
+ * @returns {JSX.Element}
+ */
 export const SpringExample = () => {
   const floor = useRef<RapierRigidBody>(null);
 
   return (
     <>
-      <RigidBody ref={floor} position={[0, 5, 0]} type="fixed" />
-
       <group>
         <BallSpring
           ref={floor}

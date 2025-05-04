@@ -1,4 +1,4 @@
-import React, { RefObject, useEffect, useRef } from "react";
+import { RefObject, useEffect, useRef } from "react";
 import { useThree, useFrame } from "@react-three/fiber";
 import {
   Mesh,

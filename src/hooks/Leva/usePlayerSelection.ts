@@ -1,4 +1,3 @@
-import { useControls } from "leva";
 import { useState } from "react";
 import { EnumPlayerOption } from "src/constants/playerSelection";
 
@@ -8,13 +7,13 @@ export const usePlayerSelection = () => {
     EnumPlayerOption.Character,
   ); // Default Player
 
-  const controls = useControls("Player Selection", {
-    Player: {
-      value: player,
-      options: Object.values(EnumPlayerOption) as EnumPlayerOption[],
-      onChange: (value: EnumPlayerOption) => setPlayer(value),
-    },
-  });
+  // const controls = useControls("Player Selection", {
+  //   Player: {
+  //     value: player,
+  //     options: Object.values(EnumPlayerOption) as EnumPlayerOption[],
+  //     onChange: (value: EnumPlayerOption) => setPlayer(value),
+  //   },
+  // });
 
   // Update player selection
   const updatePlayer = (newPlayer: EnumPlayerOption) => {

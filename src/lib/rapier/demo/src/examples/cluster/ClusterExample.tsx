@@ -1,18 +1,17 @@
 import { useFrame } from "@react-three/fiber";
 import {
-  InstancedRigidBodies,
-  RapierRigidBody,
-  useRapier,
-  vec3,
+    InstancedRigidBodies,
+    RapierRigidBody,
+    useRapier,
+    vec3,
 } from "@react-three/rapier";
 import { useEffect, useRef } from "react";
 import { Color, InstancedMesh } from "three";
-import { Demo } from "../../App";
 import { useResetOrbitControls } from "../../hooks/use-reset-orbit-controls";
 
 const BALLS = 1000;
 
-export const Cluster: Demo = () => {
+export const Cluster = () => {
   const api = useRef<RapierRigidBody[]>(null);
 
   useResetOrbitControls();

@@ -1,12 +1,23 @@
 import { Text } from "@react-three/drei";
 import { useFrame } from "@react-three/fiber";
-import { RigidBody } from "@react-three/rapier";
-import { useMemo, useRef } from "react";
 import { Vector3 } from "three";
 import { Entity } from "../../../Entity";
-import EntitySingleton from "../../../EntitySingleton";
+import { EntityComponent } from "../../../EntityComponent";
+import { RapierRigidBody } from "@react-three/rapier";
+import { RefObject } from "react";
+import { useWorldRigidBody } from "@/hooks/useWorldRigidBody";
 
+/**
+ * An entity class
+ * 
+ * @class
+ * @extends Entity
+ */
 export class KinematicMovingPlatformEntity extends Entity {
+    /**
+   * Creates a new instance
+   * Initializes with default values for physics and appearance
+   */
   constructor() {
     super("KinematicMovingPlatform");
     this.type = "kinematicPosition";
@@ -14,37 +25,71 @@ export class KinematicMovingPlatformEntity extends Entity {
   }
 
   renderComponent() {
-    return <KinematicMovingPlatformComponent model={this} />;
+    return <KinematicMovingPlatformComponent entity={this} />;
   }
 }
 
-export const KinematicMovingPlatformComponent = ({
-  model,
-  ...props
-}: { model?: KinematicMovingPlatformEntity } & Partial<KinematicMovingPlatformEntity>) => {
-  const instance = model || EntitySingleton.getInstance(KinematicMovingPlatformEntity);
-  const object = useMemo(() => ({ ...instance, ...props }), [model, props]);
-
-  const ref = useRef<any>(null);
+const KinematicMovingPlatformRenderer = ({
+  instance,
+  rigidBodyRef,
+}: {
+  instance: Entity;
+  rigidBodyRef: RefObject<RapierRigidBody | null>;
+}) => {
+  const rigidBody = useWorldRigidBody(rigidBodyRef);
 
   useFrame((state) => {
+    if (!rigidBody) return;
+
     const time = state.clock.elapsedTime;
-    ref.current?.setNextKinematicTranslation({
-      x: 5 * Math.sin(time / 2) + object.position.x,
-      y: object.position.y,
-      z: object.position.z,
+    rigidBody.setNextKinematicTranslation({
+      x: 5 * Math.sin(time / 2) + instance.position.x,
+      y: instance.position.y,
+      z: instance.position.z,
     });
   });
 
   return (
-    <RigidBody ref={ref} {...object} >
-      <Text scale={0.5} color="black" maxWidth={10} textAlign="center" position={[0, 2.5, 0]}>
+    <>
+      <Text
+        scale={0.5}
+        color="black"
+        maxWidth={10}
+        textAlign="center"
+        position={[0, 2.5, 0]}
+      >
         Kinematic Moving Platform
       </Text>
       <mesh receiveShadow>
         <boxGeometry args={[5, 0.2, 5]} />
         <meshStandardMaterial color="white" />
       </mesh>
-    </RigidBody>
+    </>
   );
-};
+}
+
+/**
+ * Component responsible for rendering the entity
+ *
+ * @component
+ * @param  {KinematicMovingPlatformComponent} entity - Contains all the default props of the entity
+ * @returns {JSX.Element} The rendered 3D object
+ */
+export const KinematicMovingPlatformComponent = EntityComponent(
+  KinematicMovingPlatformEntity,
+  (instance, rigidBodyRef) => {
+      /** 
+   * Renders the 3D model
+   * 
+   * @function
+   * @param {EntityComponent} EntityTemplate - A default entity class
+   * @param {Ground} instance - An entity from the Entity parent
+   * @param {RapierRigidBody} rigidBodyRef - Reference to the RapierRigidBody instance
+   * @param {THREE.Group} visualRef - Reference to the THREE.Group instance
+   */
+
+    return (
+      <KinematicMovingPlatformRenderer instance={instance} rigidBodyRef={rigidBodyRef} />
+    );
+  },
+);

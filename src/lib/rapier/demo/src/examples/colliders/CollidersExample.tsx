@@ -1,14 +1,13 @@
-import { Box, Sphere, Torus } from "@react-three/drei";
+import { Sphere } from "@react-three/drei";
 import { useFrame } from "@react-three/fiber";
 import {
-  BallCollider,
-  CuboidCollider,
-  RapierCollider,
-  RapierRigidBody,
-  RigidBody,
+    BallCollider,
+    CuboidCollider,
+    RapierCollider,
+    RapierRigidBody,
+    RigidBody,
 } from "@react-three/rapier";
-import { useEffect, useRef } from "react";
-import { Demo } from "../../App";
+import { useRef } from "react";
 import { useResetOrbitControls } from "../../hooks/use-reset-orbit-controls";
 
 const Ball = () => {
@@ -39,7 +38,7 @@ const Ball = () => {
   );
 };
 
-export const Colliders: Demo = () => {
+export const Colliders = () => {
   const cuboid = useRef<RapierCollider>(null);
 
   useResetOrbitControls(30);

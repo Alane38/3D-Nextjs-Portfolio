@@ -87,13 +87,13 @@ export const JumpGame = () => {
       <RigidBody
         position={[-2.5, 1, 0]}
         ref={cube}
-        onCollisionEnter={({ other }: any) => {
-          if (other.rigidBodyObject.name === "floor") {
+        onCollisionEnter={({ other }) => {
+          if (other.rigidBodyObject?.name === "floor") {
             isOnFloor.current = true;
           }
         }}
-        onCollisionExit={({ other }: any) => {
-          if (other.rigidBodyObject.name === "floor") {
+        onCollisionExit={({ other }) => {
+          if (other.rigidBodyObject?.name === "floor") {
             isOnFloor.current = false;
           }
         }}
