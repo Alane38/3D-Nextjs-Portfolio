@@ -69,7 +69,7 @@ export function MainWorld() {
           TextProps={{ text: "NEWALFOX" }}
         /> */}
 
-        <DiamondComponent position={new Vector3(18, 2, 10)} entity={new Diamond()} />
+        {/* <DiamondComponent position={new Vector3(18, 2, 10)} entity={new Diamond()} /> */}
         <DiamondComponent position={new Vector3(14, 2, 10)} entity={new Diamond()} />
         <ObjectComponent position={new Vector3(0, 0.75, 0)} entity={new Object()} />
       </group>

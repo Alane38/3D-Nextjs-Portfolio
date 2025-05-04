@@ -11,9 +11,11 @@ import { useEntityStore } from "./core/class/entity.store";
 import Inventory from "./core/client/inventory/Inventory";
 import { PlacementManager } from "./core/PlacementManager";
 import { GameCanvas } from "./GameCanvas";
-import { FileWorld } from "./world/FileWorld";
+import { MainWorld } from "./world/MainWorld";
+import { useIsMobile } from "@/hooks/useIsMobile";
 
 export function Game() {
+  const isMobile = useIsMobile();
   const loading = useLoadingAssets();
   const [visible, setVisible] = useState(true);
   const [minimumTimePassed, setMinimumTimePassed] = useState(false);
@@ -27,7 +29,10 @@ export function Game() {
         const data = PlacementManager.load(
           await fetch("/save.json").then((r) => r.text()),
         );
-        console.log("Chargement par défaut (fichier chargé)", data.map((e) => e.entityName));
+        console.log(
+          "Chargement par défaut (fichier chargé)",
+          data.map((e) => e.entityName),
+        );
         setEntities(data);
       } catch {
         console.warn("Chargement par défaut (aucun fichier trouvé)");
@@ -53,6 +58,13 @@ export function Game() {
     }
   }, [loading, minimumTimePassed]);
 
+  if (isMobile)
+    return (
+      <div className="flex h-screen w-screen items-center justify-center text-center text-4xl text-red-500 px-8">
+        Mobile not supported please use a computer to play
+      </div>
+    );
+
   return (
     <>
       {visible && (
@@ -68,8 +80,8 @@ export function Game() {
       <Inventory />
       <KeyboardControls map={globalControls}>
         <GameCanvas>
-          {/* <MainWorld /> */}
-          <FileWorld />  
+          <MainWorld />
+          {/* <FileWorld />   */}
         </GameCanvas>
       </KeyboardControls>
     </>
