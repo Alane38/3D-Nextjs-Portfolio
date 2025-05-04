@@ -316,14 +316,13 @@ const ARCHE: ForwardRefRenderFunction<customRigidBody, ArcheProps> = (
 
   // Point to Move Props
   let functionKeyDown: boolean = false;
-  // Controller Mode
-  const isModePointToMove = modeSet.has("PointToMove");
-  const isModeOnlyCamera = modeSet.has("OnlyCamera");
+  /** Controller Modes */
+  const isModePointToMove = modeSet.has("PointToMove"); // ControlCamera: Have a third person camera, with a automatic movement system 
+  const isModeOnlyCamera = modeSet.has("OnlyCamera"); // ControlCamera: Have a third person camera, with basic movement system, right, left, back controls are disabled, you only control the character with Z/W and mouse.
+  const isModeControlCamera = modeSet.has("ControlCamera"); // ControlCamera: Have a third person camera, with a brutal movement system(similar to ThirdCamera) 
+  const isModeThirdCamera = modeSet.has("ThirdCamera"); // ThirdCamera(default): Have a third person camera, with a smooth movement system
 
-  const isModeControlCamera = modeSet.has("ControlCamera");
-  const isModeThirdCamera = modeSet.has("ThirdCamera"); // Default
-
-  /** LockCamera */
+  /** LockCamera props */
   const { camera, gl } = useThree();
 
   /** Body collider */

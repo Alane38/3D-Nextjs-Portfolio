@@ -48,7 +48,7 @@ export const Loading = ({
   return (
     <div className="bg-popover-foreground absolute z-50 flex h-full w-full">
       <Image
-        src="/assets/images/3dfolio_loading.png"
+        src="/assets/images/tridfolio_loading.png"
         alt="loading"
         fill
         className="w-full h-full absolute object-cover"
