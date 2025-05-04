@@ -69,7 +69,8 @@ export function MainWorld() {
           TextProps={{ text: "NEWALFOX" }}
         /> */}
 
-        <DiamondComponent position={new Vector3(18, 2, 10)} entity={new Diamond()} />
+        {/* TODO: Fix auto generated id of entity, if u put multiple diamonds, it's crash all the game. */}
+
         <DiamondComponent position={new Vector3(14, 2, 10)} entity={new Diamond()} />
         <ObjectComponent position={new Vector3(0, 0.75, 0)} entity={new Object()} />
       </group>
