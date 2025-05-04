@@ -1,47 +1,54 @@
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useCallback } from "react";
 import { LockCameraProps } from "../types/LockCamera";
 import { PointerLockControls } from "three/examples/jsm/Addons.js";
+import { useEditToolStore } from "../../../client/inventory/edit-tool/store/useEditTool.store";
 
 export const useLockCamera = ({ camera, renderer }: LockCameraProps) => {
   const controls = useRef<PointerLockControls | null>(null);
 
-  const handleMouseMove = (event: MouseEvent) => {
-    if (controls.current && controls.current.isLocked) {
-      camera.rotation.y -= event.movementX * 0.002; // Sensivity
-      camera.rotation.x -= event.movementY * 0.002;
-      camera.rotation.x = Math.max(
-        -Math.PI / 2,
-        Math.min(Math.PI / 2, camera.rotation.x),
-      ); // Inclination limit
+  const handleMouseMove = useCallback(
+    (event: MouseEvent) => {
+      if (controls.current && controls.current.isLocked) {
+        camera.rotation.y -= event.movementX * 0.002; // Sensitivity
+        camera.rotation.x -= event.movementY * 0.002;
+        camera.rotation.x = Math.max(
+          -Math.PI / 2,
+          Math.min(Math.PI / 2, camera.rotation.x),
+        );
+      }
+    },
+    [camera],
+  );
+
+  const handlePointerLockChange = useCallback(() => {
+    const isLocked = document.pointerLockElement === renderer.domElement;
+    console.log(`Pointer lock ${isLocked ? "enabled" : "disabled"}`);
+  }, [renderer]);
+
+  const enablePointerLock = useCallback(() => {
+    if (renderer?.domElement && camera) {
+      renderer.domElement.requestPointerLock();
     }
-  };
+  }, [renderer, camera]);
 
-  const handlePointerLockChange = () => {
-    if (document.pointerLockElement === renderer.domElement) {
-      // Verrouillage réussi
-      console.log("Pointer lock enabled");
-    } else {
-      // Verrouillage annulé
-      console.log("Pointer lock disabled");
-    }
-  };
-
-  const enablePointerLock = () => {
-    if (!renderer?.domElement || !camera) return;
-    renderer.domElement.requestPointerLock();
-  };
-
-  return { 
-    handleMouseMove, 
-    handlePointerLockChange, 
+  return {
+    handleMouseMove,
+    handlePointerLockChange,
     enablePointerLock,
-    controls 
+    controls,
   };
 };
 
 export const LockCamera = ({ camera, renderer }: LockCameraProps) => {
-  const { handleMouseMove, handlePointerLockChange, enablePointerLock, controls } =
-    useLockCamera({ camera, renderer });
+  const {
+    handleMouseMove,
+    handlePointerLockChange,
+    enablePointerLock,
+    controls,
+  } = useLockCamera({ camera, renderer });
+
+  // edit tool State
+  const { moveToolEnabled, scaleToolEnabled } = useEditToolStore();
 
   useEffect(() => {
     if (!renderer?.domElement || !camera) return;
@@ -50,7 +57,7 @@ export const LockCamera = ({ camera, renderer }: LockCameraProps) => {
 
     const togglePointerLock = (event: KeyboardEvent) => {
       if (event.key === "Tab") {
-        if (controls.current && controls.current.isLocked) {
+        if (controls.current?.isLocked) {
           document.exitPointerLock();
         } else {
           enablePointerLock();
@@ -58,8 +65,8 @@ export const LockCamera = ({ camera, renderer }: LockCameraProps) => {
       }
     };
 
-    // Fonction pour verrouiller la caméra au clic
     const handleClick = () => {
+      if (moveToolEnabled || scaleToolEnabled) return;
       enablePointerLock();
     };
 
@@ -70,11 +77,22 @@ export const LockCamera = ({ camera, renderer }: LockCameraProps) => {
 
     return () => {
       document.removeEventListener("keydown", togglePointerLock);
-      document.removeEventListener("pointerlockchange", handlePointerLockChange);
+      document.removeEventListener(
+        "pointerlockchange",
+        handlePointerLockChange,
+      );
       document.removeEventListener("mousemove", handleMouseMove);
       renderer.domElement.removeEventListener("click", handleClick);
     };
-  }, [camera, renderer, handleMouseMove, handlePointerLockChange, enablePointerLock]);
+  }, [
+    camera,
+    renderer,
+    handleMouseMove,
+    handlePointerLockChange,
+    enablePointerLock,
+    moveToolEnabled,
+    scaleToolEnabled,
+  ]);
 
   return null;
 };

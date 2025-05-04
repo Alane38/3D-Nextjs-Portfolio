@@ -1,5 +1,6 @@
 import { useFrame } from "@react-three/fiber";
 import { useEditToolStore } from "../store/useEditTool.store";
+import { useEffect } from "react";
 
 /**
  * Scale Tool
@@ -17,6 +18,14 @@ export const ScaleTool = () => {
     position,
     scaleMode,
   } = useEditToolStore();
+
+  // Initialize scale of the selected visual(group of the entity)
+  useEffect(() => {
+    if (selectedVisual) {
+      const { x, y, z } = selectedVisual.scale;
+      setScale({ x, y, z });
+    }
+  }, [selectedVisual]);
 
   // Update scale
   useFrame(() => {
@@ -36,7 +45,10 @@ export const ScaleTool = () => {
   };
 
   return (
-    <group position={[position.x, position.y, position.z]} rotation={[0, Math.PI, 0]}>
+    <group
+      position={[position.x, position.y, position.z]}
+      rotation={[0, Math.PI, 0]}
+    >
       {/* Échelle Y */}
       <mesh
         position={[0, 1.2, 0]}
@@ -48,7 +60,6 @@ export const ScaleTool = () => {
             setScale((s) => ({ ...s, z: s.z + 0.1 }));
           }
         }}
-        
       >
         <cylinderGeometry args={[0.05, 0.05, 1]} />
         <meshBasicMaterial color="green" />
@@ -66,7 +77,6 @@ export const ScaleTool = () => {
             setScale((s) => ({ ...s, z: s.z + 0.1 }));
           }
         }}
-        
       >
         <cylinderGeometry args={[0.05, 0.05, 1]} />
         <meshBasicMaterial color="red" />
@@ -84,7 +94,6 @@ export const ScaleTool = () => {
             setScale((s) => ({ ...s, z: s.z + 0.1 }));
           }
         }}
-        
       >
         <cylinderGeometry args={[0.05, 0.05, 1]} />
         <meshBasicMaterial color="blue" />
