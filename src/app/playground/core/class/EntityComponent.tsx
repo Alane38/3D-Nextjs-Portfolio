@@ -73,7 +73,7 @@ export function EntityComponent<InstanceType extends Entity>(
           });
 
           pendingUpdate.current = null;
-        }, 5000);
+        }, 1000);
 
         return () => clearInterval(updateData);
       }, []);
