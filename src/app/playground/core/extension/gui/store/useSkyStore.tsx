@@ -1,0 +1,27 @@
+import { create } from "zustand";
+
+interface SkyState {
+  turbidity: number;
+  rayleigh: number;
+  mieCoefficient: number;
+  mieDirectionalG: number;
+  elevation: number;
+  azimuth: number;
+  distance: number;
+  sunPosition: [number, number, number];
+  setSky: (newState: Partial<Omit<SkyState, "setSky">>) => void;
+}
+
+ // eslint-disable-next-line
+const useSkyStore = create<SkyState>((set) => ({
+  turbidity: -1,
+  rayleigh: 17,
+  mieCoefficient: 4,
+  mieDirectionalG: 50,
+  elevation: 0,
+  azimuth: -88,
+  distance: 1000,
+  sunPosition: [-100, -100, 1],
+  setSky: (newState) => set((state) => ({ ...state, ...newState })),
+}));
+
