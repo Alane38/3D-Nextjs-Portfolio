@@ -1,4 +1,3 @@
-import { useSky } from "@/hooks";
 import { Sky } from "@react-three/drei";
 import { useControls } from "leva";
 import { Fragment } from "react";
@@ -26,6 +25,7 @@ import { KinematicMovingPlatformComponent, KinematicMovingPlatformEntity } from 
 import { FPPushtoMove, FPPushtoMoveComponent } from "../core/class/entities/platform/floating/FPPushtoMove";
 import { useEntityStore } from "../core/class/entity.store";
 import { EditTool } from "../core/client/tool-bar/edit-tool/EditTool";
+import { useSky } from "@/hooks/Leva/useSky";
 
 export function MainWorld() {
   // Leva Const initialization

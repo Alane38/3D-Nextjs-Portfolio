@@ -1,4 +1,4 @@
-import { useDebugState } from "@/hooks/leva";
+import { useDebugState } from "@/hooks/Leva/useDebugState";
 import { Bvh, Grid } from "@react-three/drei";
 import { Camera, Canvas } from "@react-three/fiber";
 import { Bloom, EffectComposer } from "@react-three/postprocessing";
