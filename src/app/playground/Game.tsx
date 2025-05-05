@@ -2,17 +2,17 @@
 
 import { Loading } from "@/components/Loading";
 import { useLoadingAssets } from "@/hooks";
+import { useIsMobile } from "@/hooks/useIsMobile";
 import { KeyboardControls } from "@react-three/drei";
 import { Leva } from "leva";
 import { useEffect, useState } from "react";
 import { globalControls } from "src/constants/default";
 import { PerformanceWarning } from "../../components/PerformanceWarning";
 import { useEntityStore } from "./core/class/entity.store";
-import Inventory from "./core/client/inventory/Inventory";
+import ToolBar from "./core/client/tool-bar/ToolBar";
 import { PlacementManager } from "./core/PlacementManager";
 import { GameCanvas } from "./GameCanvas";
 import { MainWorld } from "./world/MainWorld";
-import { useIsMobile } from "@/hooks/useIsMobile";
 
 export function Game() {
   const isMobile = useIsMobile();
@@ -77,7 +77,7 @@ export function Game() {
       )}
       <PerformanceWarning />
       <Leva collapsed={true} />
-      <Inventory />
+      <ToolBar />
       <KeyboardControls map={globalControls}>
         <GameCanvas>
           <MainWorld />

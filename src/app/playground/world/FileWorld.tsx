@@ -1,16 +1,16 @@
 import { useSky } from "@/hooks";
 import { Sky } from "@react-three/drei";
 import { Fragment } from "react";
+import { Vector3 } from "three";
 import { Character } from "../core/character/Character";
 import {
-  Diamond,
-  DiamondComponent,
-  Ground,
-  GroundComponent,
+    Diamond,
+    DiamondComponent,
+    Ground,
+    GroundComponent,
 } from "../core/class";
 import { useEntityStore } from "../core/class/entity.store";
-import { EditTool } from "../core/client/inventory/edit-tool/EditTool";
-import { Vector3 } from "three";
+import { EditTool } from "../core/client/tool-bar/edit-tool/EditTool";
 
 export function FileWorld() {
   /* Leva Settings */

@@ -1,12 +1,12 @@
+import { useWorldRigidBody } from "@/hooks/useWorldRigidBody";
 import { useFrame } from "@react-three/fiber";
 import { RapierRigidBody, RigidBody } from "@react-three/rapier";
-import React, { JSX, useRef, useEffect } from "react";
-import { Group, Vector3, Euler } from "three";
-import { useEditToolStore } from "../client/inventory/edit-tool/store/useEditTool.store";
+import React, { JSX, useEffect, useRef } from "react";
+import { Euler, Group, Vector3 } from "three";
+import { useEditToolStore } from "../client/tool-bar/edit-tool/store/useEditTool.store";
 import { Entity } from "./Entity";
 import { useEntityStore } from "./entity.store";
 import { EntityManager } from "./EntityManager";
-import { useWorldRigidBody } from "@/hooks/useWorldRigidBody";
 
 export function EntityComponent<InstanceType extends Entity>(
   EntityTemplate: new () => InstanceType,

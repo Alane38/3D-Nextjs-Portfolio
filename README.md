@@ -83,7 +83,7 @@ bun dev
 │   │   │   └── glb/                # 3D models in GLB format
 │   │   ├── images/                 # Image assets
 │   │   │   ├── example/            # Example images
-│   │   │   └── inventory/          # Inventory-related images
+│   │   │   └── tools-items/          # ToolBar-related images
 │   │   └── videos/                 # Video assets
 │   └── fonts/                      # Custom fonts
 ├── src/                            # Source code
@@ -101,8 +101,8 @@ bun dev
 │   │   │   │   │   ├── template/   # Class templates or patterns
 │   │   │   │   │   └── ui/         # UI elements in class-based structure
 │   │   │   │   ├── client/         # Client-side specific logic
-│   │   │   │   │   └── inventory/  # Inventory system
-│   │   │   │   │       └── edit-tool/ # Tools to edit inventory items
+│   │   │   │   │   └── tool-bar/  # ToolBar system
+│   │   │   │   │       └── edit-tool/ # Tools to edit ToolBar items
 │   │   │   │   └── extension/      # Core extensions and plugins
 │   │   │   │       └── arche/      # Arche framework-related modules
 │   │   │   │           ├── hooks/  # Custom hooks for arche
