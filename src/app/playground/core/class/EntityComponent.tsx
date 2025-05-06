@@ -54,7 +54,7 @@ export function EntityComponent<InstanceType extends Entity>(
         if (props) {
           Object.assign(currentInstance, props);
         }
-      }, []);
+      }, [props]);
 
       useEffect(() => {
         if (!currentInstance) return;

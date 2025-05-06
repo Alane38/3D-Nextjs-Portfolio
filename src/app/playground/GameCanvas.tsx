@@ -1,13 +1,13 @@
-import { useDebugState } from "@/hooks/Leva/useDebugState";
 import { Bvh, Grid } from "@react-three/drei";
 import { Camera, Canvas } from "@react-three/fiber";
 import { Bloom, EffectComposer } from "@react-three/postprocessing";
 import { Physics } from "@react-three/rapier";
 import { Perf } from "r3f-perf";
 import React, { ReactNode, Suspense, useEffect, useState } from "react";
+import { useDebugStore } from "./core/extension/eva/store/useDebugStore";
 
 export function GameCanvas({ children }: { children: ReactNode }) {
-  const  debugState  = useDebugState();
+  const { debugState } = useDebugStore();
   const shadowCameraRef = React.useRef<Camera>(null);
 
   /**
@@ -23,7 +23,6 @@ export function GameCanvas({ children }: { children: ReactNode }) {
   }, []);
 
   return (
-
     <Canvas
       camera={{ position: [0, 16, 5], fov: 70, near: 0.1, far: 10000 }}
       shadows
@@ -65,7 +64,6 @@ export function GameCanvas({ children }: { children: ReactNode }) {
             timeStep={"vary"}
             paused={pausedPhysics}
           >
-            
             {children}
           </Physics>
           {/* </Suspense> */}

@@ -10,11 +10,12 @@ import {
 } from "../core/class";
 import { useEntityStore } from "../core/class/entity.store";
 import { EditTool } from "../core/client/tool-bar/edit-tool/EditTool";
-import { useSky } from "@/hooks/Leva/useSky";
+import { useSkyStore } from "../core/extension/eva/store/useSkyStore";
+
 
 export function FileWorld() {
   /* Leva Settings */
-  const sky = useSky();
+  const sky = useSkyStore();
   const entities = useEntityStore((state) => state.entities);
 
   return (

@@ -1,41 +1,50 @@
 import { Sky } from "@react-three/drei";
 import { useControls } from "leva";
-import { Fragment } from "react";
+import { Fragment, useMemo } from "react";
 import { Euler, Vector3 } from "three";
 import { Character } from "../core/character/Character";
 import {
-    Diamond,
-    DiamondComponent,
-    Ground,
-    GroundComponent,
-    KillBrick,
-    KillBrickComponent,
-    NeonDoor,
-    NeonDoorComponent,
-    Object,
-    ObjectComponent,
-    RestaurantSign,
-    RestaurantSignComponent,
-    Spinner,
-    SpinnerComponent,
-    Stairs,
-    StairsComponent
+  Diamond,
+  DiamondComponent,
+  Ground,
+  GroundComponent,
+  KillBrick,
+  KillBrickComponent,
+  NeonDoor,
+  NeonDoorComponent,
+  Object,
+  ObjectComponent,
+  RestaurantSign,
+  RestaurantSignComponent,
+  Spinner,
+  SpinnerComponent,
+  Stairs,
+  StairsComponent,
 } from "../core/class";
-import { KinematicMovingPlatformComponent, KinematicMovingPlatformEntity } from "../core/class/entities/platform/dynamic/KineticMovingPlatform";
-import { FPPushtoMove, FPPushtoMoveComponent } from "../core/class/entities/platform/floating/FPPushtoMove";
+import {
+  KinematicMovingPlatformComponent,
+  KinematicMovingPlatformEntity,
+} from "../core/class/entities/platform/dynamic/KineticMovingPlatform";
+import {
+  FPPushtoMove,
+  FPPushtoMoveComponent,
+} from "../core/class/entities/platform/floating/FPPushtoMove";
 import { useEntityStore } from "../core/class/entity.store";
 import { EditTool } from "../core/client/tool-bar/edit-tool/EditTool";
-import { useSky } from "@/hooks/Leva/useSky";
+import { useSkyStore } from "../core/extension/eva/store/useSkyStore";
+import { useSpinnerStore } from "../core/extension/eva/store/useSpinnerStore";
 
 export function MainWorld() {
   // Leva Const initialization
-  const rotateSpeed = useControls("RotateSpeed", {
-    speed: { value: 1, step: 0.3 },
-  });
-  const sky = useSky();
+  const spinnerSpeed = useSpinnerStore((state) => state.speed);
+
+  const sky = useSkyStore();
 
   // Store initialization
   const { entities } = useEntityStore();
+
+  // Entity initialization(not necessary but useful for performance and avoid bugs(like the rotation speed of the spinner don't update when changing the speed))
+  const spinnerEntity = useMemo(() => new Spinner(), []);
 
   return (
     <>
@@ -61,7 +70,7 @@ export function MainWorld() {
         defaultPlayer
       />
       {/* Ground */}
-      <GroundComponent entity={new Ground()}/>
+      <GroundComponent entity={new Ground()} />
       {/* Entity Importations */}
       <group>
         {/* <TextObjectComponent
@@ -71,16 +80,22 @@ export function MainWorld() {
 
         {/* TODO: Fix auto generated id of entity, if u put multiple diamonds, it's crash all the game. */}
 
-        <DiamondComponent position={new Vector3(14, 2, 10)} entity={new Diamond()} />
-        <ObjectComponent position={new Vector3(0, 0.75, 0)} entity={new Object()} />
+        <DiamondComponent
+          position={new Vector3(14, 2, 10)}
+          entity={new Diamond()}
+        />
+        <ObjectComponent
+          position={new Vector3(0, 0.75, 0)}
+          entity={new Object()}
+        />
       </group>
       <group>
         {/* Entity Importations */}
         {/* <Steps /> */}
         <SpinnerComponent
           position={new Vector3(10, 1, 20)}
-          speed={rotateSpeed.speed}
-          entity={new Spinner()}
+          speed={spinnerSpeed}
+          entity={spinnerEntity}
         />
         <KillBrickComponent
           position={new Vector3(15, 1, 15)}
@@ -94,8 +109,14 @@ export function MainWorld() {
       </group>
       <group>
         {/* Platforms Events Examples */}
-        <FPPushtoMoveComponent position={new Vector3(30, 5, 0)} entity={new FPPushtoMove()} />
-        <KinematicMovingPlatformComponent position={new Vector3(20, 5, 20)} entity={new KinematicMovingPlatformEntity()}/>
+        <FPPushtoMoveComponent
+          position={new Vector3(30, 5, 0)}
+          entity={new FPPushtoMove()}
+        />
+        <KinematicMovingPlatformComponent
+          position={new Vector3(20, 5, 20)}
+          entity={new KinematicMovingPlatformEntity()}
+        />
       </group>
       {/* OTHERS */}
       <StairsComponent
@@ -105,7 +126,11 @@ export function MainWorld() {
       />
       {/* <RacingVehicle position={[15, 2, 0]} rotation={[0, Math.PI / 2, 0]} /> */}
       {/* <Vehicle position={[8, 2, 0]} /> */}
-      <NeonDoorComponent position={new Vector3(11.0, 0.34, -7.0)} scale={2} entity={new NeonDoor()}/>
+      <NeonDoorComponent
+        position={new Vector3(11.0, 0.34, -7.0)}
+        scale={2}
+        entity={new NeonDoor()}
+      />
       <EditTool />
     </>
   );

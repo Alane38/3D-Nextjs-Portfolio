@@ -101,10 +101,15 @@ bun dev
 │   │   │   │   │   ├── template/   # Class templates or patterns
 │   │   │   │   │   └── ui/         # UI elements in class-based structure
 │   │   │   │   ├── client/         # Client-side specific logic
-│   │   │   │   │   └── tool-bar/  # ToolBar system
+│   │   │   │   │   └── tool-bar/   # ToolBar system
 │   │   │   │   │       └── edit-tool/ # Tools to edit ToolBar items
 │   │   │   │   └── extension/      # Core extensions and plugins
 │   │   │   │       └── arche/      # Arche framework-related modules
+│   │   │   │           ├── hooks/  # Custom hooks for arche
+│   │   │   │           ├── store/  # Global/local state stores
+│   │   │   │           ├── types/  # Type definitions
+│   │   │   │           └── utils/  # Utility functions
+│   │   │   │       └── eva/        # EVA Technical GUI
 │   │   │   │           ├── hooks/  # Custom hooks for arche
 │   │   │   │           ├── store/  # Global/local state stores
 │   │   │   │           ├── types/  # Type definitions
@@ -114,7 +119,6 @@ bun dev
 │   ├── components/                 # Reusable React components
 │   ├── constants/                  # Constant values and config
 │   └── hooks/                      # Custom React hooks
-│       └── leva/                   # Hooks for Leva UI controls
 
 ```
 

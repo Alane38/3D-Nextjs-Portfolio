@@ -38,6 +38,7 @@ export class Entity {
   rigidBody?: RapierRigidBody;
   ccd: boolean = false;
   canSleep: boolean = true;
+  speed: number = 0;
 
   // Physics constraints
   lockTranslations: boolean = false;

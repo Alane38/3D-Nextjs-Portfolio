@@ -1,18 +1,6 @@
-import {
-  Collider,
-  QueryFilterFlags,
-  RayColliderHit,
-  Vector,
-} from "@dimforge/rapier3d-compat";
+import { useWorldRigidBody } from "@/hooks/useWorldRigidBody";
 import { useKeyboardControls } from "@react-three/drei";
 import { useFrame, useThree } from "@react-three/fiber";
-import {
-  CylinderCollider,
-  quat,
-  RigidBody,
-  RoundCuboidCollider,
-  useRapier,
-} from "@react-three/rapier";
 import {
   forwardRef,
   ForwardRefRenderFunction,
@@ -30,7 +18,8 @@ import { ArcheProps, CharacterState, customRigidBody } from "./types/Arche";
 import { getObjectDirection } from "./utils/getObjectDirection";
 import { InsideKeyboardControls } from "./utils/insideKeyboardControls";
 import { LockCamera } from "./utils/LockCamera";
-import { useWorldRigidBody } from "@/hooks/useWorldRigidBody";
+import { RayColliderHit, Vector, Collider, QueryFilterFlags } from "@dimforge/rapier3d-compat";
+import { CylinderCollider, quat, RigidBody, RoundCuboidCollider, useRapier } from "@react-three/rapier";
 
 /**
  * ARCHE - Advanced React Character Handling Engine

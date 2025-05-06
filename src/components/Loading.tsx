@@ -1,7 +1,7 @@
-import { useEffect, useState } from "react";
-import { Button } from "./ui/button";
 import { motion } from "framer-motion";
 import Image from "next/image";
+import { useEffect, useState } from "react";
+import { Button } from "./ui/button";
 
 export const Loading = ({
   progress,
@@ -46,7 +46,7 @@ export const Loading = ({
   }, []);
 
   return (
-    <div className="bg-popover-foreground absolute z-50 flex h-full w-full">
+    <div className="bg-popover absolute z-50 flex h-full w-full">
       <Image
         src="/assets/images/tridfolio_loading.png"
         alt="loading"
