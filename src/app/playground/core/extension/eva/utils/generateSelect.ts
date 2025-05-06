@@ -1,10 +1,4 @@
-
-/**
- * 
- * @param s A string
- * @returns A string with the first letter capitalized
- */
-const capitalize = (s: string) => s.charAt(0).toUpperCase() + s.slice(1);
+import { capitalize } from "./capitalize";
 
 /** 
  * Generate select options and setters from a store config who interact with a zustand store.

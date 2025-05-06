@@ -1,10 +1,10 @@
 import { generateChecks } from "../utils/generateChecks";
-import { generateInputs } from "../utils/generateInputs";
 import { generateSelect } from "../utils/generateSelect";
 import { generateSliders } from "../utils/generateSliders";
 import { debugStoreConfig, useDebugStore } from "./useDebugStore";
 import { playerStoreConfig, usePlayerStore } from "./usePlayerStore";
 import { skyStoreConfig, useSkyStore } from "./useSkyStore";
+import { spinnerStoreConfig, useSpinnerStore } from "./useSpinnerStore";
 
 /**
  * `stories` is a centralized configuration object that dynamically generates UI controls
@@ -15,8 +15,11 @@ import { skyStoreConfig, useSkyStore } from "./useSkyStore";
  */
 export const stories = {
   checks: generateChecks(useDebugStore, debugStoreConfig),
-  sliders: generateSliders(useSkyStore, skyStoreConfig),
+  sliders: [
+    ...generateSliders(useSkyStore, skyStoreConfig),
+    ...generateSliders(useSpinnerStore, spinnerStoreConfig),
+  ],
   inputs: null,
   // use [...generateXXX, ...generateXXX] to concatenate arrays
-  selects: [...generateSelect(usePlayerStore, playerStoreConfig)], 
+  selects: [...generateSelect(usePlayerStore, playerStoreConfig)],
 };

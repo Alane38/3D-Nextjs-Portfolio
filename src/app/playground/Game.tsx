@@ -12,7 +12,7 @@ import ToolBar from "./core/client/tool-bar/ToolBar";
 import { Eva } from "./core/extension/eva/Eva";
 import { PlacementManager } from "./core/PlacementManager";
 import { GameCanvas } from "./GameCanvas";
-import { FileWorld } from "./world/FileWorld";
+import { MainWorld } from "./world/MainWorld";
 
 export function Game() {
   const isMobile = useIsMobile();
@@ -82,8 +82,8 @@ export function Game() {
       {/* Games */}
       <KeyboardControls map={globalControls}>
         <GameCanvas>
-          {/* <MainWorld /> */}
-          <FileWorld />  
+          <MainWorld />
+          {/* <FileWorld />   */}
         </GameCanvas>
       </KeyboardControls>
     </>

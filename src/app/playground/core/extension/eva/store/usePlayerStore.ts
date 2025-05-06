@@ -1,12 +1,12 @@
 import { create } from "zustand";
 import { SelectType } from "../types/default";
 
-export interface playerStoreType {
+export interface playerState {
     player: string;
     setPlayer: (player: string) => void;
 }
 
-export const usePlayerStore = create<playerStoreType>((set) => ({
+export const usePlayerStore = create<playerState>((set) => ({
     player: "newalfox",
     setPlayer: (player) => set({ player }),
 }));

@@ -1,9 +1,4 @@
-/**
- * 
- * @param s A string
- * @returns A string with the first letter capitalized
- */
-const capitalize = (s: string) => s.charAt(0).toUpperCase() + s.slice(1);
+import { capitalize } from "./capitalize";
 
 /** 
  * Generate a checkbox and his setters from a store config who interact with a zustand store.
@@ -21,7 +16,7 @@ export function generateChecks<T extends object>(
       .filter(([, meta]) => meta.type === "check")
       .map(([key]) => ({
         key,
-        label: key.charAt(0).toUpperCase() + key.slice(1),
+        label: capitalize(key),
         value: (s: unknown) => (s as any)[key],
         toggle: (s: unknown) => () => {
           const current = (s as any)[key];
