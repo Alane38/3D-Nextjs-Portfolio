@@ -10,7 +10,7 @@ interface EvaProps {
  * @component
  * @returns {JSX.Element}
  */
-export function Eva({ collapsed }: EvaProps) {
+export const Eva =({ collapsed }: EvaProps) => {
     return (
         <EvaPanel collapsed={collapsed} />
     )
