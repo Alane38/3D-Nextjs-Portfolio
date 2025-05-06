@@ -8,14 +8,15 @@ import {
   LucideIcon,
   MoveIcon,
   Rotate3DIcon,
-  Undo2Icon
+  Undo2Icon,
 } from "lucide-react";
 import Image from "next/image";
+import { Inventory } from "../inventory/Inventory";
+import { InventoryModeEnum } from "../inventory/inventory.type";
 import { MoveToolStats } from "./edit-tools/move/MoveToolStats";
 import { ScaleToolStats } from "./edit-tools/scale/ScaleToolStats";
 import { useEditToolStore } from "./edit-tools/store/useEditTool.store";
 import { LoadSaveTool } from "./load-save-tool/LoadSaveTool";
-
 
 // ToolBar items
 const itemsData: {
@@ -113,14 +114,15 @@ export const ToolBar = () => {
       <MoveToolStats active={moveToolEnabled} />
       <ScaleToolStats active={scaleToolEnabled} />
 
-      <div className="fixed bottom-0 left-0 z-10 w-full p-4">
+      <div className="fixed bottom-0 left-0 z-10 flex w-full flex-col items-center border p-4 gap-4">
+        <Inventory mode={InventoryModeEnum.CREATIVE} />
         <div className="flex items-center justify-center px-16">
           {/* World buttons */}
           <LoadSaveTool />
 
           {/* Edit Tools items */}
           <div className="flex items-center justify-center">
-            <div className="grid grid-cols-10 gap-2">
+            <div className="grid grid-cols-8 gap-2">
               {itemsData.map((item, index) => (
                 <div
                   key={index}

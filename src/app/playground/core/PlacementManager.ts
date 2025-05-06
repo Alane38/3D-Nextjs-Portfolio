@@ -1,11 +1,5 @@
-import { Diamond, KillBrick } from "./class";
+import { allEntities } from "./class";
 import { Entity, EntitySerializableType } from "./class/Entity";
-
-export const ENTITY_TYPES: Record<string, new () => Entity> = {
-  Diamond,
-  KillBrick,
-  // Add more entity types here
-};
 
 export class PlacementManager {
   // Save registered entities to a JSON file
@@ -21,31 +15,40 @@ export class PlacementManager {
   // Load a json file and return an array of entities
   static load(json: string): Entity[] {
     const data = JSON.parse(json);
+
+    // Create a lookup from entityName to class constructor using allEntities
+    const entityMap: Record<string, new () => Entity> = {};
+    for (const instance of allEntities) {
+      if (instance.entityName) {
+        entityMap[instance.entityName] = instance.constructor as new () => Entity;
+      }
+    }
+
     return data.map((entry: EntitySerializableType & { entityId?: number }) => {
-      const EntityClass = ENTITY_TYPES[entry.entityName];
+      const EntityClass = entityMap[entry.entityName];
       if (!EntityClass) {
         console.warn(`Unknown entity type: ${entry.entityName}`);
         return null;
       }
-  
+
       // Create a new instance of the entity class
       const entity = new EntityClass();
-  
+
       // Deserialize the entity using the fromSerialized method
       const baseEntity = Entity.fromSerialized(entry);
-  
+
       // Copy the properties from the base entity to the new entity
       entity.position.copy(baseEntity.position);
       entity.rotation.copy(baseEntity.rotation);
       entity.scale = baseEntity.scale;
       entity.type = baseEntity.type;
       entity.path = baseEntity.path;
-  
+
       // Set the entityId if it exists in the entry
       if (entry.entityId !== undefined) {
         entity.entityId = entry.entityId;
       }
-  
+
       return entity;
     }).filter(Boolean) as Entity[];
   }
