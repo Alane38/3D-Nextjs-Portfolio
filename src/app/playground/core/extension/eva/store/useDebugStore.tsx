@@ -1,4 +1,5 @@
 import { create } from "zustand";
+import { CheckType } from "../types/default";
 
 export interface DebugState {
     debugState: boolean;
@@ -11,3 +12,8 @@ export const useDebugStore = create<DebugState>((set) => ({
         set(() => ({ debugState: state }));
     },
 }));
+
+// Auto-generation stories for EVA
+export const debugStoreConfig: CheckType = {
+    debugState: { type: "check" },
+  };

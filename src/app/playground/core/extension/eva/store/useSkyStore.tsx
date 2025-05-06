@@ -1,4 +1,5 @@
 import { create } from "zustand";
+import { SliderType } from "../types/default";
 
 export interface SkyState {
   turbidity: number;
@@ -24,3 +25,13 @@ export const useSkyStore = create<SkyState>((set) => ({
   setSky: (newState) => set((state) => ({ ...state, ...newState })),
 }));
 
+
+// Auto-generation for EVA
+export const skyStoreConfig: SliderType = {
+  turbidity: { type: "slider", min: -100, max: 100, step: 0.1 },
+  rayleigh: { type: "slider", min: 0, max: 20, step: 0.1 },
+  mieCoefficient: { type: "slider" },
+  mieDirectionalG: { type: "slider" },
+  elevation: { type: "slider" },
+  azimuth: { type: "slider" },
+};

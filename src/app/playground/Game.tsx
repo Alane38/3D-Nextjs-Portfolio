@@ -78,7 +78,7 @@ export function Game() {
       {/* Utils */}
       <PerformanceWarning />
       <ToolBar />
-      <Eva />
+      <Eva collapsed={true} />
       {/* Games */}
       <KeyboardControls map={globalControls}>
         <GameCanvas>

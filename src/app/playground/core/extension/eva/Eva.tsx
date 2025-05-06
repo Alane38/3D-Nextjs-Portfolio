@@ -1,4 +1,8 @@
-import { Controls } from "./Controls"
+import { EvaPanel } from "./EvaPanel"
+
+interface EvaProps {
+    collapsed: boolean
+}
 
 /**
  * Engine Visual Assistant
@@ -6,8 +10,8 @@ import { Controls } from "./Controls"
  * @component
  * @returns {JSX.Element}
  */
-export function Eva() {
+export function Eva({ collapsed }: EvaProps) {
     return (
-        <Controls   />
+        <EvaPanel collapsed={collapsed} />
     )
 }
