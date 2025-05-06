@@ -58,8 +58,6 @@ const SpinnerRenderer = ({
     rigidBody.setNextKinematicRotation(curRotation);
   });
 
-  console.log("Rendering spinner", instance.speed);
-
   return (
     <group>
       <Box args={[1, 0.5, 5]} />

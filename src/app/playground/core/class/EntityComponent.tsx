@@ -56,8 +56,6 @@ export function EntityComponent<InstanceType extends Entity>(
         }
       }, [props]);
 
-
-
       useEffect(() => {
         if (!currentInstance) return;
 
