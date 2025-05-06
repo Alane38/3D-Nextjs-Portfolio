@@ -4,28 +4,28 @@ import { Fragment } from "react";
 import { Euler, Vector3 } from "three";
 import { Character } from "../core/character/Character";
 import {
-    Diamond,
-    DiamondComponent,
-    Ground,
-    GroundComponent,
-    KillBrick,
-    KillBrickComponent,
-    NeonDoor,
-    NeonDoorComponent,
-    Object,
-    ObjectComponent,
-    RestaurantSign,
-    RestaurantSignComponent,
-    Spinner,
-    SpinnerComponent,
-    Stairs,
-    StairsComponent
+  Diamond,
+  DiamondComponent,
+  Ground,
+  GroundComponent,
+  KillBrick,
+  KillBrickComponent,
+  NeonDoor,
+  NeonDoorComponent,
+  Object,
+  ObjectComponent,
+  RestaurantSign,
+  RestaurantSignComponent,
+  Spinner,
+  SpinnerComponent,
+  Stairs,
+  StairsComponent
 } from "../core/class";
 import { KinematicMovingPlatformComponent, KinematicMovingPlatformEntity } from "../core/class/entities/platform/dynamic/KineticMovingPlatform";
 import { FPPushtoMove, FPPushtoMoveComponent } from "../core/class/entities/platform/floating/FPPushtoMove";
 import { useEntityStore } from "../core/class/entity.store";
 import { EditTool } from "../core/client/tool-bar/edit-tool/EditTool";
-import { useSky } from "@/hooks/Leva/useSky";
+import { useSky } from "@/hooks/leva/useSky";
 
 export function MainWorld() {
   // Leva Const initialization

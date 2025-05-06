@@ -12,7 +12,7 @@ import { useEntityStore } from "./core/class/entity.store";
 import ToolBar from "./core/client/tool-bar/ToolBar";
 import { PlacementManager } from "./core/PlacementManager";
 import { GameCanvas } from "./GameCanvas";
-import { MainWorld } from "./world/MainWorld";
+import { CreativeWorld } from "./world/CreativeWorld";
 
 export function Game() {
   const isMobile = useIsMobile();
@@ -80,7 +80,8 @@ export function Game() {
       <ToolBar />
       <KeyboardControls map={globalControls}>
         <GameCanvas>
-          <MainWorld />
+          <CreativeWorld />
+          {/* <MainWorld /> */}
           {/* <FileWorld />   */}
         </GameCanvas>
       </KeyboardControls>

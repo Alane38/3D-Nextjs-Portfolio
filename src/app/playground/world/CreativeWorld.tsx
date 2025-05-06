@@ -1,19 +1,16 @@
-import { Sky } from "@react-three/drei";
+import { useSky } from "@/hooks/leva/useSky";
+import { OrbitControls, Sky } from "@react-three/drei";
 import { Fragment } from "react";
-import { Vector3 } from "three";
-import { Character } from "../core/character/Character";
 import {
-  Diamond,
-  DiamondComponent,
-  Ground,
-  GroundComponent,
+    Ground,
+    GroundComponent
 } from "../core/class";
 import { useEntityStore } from "../core/class/entity.store";
 import { EditTool } from "../core/client/tool-bar/edit-tool/EditTool";
-import { useSky } from "@/hooks/leva/useSky";
+import ToolBar from "../core/client/tool-bar/ToolBar";
 
-export function FileWorld() {
-  /* Leva Settings */
+export function CreativeWorld() {
+  /* Eva Settings */
   const sky = useSky();
   const entities = useEntityStore((state) => state.entities);
 
@@ -32,22 +29,8 @@ export function FileWorld() {
       />
       <GroundComponent entity={new Ground()} />
 
-      <Character
-        name="Player"
-        path="FoxPam.fbx"
-        position={[0, 10, 0]}
-        defaultPlayer
-      />
-
-      <DiamondComponent
-        position={new Vector3(8, 5, 15)}
-        entity={new Diamond()}
-      />
-      <DiamondComponent
-        position={new Vector3(12, 5, 10)}
-        entity={new Diamond()}
-      />
-
+      {/* TODO: Orbital Camera with flying system */}
+      <OrbitControls />
       <EditTool />
 
       {entities.map((entity, i) => (
