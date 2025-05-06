@@ -9,10 +9,10 @@ import { ScaleTool } from "./scale/ScaleTool";
  * @returns {JSX.Element}
  */
 export const EditTool = () => {
-    return (
-        <>
-            <MoveTool />
-            <ScaleTool />
-        </>
-    );
+  return (
+    <>
+      <MoveTool />
+      <ScaleTool />
+    </>
+  );
 };

@@ -1,3 +1,4 @@
+import { useSky } from "@/hooks/leva/useSky";
 import { Sky } from "@react-three/drei";
 import { Fragment } from "react";
 import { Vector3 } from "three";
@@ -9,8 +10,7 @@ import {
   GroundComponent,
 } from "../core/class";
 import { useEntityStore } from "../core/class/entity.store";
-import { EditTool } from "../core/client/tool-bar/edit-tool/EditTool";
-import { useSky } from "@/hooks/leva/useSky";
+import { EditTool } from "../core/client/tool-bar/edit-tools/EditTool";
 
 export function FileWorld() {
   /* Leva Settings */

@@ -3,7 +3,7 @@ import { useFrame } from "@react-three/fiber";
 import { RapierRigidBody, RigidBody } from "@react-three/rapier";
 import React, { JSX, useEffect, useRef } from "react";
 import { Euler, Group, Vector3 } from "three";
-import { useEditToolStore } from "../client/tool-bar/edit-tool/store/useEditTool.store";
+import { useEditToolStore } from "../client/tool-bar/edit-tools/store/useEditTool.store";
 import { Entity } from "./Entity";
 import { useEntityStore } from "./entity.store";
 import { EntityManager } from "./EntityManager";

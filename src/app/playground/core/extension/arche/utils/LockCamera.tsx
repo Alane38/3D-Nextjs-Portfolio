@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useRef } from "react";
 import { PointerLockControls } from "three/examples/jsm/Addons.js";
-import { useEditToolStore } from "../../../client/tool-bar/edit-tool/store/useEditTool.store";
+import { useEditToolStore } from "../../../client/tool-bar/edit-tools/store/useEditTool.store";
 import { LockCameraProps } from "../types/LockCamera";
 
 export const useLockCamera = ({ camera, renderer }: LockCameraProps) => {
