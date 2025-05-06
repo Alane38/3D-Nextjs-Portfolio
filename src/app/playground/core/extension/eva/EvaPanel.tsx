@@ -31,7 +31,7 @@ export const EvaPanel = ({ collapsed }: EvaPanelProps) => {
     <div className="fixed right-16 bottom-9 z-10">
       <div className="relative max-h-screen">
         <Button
-          className="bg-accent hover:bg-muted text-foreground absolute top-1/2 -left-8 size-12 -translate-y-1/2 rounded-full shadow-md"
+          className="bg-muted hover:bg-accent text-foreground absolute top-1/2 -left-8 size-12 -translate-y-1/2 rounded-full shadow-sm"
           onClick={() => setIsCollapsed(!isCollapsed)}
         >
           {isCollapsed ? <Settings2 size={18} /> : <ChevronRight size={18} />}
@@ -55,7 +55,7 @@ export const EvaPanel = ({ collapsed }: EvaPanelProps) => {
                     Check {showChecks ? "▾" : "▸"}
                   </Button>
                   {showChecks && (
-                    <ScrollArea className="h-min w-full">
+                    <ScrollArea className="h-64 w-full">
                       <div className="flex flex-col items-center justify-center gap-2 py-2">
                         <EvaCheck checks={stories.checks} />
                       </div>
@@ -75,7 +75,7 @@ export const EvaPanel = ({ collapsed }: EvaPanelProps) => {
                     Sliders {showSliders ? "▾" : "▸"}
                   </Button>
                   {showSliders && (
-                    <ScrollArea className="h-min w-full">
+                    <ScrollArea className="h-64 w-full">
                       <div className="flex flex-col items-center justify-center gap-2 py-2">
                         <EvaSlider sliders={stories.sliders} />
                       </div>
@@ -95,7 +95,7 @@ export const EvaPanel = ({ collapsed }: EvaPanelProps) => {
                     Inputs {showInputs ? "▾" : "▸"}
                   </Button>
                   {showInputs && (
-                    <ScrollArea className="h-min w-full">
+                    <ScrollArea className="h-64 w-full">
                       <div className="flex flex-col items-center justify-center gap-2 py-2">
                         <EvaInputs inputs={stories.inputs} />
                       </div>
@@ -115,7 +115,7 @@ export const EvaPanel = ({ collapsed }: EvaPanelProps) => {
                     Selects {showSelects ? "▾" : "▸"}
                   </Button>
                   {showSelects && (
-                    <ScrollArea className="h-min w-full">
+                    <ScrollArea className="h-64 w-full">
                       <div className="flex flex-col items-center justify-center gap-2 py-2">
                         <EvaSelect selects={stories.selects} />
                       </div>
