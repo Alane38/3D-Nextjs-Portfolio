@@ -10,7 +10,7 @@ import { useWorldRigidBody } from "@/hooks/useWorldRigidBody";
 
 /**
  * An entity class
- * 
+ *
  * @class
  * @extends Entity
  */
@@ -38,11 +38,17 @@ export class Spinner extends Entity {
   }
 }
 
-const SpinnerRenderer = ({ instance, rigidBodyRef }: { instance: Spinner; rigidBodyRef: RefObject<RapierRigidBody | null> }) => {
+const SpinnerRenderer = ({
+  instance,
+  rigidBodyRef,
+}: {
+  instance: Spinner;
+  rigidBodyRef: RefObject<RapierRigidBody | null>;
+}) => {
   const rigidBody = useWorldRigidBody(rigidBodyRef);
   useFrame((_state, delta) => {
     if (!rigidBody) return;
-    
+
     const curRotation = quat(rigidBody.rotation());
     const incrementRotation = new Quaternion().setFromAxisAngle(
       new Vector3(0, 1, 0),
@@ -69,7 +75,9 @@ const SpinnerRenderer = ({ instance, rigidBodyRef }: { instance: Spinner; rigidB
  * @param  {SpinnerComponent} entity - Contains all the default props of the entity
  * @returns {JSX.Element} The rendered 3D object
  */
-export const SpinnerComponent = EntityComponent(Spinner, (instance, rigidBodyRef) => {
-  return <SpinnerRenderer instance={instance} rigidBodyRef={rigidBodyRef} />;
-});
-
+export const SpinnerComponent = EntityComponent(
+  Spinner,
+  (instance, rigidBodyRef) => {
+    return <SpinnerRenderer instance={instance} rigidBodyRef={rigidBodyRef} />;
+  },
+);

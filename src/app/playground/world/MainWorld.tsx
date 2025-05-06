@@ -1,6 +1,6 @@
 import { Sky } from "@react-three/drei";
 import { useControls } from "leva";
-import { Fragment } from "react";
+import { Fragment, useMemo } from "react";
 import { Euler, Vector3 } from "three";
 import { Character } from "../core/character/Character";
 import {
@@ -42,6 +42,9 @@ export function MainWorld() {
 
   // Store initialization
   const { entities } = useEntityStore();
+
+  // Entity initialization(not necessary but useful for performance and avoid bugs(like the rotation speed of the spinner don't update when changing the speed))
+  const spinnerEntity = useMemo(() => new Spinner(), []);
 
   return (
     <>
@@ -92,7 +95,7 @@ export function MainWorld() {
         <SpinnerComponent
           position={new Vector3(10, 1, 20)}
           speed={spinnerSpeed}
-          entity={new Spinner()}
+          entity={spinnerEntity}
         />
         <KillBrickComponent
           position={new Vector3(15, 1, 15)}
