@@ -1,4 +1,3 @@
-import { useSky } from "@/hooks";
 import { Sky } from "@react-three/drei";
 import { useControls } from "leva";
 import { Fragment } from "react";
@@ -26,13 +25,14 @@ import { KinematicMovingPlatformComponent, KinematicMovingPlatformEntity } from 
 import { FPPushtoMove, FPPushtoMoveComponent } from "../core/class/entities/platform/floating/FPPushtoMove";
 import { useEntityStore } from "../core/class/entity.store";
 import { EditTool } from "../core/client/tool-bar/edit-tool/EditTool";
+import { useSkyStore } from "../core/extension/eva/store/useSkyStore";
 
 export function MainWorld() {
   // Leva Const initialization
   const rotateSpeed = useControls("RotateSpeed", {
     speed: { value: 1, step: 0.3 },
   });
-  const sky = useSky();
+  const sky = useSkyStore();
 
   // Store initialization
   const { entities } = useEntityStore();

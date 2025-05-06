@@ -1,3 +1,4 @@
+import { Controls } from "./Controls"
 
 /**
  * Engine Visual Assistant
@@ -5,8 +6,8 @@
  * @component
  * @returns {JSX.Element}
  */
-export const EVA = () => {
+export function Eva() {
     return (
-        <div>Engine Visual Assistant</div>
+        <Controls   />
     )
 }

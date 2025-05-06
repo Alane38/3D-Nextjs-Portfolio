@@ -1,6 +1,6 @@
 import { create } from "zustand";
 
-interface SkyState {
+export interface SkyState {
   turbidity: number;
   rayleigh: number;
   mieCoefficient: number;
@@ -12,8 +12,7 @@ interface SkyState {
   setSky: (newState: Partial<Omit<SkyState, "setSky">>) => void;
 }
 
- // eslint-disable-next-line
-const useSkyStore = create<SkyState>((set) => ({
+export const useSkyStore = create<SkyState>((set) => ({
   turbidity: -1,
   rayleigh: 17,
   mieCoefficient: 4,

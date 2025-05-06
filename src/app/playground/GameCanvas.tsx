@@ -1,13 +1,13 @@
-import { useDebugState } from "@/hooks/leva";
 import { Bvh, Grid } from "@react-three/drei";
 import { Camera, Canvas } from "@react-three/fiber";
 import { Bloom, EffectComposer } from "@react-three/postprocessing";
 import { Physics } from "@react-three/rapier";
 import { Perf } from "r3f-perf";
 import React, { ReactNode, Suspense, useEffect, useState } from "react";
+import { useDebugStore } from "./core/extension/eva/store/useDebugStore";
 
 export function GameCanvas({ children }: { children: ReactNode }) {
-  const  debugState  = useDebugState();
+  const   { debugState }   = useDebugStore();
   const shadowCameraRef = React.useRef<Camera>(null);
 
   /**
