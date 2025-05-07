@@ -3,12 +3,7 @@ import { Card, CardContent } from "@/components/ui/card";
 import { ChevronRight, User } from "lucide-react";
 import { useState } from "react";
 import { useCharacterStore } from "./store/useCharacterStore";
-
-const characters = [
-  { id: "newalfox", label: "Fox Pam", image: "/images/foxpam.png" },
-  { id: "pamacea", label: "Pamacea", image: "/images/pamacea.png" },
-  { id: "vehicle", label: "Vehicle", image: "/images/vehicle.png" },
-];
+import { charactersData } from "./Player";
 
 /**
  * A user interface that lets you interact with a character and/or controller change blind. 
@@ -37,7 +32,7 @@ export const CharacterSelection = () => {
               </h2>
 
               <div className="flex flex-col gap-2">
-                {characters.map((char) => (
+                {charactersData.defaultCharacter.concat(charactersData.other).map((char) => (
                   <Button
                     key={char.id}
                     onClick={() => setCharacter(char.id)}

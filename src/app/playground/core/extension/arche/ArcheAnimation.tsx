@@ -31,6 +31,7 @@ export function ArcheAnimation(props: ArcheAnimationProps) {
   useEffect(() => {
     const action: ActionType | null = actions[curAnimation] as ActionType | null;
     if (!action) return;
+    if (!props.animationSet) return;
   
     const isOneShot =
       curAnimation === props.animationSet.jump ||

@@ -9,7 +9,7 @@ import { Eva } from "./extension/eva/Eva";
  */
 export const Navigation = () => {
   return (
-    <div className="fixed bottom-0 left-0 z-5 w-full p-4">
+    <div className="fixed bottom-0 right-0 z-10 w-1/5 p-4">
       <div className="flex items-end justify-end gap-18 p-6">
         <CharacterSelection />
         <Eva collapsed={true} />
