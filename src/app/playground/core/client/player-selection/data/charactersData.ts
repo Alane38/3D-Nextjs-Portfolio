@@ -2,7 +2,7 @@
 /**
  * A list of characters available in the game.
  */
-export type CharacterData = {
+export type CharacterDataType = {
   id: string;
   label: string;
   path?: string;
@@ -10,9 +10,9 @@ export type CharacterData = {
 };
 
 export const charactersData: {
-  thirdController: CharacterData[];
-  firstController: CharacterData[];
-  otherController: CharacterData[];
+  thirdController: CharacterDataType[];
+  firstController: CharacterDataType[];
+  otherController: CharacterDataType[];
 } = {
   thirdController: [
     {

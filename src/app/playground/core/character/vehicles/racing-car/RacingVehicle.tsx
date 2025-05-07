@@ -17,6 +17,7 @@ import * as THREE from "three";
 import { VehicleProps } from "../types/VehicleProps";
 import { useVehicleController } from "./use-vehicle-controller";
 import { useRacingVehicleStore } from "../../../extension/eva/store/useRacingVehicleStore";
+import { CharacterRef } from "../../ThirdControllerCharacter";
 
 const cameraOffset = new THREE.Vector3(7, 3, 0);
 const cameraTargetOffset = new THREE.Vector3(0, 1.5, 0);
@@ -35,7 +36,7 @@ export const racingVehicleControls = [
   { name: "reset", keys: ["KeyR"] },
 ];
 
-export const RacingVehicle = forwardRef<dimRigidBody | null, VehicleProps>((props, ref) => {
+export const RacingVehicle = forwardRef<CharacterRef, VehicleProps>((props, ref) => {
   const { world, rapier } = useRapier();
   const threeControls = useThree((s) => s.controls);
   const [, getKeyboardControls] = useKeyboardControls();

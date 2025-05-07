@@ -1,13 +1,10 @@
 import { useCharacterStore } from "./store/useCharacterStore";
 import { useThree } from "@react-three/fiber";
 import { RacingVehicle } from "../../character/vehicles/racing-car/RacingVehicle";
-import { RigidBody } from "@dimforge/rapier3d-compat";
-import { createRef, RefObject, useEffect, useRef } from "react";
-import {
-  CharacterRef,
-  ThirdControllerCharacter,
-} from "../../character/ThirdControllerCharacter";
-import { charactersData } from "./data/charactersData";
+import { useEffect } from "react";
+import { ThirdControllerCharacter } from "../../character/ThirdControllerCharacter";
+import { CharacterDataType, charactersData } from "./data/charactersData";
+import { useCharacterRefs } from "./utils/useCharacterRef";
 
 /**
  * By default or by user choice, it adds the character (followed by his controller and camera) to the 3D scene!
@@ -32,17 +29,17 @@ export const Player = () => {
    *
    * The characterRefs object is a map where the keys are the character ids and the values are the characterRef objects.
    */
-  const characterRefs = useRef<Record<string, RefObject<CharacterRef | null>>>(
-    charactersData.thirdController.reduce(
-      (acc, c) => {
-        acc[c.id] = createRef<CharacterRef>();
+  const flattenedCharactersData = Object.values(charactersData) // Flatten the charactersData object
+    .flat()
+    .reduce(
+      (acc, character) => {
+        acc[character.id] = character;
         return acc;
       },
-      {} as Record<string, RefObject<CharacterRef | null>>,
-    ),
-  );
+      {} as Record<string, CharacterDataType>,
+    );
 
-  const vehicleRef = useRef<RigidBody | null>(null);
+  const characterRefs = useCharacterRefs(flattenedCharactersData); // Generate a ref for each character base on the character id
 
   /**
    * It is executed only once, when changing character.
@@ -54,6 +51,7 @@ export const Player = () => {
 
     const checkAndSetCamera = () => {
       const currentRef = characterRefs.current[character];
+
       const isReady = currentRef?.current?.isReady();
       if (isReady) {
         const target = currentRef?.current?.getCameraTarget();
@@ -74,7 +72,7 @@ export const Player = () => {
     <>
       {/* Render the character and his controller according to the chosen character */}
       {/* With the defaultPlayer props, from the Character component (the default controller), you can activate/deactivate the camera and character controls. */}
-      {charactersData.thirdController.map((c) => (
+      {charactersData.thirdController.map((c, i) => (
         <ThirdControllerCharacter
           key={c.id}
           name="Player"
@@ -85,12 +83,12 @@ export const Player = () => {
         />
       ))}
 
-        <RacingVehicle
-          ref={vehicleRef}
-          position={[0, 10, 5]}
-          rotation={[0, 0, 0]}
-          defaultPlayer={character === "vehicle"}
-        />
+      <RacingVehicle
+        ref={characterRefs.current["vehicle"]}
+        position={[0, 10, 5]}
+        rotation={[0, 0, 0]}
+        defaultPlayer={character === "vehicle"}
+      />
     </>
   );
 };

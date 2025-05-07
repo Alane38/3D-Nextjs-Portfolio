@@ -9,9 +9,6 @@ export const ThirdController = () => {
       {/* THIRD PERSON CHARACTERS CONTROLLERS*/}
       {charactersData.thirdController.length > 0 && (
         <div className="flex flex-col gap-2">
-          <h3 className="text-center text-sm font-semibold uppercase">
-            THIRD PERSON CHARACTERS
-          </h3>
           {charactersData.thirdController.map((char) => (
             <Button
               key={char.id}

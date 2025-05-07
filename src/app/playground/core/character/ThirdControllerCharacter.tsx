@@ -1,6 +1,12 @@
 import { animationPrefix, characterPath } from "@/constants/default";
 import { RapierRigidBody } from "@react-three/rapier";
-import { forwardRef, useEffect, useImperativeHandle, useRef, useState } from "react";
+import {
+  forwardRef,
+  useEffect,
+  useImperativeHandle,
+  useRef,
+  useState,
+} from "react";
 import Arche from "../extension/arche/Arche";
 import { ArcheAnimation } from "../extension/arche/ArcheAnimation";
 import { CharacterProps } from "./character.type";
@@ -11,36 +17,39 @@ export type CharacterRef = {
   isReady: () => boolean;
 };
 
-export const ThirdControllerCharacter = forwardRef<CharacterRef, CharacterProps>(
-  ({ name, position, defaultPlayer, path }, ref) => {
-    if (!path) return;
-    
-    const [loaded, setLoaded] = useState(false);
-    const rb = useRef<RapierRigidBody>(null);
-    
-    useEffect(() => {
-      const timer = setTimeout(() => setLoaded(true), 500); 
-      return () => clearTimeout(timer);
-    }, []);
-  
+export const ThirdControllerCharacter = forwardRef<
+  CharacterRef,
+  CharacterProps
+>(({ name, position, defaultPlayer, path }, ref) => {
+  if (!path) return;
 
-    useImperativeHandle(ref, () => ({
-      getCameraTarget: () => {
-        const pos = rb.current?.translation();
-        return pos ? new Vector3(pos.x, pos.y, pos.z) : null;
-      },
-      isReady: () => loaded,
-    }));
+  const [loaded, setLoaded] = useState(false);
+  const rb = useRef<RapierRigidBody>(null);
 
-    const animationSet = defaultPlayer ? {
-      idle: animationPrefix + "idle",
-      walk: animationPrefix + "walk",
-      run: animationPrefix + "run",
-      jump: animationPrefix + "jump",
-      jumpIdle: animationPrefix + "jumpIdle",
-      jumpLand: animationPrefix + "jumpLand",
-    } : null;
-  
+  useEffect(() => {
+    const timer = setTimeout(() => setLoaded(true), 1000);
+    return () => clearTimeout(timer);
+  }, []);
+
+  useImperativeHandle(ref, () => ({
+    getCameraTarget: () => {
+      const pos = rb.current?.translation();
+      return pos ? new Vector3(pos.x, pos.y, pos.z) : null;
+    },
+    isReady: () => loaded,
+  }));
+
+  const animationSet = defaultPlayer
+    ? {
+        idle: animationPrefix + "idle",
+        walk: animationPrefix + "walk",
+        run: animationPrefix + "run",
+        jump: animationPrefix + "jump",
+        jumpIdle: animationPrefix + "jumpIdle",
+        jumpLand: animationPrefix + "jumpLand",
+      }
+    : null;
+
   const enableControl = defaultPlayer ? true : false;
   const enableFollowCam = defaultPlayer ? true : false;
 
@@ -136,9 +145,8 @@ export const ThirdControllerCharacter = forwardRef<CharacterRef, CharacterProps>
           }}
         />
       </Arche>
-      </>
-    );
-  }
-);
+    </>
+  );
+});
 
 ThirdControllerCharacter.displayName = "Character";
