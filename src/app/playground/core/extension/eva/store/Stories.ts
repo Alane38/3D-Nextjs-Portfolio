@@ -1,8 +1,6 @@
 import { generateChecks } from "../utils/generateChecks";
-import { generateSelect } from "../utils/generateSelect";
 import { generateSliders } from "../utils/generateSliders";
 import { debugStoreConfig, useDebugStore } from "./useDebugStore";
-import { playerStoreConfig, usePlayerStore } from "./usePlayerStore";
 import { skyStoreConfig, useSkyStore } from "./useSkyStore";
 import { spinnerStoreConfig, useSpinnerStore } from "./useSpinnerStore";
 
@@ -20,6 +18,5 @@ export const stories = {
     ...generateSliders(useSpinnerStore, spinnerStoreConfig),
   ],
   inputs: null,
-  // use [...generateXXX, ...generateXXX] to concatenate arrays
-  selects: [...generateSelect(usePlayerStore, playerStoreConfig)],
+  selects: null,
 };
