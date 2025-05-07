@@ -7,7 +7,8 @@ import { FirstController } from "./components/FirstController";
 import { OtherController } from "./components/OtherController";
 
 /**
- * A user interface that lets you interact with a character and/or controller change blind.
+ * @description  A user interface that lets you interact with a character and/or controller change blind.
+ * We arrange them by configuration controllers and controllers
  *
  * @component
  * @returns {JSX.Element}

@@ -1,6 +1,7 @@
 import { generateChecks } from "../utils/generateChecks";
 import { generateSliders } from "../utils/generateSliders";
 import { debugStoreConfig, useDebugStore } from "./useDebugStore";
+import { racingVehicleStoreConfig, useRacingVehicleStore } from "./useRacingVehicleStore";
 import { skyStoreConfig, useSkyStore } from "./useSkyStore";
 import { spinnerStoreConfig, useSpinnerStore } from "./useSpinnerStore";
 
@@ -16,6 +17,7 @@ export const stories = {
   sliders: [
     ...generateSliders(useSkyStore, skyStoreConfig),
     ...generateSliders(useSpinnerStore, spinnerStoreConfig),
+    ...generateSliders(useRacingVehicleStore, racingVehicleStoreConfig),
   ],
   inputs: null,
   selects: null,

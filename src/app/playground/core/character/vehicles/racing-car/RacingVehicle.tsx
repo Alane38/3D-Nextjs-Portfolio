@@ -16,6 +16,7 @@ import { spawn, wheels } from "src/constants/vehicle";
 import * as THREE from "three";
 import { VehicleProps } from "../types/VehicleProps";
 import { useVehicleController } from "./use-vehicle-controller";
+import { useRacingVehicleStore } from "../../../extension/eva/store/useRacingVehicleStore";
 
 const cameraOffset = new THREE.Vector3(7, 3, 0);
 const cameraTargetOffset = new THREE.Vector3(0, 1.5, 0);
@@ -49,14 +50,7 @@ export const RacingVehicle = forwardRef<dimRigidBody | null, VehicleProps>((prop
     wheels,
   );
 
-  const { accelerateForce, brakeForce, steerAngle } = useControls(
-    "rapier-dynamic-raycast-vehicle-controller",
-    {
-      accelerateForce: { value: 1, min: 0, max: 10 },
-      brakeForce: { value: 0.05, min: 0, max: 0.5, step: 0.01 },
-      steerAngle: { value: Math.PI / 24, min: 0, max: Math.PI / 12 },
-    },
-  );
+  const { accelerateForce, brakeForce, steerAngle } = useRacingVehicleStore();
 
   const [smoothedCameraPosition] = useState(new THREE.Vector3(0, 100, -300));
   const [smoothedCameraTarget] = useState(new THREE.Vector3());
