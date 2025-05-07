@@ -33,6 +33,7 @@ import { useEntityStore } from "../core/class/entity.store";
 import { EditTool } from "../core/client/tool-bar/edit-tool/EditTool";
 import { useSkyStore } from "../core/extension/eva/store/useSkyStore";
 import { useSpinnerStore } from "../core/extension/eva/store/useSpinnerStore";
+import { Player } from "../core/client/player-selection/Player";
 
 export function MainWorld() {
   // Leva Const initialization
@@ -52,7 +53,7 @@ export function MainWorld() {
       {entities?.map((entity, i) => (
         <Fragment key={i}>{entity.renderComponent()}</Fragment>
       ))}
-      {/* <ObjectComponent /> */}
+      {/* Soil & Sky */}
       <Sky
         turbidity={sky.turbidity}
         rayleigh={sky.rayleigh}
@@ -63,23 +64,14 @@ export function MainWorld() {
         inclination={0}
         sunPosition={sky.sunPosition}
       />
-      <Character
-        name="Player"
-        path="FoxPam.fbx"
-        position={[0, 20, 0]}
-        defaultPlayer
-      />
-      {/* Ground */}
       <GroundComponent entity={new Ground()} />
+
+      {/* Player */}
+      <Player />
+
       {/* Entity Importations */}
       <group>
-        {/* <TextObjectComponent
-          position={new Vector3(3, 1, 0)}
-          TextProps={{ text: "NEWALFOX" }}
-        /> */}
-
         {/* TODO: Fix auto generated id of entity, if u put multiple diamonds, it's crash all the game. */}
-
         <DiamondComponent
           position={new Vector3(14, 2, 10)}
           entity={new Diamond()}
@@ -89,9 +81,8 @@ export function MainWorld() {
           entity={new Object()}
         />
       </group>
+
       <group>
-        {/* Entity Importations */}
-        {/* <Steps /> */}
         <SpinnerComponent
           position={new Vector3(10, 1, 20)}
           speed={spinnerSpeed}
@@ -107,6 +98,7 @@ export function MainWorld() {
           entity={new RestaurantSign()}
         />
       </group>
+
       <group>
         {/* Platforms Events Examples */}
         <FPPushtoMoveComponent
@@ -118,19 +110,20 @@ export function MainWorld() {
           entity={new KinematicMovingPlatformEntity()}
         />
       </group>
+
       {/* OTHERS */}
       <StairsComponent
         position={new Vector3(-30, 0, 15)}
         rotation={new Euler(0, 0, 0)}
         entity={new Stairs()}
       />
-      {/* <RacingVehicle position={[15, 2, 0]} rotation={[0, Math.PI / 2, 0]} /> */}
-      {/* <Vehicle position={[8, 2, 0]} /> */}
       <NeonDoorComponent
         position={new Vector3(11.0, 0.34, -7.0)}
         scale={2}
         entity={new NeonDoor()}
       />
+
+      {/* Automation & development tools */}
       <EditTool />
     </>
   );

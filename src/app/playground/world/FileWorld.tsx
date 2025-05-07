@@ -1,17 +1,16 @@
 import { Sky } from "@react-three/drei";
 import { Fragment } from "react";
 import { Vector3 } from "three";
-import { Character } from "../core/character/Character";
 import {
-    Diamond,
-    DiamondComponent,
-    Ground,
-    GroundComponent,
+  Diamond,
+  DiamondComponent,
+  Ground,
+  GroundComponent,
 } from "../core/class";
 import { useEntityStore } from "../core/class/entity.store";
 import { EditTool } from "../core/client/tool-bar/edit-tool/EditTool";
 import { useSkyStore } from "../core/extension/eva/store/useSkyStore";
-
+import { Player } from "../core/client/player-selection/Player";
 
 export function FileWorld() {
   /* Leva Settings */
@@ -20,7 +19,7 @@ export function FileWorld() {
 
   return (
     <>
-      {/* <ObjectComponent /> */}
+      {/* Soil & Sky */}
       <Sky
         turbidity={sky.turbidity}
         rayleigh={sky.rayleigh}
@@ -33,13 +32,10 @@ export function FileWorld() {
       />
       <GroundComponent entity={new Ground()} />
 
-      <Character
-        name="Player"
-        path="FoxPam.fbx"
-        position={[0, 10, 0]}
-        defaultPlayer
-      />
+      {/* Player */}
+      <Player />
 
+      {/*  Entities */}
       <DiamondComponent
         position={new Vector3(8, 5, 15)}
         entity={new Diamond()}
@@ -49,6 +45,7 @@ export function FileWorld() {
         entity={new Diamond()}
       />
 
+      {/* Automation & development tools */}
       <EditTool />
 
       {entities.map((entity, i) => (

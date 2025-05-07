@@ -6,6 +6,7 @@ import {
 } from "@react-three/rapier";
 import { RefObject, useEffect, useRef } from "react";
 import * as THREE from "three";
+import { useFrame } from "@react-three/fiber";
 
 const up = new THREE.Vector3(0, 1, 0);
 
@@ -28,7 +29,15 @@ export const useVehicleController = (
 ) => {
   const { world } = useRapier();
 
-  const vehicleController = useRef<DynamicRayCastVehicleController>(null);
+  const vehicleController = useRef<DynamicRayCastVehicleController | null>(null);
+
+  // Store frame data safely
+  const wheelStates = useRef(
+    wheelsInfo.map(() => ({
+      positionY: 0,
+      rotation: new THREE.Quaternion(),
+    })),
+  );
 
   useEffect(() => {
     const { current: chassis } = chassisRef;
@@ -63,32 +72,40 @@ export const useVehicleController = (
     };
   }, []);
 
+  // Safely update wheel physics data
   useAfterPhysicsStep((world) => {
-    if (!vehicleController.current) return;
-
     const controller = vehicleController.current;
+    if (!controller) return;
 
     controller.updateVehicle(world.timestep);
 
-    const { current: wheels } = wheelsRef;
-
-    wheels?.forEach((wheel, index) => {
+    wheelStates.current.forEach((state, index) => {
       const wheelAxleCs = controller.wheelAxleCs(index)!;
-      const connection =
-        controller.wheelChassisConnectionPointCs(index)?.y || 0;
+      const connection = controller.wheelChassisConnectionPointCs(index)?.y || 0;
       const suspension = controller.wheelSuspensionLength(index) || 0;
       const steering = controller.wheelSteering(index) || 0;
       const rotationRad = controller.wheelRotation(index) || 0;
 
-      wheel.position.y = connection - suspension;
+      state.positionY = connection - suspension;
 
       _wheelSteeringQuat.setFromAxisAngle(up, steering);
       _wheelRotationQuat.setFromAxisAngle(wheelAxleCs, rotationRad);
-
-      wheel.quaternion.multiplyQuaternions(
+      state.rotation.multiplyQuaternions(
         _wheelSteeringQuat,
         _wheelRotationQuat,
       );
+    });
+  });
+
+  // Apply visual transforms *after* physics safely, in the render loop
+  useFrame(() => {
+    const wheels = wheelsRef.current;
+    if (!wheels) return;
+
+    wheels.forEach((wheel, index) => {
+      const state = wheelStates.current[index];
+      wheel.position.y = state.positionY;
+      wheel.quaternion.copy(state.rotation);
     });
   });
 

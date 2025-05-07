@@ -1,38 +1,42 @@
-
 import { animationPrefix, characterPath } from "@/constants/default";
 import { RapierRigidBody } from "@react-three/rapier";
-import { useRef } from "react";
+import { forwardRef, useImperativeHandle, useRef } from "react";
 import Arche from "../extension/arche/Arche";
 import { ArcheAnimation } from "../extension/arche/ArcheAnimation";
 import { CharacterProps } from "./character.type";
+import { Vector3 } from "three";
 
-export const Character = ({
-  name,
-  position,
-  defaultPlayer,
-  path,
-}: CharacterProps) => {
-  const rb = useRef<RapierRigidBody>(null);
+export type CharacterRef = {
+  getCameraTarget: () => Vector3 | null;
+};
 
-  const animationSet = {
-    idle: animationPrefix + "idle",
-    walk: animationPrefix + "walk",
-    run: animationPrefix + "run",
-    jump: animationPrefix + "jump",
-    jumpIdle: animationPrefix + "jumpIdle",
-    jumpLand: animationPrefix + "jumpLand",
-  };
+export const Character = forwardRef<CharacterRef, CharacterProps>(
+  ({ name, position, defaultPlayer, path }, ref) => {
+    const rb = useRef<RapierRigidBody>(null);
 
-  let enableControl = true;
-  let enableFollowCam = true;
-  if (!defaultPlayer) {
-    enableControl = false;
-    enableFollowCam = false;
-  }
+    useImperativeHandle(ref, () => ({
+      getCameraTarget: () => {
+        const pos = rb.current?.translation();
+        return pos ? new Vector3(pos.x, pos.y, pos.z) : null;
+      },
+    }));
+
+    const animationSet = {
+      idle: animationPrefix + "idle",
+      walk: animationPrefix + "walk",
+      run: animationPrefix + "run",
+      jump: animationPrefix + "jump",
+      jumpIdle: animationPrefix + "jumpIdle",
+      jumpLand: animationPrefix + "jumpLand",
+    };
+
+    const enableControl = !!defaultPlayer;
+    const enableFollowCam = !!defaultPlayer;
 
   return (
     <>
       <Arche
+        ref={rb}
         // Character
         name={name}
         defaultPlayer={defaultPlayer}
@@ -121,6 +125,9 @@ export const Character = ({
           }}
         />
       </Arche>
-    </>
-  );
-};
+      </>
+    );
+  }
+);
+
+Character.displayName = "Character";
