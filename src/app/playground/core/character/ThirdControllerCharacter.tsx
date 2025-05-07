@@ -11,7 +11,7 @@ export type CharacterRef = {
   isReady: () => boolean;
 };
 
-export const DefaultCharacter = forwardRef<CharacterRef, CharacterProps>(
+export const ThirdControllerCharacter = forwardRef<CharacterRef, CharacterProps>(
   ({ name, position, defaultPlayer, path }, ref) => {
     if (!path) return;
     
@@ -32,7 +32,7 @@ export const DefaultCharacter = forwardRef<CharacterRef, CharacterProps>(
       isReady: () => loaded,
     }));
 
-    const animationSet = defaultPlayer ?{
+    const animationSet = defaultPlayer ? {
       idle: animationPrefix + "idle",
       walk: animationPrefix + "walk",
       run: animationPrefix + "run",
@@ -141,4 +141,4 @@ export const DefaultCharacter = forwardRef<CharacterRef, CharacterProps>(
   }
 );
 
-DefaultCharacter.displayName = "Character";
+ThirdControllerCharacter.displayName = "Character";

@@ -5,47 +5,9 @@ import { RigidBody } from "@dimforge/rapier3d-compat";
 import { createRef, RefObject, useEffect, useRef } from "react";
 import {
   CharacterRef,
-  DefaultCharacter,
-} from "../../character/DefaultCharacter";
-
-/**
- * A list of characters available in the game.
- */
-export type CharacterData = {
-  id: string;
-  label: string;
-  path?: string;
-  position: [number, number, number];
-};
-
-export const charactersData: {
-  defaultCharacter: CharacterData[];
-  thirdCharacter: CharacterData[];
-  other: CharacterData[];
-} = {
-  defaultCharacter: [
-    {
-      id: "newalfox",
-      label: "Newalfox",
-      path: "FoxPam.fbx",
-      position: [0, 10, 0],
-    },
-    {
-      id: "pamacea",
-      label: "Pamacea",
-      path: "PamFox.fbx",
-      position: [5, 1.5, 0],
-    },
-  ],
-  thirdCharacter: [],
-  other: [
-    {
-      id: "vehicle",
-      label: "RacingCar",
-      position: [10, 1.5, 0],
-    },
-  ],
-};
+  ThirdControllerCharacter,
+} from "../../character/ThirdControllerCharacter";
+import { charactersData } from "./data/charactersData";
 
 /**
  * By default or by user choice, it adds the character (followed by his controller and camera) to the 3D scene!
@@ -71,7 +33,7 @@ export const Player = () => {
    * The characterRefs object is a map where the keys are the character ids and the values are the characterRef objects.
    */
   const characterRefs = useRef<Record<string, RefObject<CharacterRef | null>>>(
-    charactersData.defaultCharacter.reduce(
+    charactersData.thirdController.reduce(
       (acc, c) => {
         acc[c.id] = createRef<CharacterRef>();
         return acc;
@@ -112,8 +74,8 @@ export const Player = () => {
     <>
       {/* Render the character and his controller according to the chosen character */}
       {/* With the defaultPlayer props, from the Character component (the default controller), you can activate/deactivate the camera and character controls. */}
-      {charactersData.defaultCharacter.map((c) => (
-        <DefaultCharacter
+      {charactersData.thirdController.map((c) => (
+        <ThirdControllerCharacter
           key={c.id}
           name="Player"
           ref={characterRefs.current[c.id]}
