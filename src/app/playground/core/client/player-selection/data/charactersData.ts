@@ -29,11 +29,5 @@ export const charactersData: {
     },
   ],
   firstController: [],
-  otherController: [
-    {
-      id: "vehicle",
-      label: "RacingCar",
-      position: [10, 1.5, 0],
-    },
-  ],
+  otherController: [],
 };

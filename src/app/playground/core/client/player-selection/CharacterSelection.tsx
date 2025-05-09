@@ -14,10 +14,7 @@ import { OtherController } from "./components/OtherController";
  * @returns {JSX.Element}
  */
 export const CharacterSelection = () => {
-  const [isCollapsed, setIsCollapsed] = useState(true);
-  const [showThirdPerson, setShowThirdPerson] = useState(false);
-  const [showFirstPerson, setShowFirstPerson] = useState(false);
-  const [showOtherPerson, setShowOtherPerson] = useState(false);
+  const [isCollapsed, setIsCollapsed] = useState(true); 
 
   return (
     <div className="relative max-h-screen">
@@ -34,50 +31,15 @@ export const CharacterSelection = () => {
             <h2 className="text-primary mb-2 text-center text-lg font-semibold uppercase">
               Characters
             </h2>
+            {/* THIRD PERSON CHARACTERS CONTROLLERS(default) */}
+            <ThirdController />
 
-            {/* LIST OF CHARACTERS BY CONTROLLERS CATEGORY */}
-            <div className="flex flex-col gap-4">
-              {/* THIRD PERSON CHARACTERS CONTROLLERS*/}
-                  <Button
-                    variant="ghost"
-                    className="w-full justify-start py-2 text-sm font-semibold uppercase"
-                    onClick={() => setShowThirdPerson(!showThirdPerson)}
-                  >
-                    Third Person {showThirdPerson ? "▾" : "▸"}
-                  </Button>
-              {showThirdPerson && (
-                <>
-                  <ThirdController />
-                </>
-              )}
+            {/* FIRST PERSON CHARACTERS CONTROLLERS */}
 
-              {/* FIRST PERSON CHARACTERS CONTROLLERS */}
-                  <Button
-                    variant="ghost"
-                    className="w-full justify-start py-2 text-sm font-semibold uppercase"
-                    onClick={() => setShowFirstPerson(!showFirstPerson)}
-                  >
-                    First Person {showFirstPerson ? "▾" : "▸"}
-                  </Button>
-              {showFirstPerson && (
-                <>
-                  <FirstController />
-                </>
-              )}
-              {/* OTHERS CHARACTERS CONTROLLERS */}
-                  <Button
-                    variant="ghost"
-                    className="w-full justify-start py-2 text-sm font-semibold uppercase"
-                    onClick={() => setShowOtherPerson(!showOtherPerson)}
-                  >
-                    Other {showOtherPerson ? "▾" : "▸"}
-                  </Button>
-              {showOtherPerson && (
-                <>
-                  <OtherController />
-                </>
-              )}
-            </div>
+            <FirstController />
+            {/* OTHERS CHARACTERS CONTROLLERS */}
+
+            <OtherController />
           </CardContent>
         </Card>
       )}
