@@ -1,8 +1,7 @@
 import { generateChecks } from "../utils/generateChecks";
-import { generateSelect } from "../utils/generateSelect";
 import { generateSliders } from "../utils/generateSliders";
 import { debugStoreConfig, useDebugStore } from "./useDebugStore";
-import { playerStoreConfig, usePlayerStore } from "./usePlayerStore";
+import { racingVehicleStoreConfig, useRacingVehicleStore } from "./useRacingVehicleStore";
 import { skyStoreConfig, useSkyStore } from "./useSkyStore";
 import { spinnerStoreConfig, useSpinnerStore } from "./useSpinnerStore";
 
@@ -18,8 +17,8 @@ export const stories = {
   sliders: [
     ...generateSliders(useSkyStore, skyStoreConfig),
     ...generateSliders(useSpinnerStore, spinnerStoreConfig),
+    ...generateSliders(useRacingVehicleStore, racingVehicleStoreConfig),
   ],
   inputs: null,
-  // use [...generateXXX, ...generateXXX] to concatenate arrays
-  selects: [...generateSelect(usePlayerStore, playerStoreConfig)],
+  selects: null,
 };

@@ -28,7 +28,6 @@ export const EvaPanel = ({ collapsed }: EvaPanelProps) => {
   const [showSelects, setShowSelects] = useState(false); // The selects
 
   return (
-    <div className="fixed right-16 bottom-9 z-10">
       <div className="relative max-h-screen">
         <Button
           className="bg-muted hover:bg-accent text-foreground absolute top-1/2 -left-8 size-12 -translate-y-1/2 rounded-full shadow-sm"
@@ -127,6 +126,5 @@ export const EvaPanel = ({ collapsed }: EvaPanelProps) => {
           </Card>
         )}
       </div>
-    </div>
   );
 };

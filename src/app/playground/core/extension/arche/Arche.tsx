@@ -1565,6 +1565,7 @@ const ARCHE: ForwardRefRenderFunction<customRigidBody, ArcheProps> = (
   return (
     <RigidBody
       ref={characterRef}
+      type={defaultPlayer ? "dynamic" : "fixed"}
       position={props.position || [0, 5, 0]}
       friction={props.friction || -0.5}
       mass={props.mass || 100}

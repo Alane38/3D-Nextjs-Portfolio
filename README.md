@@ -103,6 +103,7 @@ bun dev
 │   │   │   │   ├── client/         # Client-side specific logic
 │   │   │   │   │   └── tool-bar/   # ToolBar system
 │   │   │   │   │       └── edit-tool/ # Tools to edit ToolBar items
+│   │   │   │   │   └── player-selection  # Character selection
 │   │   │   │   └── extension/      # Core extensions and plugins
 │   │   │   │       └── arche/      # Arche framework-related modules
 │   │   │   │           ├── hooks/  # Custom hooks for arche

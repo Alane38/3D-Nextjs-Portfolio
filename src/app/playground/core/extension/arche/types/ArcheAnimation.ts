@@ -3,7 +3,7 @@ import { AnimationSet } from "./AnimationSet";
 
 export type ArcheAnimationProps = {
   path: string;
-  animationSet: AnimationSet;
+  animationSet: AnimationSet | null;
   children?: React.ReactNode;
   rigidBodyProps: RigidBodyProps;
 };
