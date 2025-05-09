@@ -9,9 +9,6 @@ export const FirstController = () => {
       {/* FIRST PERSON CHARACTERS CONTROLLERS*/}
       {charactersData.firstController.length > 0 && (
         <div className="flex flex-col gap-2">
-          <h3 className="text-center text-sm font-semibold uppercase">
-            DEFAULT CHARACTER
-          </h3>
           {charactersData.firstController.map((char) => (
             <Button
               key={char.id}

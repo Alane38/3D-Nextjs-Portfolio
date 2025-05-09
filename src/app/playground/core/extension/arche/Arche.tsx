@@ -297,9 +297,6 @@ const ARCHE: ForwardRefRenderFunction<customRigidBody, ArcheProps> = (
     action4: 0,
   };
 
-  // If defaultPlayer is true, the character will be dynamic.
-  const characterType = defaultPlayer ? "dynamic" : "fixed";
-
   const characterRigidBody = useWorldRigidBody(characterRef);
 
   /** Move and Camera mode */
@@ -1568,7 +1565,7 @@ const ARCHE: ForwardRefRenderFunction<customRigidBody, ArcheProps> = (
   return (
     <RigidBody
       ref={characterRef}
-      type={characterType}
+      type={defaultPlayer ? "dynamic" : "fixed"}
       position={props.position || [0, 5, 0]}
       friction={props.friction || -0.5}
       mass={props.mass || 100}

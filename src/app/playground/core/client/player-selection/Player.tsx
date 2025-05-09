@@ -1,78 +1,91 @@
 import { useCharacterStore } from "./store/useCharacterStore";
 import { useThree } from "@react-three/fiber";
 import { RacingVehicle } from "../../character/vehicles/racing-car/RacingVehicle";
-import { useEffect } from "react";
+import { createRef, useEffect, useRef } from "react";
 import { ThirdControllerCharacter } from "../../character/ThirdControllerCharacter";
 import { CharacterDataType, charactersData } from "./data/charactersData";
-import { useCharacterRefs } from "./utils/useCharacterRef";
+import { CharacterRef } from "../../character/character.type";
 
 /**
- * By default or by user choice, it adds the character (followed by his controller and camera) to the 3D scene!
+ * Player component manages character selection and camera control in the 3D scene.
  *
  * @returns {JSX.Element}
  */
 export const Player = () => {
-  /**
-   * The link between character selection and the character in the 3d scene.
-   */
+  // Get the currently selected character from the store
   const { character } = useCharacterStore();
 
-  /**
-   * This maintains the logic of the camera in the scene and avoids bugs such as a frozen camera or controls that don't work.
-   */
+  // Access the camera from Three.js
   const { camera } = useThree();
 
-  /**
-   * We use a characterRef via a forwardRef to give the parent component access to the character.
-   * This is mainly used to manage the camera, but also to interact with other systems:
-   * to reset the character, control keyboard input, or read its position in real time.
-   *
-   * The characterRefs object is a map where the keys are the character ids and the values are the characterRef objects.
-   */
-  const flattenedCharactersData = Object.values(charactersData) // Flatten the charactersData object
-    .flat()
-    .reduce(
-      (acc, character) => {
-        acc[character.id] = character;
-        return acc;
-      },
-      {} as Record<string, CharacterDataType>,
-    );
+  // Create a ref object to store all character references
+  const characterRefs = useRef<Record<string, React.RefObject<CharacterRef>>>({});
 
-  const characterRefs = useCharacterRefs(flattenedCharactersData); // Generate a ref for each character base on the character id
-
-  /**
-   * It is executed only once, when changing character.
-   *  This way, you can be sure that the camera is actually changing targets,
-   *  while letting the controller's camera modes and other systems take care of the rest.
-   */
+  // Initialize refs for all characters
   useEffect(() => {
+    // Flatten the character data for easy access
+    const flattenedCharactersData = Object.values(charactersData)
+      .flat()
+      .reduce((acc, char) => {
+        acc[char.id] = char;
+        return acc;
+      }, {} as Record<string, CharacterDataType>);
+
+    // Create a ref for each character
+    Object.keys(flattenedCharactersData).forEach(id => {
+      characterRefs.current[id] = characterRefs.current[id] || createRef<CharacterRef>();
+    });
+
+    // Add vehicle ref
+    characterRefs.current["vehicle"] = characterRefs.current["vehicle"] || createRef<CharacterRef>();
+    
+  }, []);
+
+  // Update camera when character changes
+  useEffect(() => {
+    if (!character || !characterRefs.current[character]) return;
+
     let interval: ReturnType<typeof setInterval>;
+    let attempts = 0;
+    const MAX_ATTEMPTS = 50; // Limit check attempts
 
     const checkAndSetCamera = () => {
+      attempts++;
       const currentRef = characterRefs.current[character];
+      
+      if (!currentRef?.current) {
+        if (attempts >= MAX_ATTEMPTS) {
+          console.warn("Failed to find character reference after multiple attempts");
+          clearInterval(interval);
+        }
+        return;
+      }
 
-      const isReady = currentRef?.current?.isReady();
+      const isReady = currentRef.current.isReady();
       if (isReady) {
-        const target = currentRef?.current?.getCameraTarget();
+        const target = currentRef.current.getCameraTarget();
         if (target) {
+          // Position camera relative to character
           camera.position.set(target.x + 5, target.y + 5, target.z + 5);
           camera.lookAt(target);
         }
         clearInterval(interval);
+      } else if (attempts >= MAX_ATTEMPTS) {
+        console.warn("Character never reported ready state");
+        clearInterval(interval);
       }
     };
 
+    // Check regularly until camera is positioned
     interval = setInterval(checkAndSetCamera, 100);
 
     return () => clearInterval(interval);
-  }, [character]);
+  }, [character, camera]);
 
   return (
     <>
-      {/* Render the character and his controller according to the chosen character */}
-      {/* With the defaultPlayer props, from the Character component (the default controller), you can activate/deactivate the camera and character controls. */}
-      {charactersData.thirdController.map((c, i) => (
+      {/* Render third-person characters */}
+      {charactersData.thirdController.map((c) => (
         <ThirdControllerCharacter
           key={c.id}
           name="Player"
@@ -83,9 +96,10 @@ export const Player = () => {
         />
       ))}
 
+      {/* Render vehicle */}
       <RacingVehicle
         ref={characterRefs.current["vehicle"]}
-        position={[0, 10, 5]}
+        position={[0, 1.5, 5]}
         rotation={[0, 0, 0]}
         defaultPlayer={character === "vehicle"}
       />
