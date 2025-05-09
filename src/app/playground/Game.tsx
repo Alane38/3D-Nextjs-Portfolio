@@ -13,6 +13,7 @@ import { PlacementManager } from "./core/PlacementManager";
 import { GameCanvas } from "./GameCanvas";
 import { FileWorld } from "./world/FileWorld";
 import { Navigation } from "./core/Navigation";
+import { MainWorld } from "./world/MainWorld";
 
 export function Game() {
   const isMobile = useIsMobile();
@@ -82,8 +83,8 @@ export function Game() {
       {/* Games */}
       <KeyboardControls map={globalControls}>
         <GameCanvas>
-          {/* <MainWorld /> */}
-          <FileWorld />  
+          <MainWorld />
+          {/* <FileWorld />   */}
         </GameCanvas>
       </KeyboardControls>
     </>
