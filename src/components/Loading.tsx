@@ -56,7 +56,7 @@ export const Loading = ({
       <div className="flex w-full flex-col items-center justify-end">
         {/* Loading bar animation (smooth visual progress) */}
         <motion.div
-          className="bg-primary absolute bottom-0 left-0 z-60 h-2 max-w-full"
+          className="bg-primary absolute bottom-0 left-0 z-60 h-1 max-w-full"
           initial={{ width: 0 }}
           animate={{ width: `${visualProgress}%` }}
           transition={{ ease: "easeOut", duration: 0.2 }}

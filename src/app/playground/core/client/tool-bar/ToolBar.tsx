@@ -9,6 +9,7 @@ import {
   DropdownMenuTrigger,
 } from "@radix-ui/react-dropdown-menu";
 import {
+  ChevronDown,
   ClipboardCopyIcon,
   ClipboardPasteIcon,
   CopyCheckIcon,
@@ -16,6 +17,7 @@ import {
   ExpandIcon,
   Globe,
   LucideIcon,
+  Move3D,
   MoveIcon,
   Rotate3DIcon,
   Undo2Icon,
@@ -26,6 +28,7 @@ import { PlacementManager } from "../../PlacementManager";
 import { MoveToolStats } from "./edit-tool/move/MoveToolStats";
 import { ScaleToolStats } from "./edit-tool/scale/ScaleToolStats";
 import { useEditToolStore } from "./edit-tool/store/useEditTool.store";
+import { useState } from "react";
 
 // ToolBar items
 const itemsData: {
@@ -92,6 +95,7 @@ const itemsData: {
  * @returns {JSX.Element}
  */
 export const ToolBar = () => {
+  const [isCollapsed, setIsCollapsed] = useState(true);
   // Store initialization
   const {
     // Move Tool
@@ -134,126 +138,120 @@ export const ToolBar = () => {
   };
 
   return (
-    <>
+    <div>
       <MoveToolStats active={moveToolEnabled} />
       <ScaleToolStats active={scaleToolEnabled} />
 
-      <div className="fixed bottom-0 left-0 z-10 w-full p-4">
-        <div className="flex items-center justify-center px-16">
-          {/* World buttons */}
-          <div className="flex justify-start px-4">
-            <DropdownMenu>
-              <DropdownMenuTrigger asChild>
-                <Button
-                  variant="default"
-                  className="bg-popover h-11 w-12 rounded-lg hover:scale-105 text-foreground"
-                >
-                  <Globe />
-                </Button>
-              </DropdownMenuTrigger>
-              <DropdownMenuContent className="flex flex-col gap-4 px-2 py-2">
-                <DropdownMenuItem>
+      <div className="flex items-center justify-center">
+        <Button
+          className="bg-background hover:bg-background/80 text-foreground size-10 rounded-full shadow-sm"
+          onClick={() => setIsCollapsed(!isCollapsed)}
+        >
+          {isCollapsed ? <Move3D /> : <ChevronDown />}
+        </Button>
+        {/* World buttons */}
+        {!isCollapsed && (
+          <div className="flex justify-center gap-4 absolute bottom-20">
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild>
                   <Button
                     variant="default"
-                    onClick={handleSave}
-                    className="bg-popover h9 text-foreground w-36 cursor-pointer text-center"
+                    className="bg-background hover:bg-background/80 text-foreground size-10 rounded-full shadow-sm hover:scale-105"
                   >
-                    💾 Snapshot
+                    <Globe />
                   </Button>
-                </DropdownMenuItem>
-                <DropdownMenuItem>
-                  <Input
-                    type="file"
-                    accept=".json"
-                    className="hidden"
-                    id="file-input"
-                    onChange={(e) => {
-                      const file = e.target.files?.[0];
-                      if (!file) return;
-                      const reader = new FileReader();
-                      reader.onload = (event) => {
-                        const loadedEntities = PlacementManager.load(
-                          event.target?.result as string,
-                        );
-                        // ici tu les places dans le monde
-                        setEntities(loadedEntities);
-                      };
-                      reader.readAsText(file);
-                    }}
-                  />
-                  <Label
-                    htmlFor="file-input"
-                    className="bg-popover text-foreground hover:bg-primary/90 focus-visible:border-ring focus-visible:ring-ring/50 aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive inline-flex h-9 w-36 shrink-0 cursor-pointer items-center justify-center gap-2 rounded-md text-center text-sm font-medium whitespace-nowrap shadow-xs transition-all outline-none focus-visible:ring-[3px] disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4"
-                  >
-                    📂 Load world
-                  </Label>
-                </DropdownMenuItem>
-                <DropdownMenuItem>
-                  <Button
-                    variant="default"
-                    className="bg-popover h9 text-foreground w-36 cursor-pointer text-center"
-                    onClick={() => {
-                      // if (!allRigidBodiesMounted) {
-                      //   console.warn("⚠️ Some RigidBody are not mounted yet. Cannot save.");
-                      //   return;
-                      // }
-                      const json = PlacementManager.save(entities);
-                      console.log(json);
+                </DropdownMenuTrigger>
+                <DropdownMenuContent className="flex flex-col gap-4 px-2 py-2">
+                  <DropdownMenuItem>
+                    <Button
+                      variant="default"
+                      onClick={handleSave}
+                      className="bg-background hover:bg-background/80 h9 text-foreground w-36 cursor-pointer text-center shadow-sm"
+                    >
+                      💾 Snapshot
+                    </Button>
+                  </DropdownMenuItem>
+                  <DropdownMenuItem>
+                    <Input
+                      type="file"
+                      accept=".json"
+                      className="hidden"
+                      id="file-input"
+                      onChange={(e) => {
+                        const file = e.target.files?.[0];
+                        if (!file) return;
+                        const reader = new FileReader();
+                        reader.onload = (event) => {
+                          const loadedEntities = PlacementManager.load(
+                            event.target?.result as string,
+                          );
+                          setEntities(loadedEntities);
+                        };
+                        reader.readAsText(file);
+                      }}
+                    />
+                    <Label
+                      htmlFor="file-input"
+                      className="bg-background hover:bg-background/80 text-foreground inline-flex h-9 w-36 cursor-pointer items-center justify-center gap-2 rounded-md text-center text-sm font-medium shadow-xs transition-all"
+                    >
+                      📂 Load world
+                    </Label>
+                  </DropdownMenuItem>
+                  <DropdownMenuItem>
+                    <Button
+                      variant="default"
+                      className="bg-background hover:bg-background/80 h9 text-foreground w-36 cursor-pointer text-center shadow-sm"
+                      onClick={() => {
+                        const json = PlacementManager.save(entities);
+                        console.log(json);
+                      }}
+                    >
+                      🌍 Save world
+                    </Button>
+                  </DropdownMenuItem>
+                </DropdownMenuContent>
+              </DropdownMenu>
 
-                      // create file
-                      // const blob = new Blob([json], { type: "application/json" });
-                      // const url = URL.createObjectURL(blob);
-                      // const a = document.createElement("a");
-                      // a.href = url;
-                      // a.download = "save.json";
-                      // a.click();
-                    }}
-                  >
-                    🌍 Save world
-                  </Button>
-                </DropdownMenuItem>
-              </DropdownMenuContent>
-            </DropdownMenu>
-          </div>
-
-          {/* ToolBar items */}
-          <div className="flex items-center justify-center">
-            <div className="grid grid-cols-10 gap-2">
-              {itemsData.map((item, index) => (
-                <div
-                  key={index}
-                  onClick={
-                    item.active ? () => handleItemClick(index) : undefined
-                  }
-                  className={cn(
-                    item.active
-                      ? "group bg-popover hover:bg-popover/90 relative h-11 w-12 transform cursor-pointer rounded-lg p-1 transition duration-300 ease-in-out hover:scale-105"
-                      : "group bg-popover relative h-11 w-12 transform cursor-pointer rounded-lg p-1 opacity-25 transition duration-300 ease-in-out hover:scale-105",
-                  )}
-                >
-                  <div className="absolute inset-0 flex items-center justify-center">
-                    {typeof item.image === "string" ? (
-                      <Image
-                        src={item.image}
-                        alt={item.name}
-                        width={32}
-                        height={32}
-                        className="h-6 w-6 object-contain"
-                      />
-                    ) : (
-                      (() => {
-                        const IconComponent = item.image;
-                        return <IconComponent className="h-6 w-6 text-white" />;
-                      })()
+            <div className="flex items-center justify-center">
+              <div className="grid grid-cols-10 gap-2">
+                {itemsData.map((item, index) => (
+                  <div
+                    key={index}
+                    onClick={
+                      item.active ? () => handleItemClick(index) : undefined
+                    }
+                    className={cn(
+                      item.active
+                        ? "group bg-background hover:bg-background/80 relative size-10 transform cursor-pointer rounded-full p-1 shadow-sm transition duration-300 ease-in-out hover:scale-105"
+                        : "group bg-background hover:bg-background/80 relative size-10 transform cursor-pointer rounded-full p-1 opacity-25 shadow-sm transition duration-300 ease-in-out hover:scale-105",
                     )}
+                  >
+                    <div className="absolute inset-0 flex items-center justify-center">
+                      {typeof item.image === "string" ? (
+                        <Image
+                          src={item.image}
+                          alt={item.name}
+                          width={32}
+                          height={32}
+                          className="h-6 w-6 object-contain"
+                        />
+                      ) : (
+                        (() => {
+                          const IconComponent = item.image;
+                          return (
+                            <IconComponent className="text-foreground h-6 w-6" />
+                          );
+                        })()
+                      )}
+                    </div>
                   </div>
-                </div>
-              ))}
+                ))}
+              </div>
             </div>
           </div>
-        </div>
+        )}
       </div>
-    </>
+    </div>
   );
 };
 

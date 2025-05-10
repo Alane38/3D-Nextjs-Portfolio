@@ -19,7 +19,7 @@ import { getObjectDirection } from "./utils/getObjectDirection";
 import { InsideKeyboardControls } from "./utils/insideKeyboardControls";
 import { LockCamera } from "./utils/LockCamera";
 import { RayColliderHit, Vector, Collider, QueryFilterFlags } from "@dimforge/rapier3d-compat";
-import { CylinderCollider, quat, RigidBody, RoundCuboidCollider, useRapier } from "@react-three/rapier";
+import { CylinderCollider, quat, RigidBody, RigidBodyTypeString, RoundCuboidCollider, useRapier } from "@react-three/rapier";
 
 /**
  * ARCHE - Advanced React Character Handling Engine
@@ -298,6 +298,10 @@ const ARCHE: ForwardRefRenderFunction<customRigidBody, ArcheProps> = (
   };
 
   const characterRigidBody = useWorldRigidBody(characterRef);
+
+  const [bodyType, setBodyType] = useState<RigidBodyTypeString>(() =>
+    defaultPlayer ? "fixed" : "fixed"
+  );
 
   /** Move and Camera mode */
   const setMoveToPoint = useGame((state) => state.setMoveToPoint);
@@ -1003,7 +1007,18 @@ const ARCHE: ForwardRefRenderFunction<customRigidBody, ArcheProps> = (
         characterRigidBody.setRotation({ x: 0, y: 0, z: 0, w: 1 }, false);
       }
     };
+    
   }, [autoBalance]);
+
+  useEffect(() => {
+    if (defaultPlayer) {
+      const timer = setTimeout(() => {
+        setBodyType("dynamic");
+      }, 2000);
+
+      return () => clearTimeout(timer);
+    }
+  }, [defaultPlayer]);
 
   /** Character movement, Slope Management, Animations */
   useFrame((state, delta) => {
@@ -1565,7 +1580,7 @@ const ARCHE: ForwardRefRenderFunction<customRigidBody, ArcheProps> = (
   return (
     <RigidBody
       ref={characterRef}
-      type={defaultPlayer ? "dynamic" : "fixed"}
+      type={bodyType}
       position={props.position || [0, 5, 0]}
       friction={props.friction || -0.5}
       mass={props.mass || 100}

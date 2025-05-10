@@ -29,7 +29,7 @@ export const EvaSelect = (stories: { selects: StoryEntry[] | null }) => {
       return (
         <div
           key={key}
-          className="bg-input flex w-4/5 flex-col items-center justify-center gap-4 rounded-sm p-4 shadow-sm"
+          className="bg-background flex w-4/5 flex-col items-center justify-center gap-4 rounded-sm p-4 shadow-sm"
         >
           <Label htmlFor={key} className="font-semibold text-foreground uppercase">
             {label}

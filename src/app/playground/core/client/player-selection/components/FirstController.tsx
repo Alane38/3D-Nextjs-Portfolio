@@ -13,10 +13,10 @@ export const FirstController = () => {
             <Button
               key={char.id}
               onClick={() => setCharacter(char.id)}
-              className={`w-full justify-start rounded-xl px-4 py-3 text-sm font-semibold transition ${
+              className={`w-full justify-start rounded-xl px-4 py-3 text-sm font-semibold shadow-sm transition ${
                 character === char.id
-                  ? "bg-primary/50 text-foreground"
-                  : "bg-accent text-foreground hover:bg-accent/50"
+                  ? "bg-accent/50 text-foreground hover:bg-accent/80"
+                  : "bg-accent/10 text-foreground hover:bg-accent/50"
               }`}
             >
               {char.label}

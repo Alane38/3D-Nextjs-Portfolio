@@ -21,7 +21,7 @@ export const EvaInputs = (stories: { inputs: StoryEntry[] | null }) => {
           type="text"
           value={typeof val === "boolean" ? String(val) : val}
           onChange={(e) => onChange(e.target.value)}
-          className="rounded border border-gray-600 bg-gray-800 p-2 text-foreground"
+          className="rounded border border-input bg-background p-2 text-foreground"
         />
       </div>
     );

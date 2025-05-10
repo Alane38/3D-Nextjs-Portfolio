@@ -77,7 +77,6 @@ export function Game() {
       )}
       {/* Utils */}
       <PerformanceWarning />
-      <ToolBar />
       <Navigation />
       {/* Games */}
       <KeyboardControls map={globalControls}>

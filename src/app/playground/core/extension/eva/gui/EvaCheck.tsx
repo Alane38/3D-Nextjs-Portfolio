@@ -13,13 +13,13 @@ export const EvaCheck = (stories: { checks: StoryEntry[] | null }) => {
     return (
       <div
         key={key}
-        className="bg-input flex w-4/5 items-center justify-center gap-4 rounded-sm p-4 shadow-sm"
+        className="bg-background flex w-4/5 items-center justify-center gap-4 rounded-sm p-4 shadow-sm"
       >
         <Checkbox
           id={key}
           checked={typeof checked === "boolean" ? checked : false}
           onCheckedChange={onChange}
-          className="rounded border border-gray-600 bg-gray-800 p-2 text-foreground"
+          className="rounded bg-background p-2 text-foreground"
         />
         <Label htmlFor={key} className="font-semibold text-foreground uppercase">
           {label}

@@ -21,7 +21,7 @@ export const EvaSlider = (stories: { sliders: StoryEntry[] | null}) => {
       const onChange = setValue(state);
 
       return (
-        <div key={key} className="flex flex-col justify-center items-center w-4/5 gap-4 bg-input p-4 rounded-sm shadow-sm">
+        <div key={key} className="flex flex-col justify-center items-center w-4/5 gap-4 bg-background p-4 rounded-sm shadow-sm">
           <Label htmlFor={key} className="text-foreground uppercase text-xs font-semibold">
             {label} <p className="text-sm text-primary">{val.toFixed(2)}</p>
           </Label>
