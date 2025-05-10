@@ -377,6 +377,7 @@ const ARCHE: ForwardRefRenderFunction<customRigidBody, ArcheProps> = (
     right: false,
     jump: false,
     run: false,
+    reset: false,
   };
 
   // // Joystick controls setup
@@ -908,6 +909,14 @@ const ARCHE: ForwardRefRenderFunction<customRigidBody, ArcheProps> = (
     resetAnimation();
   };
 
+  const resetCharacter = () => {
+    if (!characterRigidBody) return;
+    // Teleport character to initial position
+    characterRigidBody.setTranslation({ x: 0, y: 2, z: 0 }, true);
+    characterRigidBody.setLinvel({ x: 0, y: 0, z: 0 }, true);
+    characterRigidBody.setAngvel({ x: 0, y: 0, z: 0 }, false);
+  };
+
   /** Rotate camera function */
   // eslint-disable-next-line
   const rotateCamera = (x: number, y: number) => {
@@ -1007,14 +1016,16 @@ const ARCHE: ForwardRefRenderFunction<customRigidBody, ArcheProps> = (
         characterRigidBody.setRotation({ x: 0, y: 0, z: 0, w: 1 }, false);
       }
     };
+
     
-  }, [autoBalance]);
+  }, [autoBalance, defaultPlayer]);
 
   useEffect(() => {
+    // Define type
     if (defaultPlayer) {
       const timer = setTimeout(() => {
         setBodyType("dynamic");
-      }, 2000);
+      }, 1000);
 
       return () => clearTimeout(timer);
     }
@@ -1092,7 +1103,7 @@ const ARCHE: ForwardRefRenderFunction<customRigidBody, ArcheProps> = (
     if (camCollision) cameraCollisionDetect(delta);
 
     // // Getting all the useful keys from useKeyboardControls
-    const { forward, back, left, right, jump, run } = inKeyboardControls
+    const { forward, back, left, right, jump, run, reset } = inKeyboardControls
       ? (getKeys?.() ?? presetKeys)
       : presetKeys;
 
@@ -1146,6 +1157,11 @@ const ARCHE: ForwardRefRenderFunction<customRigidBody, ArcheProps> = (
       gamepadKeys.right
     )
       moveCharacter(delta, run, slopeAngle, movingObjectVelocity);
+
+      /** Reset Character */
+      if (reset) {
+        resetCharacter();
+      }
 
     /** Jump */
     if ((jump || button1Pressed) && (canJump || infiniteJump)) {
