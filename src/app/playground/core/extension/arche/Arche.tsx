@@ -18,8 +18,20 @@ import { ArcheProps, CharacterState, customRigidBody } from "./types/Arche";
 import { getObjectDirection } from "./utils/getObjectDirection";
 import { InsideKeyboardControls } from "./utils/insideKeyboardControls";
 import { LockCamera } from "./utils/LockCamera";
-import { RayColliderHit, Vector, Collider, QueryFilterFlags } from "@dimforge/rapier3d-compat";
-import { CylinderCollider, quat, RigidBody, RigidBodyTypeString, RoundCuboidCollider, useRapier } from "@react-three/rapier";
+import {
+  RayColliderHit,
+  Vector,
+  Collider,
+  QueryFilterFlags,
+} from "@dimforge/rapier3d-compat";
+import {
+  CylinderCollider,
+  quat,
+  RigidBody,
+  RigidBodyTypeString,
+  RoundCuboidCollider,
+  useRapier,
+} from "@react-three/rapier";
 
 /**
  * ARCHE - Advanced React Character Handling Engine
@@ -147,6 +159,7 @@ const ARCHE: ForwardRefRenderFunction<customRigidBody, ArcheProps> = (
 
     /** Player Selection */
     defaultPlayer = false,
+    noClipMode = false,
     /** Colliders settings */
     hitboxHeight = 0.5,
     hitboxWidth = 0.3,
@@ -300,7 +313,7 @@ const ARCHE: ForwardRefRenderFunction<customRigidBody, ArcheProps> = (
   const characterRigidBody = useWorldRigidBody(characterRef);
 
   const [bodyType, setBodyType] = useState<RigidBodyTypeString>(() =>
-    defaultPlayer ? "fixed" : "fixed"
+    defaultPlayer ? "fixed" : "fixed",
   );
 
   /** Move and Camera mode */
@@ -310,9 +323,9 @@ const ARCHE: ForwardRefRenderFunction<customRigidBody, ArcheProps> = (
   // Point to Move Props
   let functionKeyDown: boolean = false;
   /** Controller Modes */
-  const isModePointToMove = modeSet.has("PointToMove"); // ControlCamera: Have a third person camera, with a automatic movement system 
+  const isModePointToMove = modeSet.has("PointToMove"); // ControlCamera: Have a third person camera, with a automatic movement system
   const isModeOnlyCamera = modeSet.has("OnlyCamera"); // ControlCamera: Have a third person camera, with basic movement system, right, left, back controls are disabled, you only control the character with Z/W and mouse.
-  const isModeControlCamera = modeSet.has("ControlCamera"); // ControlCamera: Have a third person camera, with a brutal movement system(similar to ThirdCamera) 
+  const isModeControlCamera = modeSet.has("ControlCamera"); // ControlCamera: Have a third person camera, with a brutal movement system(similar to ThirdCamera)
   const isModeThirdCamera = modeSet.has("ThirdCamera"); // ThirdCamera(default): Have a third person camera, with a smooth movement system
 
   /** LockCamera props */
@@ -915,6 +928,10 @@ const ARCHE: ForwardRefRenderFunction<customRigidBody, ArcheProps> = (
     characterRigidBody.setTranslation({ x: 0, y: 2, z: 0 }, true);
     characterRigidBody.setLinvel({ x: 0, y: 0, z: 0 }, true);
     characterRigidBody.setAngvel({ x: 0, y: 0, z: 0 }, false);
+    // Reset camera to character
+    const characterPosition = characterRigidBody.translation();
+    followCam.position.set(characterPosition.x + 5, characterPosition.y + 5, characterPosition.z + 5);
+    followCam.lookAt(new THREE.Vector3(characterPosition.x, characterPosition.y, characterPosition.z));
   };
 
   /** Rotate camera function */
@@ -1016,8 +1033,6 @@ const ARCHE: ForwardRefRenderFunction<customRigidBody, ArcheProps> = (
         characterRigidBody.setRotation({ x: 0, y: 0, z: 0, w: 1 }, false);
       }
     };
-
-    
   }, [autoBalance, defaultPlayer]);
 
   useEffect(() => {
@@ -1030,6 +1045,24 @@ const ARCHE: ForwardRefRenderFunction<customRigidBody, ArcheProps> = (
       return () => clearTimeout(timer);
     }
   }, [defaultPlayer]);
+
+  useEffect(() => {
+  if (noClipMode) {
+    setBodyType("kinematicPosition"); // En mode noClip, utilisez kinematicPosition pour traverser les objets
+    
+    // Optionnel: Désactivez temporairement les collisions avec le monde
+    if (characterRigidBody) {
+      characterRigidBody.setEnabled(false);
+    }
+  } else {
+    setBodyType(defaultPlayer ? "fixed" : "fixed");
+    
+    // Réactivez les collisions avec le monde
+    if (characterRigidBody) {
+      characterRigidBody.setEnabled(true);
+    }
+  }
+}, [noClipMode, characterRigidBody, defaultPlayer]);
 
   /** Character movement, Slope Management, Animations */
   useFrame((state, delta) => {
@@ -1158,10 +1191,10 @@ const ARCHE: ForwardRefRenderFunction<customRigidBody, ArcheProps> = (
     )
       moveCharacter(delta, run, slopeAngle, movingObjectVelocity);
 
-      /** Reset Character */
-      if (reset) {
-        resetCharacter();
-      }
+    /** Reset Character */
+    if (reset) {
+      resetCharacter();
+    }
 
     /** Jump */
     if ((jump || button1Pressed) && (canJump || infiniteJump)) {
@@ -1599,21 +1632,24 @@ const ARCHE: ForwardRefRenderFunction<customRigidBody, ArcheProps> = (
       type={bodyType}
       position={props.position || [0, 5, 0]}
       friction={props.friction || -0.5}
-      mass={props.mass || 100}
+      mass={props.mass || 10}
       onContactForce={(e) =>
         bodyContactForce.set(e.totalForce.x, e.totalForce.y, e.totalForce.z)
       }
       onCollisionExit={() => bodyContactForce.set(0, 0, 0)}
-      userData={{ canJump: false }}
+      userData={{ canJump: false, noClipMode: noClipMode }}
       {...props}
     >
-      <RoundCuboidCollider
-        name="character-capsule-collider"
-        args={[hitboxWidth, hitboxHeight, hitboxLenght, hitboxRadius]}
-        position={[0, 0, 0]}
-      />
+      {!noClipMode && (
+        <RoundCuboidCollider
+          name="character-capsule-collider"
+          args={[hitboxWidth, hitboxHeight, hitboxLenght, hitboxRadius]}
+          position={[0, 0, 0]}
+        />
+      )}
+
       {/* Body collide sensor (only for point to move mode) */}
-      {isModePointToMove && (
+      {isModePointToMove && !noClipMode && (
         <CylinderCollider
           ref={bodySensorRef}
           sensor

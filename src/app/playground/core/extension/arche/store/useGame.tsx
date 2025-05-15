@@ -2,7 +2,7 @@ import * as THREE from "three";
 import { create } from "zustand";
 import { subscribeWithSelector } from "zustand/middleware";
 import { AnimationSet } from "../types/AnimationSet";
-import { State } from "../types/State";
+import { State } from "../types/Arche";
 
 export const useGame = create(
   subscribeWithSelector<State>((set, get) => ({

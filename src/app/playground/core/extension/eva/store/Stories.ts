@@ -1,7 +1,11 @@
 import { generateChecks } from "../utils/generateChecks";
 import { generateSliders } from "../utils/generateSliders";
 import { debugStoreConfig, useDebugStore } from "./useDebugStore";
-import { racingVehicleStoreConfig, useRacingVehicleStore } from "./useRacingVehicleStore";
+import { noClipStoreConfig, useNoClipStore } from "./useNoClipStore";
+import {
+  racingVehicleStoreConfig,
+  useRacingVehicleStore,
+} from "./useRacingVehicleStore";
 import { skyStoreConfig, useSkyStore } from "./useSkyStore";
 import { spinnerStoreConfig, useSpinnerStore } from "./useSpinnerStore";
 
@@ -13,7 +17,10 @@ import { spinnerStoreConfig, useSpinnerStore } from "./useSpinnerStore";
  * to build form components for debugging or runtime configuration.
  */
 export const stories = {
-  checks: generateChecks(useDebugStore, debugStoreConfig),
+  checks: [
+    ...generateChecks(useDebugStore, debugStoreConfig),
+    ...generateChecks(useNoClipStore, noClipStoreConfig),
+  ],
   sliders: [
     ...generateSliders(useSkyStore, skyStoreConfig),
     ...generateSliders(useSpinnerStore, spinnerStoreConfig),

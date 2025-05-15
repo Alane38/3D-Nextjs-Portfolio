@@ -11,12 +11,15 @@ import Arche from "../extension/arche/Arche";
 import { ArcheAnimation } from "../extension/arche/ArcheAnimation";
 import { CharacterProps, CharacterRef } from "./character.type";
 import { Vector3 } from "three";
+import { useNoClipStore } from "../extension/eva/store/useNoClipStore";
 
 export const ThirdControllerCharacter = forwardRef<
   CharacterRef,
   CharacterProps
 >(({ name, position, defaultPlayer, path }, ref) => {
   if (!path) return null;
+
+  const { noClip } = useNoClipStore();
 
   const [loaded, setLoaded] = useState(false);
   const rb = useRef<RapierRigidBody>(null);
@@ -69,6 +72,7 @@ export const ThirdControllerCharacter = forwardRef<
       // Character
       name={name || "Player"}
       defaultPlayer={defaultPlayer}
+      noClipMode={noClip}
       position={position || [0, 0, 0]}
       infiniteJump={true}
       animated={true}

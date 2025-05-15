@@ -8,6 +8,7 @@ export interface ArcheProps extends RigidBodyProps {
 
   /** Player Selection */
   defaultPlayer?: boolean;
+  noClipMode?: boolean;
   /** Colliders settings */
   hitboxHeight?: number;
   hitboxWidth?: number;
