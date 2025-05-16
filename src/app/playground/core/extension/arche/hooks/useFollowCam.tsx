@@ -206,7 +206,24 @@ export const useFollowCam = ({
     ); // delta * 2 for rapier ray setup
   };
 
+  const resetFollowCamera = (position = new THREE.Vector3(0, 2, 0)) => {
+  // Reset pivot position to character
+  pivot.position.copy(position);
 
+  // Reset rotations
+  pivot.rotation.set(0, camInitDir.y, 0);
+  followCam.rotation.set(camInitDir.x, 0, 0);
 
-  return { pivot, followCam, cameraCollisionDetect, joystickCamMove };
+  // Reset camera initial distance
+  originZDis.current = camInitDis;
+
+  // Calculate the camera initial position
+  followCam.position.set(
+    0,
+    camInitDis * Math.sin(-camInitDir.x),
+    camInitDis * Math.cos(-camInitDir.x)
+  );
+};
+
+  return { pivot, followCam, cameraCollisionDetect, joystickCamMove, resetFollowCamera };
 };

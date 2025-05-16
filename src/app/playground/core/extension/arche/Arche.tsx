@@ -528,8 +528,13 @@ const ARCHE: ForwardRefRenderFunction<customRigidBody, ArcheProps> = (
   };
 
   // // Load camera pivot and character move
-  const { pivot, followCam, cameraCollisionDetect, joystickCamMove } =
-    useFollowCam(cameraSetups);
+  const {
+    pivot,
+    followCam,
+    cameraCollisionDetect,
+    joystickCamMove,
+    resetFollowCamera,
+  } = useFollowCam(cameraSetups);
   const pivotPosition: THREE.Vector3 = useMemo(() => new THREE.Vector3(), []);
   const pivotXAxis: THREE.Vector3 = useMemo(
     () => new THREE.Vector3(1, 0, 0),
@@ -929,9 +934,10 @@ const ARCHE: ForwardRefRenderFunction<customRigidBody, ArcheProps> = (
     characterRigidBody.setLinvel({ x: 0, y: 0, z: 0 }, true);
     characterRigidBody.setAngvel({ x: 0, y: 0, z: 0 }, false);
     // Reset camera to character
-    const characterPosition = characterRigidBody.translation();
-    followCam.position.set(characterPosition.x + 5, characterPosition.y + 5, characterPosition.z + 5);
-    followCam.lookAt(new THREE.Vector3(characterPosition.x, characterPosition.y, characterPosition.z));
+    const pos = characterRigidBody.translation();
+    resetFollowCamera(new THREE.Vector3(pos.x, pos.y, pos.z));
+    camera.position.set(pos.x, pos.y + 5, pos.z + 10);
+    camera.lookAt(pos.x, pos.y, pos.z);
   };
 
   /** Rotate camera function */
@@ -1047,26 +1053,27 @@ const ARCHE: ForwardRefRenderFunction<customRigidBody, ArcheProps> = (
   }, [defaultPlayer]);
 
   useEffect(() => {
-  if (noClipMode) {
-    setBodyType("kinematicPosition"); // En mode noClip, utilisez kinematicPosition pour traverser les objets
-    
-    // Optionnel: Désactivez temporairement les collisions avec le monde
-    if (characterRigidBody) {
-      characterRigidBody.setEnabled(false);
+    if (noClipMode) {
+      setBodyType("kinematicPosition"); // Kinematic for allow to noclip
+
+      // Disable character collision
+      if (characterRigidBody) {
+        characterRigidBody.setEnabled(false);
+      }
+    } else {
+      setBodyType(defaultPlayer ? "fixed" : "fixed");
+
+      // Enable character collision
+      if (characterRigidBody) {
+        characterRigidBody.setEnabled(true);
+      }
     }
-  } else {
-    setBodyType(defaultPlayer ? "fixed" : "fixed");
-    
-    // Réactivez les collisions avec le monde
-    if (characterRigidBody) {
-      characterRigidBody.setEnabled(true);
-    }
-  }
-}, [noClipMode, characterRigidBody, defaultPlayer]);
+  }, [noClipMode, characterRigidBody, defaultPlayer]);
 
   /** Character movement, Slope Management, Animations */
   useFrame((state, delta) => {
     if (!characterRigidBody) return;
+
     /**  Move character with the moving platform */
     detectPlatformUnderPlayer(); // Update isOnMovingPlatform and movingPlatformVelocity
 
@@ -1123,6 +1130,7 @@ const ARCHE: ForwardRefRenderFunction<customRigidBody, ArcheProps> = (
       .addScaledVector(pivotZAxis, camTargetPos.z);
     pivot.position.lerp(pivotPosition, 1 - Math.exp(-camFollowMult * delta));
 
+    // TODO: Correct the camera which, when alt-tabbed, passes under the card and gets stuck.
     if (enableFollowCam) {
       followCam.getWorldPosition(followCamPosition);
       state.camera.position.lerp(
