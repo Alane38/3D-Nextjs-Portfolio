@@ -1,15 +1,23 @@
+# Dockerfile.prod
 FROM node:slim-23-alpine
 
+# Définir le dossier de travail
 WORKDIR /app
 
-COPY package.json ./
+# Copier uniquement package.json et package-lock.json pour optimiser le cache Docker
+COPY package.json package-lock.json ./
 
+# Installer les dépendances
+RUN npm install --production
+
+# Copier le reste du code
 COPY . .
 
-RUN npm install
-
+# Construire l'application
 RUN npm run build
 
+# Exposer le port
 EXPOSE 3000
 
-CMD ["npm", "run", "dev"]
+# Démarrer l'application en écoutant toutes les interfaces
+CMD ["npx", "next", "start", "-H", "0.0.0.0", "-p", "3000"]
