@@ -13,6 +13,10 @@ COPY package.json pnpm-lock.yaml ./
 # Installer toutes les dépendances pour le build
 RUN pnpm install
 
+# Copier le fichier de config des alias TypeScript/JS
+COPY tsconfig.json ./
+# ou jsconfig.json si tu utilises JS
+
 # Copier le code source depuis src/
 COPY src ./src
 COPY public ./public
@@ -34,6 +38,7 @@ COPY --from=builder /app/package.json /app/pnpm-lock.yaml ./
 COPY --from=builder /app/node_modules ./node_modules
 COPY --from=builder /app/.next ./.next
 COPY --from=builder /app/public ./public
+COPY --from=builder /app/tsconfig.json ./
 
 # Définir l'environnement pour que Next.js écoute toutes les interfaces
 ENV NODE_ENV=production
