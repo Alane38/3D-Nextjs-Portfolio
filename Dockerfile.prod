@@ -1,5 +1,5 @@
 # Dockerfile.prod
-FROM node:slim-23-alpine
+FROM node:23-alpine
 
 # Définir le dossier de travail
 WORKDIR /app
