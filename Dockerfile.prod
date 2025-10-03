@@ -16,7 +16,7 @@ RUN pnpm install
 # Copier le code source depuis src/
 COPY src ./src
 COPY public ./public
-COPY next.config.js ./
+COPY next.config.ts ./
 
 # Construire l'application Next.js
 RUN pnpm build
