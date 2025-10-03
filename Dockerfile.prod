@@ -1,26 +1,47 @@
-# Dockerfile.prod
-FROM node:23-alpine
+# Étape 1 : Build
+FROM node:23-alpine AS builder
 
-# Installer pnpm globalement
+# Installer pnpm
 RUN npm install -g pnpm
 
 # Définir le dossier de travail
 WORKDIR /app
 
-# Copier uniquement package.json et pnpm-lock.yaml pour optimiser le cache Docker
+# Copier uniquement package.json et pnpm-lock.yaml pour profiter du cache
 COPY package.json pnpm-lock.yaml ./
 
-# Installer toutes les dépendances (prod + dev) pour le build
-RUN pnpm install --frozen-lockfile
+# Installer toutes les dépendances pour le build
+RUN pnpm install
 
-# Copier le reste du code source
-COPY . .
+# Copier le code source depuis src/
+COPY src ./src
+COPY public ./public
+COPY next.config.js ./
 
-# Construire l'application pour production
-RUN pnpm run build
+# Construire l'application Next.js
+RUN pnpm build
 
-# Exposer le port 3000
+# Étape 2 : Production
+FROM node:23-alpine AS production
+
+# Installer pnpm
+RUN npm install -g pnpm
+
+WORKDIR /app
+
+# Copier les fichiers nécessaires depuis le builder
+COPY --from=builder /app/package.json /app/pnpm-lock.yaml ./
+COPY --from=builder /app/node_modules ./node_modules
+COPY --from=builder /app/.next ./.next
+COPY --from=builder /app/public ./public
+
+# Définir l'environnement pour que Next.js écoute toutes les interfaces
+ENV NODE_ENV=production
+ENV HOST=0.0.0.0
+ENV PORT=3000
+
+# Exposer le port
 EXPOSE 3000
 
-# Démarrer l'application en écoutant toutes les interfaces
-CMD ["pnpm", "start", "--", "--hostname", "0.0.0.0", "--port", "3000"]
+# Démarrer l'application
+CMD ["pnpm", "start"]
