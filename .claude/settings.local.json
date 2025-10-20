@@ -1,0 +1,17 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(docker-compose logs app)",
+      "Bash(docker-compose exec app ls -la /app/)",
+      "Bash(docker-compose build app)",
+      "Bash(docker run --rm 3d-nextjs-portfolio-app:latest ls -la /app/)",
+      "Bash(docker run --rm 3d-nextjs-portfolio-app:latest find /app -name \"server.js\" -o -name \"*.js\")",
+      "Bash(docker-compose up -d)",
+      "Bash(docker-compose logs app --tail 30)",
+      "Bash(docker-compose down)",
+      "Bash(docker-compose logs app --tail 20)"
+    ],
+    "deny": [],
+    "ask": []
+  }
+}

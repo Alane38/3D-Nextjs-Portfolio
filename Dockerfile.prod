@@ -1,52 +1,38 @@
-# Étape 1 : Build
-FROM node:23-alpine AS builder
-
-# Installer pnpm
-RUN npm install -g pnpm
-
-# Définir le dossier de travail
+# Étape 1 : Build de l'application
+FROM node:18-alpine AS builder
 WORKDIR /app
 
-# Copier uniquement package.json et pnpm-lock.yaml pour profiter du cache
+# Installer pnpm
+RUN corepack enable && corepack prepare pnpm@latest --activate
+
+# Définir les variables d'environnement pour le build
+# ARG NEXT_PUBLIC_API_URL
+# ARG NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY
+# ARG NEXT_PUBLIC_SITE_URL
+
+# ENV NEXT_PUBLIC_API_URL=$NEXT_PUBLIC_API_URL
+# ENV NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY=$NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY
+# ENV NEXT_PUBLIC_SITE_URL=$NEXT_PUBLIC_SITE_URL
+
 COPY package.json pnpm-lock.yaml ./
+RUN pnpm install --frozen-lockfile
 
-# Installer toutes les dépendances pour le build
-RUN pnpm install
+COPY . .
+RUN pnpm run build
 
-# Copier le fichier de config des alias TypeScript/JS
-COPY tsconfig.json ./
-# ou jsconfig.json si tu utilises JS
-
-# Copier le code source depuis src/
-COPY src ./src
-COPY public ./public
-COPY next.config.ts ./
-
-# Construire l'application Next.js
-RUN pnpm build
-
-# Étape 2 : Production
-FROM node:23-alpine AS production
-
-# Installer pnpm
-RUN npm install -g pnpm
-
+# Étape 2 : Exécution avec Next.js standalone
+FROM node:18-alpine
 WORKDIR /app
 
-# Copier les fichiers nécessaires depuis le builder
-COPY --from=builder /app/package.json /app/pnpm-lock.yaml ./
-COPY --from=builder /app/node_modules ./node_modules
-COPY --from=builder /app/.next ./.next
-COPY --from=builder /app/public ./public
-COPY --from=builder /app/tsconfig.json ./
+# Installer pnpm (nécessaire si le standalone l'utilise)
+RUN corepack enable && corepack prepare pnpm@latest --activate
 
-# Définir l'environnement pour que Next.js écoute toutes les interfaces
-ENV NODE_ENV=production
-ENV HOST=0.0.0.0
-ENV PORT=3000
+# Copier les fichiers Next.js générés
+COPY --from=builder /app/.next/standalone ./
+COPY --from=builder /app/.next/static ./.next/static
+COPY --from=builder /app/public ./public
 
 # Exposer le port
 EXPOSE 3000
 
-# Démarrer l'application
-CMD ["pnpm", "start"]
+CMD ["node", "server.js"]
