@@ -66,78 +66,82 @@ export const ThirdControllerCharacter = forwardRef<
   return (
     <Arche
       ref={rb}
-      // Character
+      // ===== CHARACTER SETUP =====
       name={name || "Player"}
       defaultPlayer={defaultPlayer}
       position={position || [0, 0, 0]}
-      infiniteJump={true}
+      infiniteJump={false}
       animated={true}
-      floatMode={false}
-      // Collider
+      // ===== COLLIDER - Hitbox stable et précise =====
       colliders="hull"
-      hitboxHeight={0.4}
-      hitboxWidth={0.05}
-      hitboxLenght={0.8}
+      hitboxHeight={0.5}
+      hitboxWidth={0.3}
+      hitboxLenght={0.1}
       hitboxRadius={0.3}
-      floatHeight={1}
-      // Control & Camera
-      enableControl={enableControl}
-      enableFollowCam={enableFollowCam}
-      // Direction & Camera
-      camMode="ThirdCamera"
-      characterInitDir={0}
-      camInitDis={-3.5}
-      camMaxDis={-5}
-      camMinDis={-1.5}
-      camUpLimit={1.2}
-      camLowLimit={-1}
-      camInitDir={{ x: 0, y: 0 }}
-      camTargetPos={{ x: 0, y: 0.5, z: 0 }}
-      camMoveSpeed={1.5}
-      camZoomSpeed={1.2}
-      camCollision={true}
-      camCollisionOffset={0.5}
-      camCollisionSpeedMult={5}
-      controlCamRotMult={1}
-      camFollowMult={10}
-      camLerpMult={20}
-      // Follow light
-      followLight={false}
-      // Physics
-      maxVelLim={5}
-      turnVelMultiplier={0.1}
-      turnSpeed={4}
-      sprintMult={1.8}
-      jumpVel={8}
-      jumpForceToGroundMult={1}
-      slopJumpMult={0}
-      sprintJumpMult={1.1}
-      airDragMultiplier={0.1}
-      dragDampingC={0.1}
-      accDeltaTime={5}
-      rejectVelMult={1}
-      moveImpulsePointY={0.3}
-      fallingGravityScale={3}
-      fallingMaxVel={-25}
-      wakeUpDelay={100}
-      rayOriginOffest={{ x: 0, y: -0.5, z: 0 }}
-      rayHitForgiveness={1}
-      rayLength={0.35}
-      rayDir={{ x: 0, y: -1, z: 0 }}
+      // ===== FLOAT MODE - Désactivé pour physique réaliste =====
+      floatMode={false}
+      floatHeight={0.5}
+      // ===== SPRING SYSTEM - Équilibre fondamental =====
       springK={5}
       dampingC={1}
-      slopeMaxAngle={0.7}
-      slopeRayOriginOffest={0.2}
-      slopeRayLength={2}
+      // ===== CONTROLS =====
+      enableControl={enableControl}
+      enableFollowCam={enableFollowCam}
+      characterInitDir={0}
+      // ===== CAMERA - Fluide et synchronisée =====
+      camMode="ThirdCamera"
+      camInitDis={-5}
+      camMaxDis={-7}
+      camMinDis={-2}
+      camUpLimit={1.5}
+      camLowLimit={-1.3}
+      camInitDir={{ x: 0, y: 0 }}
+      camTargetPos={{ x: 0, y: 0, z: 0 }}
+      camMoveSpeed={1.5}
+      camZoomSpeed={1.5}
+      camCollision={true}
+      camCollisionOffset={0.7}
+      camCollisionSpeedMult={4}
+      controlCamRotMult={1.8}
+      camFollowMult={15}
+      camLerpMult={30}
+      // ===== PHYSICS - Mouvement stable et réactif =====
+      maxVelLim={3}
+      turnVelMultiplier={0.2}
+      turnSpeed={5}
+      sprintMult={1.8}
+      jumpVel={6}
+      jumpForceToGroundMult={5}
+      slopJumpMult={0.25}
+      sprintJumpMult={1.1}
+      airDragMultiplier={0.3}
+      dragDampingC={0.2}
+      accDeltaTime={10}
+      rejectVelMult={4}
+      moveImpulsePointY={0.5}
+      // ===== GRAVITY & FALLING - Naturel et contrôlé =====
+      fallingGravityScale={2.5}
+      fallingMaxVel={-20}
+      wakeUpDelay={200}
+      // ===== RAYCAST - Détection au sol précise =====
+      rayOriginOffest={{ x: 0, y: -0.3, z: 0 }}
+      rayHitForgiveness={0.1}
+      rayLength={0.5}
+      rayDir={{ x: 0, y: -1, z: 0 }}
+      // ===== SLOPE DETECTION - Gestion des pentes =====
+      slopeMaxAngle={1}
+      slopeRayOriginOffest={0.47}
+      slopeRayLength={2.5}
       slopeRayDir={{ x: 0, y: -1, z: 0 }}
       slopeUpExtraForce={0.05}
-      slopeDownExtraForce={0.1}
-      // Auto balance
+      slopeDownExtraForce={0.2}
+      // ===== AUTO-BALANCE - Stabilité optimale =====
       autoBalance={true}
-      autoBalanceSpringK={1}
-      autoBalanceDampingC={0.05}
-      autoBalanceSpringOnY={0.1}
-      autoBalanceDampingOnY={0.01}
+      autoBalanceSpringK={1.2}
+      autoBalanceDampingC={0.08}
+      autoBalanceSpringOnY={0.5}
+      autoBalanceDampingOnY={0.05}
+      // ===== COLLISION HANDLER =====
       onCollisionEnter={({ other }) => {
         if (other.rigidBodyObject?.name === "Spinner" && rb.current) {
           try {

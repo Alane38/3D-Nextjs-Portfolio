@@ -1,13 +1,14 @@
-version: '3.5'
+version: "3.5"
 
 services:
   app:
     build:
       context: .
-      dockerfile: Dockerfile
+      dockerfile: Dockerfile.prod
     container_name: docker-next
     ports:
-      - '3000:3000'
-    volumes:
-      - .:/app
-      - /app/node_modules
+      - "3000:3000"
+    # Volumes commentés pour la production (mode standalone)
+    # volumes:
+    #   - .:/app
+    #   - /app/node_modules
