@@ -12,7 +12,7 @@ export const useGame = create(
 
     // Initialisation de l'animation
     initializeAnimationSet: (animationSet: AnimationSet) => {
-      set((state) => {
+      set((state: State) => {
         return Object.keys(state.animationSet).length === 0
           ? { animationSet }
           : {};
@@ -20,7 +20,7 @@ export const useGame = create(
     },
 
     reset: () => {
-      set((state) => ({ curAnimation: state.animationSet.idle }));
+      set((state: State) => ({ curAnimation: state.animationSet.idle }));
     },
 
     // Fonction générique pour gérer les animations

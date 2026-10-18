@@ -7,6 +7,7 @@ import { Character } from "../core/character/Character";
 import {
   Diamond,
   DiamondComponent,
+  GlobalUI,
   Ground,
   GroundComponent,
   KillBrick,
@@ -105,6 +106,7 @@ export function MainWorld() {
       />
       {/* <RacingVehicle position={[15, 2, 0]} rotation={[0, Math.PI / 2, 0]} /> */}
       {/* <Vehicle position={[8, 2, 0]} /> */}
+      {/* <GlobalUI /> */}
       <NeonDoorComponent position={new Vector3(11.0, 0.34, -7.0)} scale={2} entity={new NeonDoor()}/>
       <EditTool />
     </>

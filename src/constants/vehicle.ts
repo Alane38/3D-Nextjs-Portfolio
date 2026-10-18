@@ -1,4 +1,4 @@
-import { WheelInfo } from "@/app/modules/player/character/vehicles/racingCar/use-vehicle-controller";
+import { WheelInfo } from "@/app/playground/core/character/vehicles/racing-car/use-vehicle-controller";
 import * as THREE from "three";
 
 // Racing Vehicle Spawn
